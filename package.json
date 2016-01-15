@@ -1,0 +1,51 @@
+{
+  "name": "eslint-plugin-ava",
+  "version": "0.0.0",
+  "description": "ESLint rules for AVA",
+  "license": "MIT",
+  "repository": "sindresorhus/eslint-plugin-ava",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "maintainers": [
+    {
+      "name": "Vadim Demedes",
+      "email": "vdemedes@gmail.com",
+      "url": "github.com/vdemedes"
+    },
+    {
+      "name": "James Talmage",
+      "email": "james@talmage.io",
+      "url": "github.com/jamestalmage"
+    }
+  ],
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js",
+    "util.js",
+    "rules"
+  ],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "ava",
+    "test",
+    "runner"
+  ],
+  "devDependencies": {
+    "ava": "*",
+    "eslint": "^1.10.3",
+    "xo": "*"
+  },
+  "peerDependencies": {
+    "eslint": ">=1.10.0"
+  }
+}
