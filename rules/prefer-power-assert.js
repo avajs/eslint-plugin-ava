@@ -31,6 +31,49 @@ var moduleAst = {
 	}
 };
 
+function assertionCalleeAst(methodName) {
+	return {
+		type: 'MemberExpression',
+		object: {
+			type: 'Identifier',
+			name: 't'
+		},
+		property: {
+			type: 'Identifier',
+			name: methodName
+		},
+		computed: false
+	};
+}
+
+function skippedAssertionCalleeAst(methodName) {
+	return {
+		type: 'MemberExpression',
+		object: {
+			type: 'MemberExpression',
+			object: {
+				type: 'Identifier',
+				name: 't'
+			},
+			property: {
+				type: 'Identifier',
+				name: 'skip'
+			},
+			computed: false
+		},
+		property: {
+			type: 'Identifier',
+			name: methodName
+		},
+		computed: false
+	};
+}
+
+function isCalleeMatched(callee, methodName) {
+	return deepStrictEqual(callee, assertionCalleeAst(methodName)) ||
+		deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
+}
+
 module.exports = function (context) {
 	var isTestFile = false;
 	var currentTestNode = false;
@@ -42,7 +85,7 @@ module.exports = function (context) {
 			}
 		},
 		CallExpression: function (node) {
-			var callee = node.callee;
+			var callee = espurify(node.callee);
 
 			if (util.isTestFile(node)) {
 				isTestFile = true;
@@ -62,10 +105,12 @@ module.exports = function (context) {
 				return;
 			}
 
-			if (callee.type === 'MemberExpression' && callee.object.type === 'Identifier' && callee.object.name === 't') {
-				if (notAllowed.indexOf(callee.property.name) !== -1) {
-					context.report(node, 'Only allow use of the assertions that have no power-assert alternative.');
-				}
+			if (callee.type === 'MemberExpression') {
+				notAllowed.forEach(function (methodName) {
+					if (isCalleeMatched(callee, methodName)) {
+						context.report(node, 'Only allow use of the assertions that have no power-assert alternative.');
+					}
+				});
 			}
 		},
 		'CallExpression:exit': function (node) {
