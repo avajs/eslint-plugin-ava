@@ -94,18 +94,18 @@ function isCalleeMatched(callee, methodName) {
 /* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var isTestFile = false;
-	var currentTestNode = false;
+	var currentTestNode = null;
 
 	return {
 		ImportDeclaration: function (node) {
-			if (deepStrictEqual(espurify(node), moduleAst)) {
+			if (!isTestFile && deepStrictEqual(espurify(node), moduleAst)) {
 				isTestFile = true;
 			}
 		},
 		CallExpression: function (node) {
 			var callee = espurify(node.callee);
 
-			if (util.isTestFile(node)) {
+			if (!isTestFile && util.isTestFile(node)) {
 				isTestFile = true;
 			}
 			if (!isTestFile) {
