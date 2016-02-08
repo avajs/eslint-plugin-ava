@@ -62,3 +62,27 @@ for (let header of [requireHeader, moduleHeader]) {
 		});
 	});
 }
+
+function testWithModifier(modifier) {
+	test(`with modifier test.${modifier}`, () => {
+		ruleTester.run('prefer-power-assert', rule, {
+			valid: [
+				`import test from 'ava';\n test.${modifier}(t => { t.ok(foo); });`
+			],
+			invalid: [
+				{
+					code: `import test from 'ava';\n test.${modifier}(t => { t.notOk(foo); });`,
+					errors
+				}
+			]
+		});
+	});
+}
+for (let mod1 of ['skip', 'only']) {
+	for (let mod2 of ['cb', 'serial']) {
+		testWithModifier(mod1);
+		testWithModifier(mod2);
+		testWithModifier(`${mod1}.${mod2}`);
+		testWithModifier(`${mod2}.${mod1}`);
+	}
+}

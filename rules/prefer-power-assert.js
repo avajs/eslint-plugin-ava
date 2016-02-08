@@ -1,6 +1,5 @@
 'use strict';
 var util = require('../util');
-/* eslint quote-props: [2, "as-needed"] */
 var espurify = require('espurify');
 var deepStrictEqual = require('deep-strict-equal');
 
@@ -30,6 +29,24 @@ var moduleAst = {
 		value: 'ava'
 	}
 };
+
+function isTestFunctionCall(callee) {
+	return callee.type === 'Identifier' &&
+		callee.name === 'test';
+}
+
+function isTestFunctionCallWithSingleModifier(callee) {
+	return callee.type === 'MemberExpression' &&
+		callee.object.type === 'Identifier' &&
+		callee.object.name === 'test';
+}
+
+function isTestFunctionCallWithDoubleModifiers(callee) {
+	return callee.type === 'MemberExpression' &&
+		callee.object.type === 'MemberExpression' &&
+		callee.object.object.type === 'Identifier' &&
+		callee.object.object.name === 'test';
+}
 
 function assertionCalleeAst(methodName) {
 	return {
@@ -74,6 +91,7 @@ function isCalleeMatched(callee, methodName) {
 		deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
 }
 
+/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var isTestFile = false;
 	var currentTestNode = false;
@@ -95,10 +113,13 @@ module.exports = function (context) {
 				return;
 			}
 
-			if (callee.type === 'Identifier' && callee.name === 'test') {
-				currentTestNode = node;
-			} else if (callee.type === 'MemberExpression' && callee.object.type === 'Identifier' && callee.object.name === 'test') {
-				currentTestNode = node;
+			if (!currentTestNode) {
+				if (isTestFunctionCall(callee) ||
+					isTestFunctionCallWithSingleModifier(callee) ||
+					isTestFunctionCallWithDoubleModifiers(callee)) {
+					// entering test function
+					currentTestNode = node;
+				}
 			}
 			if (!currentTestNode) {
 				// not in test function
