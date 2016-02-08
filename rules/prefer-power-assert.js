@@ -1,6 +1,8 @@
 'use strict';
 var util = require('../util');
 /* eslint quote-props: [2, "as-needed"] */
+var espurify = require('espurify');
+var deepStrictEqual = require('deep-strict-equal');
 
 var notAllowed = [
 	'notOk',
@@ -12,11 +14,33 @@ var notAllowed = [
 	'ifError'
 ];
 
+var moduleAst = {
+	type: 'ImportDeclaration',
+	specifiers: [
+		{
+			type: 'ImportDefaultSpecifier',
+			local: {
+				type: 'Identifier',
+				name: 'test'
+			}
+		}
+	],
+	source: {
+		type: 'Literal',
+		value: 'ava'
+	}
+};
+
 module.exports = function (context) {
 	var isTestFile = false;
 	var currentTestNode = false;
 
 	return {
+		ImportDeclaration: function (node) {
+			if (deepStrictEqual(espurify(node), moduleAst)) {
+				isTestFile = true;
+			}
+		},
 		CallExpression: function (node) {
 			var callee = node.callee;
 
@@ -24,6 +48,7 @@ module.exports = function (context) {
 				isTestFile = true;
 			}
 			if (!isTestFile) {
+				// not in test file
 				return;
 			}
 
@@ -33,6 +58,7 @@ module.exports = function (context) {
 				currentTestNode = node;
 			}
 			if (!currentTestNode) {
+				// not in test function
 				return;
 			}
 
@@ -47,6 +73,9 @@ module.exports = function (context) {
 				currentTestNode = null;
 				return;
 			}
+		},
+		'Program:exit': function () {
+			isTestFile = false;
 		}
 	};
 };
