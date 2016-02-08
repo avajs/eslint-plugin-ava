@@ -1,5 +1,4 @@
 'use strict';
-var util = require('../util');
 var espurify = require('espurify');
 var deepStrictEqual = require('deep-strict-equal');
 
@@ -13,7 +12,7 @@ var notAllowed = [
 	'ifError'
 ];
 
-var moduleAst = {
+var avaImportDeclarationAst = {
 	type: 'ImportDeclaration',
 	specifiers: [
 		{
@@ -27,6 +26,27 @@ var moduleAst = {
 	source: {
 		type: 'Literal',
 		value: 'ava'
+	}
+};
+
+var avaVariableDeclaratorAst = {
+	type: 'VariableDeclarator',
+	id: {
+		type: 'Identifier',
+		name: 'test'
+	},
+	init: {
+		type: 'CallExpression',
+		callee: {
+			type: 'Identifier',
+			name: 'require'
+		},
+		arguments: [
+			{
+				type: 'Literal',
+				value: 'ava'
+			}
+		]
 	}
 };
 
@@ -98,20 +118,22 @@ module.exports = function (context) {
 
 	return {
 		ImportDeclaration: function (node) {
-			if (!isTestFile && deepStrictEqual(espurify(node), moduleAst)) {
+			if (!isTestFile && deepStrictEqual(espurify(node), avaImportDeclarationAst)) {
+				isTestFile = true;
+			}
+		},
+		VariableDeclarator: function (node) {
+			if (!isTestFile && deepStrictEqual(espurify(node), avaVariableDeclaratorAst)) {
 				isTestFile = true;
 			}
 		},
 		CallExpression: function (node) {
-			var callee = espurify(node.callee);
-
-			if (!isTestFile && util.isTestFile(node)) {
-				isTestFile = true;
-			}
 			if (!isTestFile) {
 				// not in test file
 				return;
 			}
+
+			var callee = espurify(node.callee);
 
 			if (!currentTestNode) {
 				if (isTestFunctionCall(callee) ||
