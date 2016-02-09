@@ -50,22 +50,13 @@ var avaVariableDeclaratorAst = {
 	}
 };
 
-function isTestFunctionCall(callee) {
-	return callee.type === 'Identifier' &&
-		callee.name === 'test';
-}
-
-function isTestFunctionCallWithSingleModifier(callee) {
-	return callee.type === 'MemberExpression' &&
-		callee.object.type === 'Identifier' &&
-		callee.object.name === 'test';
-}
-
-function isTestFunctionCallWithDoubleModifiers(callee) {
-	return callee.type === 'MemberExpression' &&
-		callee.object.type === 'MemberExpression' &&
-		callee.object.object.type === 'Identifier' &&
-		callee.object.object.name === 'test';
+function isTestFunctionCall(node) {
+	if (node.type === 'Identifier') {
+		return node.name === 'test';
+	} else if (node.type === 'MemberExpression') {
+		return isTestFunctionCall(node.object);
+	}
+	return false;
 }
 
 function assertionCalleeAst(methodName) {
@@ -136,9 +127,7 @@ module.exports = function (context) {
 			var callee = espurify(node.callee);
 
 			if (!currentTestNode) {
-				if (isTestFunctionCall(callee) ||
-					isTestFunctionCallWithSingleModifier(callee) ||
-					isTestFunctionCallWithDoubleModifiers(callee)) {
+				if (isTestFunctionCall(callee)) {
 					// entering test function
 					currentTestNode = node;
 				}
