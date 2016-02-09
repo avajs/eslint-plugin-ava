@@ -40,6 +40,10 @@
     "test",
     "runner"
   ],
+  "dependencies": {
+    "deep-strict-equal": "^0.1.0",
+    "espurify": "^1.5.0"
+  },
   "devDependencies": {
     "ava": "*",
     "eslint": "^1.10.3",
@@ -47,9 +51,5 @@
   },
   "peerDependencies": {
     "eslint": ">=1.10.0"
-  },
-  "dependencies": {
-    "deep-strict-equal": "^0.1.0",
-    "espurify": "^1.5.0"
   }
 }
