@@ -35,7 +35,7 @@ Configure it in package.json.
 The rules will only activate in test files.
 
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
-- [prefer-power-assert](docs/rules/prefer-power-assert.md) - Only allow use of the assertions that have no power-assert alternative.
+- [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 
 
 ## License

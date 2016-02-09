@@ -1,14 +1,14 @@
-# Only allow use of the assertions that have no power-assert alternative
+# Allow only use of the asserts that have no power-assert alternative.
 
-- `t.ok()` __(You can do most things with this one)__
-- `t.same()`
-- `t.notSame()`
-- `t.throws()`
-- `t.notThrows()`
-- `t.pass()`
-- `t.fail()`
+- [`t.ok()`](https://github.com/sindresorhus/ava#okvalue-message) __(You can do [most things](https://github.com/sindresorhus/ava#enhanced-asserts) with this one)__
+- [`t.same()`](https://github.com/sindresorhus/ava#samevalue-expected-message)
+- [`t.notSame()`](https://github.com/sindresorhus/ava#notsamevalue-expected-message)
+- [`t.throws()`](https://github.com/sindresorhus/ava#throwsfunctionpromise-error-message)
+- [`t.notThrows()`](https://github.com/sindresorhus/ava#notthrowsfunctionpromise-message)
+- [`t.pass()`](https://github.com/sindresorhus/ava#passmessage)
+- [`t.fail()`](https://github.com/sindresorhus/ava#failmessage)
 
-Useful for people wanting to fully embrace the power of power-assert.
+Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 
 
 ## Fail
