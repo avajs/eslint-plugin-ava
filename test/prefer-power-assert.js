@@ -1,6 +1,7 @@
 import test from 'ava';
 import {RuleTester} from 'eslint';
 import rule from '../rules/prefer-power-assert';
+import {permutationCombination} from 'js-combinatorics';
 
 const ruleTester = new RuleTester({
 	env: {
@@ -88,13 +89,8 @@ function testWithModifier(modifier) {
 		});
 	});
 }
-for (const mod1 of ['skip', 'only']) {
-	for (const mod2 of ['cb', 'serial']) {
-		testWithModifier(mod1);
-		testWithModifier(mod2);
-		testWithModifier(`${mod1}.${mod2}`);
-		testWithModifier(`${mod2}.${mod1}`);
-	}
+for (const modifiers of permutationCombination(['skip', 'only', 'cb', 'serial']).toArray()) {
+	testWithModifier(modifiers.join('.'));
 }
 
 function testDeclaration(declaration) {

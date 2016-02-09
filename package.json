@@ -47,6 +47,7 @@
   "devDependencies": {
     "ava": "*",
     "eslint": "^1.10.3",
+    "js-combinatorics": "^0.5.0",
     "xo": "*"
   },
   "peerDependencies": {
