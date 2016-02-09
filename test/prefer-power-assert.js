@@ -40,7 +40,7 @@ const notAllowedMethods = [
 	'regex(str, re)',
 	'ifError(err)'
 ];
-for (let methodName of notAllowedMethods) {
+for (const methodName of notAllowedMethods) {
 	testNotAllowedMethod(methodName);
 }
 
@@ -67,7 +67,7 @@ const allowedMethods = [
 	'throws(block)',
 	'notThrows(block)'
 ];
-for (let methodName of allowedMethods) {
+for (const methodName of allowedMethods) {
 	testAllowedMethod(methodName);
 }
 
@@ -88,8 +88,8 @@ function testWithModifier(modifier) {
 		});
 	});
 }
-for (let mod1 of ['skip', 'only']) {
-	for (let mod2 of ['cb', 'serial']) {
+for (const mod1 of ['skip', 'only']) {
+	for (const mod2 of ['cb', 'serial']) {
 		testWithModifier(mod1);
 		testWithModifier(mod2);
 		testWithModifier(`${mod1}.${mod2}`);
@@ -114,7 +114,7 @@ function testDeclaration(declaration) {
 		});
 	});
 }
-for (let declaration of [
+for (const declaration of [
 	`var test = require('ava');`,
 	`let test = require('ava');`,
 	`const test = require('ava');`,

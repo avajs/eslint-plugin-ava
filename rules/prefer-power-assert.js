@@ -142,8 +142,6 @@ module.exports = function (context) {
 					// entering test function
 					currentTestNode = node;
 				}
-			}
-			if (!currentTestNode) {
 				// not in test function
 				return;
 			}
@@ -151,7 +149,7 @@ module.exports = function (context) {
 			if (callee.type === 'MemberExpression') {
 				notAllowed.forEach(function (methodName) {
 					if (isCalleeMatched(callee, methodName)) {
-						context.report(node, 'Only allow use of the assertions that have no power-assert alternative.');
+						context.report(node, 'Only asserts with no power-assert alternative are allowed.');
 					}
 				});
 			}
