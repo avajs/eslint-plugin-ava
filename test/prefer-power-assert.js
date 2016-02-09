@@ -123,6 +123,29 @@ for (const declaration of [
 	testDeclaration(declaration);
 }
 
+const assertionInNestedCode = `
+import test from 'ava';
+
+test(t => {
+	const foo = () => {
+		t.is('foo', 'bar');
+	};
+	foo();
+});
+`;
+test('assertion in nested code', () => {
+	ruleTester.run('prefer-power-assert', rule, {
+		valid: [
+		],
+		invalid: [
+			{
+				code: assertionInNestedCode,
+				errors
+			}
+		]
+	});
+});
+
 test(`misc`, () => {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
