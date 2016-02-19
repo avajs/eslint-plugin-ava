@@ -22,7 +22,8 @@ Configure it in package.json.
 			"ava"
 		],
 		"rules": {
-			"ava/test-ended": 2
+			"ava/test-ended": 2,
+			"ava/test-title": [2, "always"]
 		}
 	}
 }
@@ -34,6 +35,7 @@ Configure it in package.json.
 The rules will only activate in test files.
 
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
+- [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 
 
 ## License
