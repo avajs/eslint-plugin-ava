@@ -31,6 +31,7 @@ Configure it in `package.json`.
 		"rules": {
 			"ava/no-cb-test": 0,
 			"ava/no-identical-title": 2,
+			"ava/no-only-test": 2,
 			"ava/no-skip-assert": 2,
 			"ava/no-skip-test": 2,
 			"ava/prefer-power-assert": 0,
@@ -48,6 +49,7 @@ The rules will only activate in test files.
 
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
+- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
