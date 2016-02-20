@@ -23,7 +23,8 @@ Configure it in package.json.
 		],
 		"rules": {
 			"ava/test-ended": 2,
-			"ava/test-title": [2, "always"]
+			"ava/test-title": [2, "always"],
+			"ava/no-skip-test": 2
 		}
 	}
 }
@@ -36,6 +37,7 @@ The rules will only activate in test files.
 
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
+- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 
 
 ## License
