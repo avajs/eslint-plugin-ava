@@ -2,9 +2,7 @@
 var util = require('../util');
 
 module.exports = function (context) {
-	var ifMultiple = context.options[0] === "if-multiple";
 	var isTestFile = false;
-	var testCount = 0;
 	var usedTitles = [];
 
 	return {
