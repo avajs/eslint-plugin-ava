@@ -22,11 +22,12 @@ Configure it in package.json.
 			"ava"
 		],
 		"rules": {
-			"ava/test-ended": 2,
-			"ava/test-title": [2, "always"],
-			"ava/no-skip-test": 2,
+			"ava/no-cb-test": 2,
+			"ava/no-identical-title": 2,
 			"ava/no-only-test": 2,
-			"ava/no-identical-title": 2
+			"ava/no-skip-test": 2,
+			"ava/test-ended": 2,
+			"ava/test-title": [2, "always"]
 		}
 	}
 }
@@ -37,11 +38,12 @@ Configure it in package.json.
 
 The rules will only activate in test files.
 
+- [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
+- [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
+- [no-only-test](docs/rules/no-only-test.md) - Ensure no test.only() are present.
+- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
-- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
-- [no-only-test](docs/rules/no-only-test.md) - Ensure no test.only() are present.
-- [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 
 
 ## License
