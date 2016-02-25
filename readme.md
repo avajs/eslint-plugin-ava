@@ -1,6 +1,6 @@
 # eslint-plugin-ava [![Build Status](https://travis-ci.org/sindresorhus/eslint-plugin-ava.svg?branch=master)](https://travis-ci.org/sindresorhus/eslint-plugin-ava)
 
-> **WIP** - ESLint rules for [AVA](https://github.com/sindresorhus/ava)
+> ESLint rules for [AVA](https://ava.li)
 
 
 ## Install

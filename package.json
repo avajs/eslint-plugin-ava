@@ -38,7 +38,11 @@
     "eslint-plugin",
     "ava",
     "test",
-    "runner"
+    "runner",
+    "assert",
+    "asserts",
+    "assertion",
+    "mocha"
   ],
   "dependencies": {
     "deep-strict-equal": "^0.1.0",
