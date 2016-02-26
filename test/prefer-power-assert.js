@@ -7,8 +7,9 @@ const ruleTester = new RuleTester({
 	env: {
 		es6: true
 	},
-	ecmaFeatures: {
-		modules: true
+	parserOptions: {
+		ecmaVersion: 6,
+		sourceType: 'module'
 	}
 });
 

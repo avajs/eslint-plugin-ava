@@ -12,12 +12,19 @@ $ npm install --save-dev eslint eslint-plugin-ava
 
 ## Usage
 
-Configure it in package.json.
+Configure it in `package.json`.
 
 ```json
 {
 	"name": "my-awesome-project",
 	"eslintConfig": {
+		"env": {
+			"es6": true
+		},
+		"parserOptions": {
+			"ecmaVersion": 6,
+			"sourceType": "module"
+		},
 		"plugins": [
 			"ava"
 		],
@@ -36,6 +43,29 @@ The rules will only activate in test files.
 
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
+
+
+## Recommended configuration
+
+This plugin exports a [`recommended` configuration](index.js#L9) that enforces good practices.
+
+To enable this configuration use the `extends` property in your `package.json`.
+
+```json
+{
+	"name": "my-awesome-project",
+	"eslintConfig": {
+		"extends": "plugin:ava/recommended",
+		"plugins": [
+			"ava"
+		]
+	}
+}
+```
+
+See [ESLint documentation](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) for more information about extending configuration files.
+
+**Note**: This configuration will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
 
 
 ## License
