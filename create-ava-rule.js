@@ -1,5 +1,6 @@
 'use strict';
 var espurify = require('espurify');
+var assign = require('object-assign');
 var deepStrictEqual = require('deep-strict-equal');
 
 var avaImportDeclarationAst = {
@@ -116,7 +117,7 @@ module.exports = function createAvaRule() {
 					};
 				}
 			});
-			return Object.assign({}, customHandlers, predefinedRules);
+			return assign({}, customHandlers, predefinedRules);
 		}
 	};
 	Object.defineProperty(rule, 'isTestFile', {
