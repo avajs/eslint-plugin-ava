@@ -1,39 +1,32 @@
 'use strict';
-var util = require('../util');
+var createAvaRule = require('../create-ava-rule');
 
+/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
-	var isTestFile = false;
-
-	return {
+	var endCalled = false;
+	var ava = createAvaRule();
+	return ava.merge({
 		CallExpression: function (node) {
-			if (util.isTestFile(node)) {
-				isTestFile = true;
+			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
 				return;
 			}
-
-			if (isTestFile && util.isTestType(node, 'cb')) {
-				var arg = node.arguments[0];
-
-				if (arg && (arg.type === 'FunctionExpression' || arg.type === 'ArrowFunctionExpression')) {
-					var fnBody = arg.body.body;
-
-					// TODO: look for `t.end()` recursively
-					for (var i = 0; i < fnBody.length; i++) {
-						var el = fnBody[i];
-
-						if (el.type === 'ExpressionStatement' && el.expression.type === 'CallExpression') {
-							var callee = el.expression.callee;
-
-							if (callee.type === 'MemberExpression' && callee.object.name === 't' && callee.property.name === 'end') {
-								// didn't find a top-level `t.end()`
-								return;
-							}
-						}
-					}
-
+			var callee = node.callee;
+			if (callee.type === 'MemberExpression' && callee.object.name === 't' && callee.property.name === 'end') {
+				endCalled = true;
+			}
+		},
+		'CallExpression:exit': function (node) {
+			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
+				return;
+			}
+			if (ava.currentTestNode === node) {
+				// leaving test function
+				if (endCalled) {
+					endCalled = false;
+				} else {
 					context.report(node, 'Callback test was not ended. Make sure to explicitly end the test with `t.end()`.');
 				}
 			}
 		}
-	};
+	});
 };

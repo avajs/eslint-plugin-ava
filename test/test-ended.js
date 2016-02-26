@@ -19,6 +19,11 @@ test(() => {
 			header + 'test.cb(t => { t.pass(); t.end(); });',
 			header + 'test.cb(t => { t.end(); });',
 			header + 'test.cb(t => { t.end(); t.pass(); });',
+			header + 'test.cb.only(t => { t.end(); });',
+			header + 'test.cb.skip.only(t => { t.end(); });',
+			header + 'test.only.cb.skip(t => { t.end(); });',
+			// shouldn't be triggered since it's not a callback test
+			header + 'test(t => { t.pass(); });',
 			// shouldn't be triggered since it's not a test file
 			'test.cb(t => {});'
 		],
@@ -33,6 +38,14 @@ test(() => {
 			},
 			{
 				code: header + 'test.cb(t => {});',
+				errors
+			},
+			{
+				code: header + 'test.cb.skip.only(t => {});',
+				errors
+			},
+			{
+				code: header + 'test.only.cb.skip(t => {});',
 				errors
 			}
 		]

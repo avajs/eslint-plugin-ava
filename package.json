@@ -46,7 +46,8 @@
   ],
   "dependencies": {
     "deep-strict-equal": "^0.1.0",
-    "espurify": "^1.5.0"
+    "espurify": "^1.5.0",
+    "object-assign": "^4.0.1"
   },
   "devDependencies": {
     "ava": "*",
