@@ -29,6 +29,7 @@
   },
   "files": [
     "index.js",
+    "create-ava-rule.js",
     "util.js",
     "rules"
   ],
