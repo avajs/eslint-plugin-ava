@@ -6,7 +6,7 @@ If you forget a `t.end();` in `test.cb()` the test will hang indefinitely.
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.cb(t => {
 	t.pass();
@@ -17,7 +17,7 @@ test.cb(t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.cb(t => {
 	t.pass();

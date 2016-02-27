@@ -6,11 +6,10 @@ Tests should have a title.
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test(t => {
 	t.pass();
-	t.end();
 });
 ```
 
@@ -18,11 +17,10 @@ test(t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
-test('my test name', t => {
+test('foo', t => {
 	t.pass();
-	t.end();
 });
 ```
 

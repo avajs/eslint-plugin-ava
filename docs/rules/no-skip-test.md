@@ -6,11 +6,14 @@ It's easy to make a test skipped with test.skip() and then forget about it. It's
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
-test.skip('some title', t => {
+test('foo', t => {
 	t.pass();
-	t.end();
+});
+
+test.skip('bar', t => {
+	t.pass();
 });
 ```
 
@@ -18,10 +21,13 @@ test.skip('some title', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
-test('some title', t => {
+test('foo', t => {
 	t.pass();
-	t.end();
+});
+
+test('bar', t => {
+	t.pass();
 });
 ```

@@ -6,13 +6,13 @@ Disallow tests with identical titles as it makes it hard to differentiate them.
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
-test('some test', t => {
+test('foo', t => {
 	t.pass();
 });
 
-test('some test', t => {
+test('foo', t => {
 	t.pass();
 });
 ```
@@ -21,17 +21,17 @@ test('some test', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test(t => {
 	t.pass();
 });
 
-test('some test', t => {
+test('foo', t => {
 	t.pass();
 });
 
-test('some other test', t => {
+test('bar', t => {
 	t.pass();
 });
 ```
