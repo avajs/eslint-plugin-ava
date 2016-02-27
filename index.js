@@ -2,6 +2,7 @@
 
 module.exports = {
 	rules: {
+		'no-cb-test': require('./rules/no-cb-test'),
 		'no-identical-title': require('./rules/no-identical-title'),
 		'no-skip-test': require('./rules/no-skip-test'),
 		'prefer-power-assert': require('./rules/prefer-power-assert'),
@@ -18,6 +19,7 @@ module.exports = {
 				sourceType: 'module'
 			},
 			rules: {
+				'no-cb-test': 0,
 				'no-identical-title': 2,
 				'no-skip-test': 2,
 				'prefer-power-assert': 0,
