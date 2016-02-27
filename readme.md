@@ -31,7 +31,8 @@ Configure it in `package.json`.
 		"rules": {
 			"ava/no-skip-test": 2,
 			"ava/prefer-power-assert": 0,
-			"ava/test-ended": 2
+			"ava/test-ended": 2,
+			"ava/test-title": [2, "always"]
 		}
 	}
 }
@@ -45,6 +46,7 @@ The rules will only activate in test files.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
+- [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 
 
 ## Recommended configuration
