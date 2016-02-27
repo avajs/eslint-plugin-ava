@@ -29,6 +29,7 @@ Configure it in `package.json`.
 			"ava"
 		],
 		"rules": {
+			"ava/no-identical-title": 2,
 			"ava/no-skip-test": 2,
 			"ava/prefer-power-assert": 0,
 			"ava/test-ended": 2,
@@ -43,6 +44,7 @@ Configure it in `package.json`.
 
 The rules will only activate in test files.
 
+- [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
