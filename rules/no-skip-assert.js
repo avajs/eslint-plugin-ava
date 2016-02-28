@@ -4,6 +4,7 @@ var createAvaRule = require('../create-ava-rule');
 
 module.exports = function (context) {
 	var ava = createAvaRule();
+
 	return ava.merge({
 		MemberExpression: function (node) {
 			if (ava.isTestFile &&

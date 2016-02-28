@@ -59,12 +59,15 @@ function isCalleeMatched(callee, methodName) {
 /* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
+
 	return ava.merge({
 		CallExpression: function (node) {
 			if (!ava.isTestFile || !ava.currentTestNode) {
 				return;
 			}
+
 			var callee = espurify(node.callee);
+
 			if (callee.type === 'MemberExpression') {
 				notAllowed.forEach(function (methodName) {
 					if (isCalleeMatched(callee, methodName)) {

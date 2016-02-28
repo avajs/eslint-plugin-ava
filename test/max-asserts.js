@@ -10,6 +10,7 @@ const ruleTester = new RuleTester({
 
 const errors = [{ruleId: 'max-asserts'}];
 const header = `const test = require('ava');\n`;
+
 function nbAssertions(n) {
 	return Array.from({length: n}).map(() => 't.is(1, 1);').join('\n');
 }

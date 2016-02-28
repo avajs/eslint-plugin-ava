@@ -1,10 +1,9 @@
 'use strict';
 
-function nameOfRootObject(node) {
+exports.nameOfRootObject = function (node) {
 	if (node.object.type === 'MemberExpression') {
-		return nameOfRootObject(node.object);
+		return exports.nameOfRootObject(node.object);
 	}
-	return node.object.name;
-}
 
-exports.nameOfRootObject = nameOfRootObject;
+	return node.object.name;
+};

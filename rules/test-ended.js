@@ -3,14 +3,17 @@ var createAvaRule = require('../create-ava-rule');
 
 /* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
-	var endCalled = false;
 	var ava = createAvaRule();
+	var endCalled = false;
+
 	return ava.merge({
 		CallExpression: function (node) {
 			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
 				return;
 			}
+
 			var callee = node.callee;
+
 			if (callee.type === 'MemberExpression' && callee.object.name === 't' && callee.property.name === 'end') {
 				endCalled = true;
 			}
@@ -19,6 +22,7 @@ module.exports = function (context) {
 			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
 				return;
 			}
+
 			if (ava.currentTestNode === node) {
 				// leaving test function
 				if (endCalled) {

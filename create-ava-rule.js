@@ -105,6 +105,7 @@ module.exports = function createAvaRule() {
 		merge: function (customHandlers) {
 			Object.keys(predefinedRules).forEach(function (key) {
 				var predef = predefinedRules[key];
+
 				if (typeof customHandlers[key] === 'function') {
 					predefinedRules[key] = function (node) {
 						if (/:exit$/.test(key)) {
@@ -117,18 +118,22 @@ module.exports = function createAvaRule() {
 					};
 				}
 			});
+
 			return assign({}, customHandlers, predefinedRules);
 		}
 	};
+
 	Object.defineProperty(rule, 'isTestFile', {
 		get: function () {
 			return isTestFile;
 		}
 	});
+
 	Object.defineProperty(rule, 'currentTestNode', {
 		get: function () {
 			return currentTestNode;
 		}
 	});
+
 	return rule;
 };
