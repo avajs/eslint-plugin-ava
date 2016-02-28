@@ -29,6 +29,7 @@ Configure it in `package.json`.
 			"ava"
 		],
 		"rules": {
+			"ava/max-asserts": [2, 5],
 			"ava/no-cb-test": 0,
 			"ava/no-identical-title": 2,
 			"ava/no-only-test": 2,
@@ -47,6 +48,7 @@ Configure it in `package.json`.
 
 The rules will only activate in test files.
 
+- [max-asserts](docs/rules/max-asserts) - Limit the number of assertions in a test.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.

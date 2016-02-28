@@ -2,6 +2,7 @@
 
 module.exports = {
 	rules: {
+		'max-asserts': require('./rules/max-asserts'),
 		'no-cb-test': require('./rules/no-cb-test'),
 		'no-identical-title': require('./rules/no-identical-title'),
 		'no-only-test': require('./rules/no-only-test'),
@@ -21,6 +22,7 @@ module.exports = {
 				sourceType: 'module'
 			},
 			rules: {
+				'max-asserts': [0, 5],
 				'no-cb-test': 0,
 				'no-identical-title': 2,
 				'no-only-test': 2,
