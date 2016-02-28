@@ -36,6 +36,7 @@ Configure it in `package.json`.
 			"ava/no-only-test": 2,
 			"ava/no-skip-assert": 2,
 			"ava/no-skip-test": 2,
+			"ava/no-todo-test": 1,
 			"ava/prefer-power-assert": 0,
 			"ava/test-ended": 2,
 			"ava/test-title": [2, "always"]
@@ -56,6 +57,7 @@ The rules will only activate in test files.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
+- [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
