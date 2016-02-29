@@ -84,6 +84,13 @@ See [ESLint documentation](http://eslint.org/docs/user-guide/configuring#extendi
 **Note**: This configuration will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
 
 
+## Credit
+
+- [Jeroen Engels](https://github.com/jfmengels)
+- [Takuto Wada](https://github.com/twada)
+- [And our awesome contributors](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
+
+
 ## License
 
 MIT © [Sindre Sorhus](http://sindresorhus.com)
