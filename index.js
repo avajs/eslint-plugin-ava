@@ -24,17 +24,17 @@ module.exports = {
 				sourceType: 'module'
 			},
 			rules: {
-				'max-asserts': [0, 5],
-				'no-cb-test': 0,
-				'no-identical-title': 2,
-				'no-invalid-end': 2,
-				'no-only-test': 2,
-				'no-skip-assert': 2,
-				'no-skip-test': 2,
-				'no-todo-test': 1,
-				'prefer-power-assert': 0,
-				'test-ended': 2,
-				'test-title': [2, 'always']
+				'ava/max-asserts': [0, 5],
+				'ava/no-cb-test': 0,
+				'ava/no-identical-title': 2,
+				'ava/no-invalid-end': 2,
+				'ava/no-only-test': 2,
+				'ava/no-skip-assert': 2,
+				'ava/no-skip-test': 2,
+				'ava/no-todo-test': 1,
+				'ava/prefer-power-assert': 0,
+				'ava/test-ended': 2,
+				'ava/test-title': [2, 'always']
 			}
 		}
 	}
