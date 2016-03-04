@@ -16,9 +16,13 @@ test(() => {
 	ruleTester.run('no-identical-title', rule, {
 		valid: [
 			header + 'test("my test name", function (t) { t.pass(); });',
-			header + 'test(function (t) { t.pass(); });',
+			header + 'test("a", function (t) { t.pass(); }); test(function (t) { t.pass(); });',
 			header + 'test("a", function (t) { t.pass(); }); test("b", function (t) { t.pass(); });',
 			header + 'test("a", function (t) { t.pass(); }); test.cb("b", function (t) { t.pass(); });',
+			header + 'test("a", t => {}); notTest("a", t => {});',
+			header + 'const name = "foo"; test(`${name} 1`, function (t) { t.pass(); }); test(`${name} 2`,  function (t) { t.pass(); });',
+			header + 'const name = "foo"; test(name + " 1", function (t) { t.pass(); }); test(name + " 2", function (t) { t.pass(); });',
+			header + 'test("a", t => {}); notTest("a", t => {});',
 			header + 'notTest("a", t => {}); notTest("a", t => {});',
 			// shouldn't be triggered since it's not a test file
 			'test(t => {}); test(t => {});',
@@ -27,6 +31,10 @@ test(() => {
 		invalid: [
 			{
 				code: header + `test("a", ${testFunction}); test("a", ${testFunction});`,
+				errors
+			},
+			{
+				code: header + `test(${testFunction}); test(${testFunction});`,
 				errors
 			},
 			{
@@ -43,6 +51,14 @@ test(() => {
 			},
 			{
 				code: header + `test(${testFunction}); test.cb(${testFunction});`,
+				errors
+			},
+			{
+				code: header + 'const name = "foo"; test(`${name} 1`, function (t) { t.pass(); }); test(`${name} 1`, function (t) { t.pass(); });',
+				errors
+			},
+			{
+				code: header + 'const name = "foo"; test(name + " 1", function (t) { t.pass(); }); test(name + " 1", function (t) { t.pass(); });',
 				errors
 			}
 		]
