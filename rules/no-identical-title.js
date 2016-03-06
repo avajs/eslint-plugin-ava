@@ -1,10 +1,23 @@
 'use strict';
+var espurify = require('espurify');
+var deepStrictEqual = require('deep-strict-equal');
 var createAvaRule = require('../create-ava-rule');
+
+function purify(node) {
+	return node && espurify(node);
+}
+
+function isTitleUsed(usedTitleNodes, titleNode) {
+	var purifiedNode = purify(titleNode);
+	return usedTitleNodes.reduce(function (prev, usedTitle) {
+		return prev || deepStrictEqual(purifiedNode, usedTitle);
+	}, false);
+}
 
 /* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
-	var usedTitles = [];
+	var usedTitleNodes = [];
 
 	return ava.merge({
 		CallExpression: function (node) {
@@ -13,17 +26,16 @@ module.exports = function (context) {
 			}
 
 			var args = node.arguments;
-			var title = args.length > 1 ? args[0].value : undefined;
-
-			if (usedTitles.indexOf(title) !== -1) {
+			var titleNode = args.length > 1 ? args[0] : undefined;
+			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report(node, 'Test title is used multiple times in the same file.');
 				return;
 			}
 
-			usedTitles.push(title);
+			usedTitleNodes.push(purify(titleNode));
 		},
 		'Program.exit': function () {
-			usedTitles = [];
+			usedTitleNodes = [];
 		}
 	});
 };
