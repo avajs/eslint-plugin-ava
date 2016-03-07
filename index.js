@@ -12,7 +12,8 @@ module.exports = {
 		'no-todo-test': require('./rules/no-todo-test'),
 		'prefer-power-assert': require('./rules/prefer-power-assert'),
 		'test-ended': require('./rules/test-ended'),
-		'test-title': require('./rules/test-title')
+		'test-title': require('./rules/test-title'),
+		'use-test': require('./rules/use-test')
 	},
 	configs: {
 		recommended: {
@@ -34,7 +35,8 @@ module.exports = {
 				'ava/no-todo-test': 1,
 				'ava/prefer-power-assert': 0,
 				'ava/test-ended': 2,
-				'ava/test-title': [2, 'always']
+				'ava/test-title': [2, 'always'],
+				'ava/use-test': 2
 			}
 		}
 	}
