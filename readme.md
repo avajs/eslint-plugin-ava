@@ -39,7 +39,8 @@ Configure it in `package.json`.
 			"ava/no-todo-test": 1,
 			"ava/prefer-power-assert": 0,
 			"ava/test-ended": 2,
-			"ava/test-title": [2, "always"]
+			"ava/test-title": [2, "always"],
+			"ava/use-test": 2
 		}
 	}
 }
@@ -61,6 +62,7 @@ The rules will only activate in test files.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
+- [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
 
 
 ## Recommended configuration
