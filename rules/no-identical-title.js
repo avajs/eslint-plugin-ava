@@ -26,7 +26,7 @@ module.exports = function (context) {
 			}
 
 			var args = node.arguments;
-			var titleNode = args.length > 1 ? args[0] : undefined;
+			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report(node, 'Test title is used multiple times in the same file.');
 				return;

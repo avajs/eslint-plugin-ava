@@ -18,6 +18,7 @@ test(() => {
 			header + 'test(`my test name`, function (t) { t.pass(); t.end(); });',
 			header + 'test(\'my test name\', function (t) { t.pass(); t.end(); });',
 			header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
+			header + 'test.todo("my test name");',
 			{
 				code: header + 'test(function (t) { t.pass(); t.end(); });',
 				options: ['if-multiple']
@@ -41,6 +42,10 @@ test(() => {
 			},
 			{
 				code: header + 'test(t => { t.pass(); t.end(); });',
+				errors
+			},
+			{
+				code: header + 'test.todo();',
 				errors
 			},
 			{

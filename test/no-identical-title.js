@@ -19,6 +19,7 @@ test(() => {
 			header + 'test("a", function (t) { t.pass(); }); test(function (t) { t.pass(); });',
 			header + 'test("a", function (t) { t.pass(); }); test("b", function (t) { t.pass(); });',
 			header + 'test("a", function (t) { t.pass(); }); test.cb("b", function (t) { t.pass(); });',
+			header + 'test.todo("a"); test.todo("b");',
 			header + 'test("a", t => {}); notTest("a", t => {});',
 			header + 'const name = "foo"; test(`${name} 1`, function (t) { t.pass(); }); test(`${name} 2`,  function (t) { t.pass(); });',
 			header + 'const name = "foo"; test(name + " 1", function (t) { t.pass(); }); test(name + " 2", function (t) { t.pass(); });',
@@ -51,6 +52,10 @@ test(() => {
 			},
 			{
 				code: header + `test(${testFunction}); test.cb(${testFunction});`,
+				errors
+			},
+			{
+				code: header + `test.todo("a"); test.todo("a");`,
 				errors
 			},
 			{
