@@ -10,19 +10,18 @@ const ruleTester = new RuleTester({
 
 const errors = [{ruleId: 'no-identical-title'}];
 const header = `const test = require('ava');\n`;
-const testFunction = `function (t) { t.pass(); }`;
 
 test(() => {
 	ruleTester.run('no-identical-title', rule, {
 		valid: [
-			header + 'test("my test name", function (t) { t.pass(); });',
-			header + 'test("a", function (t) { t.pass(); }); test(function (t) { t.pass(); });',
-			header + 'test("a", function (t) { t.pass(); }); test("b", function (t) { t.pass(); });',
-			header + 'test("a", function (t) { t.pass(); }); test.cb("b", function (t) { t.pass(); });',
+			header + 'test("my test name", t => {});',
+			header + 'test("a", t => {}); test(t => {});',
+			header + 'test("a", t => {}); test("b", t => {});',
+			header + 'test("a", t => {}); test.cb("b", t => {});',
 			header + 'test.todo("a"); test.todo("b");',
 			header + 'test("a", t => {}); notTest("a", t => {});',
-			header + 'const name = "foo"; test(`${name} 1`, function (t) { t.pass(); }); test(`${name} 2`,  function (t) { t.pass(); });',
-			header + 'const name = "foo"; test(name + " 1", function (t) { t.pass(); }); test(name + " 2", function (t) { t.pass(); });',
+			header + 'test(`foo ${name}`, t => {}); test(`foo ${name}`,  t => {});',
+			header + 'const name = "foo"; test(name + " 1", t => {}); test(name + " 1", t => {});',
 			header + 'test("a", t => {}); notTest("a", t => {});',
 			header + 'notTest("a", t => {}); notTest("a", t => {});',
 			// shouldn't be triggered since it's not a test file
@@ -31,39 +30,43 @@ test(() => {
 		],
 		invalid: [
 			{
-				code: header + `test("a", ${testFunction}); test("a", ${testFunction});`,
+				code: header + 'test("a", t => {}); test("a", t => {});',
 				errors
 			},
 			{
-				code: header + `test(${testFunction}); test(${testFunction});`,
+				code: header + 'test(`a`, t => {}); test(`a`, t => {});',
 				errors
 			},
 			{
-				code: header + `test("a", ${testFunction}); test.cb("a", ${testFunction});`,
+				code: header + 'test(t => {}); test(t => {});',
 				errors
 			},
 			{
-				code: header + `test("a", ${testFunction}); test.cb.skip("a", ${testFunction});`,
+				code: header + 'test("a", t => {}); test.cb("a", t => {});',
 				errors
 			},
 			{
-				code: header + `test("foo" + 1, ${testFunction}); test("foo" + 1, ${testFunction});`,
+				code: header + 'test(`a`, t => {}); test.cb(`a`, t => {});',
 				errors
 			},
 			{
-				code: header + `test(${testFunction}); test.cb(${testFunction});`,
+				code: header + 'test("a", t => {}); test.cb.skip("a", t => {});',
 				errors
 			},
 			{
-				code: header + `test.todo("a"); test.todo("a");`,
+				code: header + 'test("foo" + 1, t => {}); test("foo" + 1, t => {});',
 				errors
 			},
 			{
-				code: header + 'const name = "foo"; test(`${name} 1`, function (t) { t.pass(); }); test(`${name} 1`, function (t) { t.pass(); });',
+				code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
 				errors
 			},
 			{
-				code: header + 'const name = "foo"; test(name + " 1", function (t) { t.pass(); }); test(name + " 1", function (t) { t.pass(); });',
+				code: header + 'test(t => {}); test.cb(t => {});',
+				errors
+			},
+			{
+				code: header + 'test.todo("a"); test.todo("a");',
 				errors
 			}
 		]
