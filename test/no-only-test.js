@@ -14,24 +14,24 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('no-only-test', rule, {
 		valid: [
-			header + 'test("my test name", function (t) { t.pass(); });',
-			header + 'test.cb("my test name", function (t) { t.pass(); t.end(); });',
-			header + 'test(function (t) { t.pass(); }); test(function (t) { t.pass(); });',
+			header + 'test("my test name", t => { t.pass(); });',
+			header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
+			header + 'test(t => { t.pass(); }); test(t => { t.pass(); });',
 			header + 'notTest.only();',
 			// shouldn't be triggered since it's not a test file
 			'test.only(t => {});'
 		],
 		invalid: [
 			{
-				code: header + 'test.only(function (t) { t.pass(); });',
+				code: header + 'test.only(t => { t.pass(); });',
 				errors
 			},
 			{
-				code: header + 'test.cb.only(function (t) { t.pass(); t.end(); });',
+				code: header + 'test.cb.only(t => { t.pass(); t.end(); });',
 				errors
 			},
 			{
-				code: header + 'test.only.cb(function (t) { t.pass(); t.end(); });',
+				code: header + 'test.only.cb(t => { t.pass(); t.end(); });',
 				errors
 			}
 		]

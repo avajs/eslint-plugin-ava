@@ -12,7 +12,7 @@ const errors = [{ruleId: 'no-statement-after-end'}];
 const header = `const test = require('ava');\n`;
 
 function cbTest(contents, prependHeader) {
-	var ret = 'test.cb(function (t) { ' + contents + ' });';
+	var ret = 'test.cb(t => { ' + contents + ' });';
 	if (prependHeader !== false) {
 		ret = header + ret;
 	}

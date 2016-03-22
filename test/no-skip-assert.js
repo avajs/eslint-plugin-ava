@@ -14,23 +14,23 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('no-skip-assert', rule, {
 		valid: [
-			header + 'test(function (t) { t.is(1, 1); });',
-			header + 'test.skip(function (t) { t.is(1, 1); });',
-			header + 'test(function (t) { notT.skip.is(1, 1); });',
+			header + 'test(t => { t.is(1, 1); });',
+			header + 'test.skip(t => { t.is(1, 1); });',
+			header + 'test(t => { notT.skip.is(1, 1); });',
 			// shouldn't be triggered since it's not a test file
-			'test(function (t) { t.skip.is(1, 1); });'
+			'test(t => { t.skip.is(1, 1); });'
 		],
 		invalid: [
 			{
-				code: header + 'test(function (t) { t.skip.is(1, 1); });',
+				code: header + 'test(t => { t.skip.is(1, 1); });',
 				errors
 			},
 			{
-				code: header + 'test.cb(function (t) { t.skip.is(1, 1); t.end(); });',
+				code: header + 'test.cb(t => { t.skip.is(1, 1); t.end(); });',
 				errors
 			},
 			{
-				code: header + 'test.skip(function (t) { t.skip.is(1, 1); });',
+				code: header + 'test.skip(t => { t.skip.is(1, 1); });',
 				errors
 			}
 		]
