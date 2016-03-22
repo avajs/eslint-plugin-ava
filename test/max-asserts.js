@@ -65,6 +65,14 @@ test(() => {
 				code: `${header} test(function (t) { ${nbAssertions(4)} });`,
 				options: [3],
 				errors
+			},
+			{
+				code: `${header} test(t => { ${nbAssertions(10)} });`,
+				errors
+			},
+			{
+				code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
+				errors: errors.concat(errors) // Should have two errors, one per test
 			}
 		]
 	});

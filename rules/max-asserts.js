@@ -9,6 +9,7 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 	var maxAssertions = context.options[0] || 5;
 	var assertionCount = 0;
+	var nodeToReport = null;
 
 	return ava.merge({
 		CallExpression: function (node) {
@@ -23,15 +24,19 @@ module.exports = function (context) {
 					util.nameOfRootObject(callee) === 't') {
 				assertionCount++;
 
-				if (assertionCount > maxAssertions) {
-					context.report(node, 'Too many assertions.');
+				if (assertionCount === maxAssertions + 1) {
+					nodeToReport = node;
 				}
 			}
 		},
 		'CallExpression:exit': function (node) {
 			if (ava.currentTestNode === node) {
 				// leaving test function
+				if (assertionCount > maxAssertions) {
+					context.report(nodeToReport, 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount);
+				}
 				assertionCount = 0;
+				nodeToReport = null;
 			}
 		}
 	});
