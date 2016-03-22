@@ -11,6 +11,7 @@ module.exports = function (context) {
 			}
 
 			var functionArg = node.arguments[node.arguments.length - 1];
+
 			if (!functionArg.params || !functionArg.params.length) {
 				return;
 			}

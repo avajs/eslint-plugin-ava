@@ -20,6 +20,7 @@ function isStatic(node) {
 
 function isTitleUsed(usedTitleNodes, titleNode) {
 	var purifiedNode = purify(titleNode);
+
 	return usedTitleNodes.some(function (usedTitle) {
 		return deepStrictEqual(purifiedNode, usedTitle);
 	});
@@ -38,6 +39,7 @@ module.exports = function (context) {
 
 			var args = node.arguments;
 			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
+
 			if (!isStatic(titleNode)) {
 				return;
 			}
