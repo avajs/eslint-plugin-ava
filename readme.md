@@ -59,6 +59,7 @@ The rules will only activate in test files.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
+- [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.
 - [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
