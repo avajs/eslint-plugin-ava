@@ -36,6 +36,7 @@ Configure it in `package.json`.
 			"ava/no-only-test": 2,
 			"ava/no-skip-assert": 2,
 			"ava/no-skip-test": 2,
+			"ava/no-statement-after-end": 2,
 			"ava/no-todo-test": 1,
 			"ava/prefer-power-assert": 0,
 			"ava/test-ended": 2,
