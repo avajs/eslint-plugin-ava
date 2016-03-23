@@ -14,13 +14,13 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('test-title', rule, {
 		valid: [
-			header + 'test("my test name", function (t) { t.pass(); t.end(); });',
-			header + 'test(`my test name`, function (t) { t.pass(); t.end(); });',
-			header + 'test(\'my test name\', function (t) { t.pass(); t.end(); });',
+			header + 'test("my test name", t => { t.pass(); t.end(); });',
+			header + 'test(`my test name`, t => { t.pass(); t.end(); });',
+			header + 'test(\'my test name\', t => { t.pass(); t.end(); });',
 			header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
 			header + 'test.todo("my test name");',
 			{
-				code: header + 'test(function (t) { t.pass(); t.end(); });',
+				code: header + 'test(t => { t.pass(); t.end(); });',
 				options: ['if-multiple']
 			},
 			header + 'notTest(t => { t.pass(); t.end(); });',
@@ -29,15 +29,15 @@ test(() => {
 		],
 		invalid: [
 			{
-				code: header + 'test(function (t) { t.pass(); t.end(); });',
+				code: header + 'test(t => { t.pass(); t.end(); });',
 				errors
 			},
 			{
-				code: header + 'test.cb(function (t) { t.pass(); t.end(); });',
+				code: header + 'test.cb(t => { t.pass(); t.end(); });',
 				errors
 			},
 			{
-				code: header + 'test.cb.skip(function (t) { t.pass(); t.end(); });',
+				code: header + 'test.cb.skip(t => { t.pass(); t.end(); });',
 				errors
 			},
 			{
@@ -49,7 +49,7 @@ test(() => {
 				errors
 			},
 			{
-				code: header + 'test(function (t) { t.pass(); t.end(); }); test(function (t) { t.pass(); t.end(); });',
+				code: header + 'test(t => { t.pass(); t.end(); }); test(t => { t.pass(); t.end(); });',
 				options: ['if-multiple'],
 				errors
 			}
