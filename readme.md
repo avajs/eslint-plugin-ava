@@ -54,7 +54,7 @@ Configure it in `package.json`.
 The rules will only activate in test files.
 
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
-- [no-cb-test](docs/rules/no-cb-test.md) - Ensure `test.cb()` is used.
+- [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
