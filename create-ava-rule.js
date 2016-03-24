@@ -102,6 +102,12 @@ module.exports = function createAvaRule() {
 		hasTestModifier: function (mod) {
 			return hasTestModifier(currentTestNode, mod);
 		},
+		hasHookModifier: function () {
+			return hasTestModifier(currentTestNode, 'before') ||
+				hasTestModifier(currentTestNode, 'beforeEach') ||
+				hasTestModifier(currentTestNode, 'after') ||
+				hasTestModifier(currentTestNode, 'afterEach');
+		},
 		merge: function (customHandlers) {
 			Object.keys(predefinedRules).forEach(function (key) {
 				var predef = predefinedRules[key];

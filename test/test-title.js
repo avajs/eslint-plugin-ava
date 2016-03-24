@@ -19,6 +19,11 @@ test(() => {
 			header + 'test(\'my test name\', t => { t.pass(); t.end(); });',
 			header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
 			header + 'test.todo("my test name");',
+			header + 'test.before(t => {});',
+			header + 'test.after(t => {});',
+			header + 'test.beforeEach(t => {});',
+			header + 'test.afterEach(t => {});',
+			header + 'test.cb.before(t => {}); test.before.cb(t => {});',
 			{
 				code: header + 'test(t => { t.pass(); t.end(); });',
 				options: ['if-multiple']

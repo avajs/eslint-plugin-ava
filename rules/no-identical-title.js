@@ -33,7 +33,7 @@ module.exports = function (context) {
 
 	return ava.merge({
 		CallExpression: function (node) {
-			if (!ava.isTestFile || ava.currentTestNode !== node) {
+			if (!ava.isTestFile || ava.currentTestNode !== node || ava.hasHookModifier()) {
 				return;
 			}
 
