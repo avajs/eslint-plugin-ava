@@ -24,6 +24,11 @@ test(() => {
 			header + 'const name = "foo"; test(name + " 1", t => {}); test(name + " 1", t => {});',
 			header + 'test("a", t => {}); notTest("a", t => {});',
 			header + 'notTest("a", t => {}); notTest("a", t => {});',
+			header + 'test.before(t => {}); test.before(t => {});',
+			header + 'test.after(t => {}); test.after(t => {});',
+			header + 'test.beforeEach(t => {}); test.beforeEach(t => {});',
+			header + 'test.afterEach(t => {}); test.afterEach(t => {});',
+			header + 'test.cb.before(t => {}); test.before.cb(t => {});',
 			// shouldn't be triggered since it's not a test file
 			'test(t => {}); test(t => {});',
 			'test("a", t => {}); test("a", t => {});'
