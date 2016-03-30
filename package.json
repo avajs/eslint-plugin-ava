@@ -63,7 +63,9 @@
   "dependencies": {
     "deep-strict-equal": "^0.1.0",
     "espurify": "^1.5.0",
-    "object-assign": "^4.0.1"
+    "multimatch": "^2.1.0",
+    "object-assign": "^4.0.1",
+    "pkg-up": "^1.0.0"
   },
   "devDependencies": {
     "ava": "*",
