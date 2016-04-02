@@ -51,7 +51,7 @@ module.exports = function (context) {
 
 			usedTitleNodes.push(purify(titleNode));
 		},
-		'Program.exit': function () {
+		'Program:exit': function () {
 			usedTitleNodes = [];
 		}
 	});
