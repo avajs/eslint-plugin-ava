@@ -23,7 +23,7 @@ module.exports = function (context) {
 				context.report(node, 'Test should have a title.');
 			}
 		},
-		'Program.exit': function () {
+		'Program:exit': function () {
 			testCount = 0;
 		}
 	});
