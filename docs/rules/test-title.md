@@ -31,5 +31,5 @@ The rule takes one option, a string, which could be either `"always"` or `"if-mu
 You can set the option in configuration like this:
 
 ```js
-"test-title": [2, "always"]
+"ava/test-title": [2, "always"]
 ```
