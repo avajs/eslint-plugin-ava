@@ -32,6 +32,7 @@ Configure it in `package.json`.
 			"ava/max-asserts": [2, 5],
 			"ava/no-cb-test": 0,
 			"ava/no-identical-title": 2,
+			"ava/no-ignored-test-files": 2,
 			"ava/no-invalid-end": 2,
 			"ava/no-only-test": 2,
 			"ava/no-skip-assert": 2,
@@ -57,6 +58,7 @@ The rules will only activate in test files.
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
+- [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
