@@ -42,7 +42,7 @@ module.exports = {
 				'ava/no-unknown-modifiers': 2,
 				'ava/prefer-power-assert': 0,
 				'ava/test-ended': 2,
-				'ava/test-title': [2, 'always'],
+				'ava/test-title': [2, 'if-multiple'],
 				'ava/use-t': 2,
 				'ava/use-test': 2
 			}
