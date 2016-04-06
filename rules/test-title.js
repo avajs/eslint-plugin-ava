@@ -4,7 +4,7 @@ var createAvaRule = require('../create-ava-rule');
 /* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
-	var ifMultiple = context.options[0] === 'if-multiple';
+	var ifMultiple = context.options[0] !== 'always';
 	var testCount = 0;
 
 	return ava.merge({

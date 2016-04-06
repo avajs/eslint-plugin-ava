@@ -14,47 +14,94 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('test-title', rule, {
 		valid: [
-			header + 'test("my test name", t => { t.pass(); t.end(); });',
-			header + 'test(`my test name`, t => { t.pass(); t.end(); });',
-			header + 'test(\'my test name\', t => { t.pass(); t.end(); });',
-			header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
-			header + 'test.todo("my test name");',
-			header + 'test.before(t => {});',
-			header + 'test.after(t => {});',
-			header + 'test.beforeEach(t => {});',
-			header + 'test.afterEach(t => {});',
-			header + 'test.cb.before(t => {}); test.before.cb(t => {});',
+			// Default options should be `['if-multiple']`
+			header + 'test(t => { t.pass(); t.end(); });',
+			{
+				code: header + 'test("my test name", t => { t.pass(); t.end(); });',
+				options: ['always']
+			},
+			{
+				code: header + 'test(`my test name`, t => { t.pass(); t.end(); });',
+				options: ['always']
+			},
+			{
+				code: header + 'test(\'my test name\', t => { t.pass(); t.end(); });',
+				options: ['always']
+			},
+			{
+				code: header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
+				options: ['always']
+			},
+			{
+				code: header + 'test.todo("my test name");',
+				options: ['always']
+			},
+			{
+				code: header + 'test.before(t => {});',
+				options: ['always']
+			},
+			{
+				code: header + 'test.after(t => {});',
+				options: ['always']
+			},
+			{
+				code: header + 'test.beforeEach(t => {});',
+				options: ['always']
+			},
+			{
+				code: header + 'test.afterEach(t => {});',
+				options: ['always']
+			},
+			{
+				code: header + 'test.cb.before(t => {}); test.before.cb(t => {});',
+				options: ['always']
+			},
 			{
 				code: header + 'test(t => { t.pass(); t.end(); });',
 				options: ['if-multiple']
 			},
-			header + 'notTest(t => { t.pass(); t.end(); });',
+			{
+				code: header + 'notTest(t => { t.pass(); t.end(); });',
+				options: ['always']
+			},
 			// shouldn't be triggered since it's not a test file
-			'test(t => {});'
+			{
+				code: 'test(t => {});',
+				options: ['always']
+			}
 		],
 		invalid: [
 			{
+				code: header + 'test(t => {}); test(t => {});',
+				errors
+			},
+			{
 				code: header + 'test(t => { t.pass(); t.end(); });',
+				options: ['always'],
 				errors
 			},
 			{
 				code: header + 'test.cb(t => { t.pass(); t.end(); });',
+				options: ['always'],
 				errors
 			},
 			{
 				code: header + 'test.cb.skip(t => { t.pass(); t.end(); });',
+				options: ['always'],
 				errors
 			},
 			{
 				code: header + 'test(t => { t.pass(); t.end(); });',
+				options: ['always'],
 				errors
 			},
 			{
 				code: header + 'test.todo();',
+				options: ['always'],
 				errors
 			},
 			{
-				code: header + 'test(t => { t.pass(); t.end(); }); test(t => { t.pass(); t.end(); });',
+				code: header + 'test(t => {}); test(t => {});',
 				options: ['if-multiple'],
 				errors
 			}
