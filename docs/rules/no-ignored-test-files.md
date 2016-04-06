@@ -88,5 +88,5 @@ This rule supports the following options:
 You can set the options like this:
 
 ```js
-"ava/no-ignored-test-files": [2, {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
+"ava/no-ignored-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
 ```
