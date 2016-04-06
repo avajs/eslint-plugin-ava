@@ -8,7 +8,7 @@ Skipped assertions are counted.
 ## Fail
 
 ```js
-/*eslint max-asserts: [2, 5]*/
+/*eslint ava/max-asserts: ["error", 5]*/
 import test = from 'ava';
 
 test('getSomeObject should define the players\' names', t => {
@@ -56,5 +56,5 @@ The rule takes one option, a number, which is the maximum number of assertions f
 You can set the option in configuration like this:
 
 ```js
-"ava/max-asserts": [2, 5]
+"ava/max-asserts": ["error", 5]
 ```
