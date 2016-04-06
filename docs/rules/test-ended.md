@@ -23,4 +23,8 @@ test.cb(t => {
 	t.pass();
 	t.end();
 });
+
+test.cb(t => {
+	acceptsCallback(t.end);
+});
 ```
