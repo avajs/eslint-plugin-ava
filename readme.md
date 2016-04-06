@@ -29,22 +29,22 @@ Configure it in `package.json`.
 			"ava"
 		],
 		"rules": {
-			"ava/max-asserts": [0, 5],
-			"ava/no-cb-test": 0,
-			"ava/no-identical-title": 2,
-			"ava/no-ignored-test-files": 2,
-			"ava/no-invalid-end": 2,
-			"ava/no-only-test": 2,
-			"ava/no-skip-assert": 2,
-			"ava/no-skip-test": 2,
-			"ava/no-statement-after-end": 2,
-			"ava/no-todo-test": 1,
-			"ava/no-unknown-modifiers": 2,
-			"ava/prefer-power-assert": 0,
-			"ava/test-ended": 2,
-			"ava/test-title": [2, "if-multiple"],
-			"ava/use-t": 2,
-			"ava/use-test": 2
+			"ava/max-asserts": ["off", 5],
+			"ava/no-cb-test": "off",
+			"ava/no-identical-title": "error",
+			"ava/no-ignored-test-files": "error",
+			"ava/no-invalid-end": "error",
+			"ava/no-only-test": "error",
+			"ava/no-skip-assert": "error",
+			"ava/no-skip-test": "error",
+			"ava/no-statement-after-end": "error",
+			"ava/no-todo-test": "warn",
+			"ava/no-unknown-modifiers": "error",
+			"ava/prefer-power-assert": "off",
+			"ava/test-ended": "error",
+			"ava/test-title": ["error", "if-multiple"],
+			"ava/use-t": "error",
+			"ava/use-test": "error"
 		}
 	}
 }
