@@ -2,6 +2,7 @@
 
 module.exports = {
 	rules: {
+		'assertion-message': require('./rules/assertion-message'),
 		'max-asserts': require('./rules/max-asserts'),
 		'no-cb-test': require('./rules/no-cb-test'),
 		'no-identical-title': require('./rules/no-identical-title'),
@@ -29,6 +30,7 @@ module.exports = {
 				sourceType: 'module'
 			},
 			rules: {
+				'ava/assertion-message': ['off', 'always'],
 				'ava/max-asserts': ['off', 5],
 				'ava/no-cb-test': 'off',
 				'ava/no-identical-title': 'error',

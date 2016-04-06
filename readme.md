@@ -29,6 +29,7 @@ Configure it in `package.json`.
 			"ava"
 		],
 		"rules": {
+			"ava/assertion-message": ["off", "always"],
 			"ava/max-asserts": ["off", 5],
 			"ava/no-cb-test": "off",
 			"ava/no-identical-title": "error",
@@ -55,6 +56,7 @@ Configure it in `package.json`.
 
 The rules will only activate in test files.
 
+- [assertion-message](docs/rules/assertion-message.md) - Enforce or disallow assertion messages.
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
