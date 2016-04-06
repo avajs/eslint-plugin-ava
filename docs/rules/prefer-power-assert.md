@@ -1,8 +1,8 @@
 # Allow only use of the asserts that have no power-assert alternative.
 
-- [`t.ok()`](https://github.com/sindresorhus/ava#okvalue-message) __(You can do [most things](https://github.com/sindresorhus/ava#enhanced-asserts) with this one)__
-- [`t.same()`](https://github.com/sindresorhus/ava#samevalue-expected-message)
-- [`t.notSame()`](https://github.com/sindresorhus/ava#notsamevalue-expected-message)
+- [`t.truthy()`](https://github.com/sindresorhus/ava#truthyvalue-message) __(You can do [most things](https://github.com/sindresorhus/ava#enhanced-assertion-messages) with this one)__
+- [`t.deepEqual()`](https://github.com/sindresorhus/ava#deepequalvalue-expected-message)
+- [`t.notDeepEqual()`](https://github.com/sindresorhus/ava#notdeepequalvalue-expected-message)
 - [`t.throws()`](https://github.com/sindresorhus/ava#throwsfunctionpromise-error-message)
 - [`t.notThrows()`](https://github.com/sindresorhus/ava#notthrowsfunctionpromise-message)
 - [`t.pass()`](https://github.com/sindresorhus/ava#passmessage)
@@ -28,6 +28,6 @@ test(t => {
 import test from 'ava';
 
 test(t => {
-	t.ok(foo === bar);
+	t.truthy(foo === bar);
 });
 ```
