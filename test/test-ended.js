@@ -19,6 +19,7 @@ test(() => {
 			header + 'test.cb(t => { t.pass(); t.end(); });',
 			header + 'test.cb(t => { t.end(); });',
 			header + 'test.cb(t => { t.end(); t.pass(); });',
+			header + 'test.cb(t => { fn(t.end); });',
 			header + 'test.cb.only(t => { t.end(); });',
 			header + 'test.cb.skip.only(t => { t.end(); });',
 			header + 'test.only.cb.skip(t => { t.end(); });',

@@ -7,14 +7,12 @@ module.exports = function (context) {
 	var endCalled = false;
 
 	return ava.merge({
-		CallExpression: function (node) {
+		MemberExpression: function (node) {
 			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
 				return;
 			}
 
-			var callee = node.callee;
-
-			if (callee.type === 'MemberExpression' && callee.object.name === 't' && callee.property.name === 'end') {
+			if (node.object.name === 't' && node.property.name === 'end') {
 				endCalled = true;
 			}
 		},
