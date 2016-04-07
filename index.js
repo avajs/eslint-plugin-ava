@@ -16,6 +16,7 @@ module.exports = {
 		'prefer-power-assert': require('./rules/prefer-power-assert'),
 		'test-ended': require('./rules/test-ended'),
 		'test-title': require('./rules/test-title'),
+		'use-t-well': require('./rules/use-t-well'),
 		'use-t': require('./rules/use-t'),
 		'use-test': require('./rules/use-test')
 	},
@@ -43,6 +44,7 @@ module.exports = {
 				'ava/prefer-power-assert': 'off',
 				'ava/test-ended': 'error',
 				'ava/test-title': ['error', 'if-multiple'],
+				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error'
 			}
