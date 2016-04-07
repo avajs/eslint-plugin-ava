@@ -9,7 +9,7 @@ var defaultFiles = [
 	'test.js',
 	'test-*.js',
 	'test/**/*.js',
-	'**/__tests__/**',
+	'**/__tests__',
 	'**/*.test.js'
 ];
 
