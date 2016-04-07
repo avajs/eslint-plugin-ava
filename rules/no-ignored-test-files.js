@@ -8,7 +8,9 @@ var createAvaRule = require('../create-ava-rule');
 var defaultFiles = [
 	'test.js',
 	'test-*.js',
-	'test/**/*.js'
+	'test/**/*.js',
+	'**/__tests__/**',
+	'**/*.test.js'
 ];
 
 var excludedFolders = [
