@@ -22,7 +22,7 @@ Configure it in `package.json`.
 			"es6": true
 		},
 		"parserOptions": {
-			"ecmaVersion": 6,
+			"ecmaVersion": 7,
 			"sourceType": "module"
 		},
 		"plugins": [
@@ -75,18 +75,18 @@ The rules will only activate in test files.
 
 ## Recommended configuration
 
-This plugin exports a [`recommended` configuration](index.js#L9) that enforces good practices.
+This plugin exports a [`recommended` configuration](index.js) that enforces good practices.
 
-To enable this configuration use the `extends` property in your `package.json`.
+To enable this configuration, use the `extends` property in your `package.json`.
 
 ```json
 {
 	"name": "my-awesome-project",
 	"eslintConfig": {
-		"extends": "plugin:ava/recommended",
 		"plugins": [
 			"ava"
-		]
+		],
+		"extends": "plugin:ava/recommended"
 	}
 }
 ```
@@ -100,9 +100,10 @@ See [ESLint documentation](http://eslint.org/docs/user-guide/configuring#extendi
 
 - [Jeroen Engels](https://github.com/jfmengels)
 - [Takuto Wada](https://github.com/twada)
-- [And our awesome contributors](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
+
+[And our awesome contributors](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
 
 
 ## License
 
-MIT © [Sindre Sorhus](http://sindresorhus.com)
+MIT © [Sindre Sorhus](https://sindresorhus.com)
