@@ -84,7 +84,7 @@ test('without AVA config in package.json', () => {
 			{
 				code: code(true),
 				filename: toPath('lib/foo.spec.js'),
-				errors: [{message: 'Test file is ignored because it is not in `test.js test-*.js test/**/*.js **/__tests__ **/*.test.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `test.js test-*.js test/**/*.js **/__tests__/**/*.js **/*.test.js`'}]
 			},
 			{
 				code: code(true),
