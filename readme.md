@@ -45,7 +45,8 @@ Configure it in `package.json`.
 			"ava/test-ended": "error",
 			"ava/test-title": ["error", "if-multiple"],
 			"ava/use-t": "error",
-			"ava/use-test": "error"
+			"ava/use-test": "error",
+			"ava/use-true-false": "error"
 		}
 	}
 }
@@ -73,6 +74,7 @@ The rules will only activate in test files.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
+- [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
 
 
 ## Recommended configuration
