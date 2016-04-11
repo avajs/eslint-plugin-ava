@@ -8,14 +8,14 @@ Assertion messages are optional arguments that can be given to any assertion cal
 ```js
 import test from 'ava';
 
-/*eslint ava/assertion-message: ["error", "always"]*/
+/* eslint ava/assertion-message: ["error", "always"] */
 test(t => {
-	t.truthy(array.indexOf(value) !== -1);
+	t.true(array.indexOf(value) !== -1);
 });
 
-/*eslint ava/assertion-message: ["error", "never"]*/
+/* eslint ava/assertion-message: ["error", "never"] */
 test(t => {
-	t.truthy(array.indexOf(value) !== -1, 'value is not in array');
+	t.true(array.indexOf(value) !== -1, 'value is not in array');
 });
 ```
 
@@ -25,14 +25,14 @@ test(t => {
 ```js
 import test from 'ava';
 
-/*eslint ava/assertion-message: ["error", "always"]*/
+/* eslint ava/assertion-message: ["error", "always"] */
 test(t => {
-	t.truthy(array.indexOf(value) !== -1, 'value is not in array');
+	t.true(array.indexOf(value) !== -1, 'value is not in array');
 });
 
-/*eslint ava/assertion-message: ["error", "never"]*/
+/* eslint ava/assertion-message: ["error", "never"] */
 test(t => {
-	t.truthy(array.indexOf(value) !== -1);
+	t.true(array.indexOf(value) !== -1);
 });
 ```
 
