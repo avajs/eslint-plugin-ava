@@ -4,7 +4,7 @@ var createAvaRule = require('../create-ava-rule');
 
 var methods = [
 	'end', 'pass', 'fail', 'truthy', 'falsy', 'true', 'false', 'is', 'not',
-	'deepEqual', 'notDeepEqual', 'throws', 'notThrows', 'regex', 'ifError'
+	'deepEqual', 'notDeepEqual', 'throws', 'notThrows', 'regex', 'ifError', 'plan'
 ];
 
 function isMethod(name) {
