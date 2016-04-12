@@ -46,6 +46,7 @@ test(() => {
 			testCase('t.context.foo.skip();'),
 			testCase('setImmediate(t.end);'),
 			testCase('t.deepEqual;'),
+			testCase('t.plan(1);'),
 			testCase('a.foo();'),
 			// shouldn't be triggered since it's not a test file
 			testCase('t.foo(a, a);', false),
@@ -110,6 +111,12 @@ test(() => {
 				code: testCase('t.deepEqual.is(a, a);'),
 				errors: [
 					{...ruleError, message: `Can't chain assertion methods`}
+				]
+			},
+			{
+				code: testCase('t.paln(1);'),
+				errors: [
+					{...ruleError, message: 'Unknown assertion method `paln`'}
 				]
 			},
 			{
