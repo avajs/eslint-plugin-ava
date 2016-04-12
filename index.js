@@ -18,7 +18,8 @@ module.exports = {
 		'test-ended': require('./rules/test-ended'),
 		'test-title': require('./rules/test-title'),
 		'use-t': require('./rules/use-t'),
-		'use-test': require('./rules/use-test')
+		'use-test': require('./rules/use-test'),
+		'use-true-false': require('./rules/use-true-false')
 	},
 	configs: {
 		recommended: {
@@ -46,7 +47,8 @@ module.exports = {
 				'ava/test-ended': 'error',
 				'ava/test-title': ['error', 'if-multiple'],
 				'ava/use-t': 'error',
-				'ava/use-test': 'error'
+				'ava/use-test': 'error',
+				'ava/use-true-false': 'error'
 			}
 		}
 	}
