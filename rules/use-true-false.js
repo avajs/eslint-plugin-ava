@@ -1,7 +1,9 @@
 'use strict';
+var espree = require('espree');
+var espurify = require('espurify');
+var deepStrictEqual = require('deep-strict-equal');
 var util = require('../util');
 var createAvaRule = require('../create-ava-rule');
-var callSignature = require('call-signature');
 
 var booleanBinaryOperators = [
 	'==', '===', '!=', '!==', '<', '<=', '>', '>='
@@ -10,7 +12,7 @@ var booleanBinaryOperators = [
 var knownBooleanSignatures = [
 	'Array.isArray(x)'
 ].map(function (signature) {
-	return callSignature.parse(signature).callee;
+	return espurify(espree.parse(signature).body[0].expression.callee);
 });
 
 module.exports = function (context) {
@@ -46,21 +48,8 @@ function matchesKnownBooleanExpression(arg) {
 	if (arg.type !== 'CallExpression') {
 		return false;
 	}
-	var callee = arg.callee;
+	var callee = espurify(arg.callee);
 	return knownBooleanSignatures.some(function (signature) {
-		return matchesSignature(callee, signature);
+		return deepStrictEqual(callee, signature);
 	});
-}
-
-function matchesSignature(node, sig) {
-	if (sig.type === 'Identifier') {
-		return isIdentifier(node, sig.name);
-	}
-	if (sig.type === 'MemberExpression') {
-		return node.type === 'MemberExpression' && isIdentifier(node.object, sig.object) && isIdentifier(node.property, sig.member);
-	}
-}
-
-function isIdentifier(node, expectedName) {
-	return node.type === 'Identifier' && node.name === expectedName;
 }
