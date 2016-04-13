@@ -61,6 +61,7 @@
     "mocha"
   ],
   "dependencies": {
+    "call-signature": "0.0.2",
     "deep-strict-equal": "^0.1.0",
     "espurify": "^1.5.0",
     "multimatch": "^2.1.0",
