@@ -100,6 +100,10 @@ test(() => {
 				errors: trueErrors
 			},
 			{
+				code: testCase('t.truthy(isFinite(3))'),
+				errors: trueErrors
+			},
+			{
 				code: testCase('t.falsy(value === 1)'),
 				errors: falseErrors
 			}

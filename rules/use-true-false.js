@@ -10,7 +10,22 @@ var booleanBinaryOperators = [
 ];
 
 var knownBooleanSignatures = [
-	'Array.isArray(x)'
+	'isFinite()',
+	'isNaN()',
+	'Object.is()',
+	'Object.isExtensible()',
+	'Object.isFrozen()',
+	'Object.isSealed()',
+	'Boolean()',
+	'Number.isNaN()',
+	'Number.isFinite()',
+	'Number.isInteger()',
+	'Number.isSafeInteger()',
+	'Array.isArray()',
+	'ArrayBuffer.isView()',
+	'SharedArrayBuffer.isView()',
+	'Reflect.has()',
+	'Reflect.isExtensible()'
 ].map(function (signature) {
 	return espurify(espree.parse(signature).body[0].expression.callee);
 });
@@ -20,11 +35,13 @@ module.exports = function (context) {
 
 	return ava.merge({
 		CallExpression: function (node) {
-			if (ava.isTestFile &&
-					ava.currentTestNode &&
-					node.callee.type === 'MemberExpression' &&
-					(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
-					util.nameOfRootObject(node.callee) === 't') {
+			if (
+				ava.isTestFile &&
+				ava.currentTestNode &&
+				node.callee.type === 'MemberExpression' &&
+				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
+				util.nameOfRootObject(node.callee) === 't'
+			) {
 				var arg = node.arguments[0];
 
 				if (arg &&
