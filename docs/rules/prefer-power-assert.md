@@ -1,5 +1,7 @@
 # Allow only use of the asserts that have no power-assert alternative.
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
+
 - [`t.truthy()`](https://github.com/sindresorhus/ava#truthyvalue-message) __(You can do [most things](https://github.com/sindresorhus/ava#enhanced-assertion-messages) with this one)__
 - [`t.deepEqual()`](https://github.com/sindresorhus/ava#deepequalvalue-expected-message)
 - [`t.notDeepEqual()`](https://github.com/sindresorhus/ava#notdeepequalvalue-expected-message)

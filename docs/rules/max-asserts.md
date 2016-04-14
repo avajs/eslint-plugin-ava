@@ -1,5 +1,7 @@
 # Limit the number of assertions in a test
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/max-asserts.md)
+
 Limit the amount of assertions in a test to enforce splitting up large tests into smaller ones.
 
 Skipped assertions are counted.
