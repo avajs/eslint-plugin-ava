@@ -1,5 +1,7 @@
 # Prevent the use of unknown test modifiers
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-unknown-modifiers.md)
+
 Prevent the use of unknown test modifiers.
 
 

@@ -1,5 +1,7 @@
 # Ensure tests have a title
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/test-title.md)
+
 Tests should have a title.
 
 

@@ -1,5 +1,7 @@
 # Ensure `t.end()` is the last statement executed.
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-statement-after-end.md)
+
 `t.end()` should mark the end of your test, and additional statements should not be executed.
 
 ## Fail

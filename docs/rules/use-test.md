@@ -1,5 +1,7 @@
 # Ensure that AVA is imported with `test` as the variable name
 
+Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/use-test.md)
+
 The convention is to import AVA and assign it to a variable named `test`. Most rules in `eslint-plugin-ava` are based on that assumption.
 
 ### Fail
