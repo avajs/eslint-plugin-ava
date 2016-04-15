@@ -40,7 +40,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "xo && ava"
+    "test": "xo && nyc ava",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls"
   },
   "files": [
     "index.js",
@@ -70,8 +71,10 @@
   },
   "devDependencies": {
     "ava": "*",
+    "coveralls": "^2.11.9",
     "eslint": "^2.2.0",
     "js-combinatorics": "^0.5.0",
+    "nyc": "^6.4.0",
     "xo": "*"
   },
   "peerDependencies": {
