@@ -17,6 +17,7 @@ test(t => {
 	t.falsy([1, 2, 3].indexOf(value) === -1);
 	t.falsy(!value);
 	t.truthy(!!value);
+	t.truthy(Array.isArray(value));
 });
 ```
 
@@ -31,5 +32,6 @@ test(t => {
 	t.false([1, 2, 3].indexOf(value) === -1);
 	t.false(!value);
 	t.true(!!value);
+	t.true(Array.isArray(value));
 });
 ```
