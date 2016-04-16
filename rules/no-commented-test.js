@@ -1,5 +1,6 @@
 'use strict';
-var acorn = require('acorn/dist/acorn_loose');
+var acorn = require('acorn');
+var acornLoose = require('acorn/dist/acorn_loose');
 var estraverse = require('estraverse');
 var numLines = require('num-lines');
 var createAvaRule = require('../create-ava-rule');
@@ -31,22 +32,23 @@ module.exports = function (context) {
 		var src = concatComments(commentBlock);
 
 		// Does a best effort parse of the code. AST will contain `x` Identifiers for chunks it can't parse.
-		var ast = acorn.parse_dammit(src, {locations: true});
+		var ast = acornLoose.parse_dammit(src, {locations: true});
 
 		// Traverse the contents of the comment block, looking for a test call.
 		estraverse.traverse(ast, {
 			enter: function (node) {
-				if (node.type !== 'CallExpression') {
-					return;
-				}
+				if (node.type === 'CallExpression' && isTestFunctionCall(node.callee)) {
+					try {
+						// Strict parse - don't report if the commented out test contains syntax errors
+						acorn.parse(src.substring(node.start, node.end));
 
-				if (isTestFunctionCall(node.callee)) {
-					var loc = translateLocation(node.loc.start, commentBlock);
+						var loc = translateLocation(node.loc.start, commentBlock);
 
-					context.report({
-						message: 'use test.skip instead of commenting out tests',
-						loc: loc
-					});
+						context.report({
+							message: 'use test.skip instead of commenting out tests',
+							loc: loc
+						});
+					} catch (e) {}
 				}
 			}
 		});

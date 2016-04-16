@@ -21,6 +21,8 @@ test(() => {
 	ruleTester.run('no-commented-tests', rule, {
 		valid: [
 			header + 'test("my test name", t => { t.pass(); });',
+			header + 'something(); // Is this a test(..)',
+			header + 'something(); // Some sentence ending with the word test (followed by parens)',
 			// shouldn't be triggered since it's not a test file
 			'test.cb(t => {});\n// test.cb(t=> {})'
 		],
