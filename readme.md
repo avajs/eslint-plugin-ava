@@ -81,11 +81,11 @@ The rules will only activate in test files.
 - [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
 
 
-## Recommended configuration
+## Recommended config
 
-This plugin exports a [`recommended` configuration](index.js) that enforces good practices.
+This plugin exports a [`recommended` config](index.js) that enforces good practices.
 
-To enable this configuration, use the `extends` property in your `package.json`.
+Enable it in your `package.json` with the `extends` option:
 
 ```json
 {
@@ -99,13 +99,14 @@ To enable this configuration, use the `extends` property in your `package.json`.
 }
 ```
 
-See [ESLint documentation](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) for more information about extending configuration files.
+See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) for more information about extending config files.
 
-**Note**: This configuration will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
+**Note**: This config will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
 
 
 ## Credit
 
+- [AVA team](https://github.com/sindresorhus/ava#team)
 - [Jeroen Engels](https://github.com/jfmengels)
 - [Takuto Wada](https://github.com/twada)
 
