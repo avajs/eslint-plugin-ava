@@ -7,7 +7,10 @@ module.exports = function (context) {
 	return ava.merge({
 		CallExpression: function (node) {
 			if (ava.isTestFile && ava.currentTestNode === node && ava.hasTestModifier('skip')) {
-				context.report(node, 'No tests should be skipped.');
+				context.report({
+					node: node,
+					message: 'No tests should be skipped.'
+				});
 			}
 		}
 	});

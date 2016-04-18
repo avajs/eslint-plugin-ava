@@ -56,7 +56,6 @@ function isCalleeMatched(callee, methodName) {
 		deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
 }
 
-/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
 
@@ -71,7 +70,10 @@ module.exports = function (context) {
 			if (callee.type === 'MemberExpression') {
 				notAllowed.forEach(function (methodName) {
 					if (isCalleeMatched(callee, methodName)) {
-						context.report(node, 'Only asserts with no power-assert alternative are allowed.');
+						context.report({
+							node: node,
+							message: 'Only asserts with no power-assert alternative are allowed.'
+						});
 					}
 				});
 			}

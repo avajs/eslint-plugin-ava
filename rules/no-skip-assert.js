@@ -11,7 +11,10 @@ module.exports = function (context) {
 					ava.currentTestNode &&
 					node.property.name === 'skip' &&
 					util.nameOfRootObject(node) === 't') {
-				context.report(node, 'No assertions should be skipped.');
+				context.report({
+					node: node,
+					message: 'No assertions should be skipped.'
+				});
 			}
 		}
 	});

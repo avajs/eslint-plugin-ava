@@ -12,7 +12,10 @@ module.exports = function (context) {
 					node.property.name === 'end' &&
 					!ava.hasTestModifier('cb') &&
 					util.nameOfRootObject(node) === 't') {
-				context.report(node, '`t.end()` should only be used inside of `test.cb()`.');
+				context.report({
+					node: node,
+					message: '`t.end()` should only be used inside of `test.cb()`.'
+				});
 			}
 		}
 	});

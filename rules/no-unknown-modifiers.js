@@ -2,8 +2,15 @@
 var createAvaRule = require('../create-ava-rule');
 
 var modifiers = [
-	'after', 'afterEach', 'before', 'beforeEach',
-	'cb', 'only', 'serial', 'skip', 'todo'
+	'after',
+	'afterEach',
+	'before',
+	'beforeEach',
+	'cb',
+	'only',
+	'serial',
+	'skip',
+	'todo'
 ];
 
 function getTestModifiers(node) {
@@ -37,7 +44,10 @@ module.exports = function (context) {
 			var unknown = unknownModifiers(node);
 
 			if (unknown.length !== 0) {
-				context.report(node, 'Unknown modifier `' + unknown[0] + '`');
+				context.report({
+					node: node,
+					message: 'Unknown test modifier `' + unknown[0] + '`.'
+				});
 			}
 		}
 	});

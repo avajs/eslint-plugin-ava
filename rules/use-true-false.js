@@ -6,7 +6,14 @@ var util = require('../util');
 var createAvaRule = require('../create-ava-rule');
 
 var booleanBinaryOperators = [
-	'==', '===', '!=', '!==', '<', '<=', '>', '>='
+	'==',
+	'===',
+	'!=',
+	'!==',
+	'<',
+	'<=',
+	'>',
+	'>='
 ];
 
 var knownBooleanSignatures = [
@@ -30,6 +37,18 @@ var knownBooleanSignatures = [
 	return espurify(espree.parse(signature).body[0].expression.callee);
 });
 
+function matchesKnownBooleanExpression(arg) {
+	if (arg.type !== 'CallExpression') {
+		return false;
+	}
+
+	var callee = espurify(arg.callee);
+
+	return knownBooleanSignatures.some(function (signature) {
+		return deepStrictEqual(callee, signature);
+	});
+}
+
 module.exports = function (context) {
 	var ava = createAvaRule();
 
@@ -51,22 +70,18 @@ module.exports = function (context) {
 					(matchesKnownBooleanExpression(arg))
 				) {
 					if (node.callee.property.name === 'falsy') {
-						context.report(node, '`t.false(x)` should be used instead of `t.falsy(x)`');
+						context.report({
+							node: node,
+							message: '`t.false()` should be used instead of `t.falsy()`.'
+						});
 					} else {
-						context.report(node, '`t.true(x)` should be used instead of `t.truthy(x)`');
+						context.report({
+							node: node,
+							message: '`t.true()` should be used instead of `t.truthy()`.'
+						});
 					}
 				}
 			}
 		}
 	});
 };
-
-function matchesKnownBooleanExpression(arg) {
-	if (arg.type !== 'CallExpression') {
-		return false;
-	}
-	var callee = espurify(arg.callee);
-	return knownBooleanSignatures.some(function (signature) {
-		return deepStrictEqual(callee, signature);
-	});
-}

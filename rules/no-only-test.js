@@ -7,7 +7,10 @@ module.exports = function (context) {
 	return ava.merge({
 		CallExpression: function (node) {
 			if (ava.isTestFile && ava.currentTestNode === node && ava.hasTestModifier('only')) {
-				context.report(node, 'test.only() should not be used.');
+				context.report({
+					node: node,
+					message: '`test.only()` should not be used.'
+				});
 			}
 		}
 	});

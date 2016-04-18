@@ -21,6 +21,7 @@ var expectedNbArguments = {
 
 function nbArguments(node) {
 	var nArgs = expectedNbArguments[node.property.name];
+
 	if (nArgs !== undefined) {
 		return nArgs;
 	}
@@ -43,17 +44,26 @@ module.exports = function (context) {
 			}
 
 			var callee = node.callee;
+
 			if (callee.property && util.nameOfRootObject(callee) === 't') {
 				var nArgs = nbArguments(callee);
+
 				if (nArgs === -1) {
 					return;
 				}
 
 				var hasMessage = nArgs < node.arguments.length;
+
 				if (!hasMessage && shouldHaveMessage) {
-					context.report(node, 'Expected an assertion message, but found none');
+					context.report({
+						node: node,
+						message: 'Expected an assertion message, but found none.'
+					});
 				} else if (hasMessage && !shouldHaveMessage) {
-					context.report(node, 'Expected no assertion message, but found one');
+					context.report({
+						node: node,
+						message: 'Expected no assertion message, but found one.'
+					});
 				}
 			}
 		}
@@ -61,5 +71,8 @@ module.exports = function (context) {
 };
 
 module.exports.schema = [{
-	enum: ['always', 'never']
+	enum: [
+		'always',
+		'never'
+	]
 }];

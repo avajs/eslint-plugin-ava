@@ -14,7 +14,7 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('test-title', rule, {
 		valid: [
-			// Default options should be `['if-multiple']`
+			// default options should be `['if-multiple']`
 			header + 'test(t => { t.pass(); t.end(); });',
 			{
 				code: header + 'test("my test name", t => { t.pass(); t.end(); });',

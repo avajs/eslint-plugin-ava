@@ -26,13 +26,12 @@ function isTitleUsed(usedTitleNodes, titleNode) {
 	});
 }
 
-/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
 	var usedTitleNodes = [];
 
 	return ava.merge({
-		CallExpression: function (node) {
+		'CallExpression': function (node) {
 			if (!ava.isTestFile || ava.currentTestNode !== node || ava.hasHookModifier()) {
 				return;
 			}
@@ -45,7 +44,10 @@ module.exports = function (context) {
 			}
 
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
-				context.report(node, 'Test title is used multiple times in the same file.');
+				context.report({
+					node: node,
+					message: 'Test title is used multiple times in the same file.'
+				});
 				return;
 			}
 

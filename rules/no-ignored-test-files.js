@@ -20,12 +20,13 @@ var excludedFolders = [
 
 function isIgnored(rootDir, files, filepath) {
 	var relativeFilePath = path.relative(rootDir, filepath);
+
 	if (multimatch([relativeFilePath], excludedFolders).length !== 0) {
-		return 'Test file is ignored because it is in `' + excludedFolders.join(' ') + '`';
+		return 'Test file is ignored because it is in `' + excludedFolders.join(' ') + '`.';
 	}
 
 	if (multimatch([relativeFilePath], files).length === 0) {
-		return 'Test file is ignored because it is not in `' + files.join(' ') + '`';
+		return 'Test file is ignored because it is not in `' + files.join(' ') + '`.';
 	}
 
 	return null;
@@ -33,13 +34,13 @@ function isIgnored(rootDir, files, filepath) {
 
 function getPackageInfo() {
 	var packageFilePath = pkgUp.sync();
+
 	return {
 		rootDir: packageFilePath && path.dirname(packageFilePath),
 		files: util.getAvaConfig(packageFilePath).files
 	};
 }
 
-/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
 	var packageInfo = getPackageInfo();
@@ -53,7 +54,7 @@ module.exports = function (context) {
 	}
 
 	return ava.merge({
-		CallExpression: function (node) {
+		'CallExpression': function (node) {
 			if (ava.isTestFile && ava.currentTestNode === node) {
 				hasTestCall = true;
 			}
@@ -64,9 +65,14 @@ module.exports = function (context) {
 			}
 
 			var ignoredReason = isIgnored(packageInfo.rootDir, files, context.getFilename());
+
 			if (ignoredReason) {
-				context.report(node, ignoredReason);
+				context.report({
+					node: node,
+					message: ignoredReason
+				});
 			}
+
 			hasTestCall = false;
 		}
 	});

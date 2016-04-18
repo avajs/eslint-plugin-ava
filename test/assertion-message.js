@@ -10,12 +10,12 @@ const ruleTester = new RuleTester({
 
 const missingError = [{
 	ruleId: 'assertion-message',
-	message: 'Expected an assertion message, but found none'
+	message: 'Expected an assertion message, but found none.'
 }];
 
 const foundError = [{
 	ruleId: 'assertion-message',
-	message: 'Expected no assertion message, but found one'
+	message: 'Expected no assertion message, but found one.'
 }];
 
 const header = `const test = require('ava');`;
@@ -26,6 +26,7 @@ function testCase(option, content, errors, useHeader) {
 			${content}
 		});
 	`;
+
 	return {
 		errors: errors || [],
 		options: [option],

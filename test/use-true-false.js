@@ -8,12 +8,21 @@ const ruleTester = new RuleTester({
 	}
 });
 
-const trueErrors = [{ruleId: 'use-true-false', message: '`t.true(x)` should be used instead of `t.truthy(x)`'}];
-const falseErrors = [{ruleId: 'use-true-false', message: '`t.false(x)` should be used instead of `t.falsy(x)`'}];
+const trueErrors = [{
+	ruleId: 'use-true-false',
+	message: '`t.true()` should be used instead of `t.truthy()`.'
+}];
+
+const falseErrors = [{
+	ruleId: 'use-true-false',
+	message: '`t.false()` should be used instead of `t.falsy()`.'
+}];
+
 const header = `const test = require('ava');\n`;
 
 function testCase(contents, prependHeader) {
 	const content = `test(t => { ${contents} });`;
+
 	if (prependHeader !== false) {
 		return header + content;
 	}

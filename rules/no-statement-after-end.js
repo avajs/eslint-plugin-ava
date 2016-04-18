@@ -4,6 +4,18 @@ var createAvaRule = require('../create-ava-rule');
 // This rule makes heavy use of eslints code path analysis
 // See: http://eslint.org/docs/developer-guide/code-path-analysis.html
 
+function isEndExpression(node) {
+	// returns true if this node represents a call to `t.end(...)`
+	return (
+		node.type === 'CallExpression' &&
+		node.callee.type === 'MemberExpression' &&
+		node.callee.object.type === 'Identifier' &&
+		node.callee.object.name === 't' &&
+		node.callee.property.type === 'Identifier' &&
+		node.callee.property.name === 'end'
+	);
+}
+
 module.exports = function (context) {
 	var ava = createAvaRule();
 	var segmentInfoMap = Object.create(null);
@@ -13,12 +25,14 @@ module.exports = function (context) {
 	function segmentStart(segment) {
 		// A new CodePathSegment has started, create an "info" object to track this segments state.
 		segmentInfoStack.push(currentSegmentInfo);
+
 		currentSegmentInfo = {
 			ended: false,
 			prev: segment.prevSegments.map(function (prevSegment) {
 				return segmentInfoMap[prevSegment.id];
 			})
 		};
+
 		segmentInfoMap[segment.id] = currentSegmentInfo;
 	}
 
@@ -49,7 +63,11 @@ module.exports = function (context) {
 				// unset ended state to avoid generating lots of errors
 				info.ended = false;
 			});
-			context.report(node, 'No statements following a call to t.end().');
+
+			context.report({
+				node: node,
+				message: 'No statements following a call to `t.end()`.'
+			});
 		}
 	}
 
@@ -66,27 +84,14 @@ module.exports = function (context) {
 		ForInStatement: checkStatement,
 		ForOfStatement: checkStatement,
 		ReturnStatement: function (node) {
-			// empty return statements are OK even after `t.end`, only check it if there is an argument.
+			// empty return statements are OK even after `t.end`,
+			// only check it if there is an argument
 			if (node.argument) {
 				checkStatement(node);
 			}
 		},
-
 		onCodePathSegmentStart: segmentStart,
 		onCodePathSegmentEnd: segmentEnd,
-
 		CallExpression: checkForEndExpression
 	});
 };
-
-function isEndExpression(node) {
-	// returns true if this node represents a call to `t.end(...)`
-	return (
-		node.type === 'CallExpression' &&
-		node.callee.type === 'MemberExpression' &&
-		node.callee.object.type === 'Identifier' &&
-		node.callee.object.name === 't' &&
-		node.callee.property.type === 'Identifier' &&
-		node.callee.property.name === 'end'
-	);
-}

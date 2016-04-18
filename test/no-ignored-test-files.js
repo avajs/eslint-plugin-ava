@@ -74,29 +74,29 @@ test('without AVA config in package.json', () => {
 			{
 				code: code(true),
 				filename: toPath('test/foo/fixtures/bar.js'),
-				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`'}]
+				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('test/foo/helpers/bar.js'),
-				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`'}]
+				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('lib/foo.spec.js'),
-				errors: [{message: 'Test file is ignored because it is not in `test.js test-*.js test/**/*.js **/__tests__/**/*.js **/*.test.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `test.js test-*.js test/**/*.js **/__tests__/**/*.js **/*.test.js`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('test/foo/bar.js'),
 				options: [{files: ['lib/**/*.spec.js']}],
-				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.spec.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.spec.js`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('lib/foo.not-test.js'),
 				options: [{files: ['lib/**/*.spec.js']}],
-				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.spec.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.spec.js`.'}]
 			}
 		]
 	});
@@ -127,28 +127,28 @@ test('with AVA config in package.json', () => {
 			{
 				code: code(true),
 				filename: toPath('lib/foo/fixtures/bar.test.js'),
-				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`'}]
+				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('lib/foo/helpers/bar.test.js'),
-				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`'}]
+				errors: [{message: 'Test file is ignored because it is in `**/fixtures/** **/helpers/**`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('test.js'),
-				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.test.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.test.js`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('bar/foo.test.js'),
-				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.test.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `lib/**/*.test.js`.'}]
 			},
 			{
 				code: code(true),
 				filename: toPath('lib/foo.test.js'),
 				options: [{files: ['bar/**/*.test.js']}],
-				errors: [{message: 'Test file is ignored because it is not in `bar/**/*.test.js`'}]
+				errors: [{message: 'Test file is ignored because it is not in `bar/**/*.test.js`.'}]
 			}
 		]
 	});

@@ -7,7 +7,10 @@ module.exports = function (context) {
 	return ava.merge({
 		CallExpression: function (node) {
 			if (ava.isTestFile && ava.currentTestNode === node && ava.hasTestModifier('todo')) {
-				context.report(node, '`test.todo()` should be not be used.');
+				context.report({
+					node: node,
+					message: '`test.todo()` should be not be used.'
+				});
 			}
 		}
 	});

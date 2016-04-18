@@ -32,49 +32,49 @@ test(() => {
 			{
 				code: `${header} test.foo(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `foo`'}
+					{...ruleError, message: 'Unknown test modifier `foo`.'}
 				]
 			},
 			{
 				code: `${header} test.onlu(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `onlu`'}
+					{...ruleError, message: 'Unknown test modifier `onlu`.'}
 				]
 			},
 			{
 				code: `${header} test.beforeeach(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `beforeeach`'}
+					{...ruleError, message: 'Unknown test modifier `beforeeach`.'}
 				]
 			},
 			{
 				code: `${header} test.c.only(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `c`'}
+					{...ruleError, message: 'Unknown test modifier `c`.'}
 				]
 			},
 			{
 				code: `${header} test.cb.onlu(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `onlu`'}
+					{...ruleError, message: 'Unknown test modifier `onlu`.'}
 				]
 			},
 			{
 				code: `${header} test.foo.bar.baz(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `foo`'}
+					{...ruleError, message: 'Unknown test modifier `foo`.'}
 				]
 			},
 			{
 				code: `${header} test.default(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `default`'}
+					{...ruleError, message: 'Unknown test modifier `default`.'}
 				]
 			},
 			{
 				code: `${header} test.test(t => {});`,
 				errors: [
-					{...ruleError, message: 'Unknown modifier `test`'}
+					{...ruleError, message: 'Unknown test modifier `test`.'}
 				]
 			}
 		]

@@ -4,7 +4,6 @@ var createAvaRule = require('../create-ava-rule');
 
 var notAssertionMethods = ['plan', 'end'];
 
-/* eslint quote-props: [2, "as-needed"] */
 module.exports = function (context) {
 	var ava = createAvaRule();
 	var maxAssertions = context.options[0] || 5;
@@ -12,7 +11,7 @@ module.exports = function (context) {
 	var nodeToReport = null;
 
 	return ava.merge({
-		CallExpression: function (node) {
+		'CallExpression': function (node) {
 			if (!ava.isTestFile || !ava.currentTestNode || node.callee.type !== 'MemberExpression') {
 				return;
 			}
@@ -33,8 +32,12 @@ module.exports = function (context) {
 			if (ava.currentTestNode === node) {
 				// leaving test function
 				if (assertionCount > maxAssertions) {
-					context.report(nodeToReport, 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount);
+					context.report({
+						node: nodeToReport,
+						message: 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount + '.'
+					});
 				}
+
 				assertionCount = 0;
 				nodeToReport = null;
 			}

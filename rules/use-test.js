@@ -17,7 +17,10 @@ var avaVariableDeclaratorInitAst = {
 };
 
 function report(context, node) {
-	context.report(node, 'AVA should be imported as `test`.');
+	context.report({
+		node: node,
+		message: 'AVA should be imported as `test`.'
+	});
 }
 
 module.exports = function (context) {
