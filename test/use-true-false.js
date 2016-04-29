@@ -52,6 +52,8 @@ test(() => {
 			testCase('t.falsy(value)'),
 			testCase('t.falsy(value())'),
 			testCase('t.falsy(value + value)'),
+			testCase('t.truthy()'),
+			testCase('t.falsy()'),
 			// shouldn't be triggered since it's not a test file
 			testCase('t.truthy(value === 1)', false)
 		],

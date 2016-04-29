@@ -64,10 +64,10 @@ module.exports = function (context) {
 				var arg = node.arguments[0];
 
 				if (arg &&
-					(arg.type === 'BinaryExpression' && booleanBinaryOperators.indexOf(arg.operator) !== -1) ||
+					((arg.type === 'BinaryExpression' && booleanBinaryOperators.indexOf(arg.operator) !== -1) ||
 					(arg.type === 'UnaryExpression' && arg.operator === '!') ||
 					(arg.type === 'Literal' && arg.value === Boolean(arg.value)) ||
-					(matchesKnownBooleanExpression(arg))
+					(matchesKnownBooleanExpression(arg)))
 				) {
 					if (node.callee.property.name === 'falsy') {
 						context.report({
