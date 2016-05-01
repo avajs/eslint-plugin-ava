@@ -68,6 +68,11 @@ test('without AVA config in package.json', () => {
 				code: code(true),
 				filename: toPath('lib/foo.spec.js'),
 				options: [{files: ['lib/**/*.spec.js']}]
+			},
+			{
+				code: code(true),
+				filename: '<text>',
+				options: [{files: ['lib/**/*.spec.js']}]
 			}
 		],
 		invalid: [
@@ -121,6 +126,11 @@ test('with AVA config in package.json', () => {
 				code: code(true),
 				filename: toPath('bar/foo.test.js'),
 				options: [{files: ['bar/**/*.test.js']}]
+			},
+			{
+				code: code(true),
+				filename: '<text>',
+				options: [{files: ['lib/**/*.spec.js']}]
 			}
 		],
 		invalid: [
