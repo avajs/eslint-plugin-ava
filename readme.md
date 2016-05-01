@@ -31,6 +31,7 @@ Configure it in `package.json`.
 			"ava"
 		],
 		"rules": {
+			"ava/assertion-arguments": "error",
 			"ava/assertion-message": ["off", "always"],
 			"ava/max-asserts": ["off", 5],
 			"ava/no-cb-test": "off",
@@ -60,6 +61,7 @@ Configure it in `package.json`.
 
 The rules will only activate in test files.
 
+- [assertion-arguments](docs/rules/assertion-arguments.md) - Enforce passing correct arguments to assertions.
 - [assertion-message](docs/rules/assertion-message.md) - Enforce or disallow assertion messages.
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
