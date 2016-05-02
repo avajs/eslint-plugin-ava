@@ -42,6 +42,11 @@ function getPackageInfo() {
 }
 
 module.exports = function (context) {
+	var filename = context.getFilename();
+	if (filename === '<text>') {
+		return {};
+	}
+
 	var ava = createAvaRule();
 	var packageInfo = getPackageInfo();
 	var options = context.options[0] || {};
@@ -64,7 +69,7 @@ module.exports = function (context) {
 				return;
 			}
 
-			var ignoredReason = isIgnored(packageInfo.rootDir, files, context.getFilename());
+			var ignoredReason = isIgnored(packageInfo.rootDir, files, filename);
 
 			if (ignoredReason) {
 				context.report({
