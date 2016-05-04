@@ -26,6 +26,7 @@ const header = `const test = require('ava');\n`;
 test(() => {
 	ruleTester.run('use-t', rule, {
 		valid: [
+			header + 'test();',
 			header + 'test(() => {});',
 			header + 'test(t => {});',
 			header + 'test.cb(t => {});',
