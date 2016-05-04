@@ -10,6 +10,14 @@ exports.nameOfRootObject = function (node) {
 	return node.object.name;
 };
 
+exports.isInContext = function (node) {
+	if (node.object.type === 'MemberExpression') {
+		return exports.isInContext(node.object);
+	}
+
+	return node.property.name === 'context';
+};
+
 exports.getAvaConfig = function (filepath) {
 	var defaultResult = {};
 	if (!filepath) {
