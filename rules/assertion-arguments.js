@@ -3,37 +3,29 @@ var util = require('../util');
 var createAvaRule = require('../create-ava-rule');
 
 var expectedNbArguments = {
-	deepEqual: 2,
-	end: 0,
-	fail: 0,
-	false: 1,
-	falsy: 1,
-	ifError: 1,
-	is: 2,
-	not: 2,
-	notDeepEqual: 2,
-	notThrows: 1,
-	pass: 0,
-	plan: 1,
-	regex: 2,
-	throws: 1,
-	true: 1,
-	truthy: 1
-};
-
-var fixedNbArguments = {
-	end: true,
-	plan: true
+	deepEqual: {min: 2, max: 3},
+	end: {min: 0, max: 0},
+	fail: {min: 0, max: 1},
+	false: {min: 1, max: 2},
+	falsy: {min: 1, max: 2},
+	ifError: {min: 1, max: 2},
+	is: {min: 2, max: 3},
+	not: {min: 2, max: 3},
+	notDeepEqual: {min: 2, max: 3},
+	notThrows: {min: 1, max: 2},
+	pass: {min: 0, max: 1},
+	plan: {min: 1, max: 1},
+	regex: {min: 2, max: 3},
+	throws: {min: 1, max: 3},
+	true: {min: 1, max: 2},
+	truthy: {min: 1, max: 2}
 };
 
 function nbArguments(node) {
 	var name = node.property.name;
 	var nArgs = expectedNbArguments[name];
-	if (nArgs !== undefined) {
-		return {
-			min: nArgs,
-			max: fixedNbArguments[name] ? nArgs : nArgs + 1
-		};
+	if (nArgs) {
+		return nArgs;
 	}
 
 	if (node.object.type === 'MemberExpression') {
@@ -78,7 +70,7 @@ module.exports = function (context) {
 			} else if (node.arguments.length > nArgs.max) {
 				report(node, 'Too many arguments. Expected at most ' + nArgs.max + '.');
 			} else if (enforcesMessage && nArgs.min !== nArgs.max) {
-				var hasMessage = nArgs.max === gottenArgs;
+				var hasMessage = gottenArgs === nArgs.max;
 				if (!hasMessage && shouldHaveMessage) {
 					report(node, 'Expected an assertion message, but found none.');
 				} else if (hasMessage && !shouldHaveMessage) {
