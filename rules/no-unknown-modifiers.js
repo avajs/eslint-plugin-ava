@@ -4,6 +4,7 @@ var createAvaRule = require('../create-ava-rule');
 var modifiers = [
 	'after',
 	'afterEach',
+	'always',
 	'before',
 	'beforeEach',
 	'cb',
