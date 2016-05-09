@@ -3,7 +3,6 @@
 Enforces passing the right number of arguments to assertion methods like `t.is()`. This rule can optionally also enforce or forbid the use of assertion messages.
 
 Assertion messages are optional arguments that can be given to any assertion call to improve the error message, should the assertion fail.
-qq
 
 ## Fail
 
