@@ -1,8 +1,8 @@
 import test from 'ava';
-import {RuleTester} from 'eslint';
+import avaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/use-true-false';
 
-const ruleTester = new RuleTester({
+const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
 	}
@@ -30,94 +30,92 @@ function testCase(contents, prependHeader) {
 	return content;
 }
 
-test(() => {
-	ruleTester.run('use-true-false', rule, {
-		valid: [
-			testCase('t.true(true)'),
-			testCase('t.true(false)'),
-			testCase('t.true(value == 1)'),
-			testCase('t.true(value === 1)'),
-			testCase('t.true(value != 1)'),
-			testCase('t.true(value !== 1)'),
-			testCase('t.true(value < 1)'),
-			testCase('t.true(value <= 1)'),
-			testCase('t.true(value > 1)'),
-			testCase('t.true(value >= 1)'),
-			testCase('t.true(!value)'),
-			testCase('t.true(!!value)'),
-			testCase('t.false(value === 1)'),
-			testCase('t.truthy(value)'),
-			testCase('t.truthy(value())'),
-			testCase('t.truthy(value + value)'),
-			testCase('t.falsy(value)'),
-			testCase('t.falsy(value())'),
-			testCase('t.falsy(value + value)'),
-			testCase('t.truthy()'),
-			testCase('t.falsy()'),
+ruleTester.run('use-true-false', rule, {
+	valid: [
+		testCase('t.true(true)'),
+		testCase('t.true(false)'),
+		testCase('t.true(value == 1)'),
+		testCase('t.true(value === 1)'),
+		testCase('t.true(value != 1)'),
+		testCase('t.true(value !== 1)'),
+		testCase('t.true(value < 1)'),
+		testCase('t.true(value <= 1)'),
+		testCase('t.true(value > 1)'),
+		testCase('t.true(value >= 1)'),
+		testCase('t.true(!value)'),
+		testCase('t.true(!!value)'),
+		testCase('t.false(value === 1)'),
+		testCase('t.truthy(value)'),
+		testCase('t.truthy(value())'),
+		testCase('t.truthy(value + value)'),
+		testCase('t.falsy(value)'),
+		testCase('t.falsy(value())'),
+		testCase('t.falsy(value + value)'),
+		testCase('t.truthy()'),
+		testCase('t.falsy()'),
 			// shouldn't be triggered since it's not a test file
-			testCase('t.truthy(value === 1)', false)
-		],
-		invalid: [
-			{
-				code: testCase('t.truthy(true)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(false)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value == 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value === 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value != 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value !== 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value < 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value <= 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value > 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(value >= 1)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(!value)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(!!value)'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(Array.isArray(value))'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.truthy(isFinite(3))'),
-				errors: trueErrors
-			},
-			{
-				code: testCase('t.falsy(value === 1)'),
-				errors: falseErrors
-			}
-		]
-	});
+		testCase('t.truthy(value === 1)', false)
+	],
+	invalid: [
+		{
+			code: testCase('t.truthy(true)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(false)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value == 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value === 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value != 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value !== 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value < 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value <= 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value > 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(value >= 1)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(!value)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(!!value)'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(Array.isArray(value))'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.truthy(isFinite(3))'),
+			errors: trueErrors
+		},
+		{
+			code: testCase('t.falsy(value === 1)'),
+			errors: falseErrors
+		}
+	]
 });

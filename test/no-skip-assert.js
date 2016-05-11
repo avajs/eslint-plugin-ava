@@ -1,8 +1,8 @@
 import test from 'ava';
-import {RuleTester} from 'eslint';
+import avaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/no-skip-assert';
 
-const ruleTester = new RuleTester({
+const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
 	}
@@ -11,28 +11,26 @@ const ruleTester = new RuleTester({
 const errors = [{ruleId: 'no-skip-assert'}];
 const header = `const test = require('ava');\n`;
 
-test(() => {
-	ruleTester.run('no-skip-assert', rule, {
-		valid: [
-			header + 'test(t => { t.is(1, 1); });',
-			header + 'test.skip(t => { t.is(1, 1); });',
-			header + 'test(t => { notT.skip.is(1, 1); });',
+ruleTester.run('no-skip-assert', rule, {
+	valid: [
+		header + 'test(t => { t.is(1, 1); });',
+		header + 'test.skip(t => { t.is(1, 1); });',
+		header + 'test(t => { notT.skip.is(1, 1); });',
 			// shouldn't be triggered since it's not a test file
-			'test(t => { t.skip.is(1, 1); });'
-		],
-		invalid: [
-			{
-				code: header + 'test(t => { t.skip.is(1, 1); });',
-				errors
-			},
-			{
-				code: header + 'test.cb(t => { t.skip.is(1, 1); t.end(); });',
-				errors
-			},
-			{
-				code: header + 'test.skip(t => { t.skip.is(1, 1); });',
-				errors
-			}
-		]
-	});
+		'test(t => { t.skip.is(1, 1); });'
+	],
+	invalid: [
+		{
+			code: header + 'test(t => { t.skip.is(1, 1); });',
+			errors
+		},
+		{
+			code: header + 'test.cb(t => { t.skip.is(1, 1); t.end(); });',
+			errors
+		},
+		{
+			code: header + 'test.skip(t => { t.skip.is(1, 1); });',
+			errors
+		}
+	]
 });

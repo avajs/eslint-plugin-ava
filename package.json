@@ -75,6 +75,7 @@
     "ava": "*",
     "coveralls": "^2.11.9",
     "eslint": "^2.2.0",
+    "eslint-ava-rule-tester": "^0.1.1",
     "js-combinatorics": "^0.5.0",
     "nyc": "^6.4.0",
     "pify": "^2.3.0",

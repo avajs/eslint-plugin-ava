@@ -1,8 +1,8 @@
 import test from 'ava';
-import {RuleTester} from 'eslint';
+import avaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/use-t';
 
-const ruleTester = new RuleTester({
+const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
 	},
@@ -23,49 +23,47 @@ const tooManyParametersErrors = [{
 
 const header = `const test = require('ava');\n`;
 
-test(() => {
-	ruleTester.run('use-t', rule, {
-		valid: [
-			header + 'test();',
-			header + 'test(() => {});',
-			header + 'test(t => {});',
-			header + 'test.cb(t => {});',
+ruleTester.run('use-t', rule, {
+	valid: [
+		header + 'test();',
+		header + 'test(() => {});',
+		header + 'test(t => {});',
+		header + 'test.cb(t => {});',
 			// header + 'test("test name", t => {});',
-			header + 'test(function (t) {});',
-			header + 'test(testFunction);',
-			header + 'test.todo("test name");',
+		header + 'test(function (t) {});',
+		header + 'test(testFunction);',
+		header + 'test.todo("test name");',
 			// shouldn't be triggered since it's not a test file
-			'test(foo => {});'
-		],
-		invalid: [
-			{
-				code: header + 'test(foo => {});',
-				errors: parameterNotNamedTErrors
-			},
-			{
-				code: header + 'test("test name", foo => {});',
-				errors: parameterNotNamedTErrors
-			},
-			{
-				code: header + 'test.cb(foo => { foo.end(); });',
-				errors: parameterNotNamedTErrors
-			},
-			{
-				code: header + 'test(function (foo) {});',
-				errors: parameterNotNamedTErrors
-			},
-			{
-				code: header + 'test((t, foo) => {});',
-				errors: tooManyParametersErrors
-			},
-			{
-				code: header + 'test((foo, t) => {});',
-				errors: tooManyParametersErrors
-			},
-			{
-				code: header + 'test("test name", (t, foo) => {});',
-				errors: tooManyParametersErrors
-			}
-		]
-	});
+		'test(foo => {});'
+	],
+	invalid: [
+		{
+			code: header + 'test(foo => {});',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test("test name", foo => {});',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test.cb(foo => { foo.end(); });',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test(function (foo) {});',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test((t, foo) => {});',
+			errors: tooManyParametersErrors
+		},
+		{
+			code: header + 'test((foo, t) => {});',
+			errors: tooManyParametersErrors
+		},
+		{
+			code: header + 'test("test name", (t, foo) => {});',
+			errors: tooManyParametersErrors
+		}
+	]
 });
