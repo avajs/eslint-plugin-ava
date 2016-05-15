@@ -38,6 +38,7 @@ module.exports = function (context) {
 			var args = node.arguments;
 			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
+			// don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
 			if (titleNode === undefined || !isStatic(titleNode)) {
 				return;
 			}
