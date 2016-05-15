@@ -29,6 +29,8 @@ test(() => {
 			header + 'test.beforeEach(t => {}); test.beforeEach(t => {});',
 			header + 'test.afterEach(t => {}); test.afterEach(t => {});',
 			header + 'test.cb.before(t => {}); test.before.cb(t => {});',
+			header + 'test(t => {}); test(t => {});',
+			header + 'test(t => {}); test.cb(t => {});',
 			// shouldn't be triggered since it's not a test file
 			'test(t => {}); test(t => {});',
 			'test("a", t => {}); test("a", t => {});'
@@ -40,10 +42,6 @@ test(() => {
 			},
 			{
 				code: header + 'test(`a`, t => {}); test(`a`, t => {});',
-				errors
-			},
-			{
-				code: header + 'test(t => {}); test(t => {});',
 				errors
 			},
 			{
@@ -64,10 +62,6 @@ test(() => {
 			},
 			{
 				code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
-				errors
-			},
-			{
-				code: header + 'test(t => {}); test.cb(t => {});',
 				errors
 			},
 			{
