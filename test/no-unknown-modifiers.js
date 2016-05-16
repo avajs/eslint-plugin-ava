@@ -25,6 +25,8 @@ test(() => {
 			`${header} test.serial(t => {});`,
 			`${header} test.skip(t => {});`,
 			`${header} test.todo(t => {});`,
+			`${header} test.after.always(t => {});`,
+			`${header} test.afterEach.always(t => {});`,
 			// shouldn't be triggered since it's not a test file
 			`test.foo(t => {});`
 		],
