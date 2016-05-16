@@ -27,6 +27,7 @@ test(() => {
 			`${header} test.todo(t => {});`,
 			`${header} test.after.always(t => {});`,
 			`${header} test.afterEach.always(t => {});`,
+			`${header} test.failing(t => {});`,
 			// shouldn't be triggered since it's not a test file
 			`test.foo(t => {});`
 		],
