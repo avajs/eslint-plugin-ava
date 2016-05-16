@@ -111,8 +111,7 @@ See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#extending-co
 - [AVA team](https://github.com/sindresorhus/ava#team)
 - [Jeroen Engels](https://github.com/jfmengels)
 - [Takuto Wada](https://github.com/twada)
-
-[And our awesome contributors](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
+- [Contributors…](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
 
 
 ## License
