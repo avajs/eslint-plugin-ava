@@ -12,8 +12,7 @@ function isStaticTemplateLiteral(node) {
 }
 
 function isStatic(node) {
-	return !node ||
-		node.type === 'Literal' ||
+	return node.type === 'Literal' ||
 		(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||
 		(node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
 }
@@ -39,7 +38,8 @@ module.exports = function (context) {
 			var args = node.arguments;
 			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
-			if (!isStatic(titleNode)) {
+			// don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
+			if (titleNode === undefined || !isStatic(titleNode)) {
 				return;
 			}
 
