@@ -11,7 +11,8 @@ var modifiers = [
 	'only',
 	'serial',
 	'skip',
-	'todo'
+	'todo',
+	'failing'
 ];
 
 function getTestModifiers(node) {
