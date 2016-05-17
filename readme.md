@@ -1,8 +1,8 @@
-# eslint-plugin-ava [![Build Status](https://travis-ci.org/sindresorhus/eslint-plugin-ava.svg?branch=master)](https://travis-ci.org/sindresorhus/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/sindresorhus/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/sindresorhus/eslint-plugin-ava?branch=master)
+# eslint-plugin-ava [![Build Status](https://travis-ci.org/avajs/eslint-plugin-ava.svg?branch=master)](https://travis-ci.org/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=master)
 
 > ESLint rules for [AVA](https://ava.li)
 
-Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
 
 
 ## Install
@@ -108,10 +108,10 @@ See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#extending-co
 
 ## Credit
 
-- [AVA team](https://github.com/sindresorhus/ava#team)
+- [AVA team](https://github.com/avajs/ava#team)
 - [Jeroen Engels](https://github.com/jfmengels)
 - [Takuto Wada](https://github.com/twada)
-- [Contributors…](https://github.com/sindresorhus/eslint-plugin-ava/graphs/contributors)
+- [Contributors…](https://github.com/avajs/eslint-plugin-ava/graphs/contributors)
 
 
 ## License

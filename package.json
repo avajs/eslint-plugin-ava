@@ -3,7 +3,7 @@
   "version": "2.3.1",
   "description": "ESLint rules for AVA",
   "license": "MIT",
-  "repository": "sindresorhus/eslint-plugin-ava",
+  "repository": "avajs/eslint-plugin-ava",
   "author": {
     "name": "Sindre Sorhus",
     "email": "sindresorhus@gmail.com",
