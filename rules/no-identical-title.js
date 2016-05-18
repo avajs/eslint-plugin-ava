@@ -30,11 +30,11 @@ module.exports = function (context) {
 	var usedTitleNodes = [];
 
 	return ava.merge({
-		'CallExpression': function (node) {
-			if (!ava.isTestFile || ava.currentTestNode !== node || ava.hasHookModifier()) {
-				return;
-			}
-
+		'CallExpression': ava.if(
+			ava.isInTestFile,
+			ava.isTestNode,
+			ava.hasNoHookModifier
+		)(function (node) {
 			var args = node.arguments;
 			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
@@ -52,7 +52,7 @@ module.exports = function (context) {
 			}
 
 			usedTitleNodes.push(purify(titleNode));
-		},
+		}),
 		'Program:exit': function () {
 			usedTitleNodes = [];
 		}

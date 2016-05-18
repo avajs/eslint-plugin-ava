@@ -6,16 +6,17 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		MemberExpression: function (node) {
-			if (ava.isTestFile &&
-					ava.currentTestNode &&
-					node.property.name === 'skip' &&
+		MemberExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			if (node.property.name === 'skip' &&
 					util.nameOfRootObject(node) === 't') {
 				context.report({
 					node: node,
 					message: 'No assertions should be skipped.'
 				});
 			}
-		}
+		})
 	});
 };

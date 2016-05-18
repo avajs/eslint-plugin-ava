@@ -6,10 +6,11 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		MemberExpression: function (node) {
-			if (ava.isTestFile &&
-					ava.currentTestNode &&
-					node.property.name === 'end' &&
+		MemberExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			if (node.property.name === 'end' &&
 					!ava.hasTestModifier('cb') &&
 					util.nameOfRootObject(node) === 't') {
 				context.report({
@@ -17,6 +18,6 @@ module.exports = function (context) {
 					message: '`t.end()` should only be used inside of `test.cb()`.'
 				});
 			}
-		}
+		})
 	});
 };

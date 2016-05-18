@@ -7,11 +7,11 @@ module.exports = function (context) {
 	var testCount = 0;
 
 	return ava.merge({
-		'CallExpression': function (node) {
-			if (!ava.isTestFile || ava.currentTestNode !== node || ava.hasHookModifier()) {
-				return;
-			}
-
+		'CallExpression': ava.if(
+			ava.isInTestFile,
+			ava.isTestNode,
+			ava.hasNoHookModifier
+		)(function (node) {
 			testCount++;
 
 			var requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
@@ -24,7 +24,7 @@ module.exports = function (context) {
 					message: 'Test should have a title.'
 				});
 			}
-		},
+		}),
 		'Program:exit': function () {
 			testCount = 0;
 		}

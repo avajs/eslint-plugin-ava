@@ -11,12 +11,14 @@ module.exports = function (context) {
 	var nodeToReport = null;
 
 	return ava.merge({
-		'CallExpression': function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode || node.callee.type !== 'MemberExpression') {
+		'CallExpression': ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			var callee = node.callee;
+			if (callee.type !== 'MemberExpression') {
 				return;
 			}
-
-			var callee = node.callee;
 
 			if (callee.property &&
 					notAssertionMethods.indexOf(callee.property.name) === -1 &&
@@ -27,21 +29,19 @@ module.exports = function (context) {
 					nodeToReport = node;
 				}
 			}
-		},
-		'CallExpression:exit': function (node) {
-			if (ava.currentTestNode === node) {
-				// leaving test function
-				if (assertionCount > maxAssertions) {
-					context.report({
-						node: nodeToReport,
-						message: 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount + '.'
-					});
-				}
-
-				assertionCount = 0;
-				nodeToReport = null;
+		}),
+		'CallExpression:exit': ava.if(ava.isTestNode)(function () {
+			// leaving test function
+			if (assertionCount > maxAssertions) {
+				context.report({
+					node: nodeToReport,
+					message: 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount + '.'
+				});
 			}
-		}
+
+			assertionCount = 0;
+			nodeToReport = null;
+		})
 	});
 };
 

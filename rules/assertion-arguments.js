@@ -49,13 +49,16 @@ module.exports = function (context) {
 	}
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode || node.callee.type !== 'MemberExpression') {
-				return;
-			}
-
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
 			var callee = node.callee;
-			if (!callee.property || util.nameOfRootObject(callee) !== 't' || util.isInContext(callee)) {
+			if (callee.type !== 'MemberExpression' ||
+				!callee.property ||
+				util.nameOfRootObject(callee) !== 't' ||
+				util.isInContext(callee)
+			) {
 				return;
 			}
 
@@ -77,7 +80,7 @@ module.exports = function (context) {
 					report(node, 'Expected no assertion message, but found one.');
 				}
 			}
-		}
+		})
 	});
 };
 

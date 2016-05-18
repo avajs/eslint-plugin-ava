@@ -53,10 +53,11 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
 			if (
-				ava.isTestFile &&
-				ava.currentTestNode &&
 				node.callee.type === 'MemberExpression' &&
 				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
 				util.nameOfRootObject(node.callee) === 't'
@@ -82,6 +83,6 @@ module.exports = function (context) {
 					}
 				}
 			}
-		}
+		})
 	});
 };

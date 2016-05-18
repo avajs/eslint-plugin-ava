@@ -6,31 +6,34 @@ module.exports = function (context) {
 	var endCalled = false;
 
 	return ava.merge({
-		'MemberExpression': function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
-				return;
-			}
-
-			if (node.object.name === 't' && node.property.name === 'end') {
+		'MemberExpression': ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			if (ava.hasTestModifier('cb') &&
+				node.object.name === 't' &&
+				node.property.name === 'end'
+			) {
 				endCalled = true;
 			}
-		},
-		'CallExpression:exit': function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode || !ava.hasTestModifier('cb')) {
+		}),
+		'CallExpression:exit': ava.if(
+			ava.isInTestFile,
+			ava.isTestNode
+		)(function (node) {
+			if (!ava.hasTestModifier('cb')) {
 				return;
 			}
 
-			if (ava.currentTestNode === node) {
-				// leaving test function
-				if (endCalled) {
-					endCalled = false;
-				} else {
-					context.report({
-						node: node,
-						message: 'Callback test was not ended. Make sure to explicitly end the test with `t.end()`.'
-					});
-				}
+			// leaving test function
+			if (endCalled) {
+				endCalled = false;
+			} else {
+				context.report({
+					node: node,
+					message: 'Callback test was not ended. Make sure to explicitly end the test with `t.end()`.'
+				});
 			}
-		}
+		})
 	});
 };

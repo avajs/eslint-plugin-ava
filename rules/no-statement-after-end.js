@@ -51,7 +51,7 @@ module.exports = function (context) {
 	}
 
 	function checkStatement(node) {
-		if (!ava.isTestFile) {
+		if (!ava.isInTestFile()) {
 			return;
 		}
 
