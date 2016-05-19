@@ -5,13 +5,16 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (ava.isTestFile && ava.currentTestNode === node && ava.hasTestModifier('cb')) {
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isTestNode
+		)(function (node) {
+			if (ava.hasTestModifier('cb')) {
 				context.report({
 					node: node,
 					message: '`test.cb()` should be not be used.'
 				});
 			}
-		}
+		})
 	});
 };

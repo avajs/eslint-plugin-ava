@@ -60,11 +60,10 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode) {
-				return;
-			}
-
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
 			var callee = espurify(node.callee);
 
 			if (callee.type === 'MemberExpression') {
@@ -77,6 +76,6 @@ module.exports = function (context) {
 					}
 				});
 			}
-		}
+		})
 	});
 };

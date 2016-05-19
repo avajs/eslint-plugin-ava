@@ -38,12 +38,14 @@ module.exports = function (context) {
 	var shouldHaveMessage = context.options[0] !== 'never';
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (!ava.isTestFile || !ava.currentTestNode || node.callee.type !== 'MemberExpression') {
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			var callee = node.callee;
+			if (callee.type !== 'MemberExpression') {
 				return;
 			}
-
-			var callee = node.callee;
 
 			if (callee.property && util.nameOfRootObject(callee) === 't') {
 				var nArgs = nbArguments(callee);
@@ -66,7 +68,7 @@ module.exports = function (context) {
 					});
 				}
 			}
-		}
+		})
 	});
 };
 

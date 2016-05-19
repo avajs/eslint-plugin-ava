@@ -64,21 +64,23 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (ava.isTestFile &&
-					ava.currentTestNode &&
-					node.callee.type !== 'MemberExpression' &&
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			if (node.callee.type !== 'MemberExpression' &&
 					node.callee.name === 't') {
 				context.report({
 					node: node,
 					message: '`t` is not a function.'
 				});
 			}
-		},
-		MemberExpression: function (node) {
-			if (!ava.isTestFile ||
-					!ava.currentTestNode ||
-					node.parent.type === 'MemberExpression' ||
+		}),
+		MemberExpression: ava.if(
+			ava.isInTestFile,
+			ava.isInTestNode
+		)(function (node) {
+			if (node.parent.type === 'MemberExpression' ||
 					util.nameOfRootObject(node) !== 't') {
 				return;
 			}
@@ -127,6 +129,6 @@ module.exports = function (context) {
 					message: 'Unknown member `' + stats.other[0] + '`. Use `context.' + stats.other[0] + '` instead.'
 				});
 			}
-		}
+		})
 	});
 };

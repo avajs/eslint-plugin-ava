@@ -5,11 +5,10 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (!ava.isTestFile || ava.currentTestNode !== node) {
-				return;
-			}
-
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isTestNode
+		)(function (node) {
 			var functionArg = node.arguments[node.arguments.length - 1];
 
 			if (!(functionArg && functionArg.params && functionArg.params.length)) {
@@ -27,6 +26,6 @@ module.exports = function (context) {
 					message: 'Test parameter should be named `t`.'
 				});
 			}
-		}
+		})
 	});
 };

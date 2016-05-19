@@ -37,11 +37,10 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: function (node) {
-			if (!ava.isTestFile || ava.currentTestNode !== node) {
-				return;
-			}
-
+		CallExpression: ava.if(
+			ava.isInTestFile,
+			ava.isTestNode
+		)(function (node) {
 			var unknown = unknownModifiers(node);
 
 			if (unknown.length !== 0) {
@@ -50,6 +49,6 @@ module.exports = function (context) {
 					message: 'Unknown test modifier `' + unknown[0] + '`.'
 				});
 			}
-		}
+		})
 	});
 };

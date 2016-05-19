@@ -1,6 +1,7 @@
 'use strict';
 var espurify = require('espurify');
 var assign = require('object-assign');
+var rest = require('lodash.rest');
 var deepStrictEqual = require('deep-strict-equal');
 
 var avaImportDeclarationAst = {
@@ -102,11 +103,11 @@ module.exports = function createAvaRule() {
 		hasTestModifier: function (mod) {
 			return hasTestModifier(currentTestNode, mod);
 		},
-		hasHookModifier: function () {
-			return hasTestModifier(currentTestNode, 'before') ||
-				hasTestModifier(currentTestNode, 'beforeEach') ||
-				hasTestModifier(currentTestNode, 'after') ||
-				hasTestModifier(currentTestNode, 'afterEach');
+		hasNoHookModifier: function () {
+			return !hasTestModifier(currentTestNode, 'before') &&
+				!hasTestModifier(currentTestNode, 'beforeEach') &&
+				!hasTestModifier(currentTestNode, 'after') &&
+				!hasTestModifier(currentTestNode, 'afterEach');
 		},
 		merge: function (customHandlers) {
 			Object.keys(predefinedRules).forEach(function (key) {
@@ -129,16 +130,29 @@ module.exports = function createAvaRule() {
 		}
 	};
 
-	Object.defineProperty(rule, 'isTestFile', {
-		get: function () {
-			return isTestFile;
-		}
-	});
+	rule.isInTestFile = function () {
+		return isTestFile;
+	};
 
-	Object.defineProperty(rule, 'currentTestNode', {
-		get: function () {
-			return currentTestNode;
-		}
+	rule.isTestNode = function (node) {
+		return currentTestNode === node;
+	};
+
+	rule.isInTestNode = function () {
+		return currentTestNode;
+	};
+
+	rule.if = rest(function (predicates) {
+		return function (visitor) {
+			return function (node) {
+				var isValid = predicates.every(function (fn) {
+					return fn(node);
+				});
+				if (isValid) {
+					return visitor(node);
+				}
+			};
+		};
 	});
 
 	return rule;

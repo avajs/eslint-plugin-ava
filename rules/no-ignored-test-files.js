@@ -59,11 +59,12 @@ module.exports = function (context) {
 	}
 
 	return ava.merge({
-		'CallExpression': function (node) {
-			if (ava.isTestFile && ava.currentTestNode === node) {
-				hasTestCall = true;
-			}
-		},
+		'CallExpression': ava.if(
+			ava.isInTestFile,
+			ava.isTestNode
+		)(function () {
+			hasTestCall = true;
+		}),
 		'Program:exit': function (node) {
 			if (!hasTestCall) {
 				return;
