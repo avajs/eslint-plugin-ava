@@ -64,6 +64,10 @@ test(() => {
 				code: header + 'notTest(t => { t.pass(); t.end(); });',
 				options: ['always']
 			},
+			{
+				code: header + 'test(macroFn, arg1, arg2);',
+				options: ['always']
+			},
 			// shouldn't be triggered since it's not a test file
 			{
 				code: 'test(t => {});',
