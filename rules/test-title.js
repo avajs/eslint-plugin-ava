@@ -15,7 +15,7 @@ module.exports = function (context) {
 			testCount++;
 
 			var requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
-			var hasNoTitle = node.arguments.length !== requiredLength;
+			var hasNoTitle = node.arguments.length < requiredLength;
 			var isOverThreshold = !ifMultiple || testCount > 1;
 
 			if (hasNoTitle && isOverThreshold) {
