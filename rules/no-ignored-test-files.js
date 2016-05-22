@@ -1,5 +1,6 @@
 'use strict';
 var path = require('path');
+var arrify = require('arrify');
 var pkgUp = require('pkg-up');
 var multimatch = require('multimatch');
 var util = require('../util');
@@ -50,7 +51,7 @@ module.exports = function (context) {
 	var ava = createAvaRule();
 	var packageInfo = getPackageInfo();
 	var options = context.options[0] || {};
-	var files = options.files || packageInfo.files || defaultFiles;
+	var files = arrify(options.files || packageInfo.files || defaultFiles);
 	var hasTestCall = false;
 
 	if (!packageInfo.rootDir) {
@@ -88,7 +89,10 @@ module.exports.schema = [{
 	type: 'object',
 	properties: {
 		files: {
-			type: 'array'
+			anyOf: [
+				{type: 'array'},
+				{type: 'string'}
+			]
 		}
 	}
 }];
