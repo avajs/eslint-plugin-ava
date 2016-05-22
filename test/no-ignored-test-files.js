@@ -129,6 +129,11 @@ test('with AVA config in package.json', () => {
 			},
 			{
 				code: code(true),
+				filename: toPath('bar/foo.test.js'),
+				options: [{files: 'bar/**/*.test.js'}]
+			},
+			{
+				code: code(true),
 				filename: '<text>',
 				options: [{files: ['lib/**/*.spec.js']}]
 			}
@@ -158,6 +163,12 @@ test('with AVA config in package.json', () => {
 				code: code(true),
 				filename: toPath('lib/foo.test.js'),
 				options: [{files: ['bar/**/*.test.js']}],
+				errors: [{message: 'Test file is ignored because it is not in `bar/**/*.test.js`.'}]
+			},
+			{
+				code: code(true),
+				filename: toPath('lib/foo.test.js'),
+				options: [{files: 'bar/**/*.test.js'}],
 				errors: [{message: 'Test file is ignored because it is not in `bar/**/*.test.js`.'}]
 			}
 		]
