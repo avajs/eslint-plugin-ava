@@ -1,6 +1,6 @@
 # Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`
 
-Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/use-true-false.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/use-true-false.md)
 
 `t.true()` and `t.false()` are stricter in their checks than `t.truthy()` and `t.falsy`.
 For example: if you have a function `foo()` which normally returns `true`, but suddenly returns `1` instead, `t.truthy(foo())` would not catch the change, but `t.true(foo())` would.

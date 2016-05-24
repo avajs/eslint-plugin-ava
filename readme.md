@@ -2,7 +2,7 @@
 
 > ESLint rules for [AVA](https://ava.li)
 
-Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
 
 
 ## Install
