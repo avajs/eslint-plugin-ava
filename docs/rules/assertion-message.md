@@ -1,6 +1,6 @@
 # Enforce or disallow assertion messages
 
-Translations: [Français](https://github.com/sindresorhus/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/assertion-message.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/assertion-message.md)
 
 Assertion messages are optional arguments that can be given to any assertion call to improve the error message, should the assertion fail. This rule either enforces or disallows the use of those messages.
 
