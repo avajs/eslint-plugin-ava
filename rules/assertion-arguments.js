@@ -16,6 +16,7 @@ var expectedNbArguments = {
 	pass: {min: 0, max: 1},
 	plan: {min: 1, max: 1},
 	regex: {min: 2, max: 3},
+	notRegex: {min: 2, max: 3},
 	throws: {min: 1, max: 3},
 	true: {min: 1, max: 2},
 	truthy: {min: 1, max: 2}

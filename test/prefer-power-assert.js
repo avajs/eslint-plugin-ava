@@ -40,6 +40,7 @@ const notAllowedMethods = [
 	'is(foo, bar)',
 	'not(foo, bar)',
 	'regex(str, re)',
+	'notRegex(str, re)',
 	'ifError(err)'
 ];
 

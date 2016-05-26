@@ -10,6 +10,7 @@ var notAllowed = [
 	'is',
 	'not',
 	'regex',
+	'notRegex',
 	'ifError'
 ];
 
