@@ -17,6 +17,7 @@ var methods = [
 	'throws',
 	'notThrows',
 	'regex',
+	'notRegex',
 	'ifError',
 	'plan'
 ];

@@ -14,6 +14,7 @@ var expectedNbArguments = {
 	notThrows: 1,
 	pass: 0,
 	regex: 2,
+	notRegex: 2,
 	throws: 1,
 	true: 1,
 	truthy: 1
