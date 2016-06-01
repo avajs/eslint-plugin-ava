@@ -4,8 +4,8 @@ const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
 
 const notAllowed = [
+	'truthy',
 	'falsy',
-	'true',
 	'false',
 	'is',
 	'not',
