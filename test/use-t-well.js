@@ -57,79 +57,117 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t();'),
 			errors: [
-				{...ruleError, message: '`t` is not a function.'}
+				{
+					...ruleError,
+					message: '`t` is not a function.'
+				}
 			]
 		},
 		{
 			code: testCase('t.foo(a, a);'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `foo`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `foo`.'
+				}
 			]
 		},
 		{
 			code: testCase('t.depEqual(a, a);'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `depEqual`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `depEqual`.'
+				}
 			]
 		},
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `skp`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `skp`.'
+				}
 			]
 		},
 		{
 			code: testCase('t.skp.deepEqual(a, a);'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `skp`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `skp`.'
+				}
 			]
 		},
 		{
 			code: testCase('t.context();'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `context`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `context`.'}
 			]
 		},
 		{
 			code: testCase('t.a = 1;'),
 			errors: [
-				{...ruleError, message: 'Unknown member `a`. Use `context.a` instead.'}
+				{
+					...ruleError,
+					message: 'Unknown member `a`. Use `context.a` instead.'
+				}
 			]
 		},
 		{
 			code: testCase('t.ctx.a = 1;'),
 			errors: [
-				{...ruleError, message: 'Unknown member `ctx`. Use `context.ctx` instead.'}
+				{
+					...ruleError,
+					message: 'Unknown member `ctx`. Use `context.ctx` instead.'
+				}
 			]
 		},
 		{
 			code: testCase('t.deepEqu;'),
 			errors: [
-				{...ruleError, message: 'Unknown member `deepEqu`. Use `context.deepEqu` instead.'}
+				{
+					...ruleError,
+					message: 'Unknown member `deepEqu`. Use `context.deepEqu` instead.'
+				}
 			]
 		},
 		{
 			code: testCase('t.deepEqual.is(a, a);'),
 			errors: [
-				{...ruleError, message: `Can't chain assertion methods.`}
+				{
+					...ruleError,
+					message: `Can't chain assertion methods.`
+				}
 			]
 		},
 		{
 			code: testCase('t.paln(1);'),
 			errors: [
-				{...ruleError, message: 'Unknown assertion method `paln`.'}
+				{
+					...ruleError,
+					message: 'Unknown assertion method `paln`.'
+				}
 			]
 		},
 		{
 			code: testCase('t.skip();'),
 			errors: [
-				{...ruleError, message: 'Missing assertion method.'}
+				{
+					...ruleError,
+					message: 'Missing assertion method.'
+				}
 			]
 		},
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
 			errors: [
-				{...ruleError, message: 'Too many chained uses of `skip`.'}
+				{
+					...ruleError,
+					message: 'Too many chained uses of `skip`.'
+				}
 			]
 		}
 	]

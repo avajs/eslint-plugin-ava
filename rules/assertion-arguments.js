@@ -3,28 +3,80 @@ var util = require('../util');
 var createAvaRule = require('../create-ava-rule');
 
 var expectedNbArguments = {
-	deepEqual: {min: 2, max: 3},
-	end: {min: 0, max: 0},
-	fail: {min: 0, max: 1},
-	false: {min: 1, max: 2},
-	falsy: {min: 1, max: 2},
-	ifError: {min: 1, max: 2},
-	is: {min: 2, max: 3},
-	not: {min: 2, max: 3},
-	notDeepEqual: {min: 2, max: 3},
-	notThrows: {min: 1, max: 2},
-	pass: {min: 0, max: 1},
-	plan: {min: 1, max: 1},
-	regex: {min: 2, max: 3},
-	notRegex: {min: 2, max: 3},
-	throws: {min: 1, max: 3},
-	true: {min: 1, max: 2},
-	truthy: {min: 1, max: 2}
+	deepEqual: {
+		min: 2,
+		max: 3
+	},
+	end: {
+		min: 0,
+		max: 0
+	},
+	fail: {
+		min: 0,
+		max: 1
+	},
+	false: {
+		min: 1,
+		max: 2
+	},
+	falsy: {
+		min: 1,
+		max: 2
+	},
+	ifError: {
+		min: 1,
+		max: 2
+	},
+	is: {
+		min: 2,
+		max: 3
+	},
+	not: {
+		min: 2,
+		max: 3
+	},
+	notDeepEqual: {
+		min: 2,
+		max: 3
+	},
+	notThrows: {
+		min: 1,
+		max: 2
+	},
+	pass: {
+		min: 0,
+		max: 1
+	},
+	plan: {
+		min: 1,
+		max: 1
+	},
+	regex: {
+		min: 2,
+		max: 3
+	},
+	notRegex: {
+		min: 2,
+		max: 3
+	},
+	throws: {
+		min: 1,
+		max: 3
+	},
+	true: {
+		min: 1,
+		max: 2
+	},
+	truthy: {
+		min: 1,
+		max: 2
+	}
 };
 
 function nbArguments(node) {
 	var name = node.property.name;
 	var nArgs = expectedNbArguments[name];
+
 	if (nArgs) {
 		return nArgs;
 	}
@@ -55,6 +107,7 @@ module.exports = function (context) {
 			ava.isInTestNode
 		)(function (node) {
 			var callee = node.callee;
+
 			if (callee.type !== 'MemberExpression' ||
 				!callee.property ||
 				util.nameOfRootObject(callee) !== 't' ||
@@ -65,6 +118,7 @@ module.exports = function (context) {
 
 			var gottenArgs = node.arguments.length;
 			var nArgs = nbArguments(callee);
+
 			if (!nArgs) {
 				return;
 			}
@@ -75,6 +129,7 @@ module.exports = function (context) {
 				report(node, 'Too many arguments. Expected at most ' + nArgs.max + '.');
 			} else if (enforcesMessage && nArgs.min !== nArgs.max) {
 				var hasMessage = gottenArgs === nArgs.max;
+
 				if (!hasMessage && shouldHaveMessage) {
 					report(node, 'Expected an assertion message, but found none.');
 				} else if (hasMessage && !shouldHaveMessage) {

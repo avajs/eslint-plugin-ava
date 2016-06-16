@@ -10,8 +10,8 @@ const ruleTester = avaRuleTester(test, {
 
 const missingError = 'Expected an assertion message, but found none.';
 const foundError = 'Expected no assertion message, but found one.';
-const tooFewError = (n) => `Not enough arguments. Expected at least ${n}.`;
-const tooManyError = (n) => `Too many arguments. Expected at most ${n}.`;
+const tooFewError = n => `Not enough arguments. Expected at least ${n}.`;
+const tooManyError = n => `Too many arguments. Expected at most ${n}.`;
 
 const header = `const test = require('ava');`;
 

@@ -26,8 +26,8 @@ exports.getAvaConfig = function (filepath) {
 
 	try {
 		var packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-		return packageContent && packageContent.ava || defaultResult;
-	} catch (e) {
+		return (packageContent && packageContent.ava) || defaultResult;
+	} catch (err) {
 		return defaultResult;
 	}
 };
