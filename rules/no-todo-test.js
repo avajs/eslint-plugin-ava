@@ -12,7 +12,7 @@ module.exports = function (context) {
 			if (ava.hasTestModifier('todo')) {
 				context.report({
 					node: node,
-					message: '`test.todo()` should be not be used.'
+					message: 'Unexpected `test.todo()` stub.'
 				});
 			}
 		})
