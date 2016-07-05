@@ -1,6 +1,6 @@
 'use strict';
 const espurify = require('espurify');
-const rest = require('lodash.rest');
+const enhance = require('enhance-visitors');
 const deepStrictEqual = require('deep-strict-equal');
 
 const avaImportDeclarationAst = {
@@ -100,36 +100,17 @@ module.exports = () => {
 		}
 	};
 
-	const rule = {
+	return {
 		hasTestModifier: mod => hasTestModifier(currentTestNode, mod),
 		hasNoHookModifier: () => !hasTestModifier(currentTestNode, 'before') &&
 				!hasTestModifier(currentTestNode, 'beforeEach') &&
 				!hasTestModifier(currentTestNode, 'after') &&
 				!hasTestModifier(currentTestNode, 'afterEach'),
+		isInTestFile: () => isTestFile,
+		isInTestNode: () => currentTestNode,
+		isTestNode: node => currentTestNode === node,
 		merge: customHandlers => {
-			Object.keys(predefinedRules).forEach(key => {
-				const predef = predefinedRules[key];
-
-				if (typeof customHandlers[key] === 'function') {
-					predefinedRules[key] = node => {
-						if (/:exit$/.test(key)) {
-							customHandlers[key](node);
-							predef(node); // append predefined rules on exit
-						} else {
-							predef(node); // prepend predefined rules on enter
-							customHandlers[key](node);
-						}
-					};
-				}
-			});
-
-			return Object.assign({}, customHandlers, predefinedRules);
+			return enhance.mergeVisitors([predefinedRules, customHandlers]);
 		}
 	};
-
-	rule.isInTestFile = () => isTestFile;
-	rule.isTestNode = node => currentTestNode === node;
-	rule.isInTestNode = () => currentTestNode;
-
-	return rule;
 };
