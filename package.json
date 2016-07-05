@@ -69,7 +69,8 @@
     "lodash.rest": "^4.0.3",
     "multimatch": "^2.1.0",
     "object-assign": "^4.0.1",
-    "pkg-up": "^1.0.0"
+    "pkg-up": "^1.0.0",
+    "req-all": "^0.1.0"
   },
   "devDependencies": {
     "ava": "*",
