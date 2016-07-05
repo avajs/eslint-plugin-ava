@@ -1,4 +1,5 @@
 'use strict';
+const visitIf = require('enhance-visitors').visitIf;
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -39,10 +40,10 @@ module.exports = context => {
 	const shouldHaveMessage = context.options[0] !== 'never';
 
 	return ava.merge({
-		CallExpression: ava.if(
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(node => {
+		])(node => {
 			const callee = node.callee;
 
 			if (callee.type !== 'MemberExpression') {

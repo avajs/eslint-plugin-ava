@@ -1,4 +1,5 @@
 'use strict';
+const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
 
 const modifiers = [
@@ -34,10 +35,10 @@ module.exports = context => {
 	const ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: ava.if(
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
-		)(node => {
+		])(node => {
 			const unknown = unknownModifiers(node);
 
 			if (unknown.length !== 0) {

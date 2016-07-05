@@ -1,5 +1,6 @@
 'use strict';
 const espurify = require('espurify');
+const visitIf = require('enhance-visitors').visitIf;
 const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
 
@@ -56,10 +57,10 @@ module.exports = context => {
 	const ava = createAvaRule();
 
 	return ava.merge({
-		CallExpression: ava.if(
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(node => {
+		])(node => {
 			const callee = espurify(node.callee);
 
 			if (callee.type === 'MemberExpression') {

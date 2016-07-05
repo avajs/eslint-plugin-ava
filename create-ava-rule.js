@@ -131,17 +131,5 @@ module.exports = () => {
 	rule.isTestNode = node => currentTestNode === node;
 	rule.isInTestNode = () => currentTestNode;
 
-	rule.if = rest(predicates => {
-		return visitor => {
-			return node => {
-				const isValid = predicates.every(fn => fn(node));
-
-				if (isValid) {
-					return visitor(node);
-				}
-			};
-		};
-	});
-
 	return rule;
 };
