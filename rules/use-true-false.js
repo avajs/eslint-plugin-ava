@@ -1,11 +1,11 @@
 'use strict';
-var espree = require('espree');
-var espurify = require('espurify');
-var deepStrictEqual = require('deep-strict-equal');
-var util = require('../util');
-var createAvaRule = require('../create-ava-rule');
+const espree = require('espree');
+const espurify = require('espurify');
+const deepStrictEqual = require('deep-strict-equal');
+const util = require('../util');
+const createAvaRule = require('../create-ava-rule');
 
-var booleanBinaryOperators = [
+const booleanBinaryOperators = [
 	'==',
 	'===',
 	'!=',
@@ -16,7 +16,7 @@ var booleanBinaryOperators = [
 	'>='
 ];
 
-var knownBooleanSignatures = [
+const knownBooleanSignatures = [
 	'isFinite()',
 	'isNaN()',
 	'Object.is()',
@@ -33,36 +33,32 @@ var knownBooleanSignatures = [
 	'SharedArrayBuffer.isView()',
 	'Reflect.has()',
 	'Reflect.isExtensible()'
-].map(function (signature) {
-	return espurify(espree.parse(signature).body[0].expression.callee);
-});
+].map(signature => espurify(espree.parse(signature).body[0].expression.callee));
 
 function matchesKnownBooleanExpression(arg) {
 	if (arg.type !== 'CallExpression') {
 		return false;
 	}
 
-	var callee = espurify(arg.callee);
+	const callee = espurify(arg.callee);
 
-	return knownBooleanSignatures.some(function (signature) {
-		return deepStrictEqual(callee, signature);
-	});
+	return knownBooleanSignatures.some(signature => deepStrictEqual(callee, signature));
 }
 
-module.exports = function (context) {
-	var ava = createAvaRule();
+module.exports = context => {
+	const ava = createAvaRule();
 
 	return ava.merge({
 		CallExpression: ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
+		)(node => {
 			if (
 				node.callee.type === 'MemberExpression' &&
 				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
 				util.nameOfRootObject(node.callee) === 't'
 			) {
-				var arg = node.arguments[0];
+				const arg = node.arguments[0];
 
 				if (arg &&
 					((arg.type === 'BinaryExpression' && booleanBinaryOperators.indexOf(arg.operator) !== -1) ||
@@ -72,12 +68,12 @@ module.exports = function (context) {
 				) {
 					if (node.callee.property.name === 'falsy') {
 						context.report({
-							node: node,
+							node,
 							message: '`t.false()` should be used instead of `t.falsy()`.'
 						});
 					} else {
 						context.report({
-							node: node,
+							node,
 							message: '`t.true()` should be used instead of `t.truthy()`.'
 						});
 					}

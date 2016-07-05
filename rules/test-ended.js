@@ -1,15 +1,15 @@
 'use strict';
-var createAvaRule = require('../create-ava-rule');
+const createAvaRule = require('../create-ava-rule');
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var endCalled = false;
+module.exports = context => {
+	const ava = createAvaRule();
+	let endCalled = false;
 
 	return ava.merge({
 		'MemberExpression': ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
+		)(node => {
 			if (ava.hasTestModifier('cb') &&
 				node.object.name === 't' &&
 				node.property.name === 'end'
@@ -20,7 +20,7 @@ module.exports = function (context) {
 		'CallExpression:exit': ava.if(
 			ava.isInTestFile,
 			ava.isTestNode
-		)(function (node) {
+		)(node => {
 			if (!ava.hasTestModifier('cb')) {
 				return;
 			}
@@ -30,7 +30,7 @@ module.exports = function (context) {
 				endCalled = false;
 			} else {
 				context.report({
-					node: node,
+					node,
 					message: 'Callback test was not ended. Make sure to explicitly end the test with `t.end()`.'
 				});
 			}

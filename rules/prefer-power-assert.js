@@ -1,9 +1,9 @@
 'use strict';
-var espurify = require('espurify');
-var deepStrictEqual = require('deep-strict-equal');
-var createAvaRule = require('../create-ava-rule');
+const espurify = require('espurify');
+const deepStrictEqual = require('deep-strict-equal');
+const createAvaRule = require('../create-ava-rule');
 
-var notAllowed = [
+const notAllowed = [
 	'falsy',
 	'true',
 	'false',
@@ -14,8 +14,22 @@ var notAllowed = [
 	'ifError'
 ];
 
-function assertionCalleeAst(methodName) {
-	return {
+const assertionCalleeAst = methodName => ({
+	type: 'MemberExpression',
+	object: {
+		type: 'Identifier',
+		name: 't'
+	},
+	property: {
+		type: 'Identifier',
+		name: methodName
+	},
+	computed: false
+});
+
+const skippedAssertionCalleeAst = methodName => ({
+	type: 'MemberExpression',
+	object: {
 		type: 'MemberExpression',
 		object: {
 			type: 'Identifier',
@@ -23,55 +37,36 @@ function assertionCalleeAst(methodName) {
 		},
 		property: {
 			type: 'Identifier',
-			name: methodName
+			name: 'skip'
 		},
 		computed: false
-	};
-}
+	},
+	property: {
+		type: 'Identifier',
+		name: methodName
+	},
+	computed: false
+});
 
-function skippedAssertionCalleeAst(methodName) {
-	return {
-		type: 'MemberExpression',
-		object: {
-			type: 'MemberExpression',
-			object: {
-				type: 'Identifier',
-				name: 't'
-			},
-			property: {
-				type: 'Identifier',
-				name: 'skip'
-			},
-			computed: false
-		},
-		property: {
-			type: 'Identifier',
-			name: methodName
-		},
-		computed: false
-	};
-}
+const isCalleeMatched = (callee, methodName) =>
+	deepStrictEqual(callee, assertionCalleeAst(methodName)) ||
+	deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
 
-function isCalleeMatched(callee, methodName) {
-	return deepStrictEqual(callee, assertionCalleeAst(methodName)) ||
-		deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
-}
-
-module.exports = function (context) {
-	var ava = createAvaRule();
+module.exports = context => {
+	const ava = createAvaRule();
 
 	return ava.merge({
 		CallExpression: ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
-			var callee = espurify(node.callee);
+		)(node => {
+			const callee = espurify(node.callee);
 
 			if (callee.type === 'MemberExpression') {
-				notAllowed.forEach(function (methodName) {
+				notAllowed.forEach(methodName => {
 					if (isCalleeMatched(callee, methodName)) {
 						context.report({
-							node: node,
+							node,
 							message: 'Only asserts with no power-assert alternative are allowed.'
 						});
 					}

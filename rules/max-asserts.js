@@ -1,21 +1,22 @@
 'use strict';
-var util = require('../util');
-var createAvaRule = require('../create-ava-rule');
+const util = require('../util');
+const createAvaRule = require('../create-ava-rule');
 
-var notAssertionMethods = ['plan', 'end'];
+const notAssertionMethods = ['plan', 'end'];
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var maxAssertions = context.options[0] || 5;
-	var assertionCount = 0;
-	var nodeToReport = null;
+module.exports = context => {
+	const ava = createAvaRule();
+	const maxAssertions = context.options[0] || 5;
+	let assertionCount = 0;
+	let nodeToReport = null;
 
 	return ava.merge({
 		'CallExpression': ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
-			var callee = node.callee;
+		)(node => {
+			const callee = node.callee;
+
 			if (callee.type !== 'MemberExpression') {
 				return;
 			}
@@ -30,12 +31,12 @@ module.exports = function (context) {
 				}
 			}
 		}),
-		'CallExpression:exit': ava.if(ava.isTestNode)(function () {
+		'CallExpression:exit': ava.if(ava.isTestNode)(() => {
 			// leaving test function
 			if (assertionCount > maxAssertions) {
 				context.report({
 					node: nodeToReport,
-					message: 'Expected at most ' + maxAssertions + ' assertions, but found ' + assertionCount + '.'
+					message: `Expected at most ${maxAssertions} assertions, but found ${assertionCount}.`
 				});
 			}
 

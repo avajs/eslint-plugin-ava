@@ -1,7 +1,7 @@
 'use strict';
-var createAvaRule = require('../create-ava-rule');
+const createAvaRule = require('../create-ava-rule');
 
-var modifiers = [
+const modifiers = [
 	'after',
 	'afterEach',
 	'always',
@@ -27,27 +27,23 @@ function getTestModifiers(node) {
 	return [];
 }
 
-function unknownModifiers(node) {
-	return getTestModifiers(node)
-		.filter(function (modifier) {
-			return modifiers.indexOf(modifier) === -1;
-		});
-}
+const unknownModifiers = node => getTestModifiers(node)
+	.filter(modifier => modifiers.indexOf(modifier) === -1);
 
-module.exports = function (context) {
-	var ava = createAvaRule();
+module.exports = context => {
+	const ava = createAvaRule();
 
 	return ava.merge({
 		CallExpression: ava.if(
 			ava.isInTestFile,
 			ava.isTestNode
-		)(function (node) {
-			var unknown = unknownModifiers(node);
+		)(node => {
+			const unknown = unknownModifiers(node);
 
 			if (unknown.length !== 0) {
 				context.report({
-					node: node,
-					message: 'Unknown test modifier `' + unknown[0] + '`.'
+					node,
+					message: `Unknown test modifier \`${unknown[0]}\`.`
 				});
 			}
 		})

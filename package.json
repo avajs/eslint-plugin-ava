@@ -37,7 +37,7 @@
     }
   ],
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "xo && nyc ava",
@@ -68,7 +68,6 @@
     "espurify": "^1.5.0",
     "lodash.rest": "^4.0.3",
     "multimatch": "^2.1.0",
-    "object-assign": "^4.0.1",
     "pkg-up": "^1.0.0",
     "req-all": "^0.1.0"
   },
@@ -84,5 +83,11 @@
   },
   "peerDependencies": {
     "eslint": ">=2"
+  },
+  "xo": {
+    "esnext": true,
+    "rules": {
+      "prefer-template": "off"
+    }
   }
 }

@@ -1,31 +1,31 @@
 'use strict';
-var createAvaRule = require('../create-ava-rule');
+const createAvaRule = require('../create-ava-rule');
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var ifMultiple = context.options[0] !== 'always';
-	var testCount = 0;
+module.exports = context => {
+	const ava = createAvaRule();
+	const ifMultiple = context.options[0] !== 'always';
+	let testCount = 0;
 
 	return ava.merge({
 		'CallExpression': ava.if(
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier
-		)(function (node) {
+		)(node => {
 			testCount++;
 
-			var requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
-			var hasNoTitle = node.arguments.length < requiredLength;
-			var isOverThreshold = !ifMultiple || testCount > 1;
+			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
+			const hasNoTitle = node.arguments.length < requiredLength;
+			const isOverThreshold = !ifMultiple || testCount > 1;
 
 			if (hasNoTitle && isOverThreshold) {
 				context.report({
-					node: node,
+					node,
 					message: 'Test should have a title.'
 				});
 			}
 		}),
-		'Program:exit': function () {
+		'Program:exit': () => {
 			testCount = 0;
 		}
 	});

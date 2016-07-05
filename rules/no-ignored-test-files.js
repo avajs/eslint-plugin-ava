@@ -1,12 +1,12 @@
 'use strict';
-var path = require('path');
-var arrify = require('arrify');
-var pkgUp = require('pkg-up');
-var multimatch = require('multimatch');
-var util = require('../util');
-var createAvaRule = require('../create-ava-rule');
+const path = require('path');
+const arrify = require('arrify');
+const pkgUp = require('pkg-up');
+const multimatch = require('multimatch');
+const util = require('../util');
+const createAvaRule = require('../create-ava-rule');
 
-var defaultFiles = [
+const defaultFiles = [
 	'test.js',
 	'test-*.js',
 	'test/**/*.js',
@@ -14,27 +14,27 @@ var defaultFiles = [
 	'**/*.test.js'
 ];
 
-var excludedFolders = [
+const excludedFolders = [
 	'**/fixtures/**',
 	'**/helpers/**'
 ];
 
 function isIgnored(rootDir, files, filepath) {
-	var relativeFilePath = path.relative(rootDir, filepath);
+	const relativeFilePath = path.relative(rootDir, filepath);
 
 	if (multimatch([relativeFilePath], excludedFolders).length !== 0) {
-		return 'Test file is ignored because it is in `' + excludedFolders.join(' ') + '`.';
+		return `Test file is ignored because it is in \`${excludedFolders.join(' ')}\`.`;
 	}
 
 	if (multimatch([relativeFilePath], files).length === 0) {
-		return 'Test file is ignored because it is not in `' + files.join(' ') + '`.';
+		return `Test file is ignored because it is not in \`${files.join(' ')}\`.`;
 	}
 
 	return null;
 }
 
 function getPackageInfo() {
-	var packageFilePath = pkgUp.sync();
+	const packageFilePath = pkgUp.sync();
 
 	return {
 		rootDir: packageFilePath && path.dirname(packageFilePath),
@@ -42,20 +42,21 @@ function getPackageInfo() {
 	};
 }
 
-module.exports = function (context) {
-	var filename = context.getFilename();
+module.exports = context => {
+	const filename = context.getFilename();
+
 	if (filename === '<text>') {
 		return {};
 	}
 
-	var ava = createAvaRule();
-	var packageInfo = getPackageInfo();
-	var options = context.options[0] || {};
-	var files = arrify(options.files || packageInfo.files || defaultFiles);
-	var hasTestCall = false;
+	const ava = createAvaRule();
+	const packageInfo = getPackageInfo();
+	const options = context.options[0] || {};
+	const files = arrify(options.files || packageInfo.files || defaultFiles);
+	let hasTestCall = false;
 
 	if (!packageInfo.rootDir) {
-		// Could not find a package.json folder
+		// could not find a package.json folder
 		return {};
 	}
 
@@ -63,19 +64,19 @@ module.exports = function (context) {
 		'CallExpression': ava.if(
 			ava.isInTestFile,
 			ava.isTestNode
-		)(function () {
+		)(() => {
 			hasTestCall = true;
 		}),
-		'Program:exit': function (node) {
+		'Program:exit': node => {
 			if (!hasTestCall) {
 				return;
 			}
 
-			var ignoredReason = isIgnored(packageInfo.rootDir, files, filename);
+			const ignoredReason = isIgnored(packageInfo.rootDir, files, filename);
 
 			if (ignoredReason) {
 				context.report({
-					node: node,
+					node,
 					message: ignoredReason
 				});
 			}

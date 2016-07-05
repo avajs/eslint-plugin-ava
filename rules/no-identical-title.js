@@ -1,42 +1,35 @@
 'use strict';
-var espurify = require('espurify');
-var deepStrictEqual = require('deep-strict-equal');
-var createAvaRule = require('../create-ava-rule');
+const espurify = require('espurify');
+const deepStrictEqual = require('deep-strict-equal');
+const createAvaRule = require('../create-ava-rule');
 
-function purify(node) {
-	return node && espurify(node);
-}
+const purify = node => node && espurify(node);
 
-function isStaticTemplateLiteral(node) {
-	return node.expressions.every(isStatic);
-}
+let isStatic = null;
 
-function isStatic(node) {
-	return node.type === 'Literal' ||
+const isStaticTemplateLiteral = node => node.expressions.every(isStatic);
+
+isStatic = node => node.type === 'Literal' ||
 		(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||
 		(node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
-}
 
 function isTitleUsed(usedTitleNodes, titleNode) {
-	var purifiedNode = purify(titleNode);
-
-	return usedTitleNodes.some(function (usedTitle) {
-		return deepStrictEqual(purifiedNode, usedTitle);
-	});
+	const purifiedNode = purify(titleNode);
+	return usedTitleNodes.some(usedTitle => deepStrictEqual(purifiedNode, usedTitle));
 }
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var usedTitleNodes = [];
+module.exports = context => {
+	const ava = createAvaRule();
+	let usedTitleNodes = [];
 
 	return ava.merge({
 		'CallExpression': ava.if(
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier
-		)(function (node) {
-			var args = node.arguments;
-			var titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
+		)(node => {
+			const args = node.arguments;
+			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
 			// don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
 			if (titleNode === undefined || !isStatic(titleNode)) {
@@ -45,7 +38,7 @@ module.exports = function (context) {
 
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report({
-					node: node,
+					node,
 					message: 'Test title is used multiple times in the same file.'
 				});
 				return;
@@ -53,7 +46,7 @@ module.exports = function (context) {
 
 			usedTitleNodes.push(purify(titleNode));
 		}),
-		'Program:exit': function () {
+		'Program:exit': () => {
 			usedTitleNodes = [];
 		}
 	});

@@ -1,10 +1,9 @@
 'use strict';
-var espurify = require('espurify');
-var assign = require('object-assign');
-var rest = require('lodash.rest');
-var deepStrictEqual = require('deep-strict-equal');
+const espurify = require('espurify');
+const rest = require('lodash.rest');
+const deepStrictEqual = require('deep-strict-equal');
 
-var avaImportDeclarationAst = {
+const avaImportDeclarationAst = {
 	type: 'ImportDeclaration',
 	specifiers: [
 		{
@@ -21,7 +20,7 @@ var avaImportDeclarationAst = {
 	}
 };
 
-var avaVariableDeclaratorAst = {
+const avaVariableDeclaratorAst = {
 	type: 'VariableDeclarator',
 	id: {
 		type: 'Identifier',
@@ -59,28 +58,30 @@ function hasTestModifier(node, mod) {
 		if (node.property.type === 'Identifier' && node.property.name === mod) {
 			return true;
 		}
+
 		return hasTestModifier(node.object, mod);
 	}
+
 	return false;
 }
 
-module.exports = function createAvaRule() {
-	var isTestFile = false;
-	var currentTestNode = null;
+module.exports = () => {
+	let isTestFile = false;
+	let currentTestNode = null;
 
 	/* eslint quote-props: [2, "as-needed"] */
-	var predefinedRules = {
-		ImportDeclaration: function (node) {
+	const predefinedRules = {
+		ImportDeclaration: node => {
 			if (!isTestFile && deepStrictEqual(espurify(node), avaImportDeclarationAst)) {
 				isTestFile = true;
 			}
 		},
-		VariableDeclarator: function (node) {
+		VariableDeclarator: node => {
 			if (!isTestFile && deepStrictEqual(espurify(node), avaVariableDeclaratorAst)) {
 				isTestFile = true;
 			}
 		},
-		CallExpression: function (node) {
+		CallExpression: node => {
 			if (!currentTestNode) {
 				if (isTestFunctionCall(node.callee)) {
 					// entering test function
@@ -88,33 +89,29 @@ module.exports = function createAvaRule() {
 				}
 			}
 		},
-		'CallExpression:exit': function (node) {
+		'CallExpression:exit': node => {
 			if (currentTestNode === node) {
 				// leaving test function
 				currentTestNode = null;
 			}
 		},
-		'Program:exit': function () {
+		'Program:exit': () => {
 			isTestFile = false;
 		}
 	};
 
-	var rule = {
-		hasTestModifier: function (mod) {
-			return hasTestModifier(currentTestNode, mod);
-		},
-		hasNoHookModifier: function () {
-			return !hasTestModifier(currentTestNode, 'before') &&
+	const rule = {
+		hasTestModifier: mod => hasTestModifier(currentTestNode, mod),
+		hasNoHookModifier: () => !hasTestModifier(currentTestNode, 'before') &&
 				!hasTestModifier(currentTestNode, 'beforeEach') &&
 				!hasTestModifier(currentTestNode, 'after') &&
-				!hasTestModifier(currentTestNode, 'afterEach');
-		},
-		merge: function (customHandlers) {
-			Object.keys(predefinedRules).forEach(function (key) {
-				var predef = predefinedRules[key];
+				!hasTestModifier(currentTestNode, 'afterEach'),
+		merge: customHandlers => {
+			Object.keys(predefinedRules).forEach(key => {
+				const predef = predefinedRules[key];
 
 				if (typeof customHandlers[key] === 'function') {
-					predefinedRules[key] = function (node) {
+					predefinedRules[key] = node => {
 						if (/:exit$/.test(key)) {
 							customHandlers[key](node);
 							predef(node); // append predefined rules on exit
@@ -126,28 +123,19 @@ module.exports = function createAvaRule() {
 				}
 			});
 
-			return assign({}, customHandlers, predefinedRules);
+			return Object.assign({}, customHandlers, predefinedRules);
 		}
 	};
 
-	rule.isInTestFile = function () {
-		return isTestFile;
-	};
+	rule.isInTestFile = () => isTestFile;
+	rule.isTestNode = node => currentTestNode === node;
+	rule.isInTestNode = () => currentTestNode;
 
-	rule.isTestNode = function (node) {
-		return currentTestNode === node;
-	};
+	rule.if = rest(predicates => {
+		return visitor => {
+			return node => {
+				const isValid = predicates.every(fn => fn(node));
 
-	rule.isInTestNode = function () {
-		return currentTestNode;
-	};
-
-	rule.if = rest(function (predicates) {
-		return function (visitor) {
-			return function (node) {
-				var isValid = predicates.every(function (fn) {
-					return fn(node);
-				});
 				if (isValid) {
 					return visitor(node);
 				}

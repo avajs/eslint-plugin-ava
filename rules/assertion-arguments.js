@@ -1,8 +1,8 @@
 'use strict';
-var util = require('../util');
-var createAvaRule = require('../create-ava-rule');
+const util = require('../util');
+const createAvaRule = require('../create-ava-rule');
 
-var expectedNbArguments = {
+const expectedNbArguments = {
 	deepEqual: {
 		min: 2,
 		max: 3
@@ -74,8 +74,8 @@ var expectedNbArguments = {
 };
 
 function nbArguments(node) {
-	var name = node.property.name;
-	var nArgs = expectedNbArguments[name];
+	const name = node.property.name;
+	const nArgs = expectedNbArguments[name];
 
 	if (nArgs) {
 		return nArgs;
@@ -88,25 +88,22 @@ function nbArguments(node) {
 	return false;
 }
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var options = context.options[0] || {};
-	var enforcesMessage = Boolean(options.message);
-	var shouldHaveMessage = options.message !== 'never';
+module.exports = context => {
+	const ava = createAvaRule();
+	const options = context.options[0] || {};
+	const enforcesMessage = Boolean(options.message);
+	const shouldHaveMessage = options.message !== 'never';
 
 	function report(node, message) {
-		context.report({
-			node: node,
-			message: message
-		});
+		context.report({node, message});
 	}
 
 	return ava.merge({
 		CallExpression: ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
-			var callee = node.callee;
+		)(node => {
+			const callee = node.callee;
 
 			if (callee.type !== 'MemberExpression' ||
 				!callee.property ||
@@ -116,19 +113,19 @@ module.exports = function (context) {
 				return;
 			}
 
-			var gottenArgs = node.arguments.length;
-			var nArgs = nbArguments(callee);
+			const gottenArgs = node.arguments.length;
+			const nArgs = nbArguments(callee);
 
 			if (!nArgs) {
 				return;
 			}
 
 			if (gottenArgs < nArgs.min) {
-				report(node, 'Not enough arguments. Expected at least ' + nArgs.min + '.');
+				report(node, `Not enough arguments. Expected at least ${nArgs.min}.`);
 			} else if (node.arguments.length > nArgs.max) {
-				report(node, 'Too many arguments. Expected at most ' + nArgs.max + '.');
+				report(node, `Too many arguments. Expected at most ${nArgs.max}.`);
 			} else if (enforcesMessage && nArgs.min !== nArgs.max) {
-				var hasMessage = gottenArgs === nArgs.max;
+				const hasMessage = gottenArgs === nArgs.max;
 
 				if (!hasMessage && shouldHaveMessage) {
 					report(node, 'Expected an assertion message, but found none.');

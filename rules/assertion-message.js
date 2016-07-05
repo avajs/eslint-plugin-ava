@@ -1,8 +1,8 @@
 'use strict';
-var util = require('../util');
-var createAvaRule = require('../create-ava-rule');
+const util = require('../util');
+const createAvaRule = require('../create-ava-rule');
 
-var expectedNbArguments = {
+const expectedNbArguments = {
 	deepEqual: 2,
 	fail: 0,
 	false: 1,
@@ -21,7 +21,7 @@ var expectedNbArguments = {
 };
 
 function nbArguments(node) {
-	var nArgs = expectedNbArguments[node.property.name];
+	const nArgs = expectedNbArguments[node.property.name];
 
 	if (nArgs !== undefined) {
 		return nArgs;
@@ -34,37 +34,38 @@ function nbArguments(node) {
 	return -1;
 }
 
-module.exports = function (context) {
-	var ava = createAvaRule();
-	var shouldHaveMessage = context.options[0] !== 'never';
+module.exports = context => {
+	const ava = createAvaRule();
+	const shouldHaveMessage = context.options[0] !== 'never';
 
 	return ava.merge({
 		CallExpression: ava.if(
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(function (node) {
-			var callee = node.callee;
+		)(node => {
+			const callee = node.callee;
+
 			if (callee.type !== 'MemberExpression') {
 				return;
 			}
 
 			if (callee.property && util.nameOfRootObject(callee) === 't') {
-				var nArgs = nbArguments(callee);
+				const nArgs = nbArguments(callee);
 
 				if (nArgs === -1) {
 					return;
 				}
 
-				var hasMessage = nArgs < node.arguments.length;
+				const hasMessage = nArgs < node.arguments.length;
 
 				if (!hasMessage && shouldHaveMessage) {
 					context.report({
-						node: node,
+						node,
 						message: 'Expected an assertion message, but found none.'
 					});
 				} else if (hasMessage && !shouldHaveMessage) {
 					context.report({
-						node: node,
+						node,
 						message: 'Expected no assertion message, but found one.'
 					});
 				}

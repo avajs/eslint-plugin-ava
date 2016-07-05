@@ -1,8 +1,7 @@
 'use strict';
+const fs = require('fs');
 
-var fs = require('fs');
-
-exports.nameOfRootObject = function (node) {
+exports.nameOfRootObject = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.nameOfRootObject(node.object);
 	}
@@ -10,7 +9,7 @@ exports.nameOfRootObject = function (node) {
 	return node.object.name;
 };
 
-exports.isInContext = function (node) {
+exports.isInContext = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.isInContext(node.object);
 	}
@@ -18,14 +17,15 @@ exports.isInContext = function (node) {
 	return node.property.name === 'context';
 };
 
-exports.getAvaConfig = function (filepath) {
-	var defaultResult = {};
+exports.getAvaConfig = filepath => {
+	const defaultResult = {};
+
 	if (!filepath) {
 		return defaultResult;
 	}
 
 	try {
-		var packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+		const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'));
 		return (packageContent && packageContent.ava) || defaultResult;
 	} catch (err) {
 		return defaultResult;

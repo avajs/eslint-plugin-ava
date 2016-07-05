@@ -1,8 +1,8 @@
 'use strict';
-var espurify = require('espurify');
-var deepStrictEqual = require('deep-strict-equal');
+const espurify = require('espurify');
+const deepStrictEqual = require('deep-strict-equal');
 
-var avaVariableDeclaratorInitAst = {
+const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
 	callee: {
 		type: 'Identifier',
@@ -18,22 +18,20 @@ var avaVariableDeclaratorInitAst = {
 
 function report(context, node) {
 	context.report({
-		node: node,
+		node,
 		message: 'AVA should be imported as `test`.'
 	});
 }
 
-module.exports = function (context) {
-	return {
-		ImportDeclaration: function (node) {
-			if (node.source.value === 'ava' && node.specifiers[0].local.name !== 'test') {
-				report(context, node);
-			}
-		},
-		VariableDeclarator: function (node) {
-			if (node.id.name !== 'test' && node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
-				report(context, node);
-			}
+module.exports = context => ({
+	ImportDeclaration: node => {
+		if (node.source.value === 'ava' && node.specifiers[0].local.name !== 'test') {
+			report(context, node);
 		}
-	};
-};
+	},
+	VariableDeclarator: node => {
+		if (node.id.name !== 'test' && node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
+			report(context, node);
+		}
+	}
+});
