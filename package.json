@@ -74,7 +74,7 @@
   "devDependencies": {
     "ava": "*",
     "coveralls": "^2.11.9",
-    "eslint": "^2.2.0",
+    "eslint": "^3.0.1",
     "eslint-ava-rule-tester": "^0.1.1",
     "js-combinatorics": "^0.5.0",
     "nyc": "^6.4.0",
@@ -82,7 +82,7 @@
     "xo": "*"
   },
   "peerDependencies": {
-    "eslint": ">=2"
+    "eslint": ">=3"
   },
   "xo": {
     "esnext": true,
