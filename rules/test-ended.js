@@ -1,7 +1,7 @@
 'use strict';
 const createAvaRule = require('../create-ava-rule');
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	let endCalled = false;
 
@@ -36,4 +36,13 @@ module.exports = context => {
 			}
 		})
 	});
+};
+
+module.exports = {
+	create,
+	meta: {
+		docs: {},
+		schema: [{
+		}]
+	}
 };

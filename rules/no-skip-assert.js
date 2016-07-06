@@ -2,7 +2,7 @@
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 
 	return ava.merge({
@@ -19,4 +19,11 @@ module.exports = context => {
 			}
 		})
 	});
+};
+
+module.exports = {
+	create,
+	meta: {
+		docs: {}
+	}
 };

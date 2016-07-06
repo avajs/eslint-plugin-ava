@@ -42,7 +42,7 @@ function getPackageInfo() {
 	};
 }
 
-module.exports = context => {
+const create = context => {
 	const filename = context.getFilename();
 
 	if (filename === '<text>') {
@@ -86,14 +86,20 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
-	type: 'object',
-	properties: {
-		files: {
-			anyOf: [
-				{type: 'array'},
-				{type: 'string'}
-			]
-		}
+module.exports = {
+	create,
+	meta: {
+		docs: {},
+		schema: [{
+			type: 'object',
+			properties: {
+				files: {
+					anyOf: [
+						{type: 'array'},
+						{type: 'string'}
+					]
+				}
+			}
+		}]
 	}
-}];
+};

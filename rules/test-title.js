@@ -1,7 +1,7 @@
 'use strict';
 const createAvaRule = require('../create-ava-rule');
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const ifMultiple = context.options[0] !== 'always';
 	let testCount = 0;
@@ -31,9 +31,15 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
-	enum: [
-		'always',
-		'if-multiple'
-	]
-}];
+module.exports = {
+	create,
+	meta: {
+		docs: {},
+		schema: [{
+			enum: [
+				'always',
+				'if-multiple'
+			]
+		}]
+	}
+};

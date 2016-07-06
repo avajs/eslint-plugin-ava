@@ -30,7 +30,7 @@ function getTestModifiers(node) {
 const unknownModifiers = node => getTestModifiers(node)
 	.filter(modifier => modifiers.indexOf(modifier) === -1);
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 
 	return ava.merge({
@@ -48,4 +48,11 @@ module.exports = context => {
 			}
 		})
 	});
+};
+
+module.exports = {
+	create,
+	meta: {
+		docs: {}
+	}
 };

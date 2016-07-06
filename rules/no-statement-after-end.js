@@ -13,7 +13,7 @@ const isEndExpression = node =>
 	node.callee.property.type === 'Identifier' &&
 	node.callee.property.name === 'end';
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const segmentInfoMap = Object.create(null);
 	const segmentInfoStack = [];
@@ -87,4 +87,11 @@ module.exports = context => {
 		onCodePathSegmentEnd: segmentEnd,
 		CallExpression: checkForEndExpression
 	});
+};
+
+module.exports = {
+	create,
+	meta: {
+		docs: {}
+	}
 };

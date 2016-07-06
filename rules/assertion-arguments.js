@@ -88,7 +88,7 @@ function nbArguments(node) {
 	return false;
 }
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const options = context.options[0] || {};
 	const enforcesMessage = Boolean(options.message);
@@ -137,14 +137,20 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
-	type: 'object',
-	properties: {
-		message: {
-			enum: [
-				'always',
-				'never'
-			]
-		}
+module.exports = {
+	create,
+	meta: {
+		docs: {},
+		schema: [{
+			type: 'object',
+			properties: {
+				message: {
+					enum: [
+						'always',
+						'never'
+					]
+				}
+			}
+		}]
 	}
-}];
+};
