@@ -46,12 +46,14 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	type: 'integer'
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {},
-		schema: [{
-			type: 'integer'
-		}]
+		schema
 	}
 };

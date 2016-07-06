@@ -74,15 +74,17 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	enum: [
+		'always',
+		'never'
+	]
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {},
-		schema: [{
-			enum: [
-				'always',
-				'never'
-			]
-		}]
+		schema
 	}
 };

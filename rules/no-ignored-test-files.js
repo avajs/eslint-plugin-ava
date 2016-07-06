@@ -86,20 +86,22 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	type: 'object',
+	properties: {
+		files: {
+			anyOf: [
+				{type: 'array'},
+				{type: 'string'}
+			]
+		}
+	}
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {},
-		schema: [{
-			type: 'object',
-			properties: {
-				files: {
-					anyOf: [
-						{type: 'array'},
-						{type: 'string'}
-					]
-				}
-			}
-		}]
+		schema
 	}
 };

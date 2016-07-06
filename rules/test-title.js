@@ -31,15 +31,17 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	enum: [
+		'always',
+		'if-multiple'
+	]
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {},
-		schema: [{
-			enum: [
-				'always',
-				'if-multiple'
-			]
-		}]
+		schema
 	}
 };

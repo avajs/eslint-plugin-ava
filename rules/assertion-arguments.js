@@ -137,20 +137,21 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	type: 'object',
+	properties: {
+		message: {
+			enum: [
+				'always',
+				'never'
+			]
+		}
+	}
+}];
+
 module.exports = {
 	create,
 	meta: {
-		docs: {},
-		schema: [{
-			type: 'object',
-			properties: {
-				message: {
-					enum: [
-						'always',
-						'never'
-					]
-				}
-			}
-		}]
+		schema
 	}
 };
