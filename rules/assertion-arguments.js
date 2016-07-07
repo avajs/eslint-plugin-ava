@@ -88,7 +88,7 @@ function nbArguments(node) {
 	return false;
 }
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const options = context.options[0] || {};
 	const enforcesMessage = Boolean(options.message);
@@ -137,7 +137,7 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
+const schema = [{
 	type: 'object',
 	properties: {
 		message: {
@@ -148,3 +148,10 @@ module.exports.schema = [{
 		}
 	}
 }];
+
+module.exports = {
+	create,
+	meta: {
+		schema
+	}
+};

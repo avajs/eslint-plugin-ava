@@ -34,7 +34,7 @@ function nbArguments(node) {
 	return -1;
 }
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const shouldHaveMessage = context.options[0] !== 'never';
 
@@ -74,9 +74,16 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
+const schema = [{
 	enum: [
 		'always',
 		'never'
 	]
 }];
+
+module.exports = {
+	create,
+	meta: {
+		schema
+	}
+};

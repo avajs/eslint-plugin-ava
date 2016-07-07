@@ -23,7 +23,7 @@ function report(context, node) {
 	});
 }
 
-module.exports = context => ({
+const create = context => ({
 	ImportDeclaration: node => {
 		if (node.source.value === 'ava' && node.specifiers[0].local.name !== 'test') {
 			report(context, node);
@@ -35,3 +35,8 @@ module.exports = context => ({
 		}
 	}
 });
+
+module.exports = {
+	create,
+	meta: {}
+};

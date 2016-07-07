@@ -18,7 +18,7 @@ function isTitleUsed(usedTitleNodes, titleNode) {
 	return usedTitleNodes.some(usedTitle => deepStrictEqual(purifiedNode, usedTitle));
 }
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	let usedTitleNodes = [];
 
@@ -50,4 +50,9 @@ module.exports = context => {
 			usedTitleNodes = [];
 		}
 	});
+};
+
+module.exports = {
+	create,
+	meta: {}
 };

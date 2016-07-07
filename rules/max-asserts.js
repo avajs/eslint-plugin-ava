@@ -4,7 +4,7 @@ const createAvaRule = require('../create-ava-rule');
 
 const notAssertionMethods = ['plan', 'end'];
 
-module.exports = context => {
+const create = context => {
 	const ava = createAvaRule();
 	const maxAssertions = context.options[0] || 5;
 	let assertionCount = 0;
@@ -46,6 +46,13 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
+const schema = [{
 	type: 'integer'
 }];
+
+module.exports = {
+	create,
+	meta: {
+		schema
+	}
+};

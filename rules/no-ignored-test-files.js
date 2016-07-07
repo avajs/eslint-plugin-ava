@@ -42,7 +42,7 @@ function getPackageInfo() {
 	};
 }
 
-module.exports = context => {
+const create = context => {
 	const filename = context.getFilename();
 
 	if (filename === '<text>') {
@@ -86,7 +86,7 @@ module.exports = context => {
 	});
 };
 
-module.exports.schema = [{
+const schema = [{
 	type: 'object',
 	properties: {
 		files: {
@@ -97,3 +97,10 @@ module.exports.schema = [{
 		}
 	}
 }];
+
+module.exports = {
+	create,
+	meta: {
+		schema
+	}
+};
