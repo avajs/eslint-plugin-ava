@@ -41,7 +41,6 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
-		docs: {},
 		schema
 	}
 };

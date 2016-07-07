@@ -133,7 +133,5 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {
-		docs: {}
-	}
+	meta: {}
 };
