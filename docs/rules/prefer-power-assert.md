@@ -2,13 +2,13 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
 
-- [`t.truthy()`](https://github.com/sindresorhus/ava#truthyvalue-message) __(You can do [most things](https://github.com/sindresorhus/ava#enhanced-assertion-messages) with this one)__
-- [`t.deepEqual()`](https://github.com/sindresorhus/ava#deepequalvalue-expected-message)
-- [`t.notDeepEqual()`](https://github.com/sindresorhus/ava#notdeepequalvalue-expected-message)
-- [`t.throws()`](https://github.com/sindresorhus/ava#throwsfunctionpromise-error-message)
-- [`t.notThrows()`](https://github.com/sindresorhus/ava#notthrowsfunctionpromise-message)
-- [`t.pass()`](https://github.com/sindresorhus/ava#passmessage)
-- [`t.fail()`](https://github.com/sindresorhus/ava#failmessage)
+- [`t.true()`](https://github.com/avajs/ava#truevalue-message)
+- [`t.deepEqual()`](https://github.com/avajs/ava#deepequalvalue-expected-message)
+- [`t.notDeepEqual()`](https://github.com/avajs/ava#notdeepequalvalue-expected-message)
+- [`t.throws()`](https://github.com/avajs/ava#throwsfunctionpromise-error-message)
+- [`t.notThrows()`](https://github.com/avajs/ava#notthrowsfunctionpromise-message)
+- [`t.pass()`](https://github.com/avajs/ava#passmessage)
+- [`t.fail()`](https://github.com/avajs/ava#failmessage)
 
 Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 
@@ -19,7 +19,13 @@ Useful for people wanting to fully embrace the power of [power-assert](https://g
 import test from 'ava';
 
 test(t => {
+	t.truthy(foo);
+	t.falsy(foo);
+	t.false(foo === bar);
 	t.is(foo, bar);
+	t.not(foo, bar);
+	t.regex(foo, bar);
+	t.ifError(error);
 });
 ```
 
@@ -30,6 +36,10 @@ test(t => {
 import test from 'ava';
 
 test(t => {
-	t.truthy(foo === bar);
+	t.true(foo === bar);
+	t.deepEqual(foo, bar);
+	t.notDeepEqual(foo, bar);
+	t.throws(foo);
+	t.notThrows(bar);
 });
 ```
