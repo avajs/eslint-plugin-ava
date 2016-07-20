@@ -1,4 +1,5 @@
 'use strict';
+const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
 
 const create = context => {
@@ -6,10 +7,10 @@ const create = context => {
 	let endCalled = false;
 
 	return ava.merge({
-		'MemberExpression': ava.if(
+		'MemberExpression': visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
-		)(node => {
+		])(node => {
 			if (ava.hasTestModifier('cb') &&
 				node.object.name === 't' &&
 				node.property.name === 'end'
@@ -17,10 +18,10 @@ const create = context => {
 				endCalled = true;
 			}
 		}),
-		'CallExpression:exit': ava.if(
+		'CallExpression:exit': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
-		)(node => {
+		])(node => {
 			if (!ava.hasTestModifier('cb')) {
 				return;
 			}

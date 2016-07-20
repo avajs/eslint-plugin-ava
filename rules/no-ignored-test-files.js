@@ -3,6 +3,7 @@ const path = require('path');
 const arrify = require('arrify');
 const pkgUp = require('pkg-up');
 const multimatch = require('multimatch');
+const visitIf = require('enhance-visitors').visitIf;
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -61,10 +62,10 @@ const create = context => {
 	}
 
 	return ava.merge({
-		'CallExpression': ava.if(
+		'CallExpression': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
-		)(() => {
+		])(() => {
 			hasTestCall = true;
 		}),
 		'Program:exit': node => {

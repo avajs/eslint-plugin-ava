@@ -1,4 +1,5 @@
 'use strict';
+const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
 
 const create = context => {
@@ -7,11 +8,11 @@ const create = context => {
 	let testCount = 0;
 
 	return ava.merge({
-		'CallExpression': ava.if(
+		'CallExpression': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier
-		)(node => {
+		])(node => {
 			testCount++;
 
 			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;

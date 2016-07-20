@@ -1,5 +1,6 @@
 'use strict';
 const espurify = require('espurify');
+const visitIf = require('enhance-visitors').visitIf;
 const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
 
@@ -23,11 +24,11 @@ const create = context => {
 	let usedTitleNodes = [];
 
 	return ava.merge({
-		'CallExpression': ava.if(
+		'CallExpression': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier
-		)(node => {
+		])(node => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
