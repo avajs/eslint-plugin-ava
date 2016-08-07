@@ -21,7 +21,7 @@ ruleTester.run('no-todo-implementation', rule, {
 		header + 'test.todo("title");',
 		header + 'test.todo.cb("title");',
 		header + 'notTest.todo(t => {});',
-			// shouldn't be triggered since it's not a test file
+		// shouldn't be triggered since it's not a test file
 		'test.todo("title", t => {});'
 	],
 	invalid: [

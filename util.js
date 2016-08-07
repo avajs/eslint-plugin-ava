@@ -1,6 +1,11 @@
 'use strict';
 const fs = require('fs');
 
+const functionExpressions = [
+	'FunctionExpression',
+	'ArrowFunctionExpression'
+];
+
 exports.nameOfRootObject = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.nameOfRootObject(node.object);
@@ -30,4 +35,8 @@ exports.getAvaConfig = filepath => {
 	} catch (err) {
 		return defaultResult;
 	}
+};
+
+exports.isFunctionExpression = node => {
+	return node && functionExpressions.indexOf(node.type) !== -1;
 };
