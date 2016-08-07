@@ -45,6 +45,7 @@ Configure it in `package.json`.
 			"ava/no-todo-implementation": "error",
 			"ava/no-todo-test": "warn",
 			"ava/no-unknown-modifiers": "error",
+			"ava/prefer-async-await": "error",
 			"ava/prefer-power-assert": "off",
 			"ava/test-ended": "error",
 			"ava/test-title": ["error", "if-multiple"],
@@ -76,6 +77,7 @@ The rules will only activate in test files.
 - [no-todo-implementation](docs/rules/no-todo-implementation.md) - Ensure `test.todo()` is not given an implementation function.
 - [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
 - [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
+- [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
