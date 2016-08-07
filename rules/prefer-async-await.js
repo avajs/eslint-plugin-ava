@@ -34,7 +34,6 @@ const create = context => {
 		const statements = node.body.body;
 		const returnStatement = statements.find(statement => statement.type === 'ReturnStatement');
 		if (returnStatement && containsThen(returnStatement.argument)) {
-			// Now go and find a .then()...
 			context.report({
 				node,
 				message: 'Prefer using async/await instead of returning a Promise.'
