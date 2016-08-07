@@ -16,6 +16,7 @@ function containsThen(node) {
 	) {
 		return true;
 	}
+
 	return containsThen(callee.object);
 }
 

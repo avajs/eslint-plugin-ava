@@ -22,7 +22,7 @@ ruleTester.run('prefer-async-await', rule, {
 		header + 'test(t => { foo().then(fn); });',
 		header + 'test(t => { function foo() { return foo().then(fn); } });',
 		header + 'test(t => foo().then(fn));',
-		// This should be an error, needs improvement
+		// TODO this should be an error, needs improvement
 		header + 'test(t => { const bar = foo().then(fn); return bar; });',
 		// shouldn't be triggered since it's not a test file
 		'test(t => { return foo().then(fn); });'
