@@ -42,6 +42,7 @@ Configure it in `package.json`.
 			"ava/no-skip-assert": "error",
 			"ava/no-skip-test": "error",
 			"ava/no-statement-after-end": "error",
+			"ava/no-todo-implementation": "error",
 			"ava/no-todo-test": "warn",
 			"ava/no-unknown-modifiers": "error",
 			"ava/prefer-power-assert": "off",
@@ -72,6 +73,7 @@ The rules will only activate in test files.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.
+- [no-todo-implementation](docs/rules/no-todo-implementation.md) - Ensure `test.todo()` is not given an implementation function.
 - [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
 - [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
