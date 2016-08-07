@@ -82,11 +82,9 @@ module.exports = () => {
 			}
 		},
 		CallExpression: node => {
-			if (!currentTestNode) {
-				if (isTestFunctionCall(node.callee)) {
-					// entering test function
-					currentTestNode = node;
-				}
+			if (isTestFunctionCall(node.callee)) {
+				// entering test function
+				currentTestNode = node;
 			}
 		},
 		'CallExpression:exit': node => {
