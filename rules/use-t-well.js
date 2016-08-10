@@ -20,6 +20,7 @@ const methods = [
 	'regex',
 	'notRegex',
 	'ifError',
+	'error',
 	'plan'
 ];
 
