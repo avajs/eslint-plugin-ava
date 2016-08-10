@@ -41,6 +41,7 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.regex(v, /v/);'),
 		testCase('t.notRegex(v, /v/);'),
 		testCase('t.ifError(error);'),
+		testCase('t.error(error);'),
 		testCase('t.deepEqual.skip(a, a);'),
 		testCase('t.skip.deepEqual(a, a);'),
 		testCase('t.context.a = 1;'),
