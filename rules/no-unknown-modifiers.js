@@ -1,5 +1,6 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
+const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
 const modifiers = [
@@ -16,19 +17,7 @@ const modifiers = [
 	'failing'
 ];
 
-function getTestModifiers(node) {
-	if (node.type === 'CallExpression') {
-		return getTestModifiers(node.callee);
-	}
-
-	if (node.type === 'MemberExpression') {
-		return getTestModifiers(node.object).concat(node.property.name);
-	}
-
-	return [];
-}
-
-const unknownModifiers = node => getTestModifiers(node)
+const unknownModifiers = node => util.getTestModifiers(node)
 	.filter(modifier => modifiers.indexOf(modifier) === -1);
 
 const create = context => {

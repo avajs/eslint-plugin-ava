@@ -17,6 +17,7 @@ module.exports = {
 				'ava/assertion-message': ['off', 'always'],
 				'ava/max-asserts': ['off', 5],
 				'ava/no-cb-test': 'off',
+				'ava/no-duplicate-modifiers': 'error',
 				'ava/no-identical-title': 'error',
 				'ava/no-ignored-test-files': 'error',
 				'ava/no-invalid-end': 'error',

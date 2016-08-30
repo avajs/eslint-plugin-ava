@@ -35,6 +35,7 @@ Configure it in `package.json`.
 			"ava/assertion-message": ["off", "always"],
 			"ava/max-asserts": ["off", 5],
 			"ava/no-cb-test": "off",
+			"ava/no-duplicate-modifiers": "error",
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
 			"ava/no-invalid-end": "error",
@@ -68,11 +69,12 @@ The rules will only activate in test files.
 - [assertion-message](docs/rules/assertion-message.md) - Enforce or disallow assertion messages.
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
+- [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md) - Ensure tests do not have duplicate modifiers.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
-- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
+- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.

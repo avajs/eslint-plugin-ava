@@ -40,3 +40,15 @@ exports.getAvaConfig = filepath => {
 exports.isFunctionExpression = node => {
 	return node && functionExpressions.indexOf(node.type) !== -1;
 };
+
+exports.getTestModifiers = function getTestModifiers(node) {
+	if (node.type === 'CallExpression') {
+		return getTestModifiers(node.callee);
+	}
+
+	if (node.type === 'MemberExpression') {
+		return getTestModifiers(node.object).concat(node.property.name);
+	}
+
+	return [];
+};
