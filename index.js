@@ -16,6 +16,7 @@ module.exports = {
 				'ava/assertion-arguments': 'error',
 				'ava/assertion-message': ['off', 'always'],
 				'ava/max-asserts': ['off', 5],
+				'ava/no-async-fn-without-await': 'error',
 				'ava/no-cb-test': 'off',
 				'ava/no-identical-title': 'error',
 				'ava/no-ignored-test-files': 'error',

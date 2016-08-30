@@ -34,6 +34,7 @@ Configure it in `package.json`.
 			"ava/assertion-arguments": "error",
 			"ava/assertion-message": ["off", "always"],
 			"ava/max-asserts": ["off", 5],
+			"ava/no-async-fn-without-await": "error",
 			"ava/no-cb-test": "off",
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
@@ -67,6 +68,7 @@ The rules will only activate in test files.
 - [assertion-arguments](docs/rules/assertion-arguments.md) - Enforce passing correct arguments to assertions.
 - [assertion-message](docs/rules/assertion-message.md) - Enforce or disallow assertion messages.
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
+- [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
