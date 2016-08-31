@@ -73,6 +73,7 @@
   },
   "devDependencies": {
     "ava": "*",
+    "babel-eslint": "^6.1.2",
     "coveralls": "^2.11.9",
     "eslint": "^3.0.1",
     "eslint-ava-rule-tester": "^2.0.0",
