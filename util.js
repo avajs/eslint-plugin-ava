@@ -52,3 +52,36 @@ exports.getTestModifiers = function getTestModifiers(node) {
 
 	return [];
 };
+
+const getMembers = node => {
+	const name = node.property.name;
+
+	if (node.object.type === 'MemberExpression') {
+		return getMembers(node.object).concat(name);
+	}
+
+	return [name];
+};
+
+exports.getMembers = getMembers;
+
+const assertionMethodsNbArguments = {
+	deepEqual: 2,
+	fail: 0,
+	false: 1,
+	falsy: 1,
+	ifError: 1,
+	is: 2,
+	not: 2,
+	notDeepEqual: 2,
+	notThrows: 1,
+	pass: 0,
+	regex: 2,
+	notRegex: 2,
+	throws: 1,
+	true: 1,
+	truthy: 1
+};
+
+exports.assertionMethodsNbArguments = assertionMethodsNbArguments;
+exports.assertionMethods = Object.keys(assertionMethodsNbArguments);

@@ -3,26 +3,8 @@ const visitIf = require('enhance-visitors').visitIf;
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const expectedNbArguments = {
-	deepEqual: 2,
-	fail: 0,
-	false: 1,
-	falsy: 1,
-	ifError: 1,
-	is: 2,
-	not: 2,
-	notDeepEqual: 2,
-	notThrows: 1,
-	pass: 0,
-	regex: 2,
-	notRegex: 2,
-	throws: 1,
-	true: 1,
-	truthy: 1
-};
-
 function nbArguments(node) {
-	const nArgs = expectedNbArguments[node.property.name];
+	const nArgs = util.assertionMethodsNbArguments[node.property.name];
 
 	if (nArgs !== undefined) {
 		return nArgs;
