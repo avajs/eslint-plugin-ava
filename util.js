@@ -83,7 +83,8 @@ const assertionMethodsNumArguments = new Map([
 	['truthy', 1]
 ]);
 
+const assertionMethodNames = Array.from(assertionMethodsNumArguments.keys());
+
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
-const assertionMethods = new Set(assertionMethodsNumArguments.keys());
-exports.executionMethods = new Set([...assertionMethods].concat(['end', 'plan']));
-exports.assertionMethods = assertionMethods;
+exports.assertionMethods = new Set(assertionMethodNames);
+exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan']));
