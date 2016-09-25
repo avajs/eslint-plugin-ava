@@ -28,7 +28,7 @@ const create = context => {
 				const members = util.getMembers(callee)
 					.filter(name => name !== 'skip');
 
-				if (util.assertionMethods.indexOf(members[0]) === -1) {
+				if (!util.assertionMethods.has(members[0])) {
 					return;
 				}
 

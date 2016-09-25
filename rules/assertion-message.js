@@ -4,7 +4,7 @@ const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
 function nbArguments(node) {
-	const nArgs = util.assertionMethodsNbArguments[node.property.name];
+	const nArgs = util.assertionMethodsNumArguments.get(node.property.name);
 
 	if (nArgs !== undefined) {
 		return nArgs;

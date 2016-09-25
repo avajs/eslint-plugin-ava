@@ -3,9 +3,7 @@ const visitIf = require('enhance-visitors').visitIf;
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const methods = util.assertionMethods.concat(['end', 'plan']);
-
-const isMethod = name => methods.indexOf(name) !== -1;
+const isMethod = name => util.executionMethods.has(name);
 
 const isCallExpression = node =>
 	node.parent.type === 'CallExpression' &&
