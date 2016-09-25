@@ -3,37 +3,7 @@ const visitIf = require('enhance-visitors').visitIf;
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const methods = [
-	'end',
-	'pass',
-	'fail',
-	'truthy',
-	'falsy',
-	'true',
-	'false',
-	'is',
-	'not',
-	'deepEqual',
-	'notDeepEqual',
-	'throws',
-	'notThrows',
-	'regex',
-	'notRegex',
-	'ifError',
-	'plan'
-];
-
-const isMethod = name => methods.indexOf(name) !== -1;
-
-const getMembers = node => {
-	const name = node.property.name;
-
-	if (node.object.type === 'MemberExpression') {
-		return getMembers(node.object).concat(name);
-	}
-
-	return [name];
-};
+const isMethod = name => util.executionMethods.has(name);
 
 const isCallExpression = node =>
 	node.parent.type === 'CallExpression' &&
@@ -84,7 +54,7 @@ const create = context => {
 				return;
 			}
 
-			const members = getMembers(node);
+			const members = util.getMembers(node);
 			const stats = getMemberStats(members);
 
 			if (members[0] === 'context') {

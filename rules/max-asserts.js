@@ -25,6 +25,13 @@ const create = context => {
 			if (callee.property &&
 					notAssertionMethods.indexOf(callee.property.name) === -1 &&
 					util.nameOfRootObject(callee) === 't') {
+				const members = util.getMembers(callee)
+					.filter(name => name !== 'skip');
+
+				if (!util.assertionMethods.has(members[0])) {
+					return;
+				}
+
 				assertionCount++;
 
 				if (assertionCount === maxAssertions + 1) {
