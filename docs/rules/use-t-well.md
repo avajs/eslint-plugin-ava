@@ -12,8 +12,8 @@ import test from 'ava';
 
 test(t => {
 	t(value); // `t` is not a function
-	t.depEqual(value, [2]); // Unknown assertion method
-	t.contxt.foo = 100; // Unknown member `context`
+	t.depEqual(value, [2]); // Unknown assertion method `depEqual`
+	t.contxt.foo = 100; // Unknown member `contxt`. Use `context.contxt` instead
 	t.foo = 1000; // Unknown member `foo`. Use `context.foo` instead
 	t.deepEqual.is(value, value); // Can't chain assertion methods
 	t.skip(); // Missing assertion method
