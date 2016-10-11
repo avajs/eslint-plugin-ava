@@ -7,6 +7,12 @@ const create = context => {
 	let testIsAsync = false;
 	let testUsed = false;
 
+	const registerUseOfAwait = () => {
+		if (testIsAsync) {
+			testUsed = true;
+		}
+	};
+
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
@@ -15,11 +21,8 @@ const create = context => {
 			const implementationFn = node.arguments[0];
 			testIsAsync = implementationFn && implementationFn.async;
 		}),
-		YieldExpression: () => {
-			if (testIsAsync) {
-				testUsed = true;
-			}
-		},
+		AwaitExpression: registerUseOfAwait,
+		YieldExpression: registerUseOfAwait,
 		'CallExpression:exit': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
