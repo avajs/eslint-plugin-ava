@@ -51,7 +51,7 @@ const create = context => {
 			.filter(info => info.ended);
 
 		// If this segment or any previous segment is already ended, further statements are not allowed, report as an error.
-		if (ended.length) {
+		if (ended.length !== 0) {
 			ended.forEach(info => {
 				// unset ended state to avoid generating lots of errors
 				info.ended = false;

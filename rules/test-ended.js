@@ -7,7 +7,7 @@ const create = context => {
 	let endCalled = false;
 
 	return ava.merge({
-		'MemberExpression': visitIf([
+		MemberExpression: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {

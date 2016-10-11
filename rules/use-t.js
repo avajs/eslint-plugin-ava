@@ -12,7 +12,7 @@ const create = context => {
 		])(node => {
 			const functionArg = node.arguments[node.arguments.length - 1];
 
-			if (!(functionArg && functionArg.params && functionArg.params.length)) {
+			if (!(functionArg && functionArg.params && functionArg.params.length !== 0)) {
 				return;
 			}
 
