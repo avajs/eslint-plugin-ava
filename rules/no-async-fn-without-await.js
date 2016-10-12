@@ -8,14 +8,14 @@ const create = context => {
 	let testUsed = false;
 
 	return ava.merge({
-		'CallExpression': visitIf([
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
 			const implementationFn = node.arguments[0];
 			testIsAsync = implementationFn && implementationFn.async;
 		}),
-		'YieldExpression': () => {
+		YieldExpression: () => {
 			if (testIsAsync) {
 				testUsed = true;
 			}

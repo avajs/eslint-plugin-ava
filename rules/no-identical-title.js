@@ -24,7 +24,7 @@ const create = context => {
 	let usedTitleNodes = [];
 
 	return ava.merge({
-		'CallExpression': visitIf([
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier

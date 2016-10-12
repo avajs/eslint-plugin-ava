@@ -21,7 +21,7 @@ function code(hasHeader) {
 	return (hasHeader ? header : '') + 'test(t => { t.pass(); });';
 }
 
-util.getAvaConfig = function mockGetAvaConfig() {
+util.getAvaConfig = function () {
 	return {
 		files: ['lib/**/*.test.js']
 	};

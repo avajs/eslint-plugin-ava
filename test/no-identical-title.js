@@ -19,6 +19,7 @@ ruleTester.run('no-identical-title', rule, {
 		header + 'test("a", t => {}); test.cb("b", t => {});',
 		header + 'test.todo("a"); test.todo("b");',
 		header + 'test("a", t => {}); notTest("a", t => {});',
+		// eslint-disable-next-line no-template-curly-in-string
 		header + 'test(`foo ${name}`, t => {}); test(`foo ${name}`,  t => {});',
 		header + 'const name = "foo"; test(name + " 1", t => {}); test(name + " 1", t => {});',
 		header + 'test("a", t => {}); notTest("a", t => {});',
@@ -61,6 +62,7 @@ ruleTester.run('no-identical-title', rule, {
 			errors
 		},
 		{
+			// eslint-disable-next-line no-template-curly-in-string
 			code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
 			errors
 		},

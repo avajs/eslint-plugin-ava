@@ -8,7 +8,7 @@ const create = context => {
 	let testCount = 0;
 
 	return ava.merge({
-		'CallExpression': visitIf([
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 			ava.hasNoHookModifier

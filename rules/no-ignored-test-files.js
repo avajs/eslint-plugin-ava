@@ -62,7 +62,7 @@ const create = context => {
 	}
 
 	return ava.merge({
-		'CallExpression': visitIf([
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
 		])(() => {
