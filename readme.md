@@ -4,6 +4,8 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
 
+This plugin is bundled in [XO](https://github.com/sindresorhus/xo). No need to do anything if you're using it.
+
 
 ## Install
 
