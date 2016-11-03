@@ -24,7 +24,7 @@ Configure it in `package.json`.
 			"es6": true
 		},
 		"parserOptions": {
-			"ecmaVersion": 7,
+			"ecmaVersion": 2017,
 			"sourceType": "module"
 		},
 		"plugins": [
