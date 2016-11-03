@@ -10,12 +10,12 @@ const ruleTester = avaRuleTester(test, {
 
 const missingError = [{
 	ruleId: 'assertion-message',
-	message: 'Expected an assertion message, but found none.'
+	message: '(DEPRECATED) Expected an assertion message, but found none.'
 }];
 
 const foundError = [{
 	ruleId: 'assertion-message',
-	message: 'Expected no assertion message, but found one.'
+	message: '(DEPRECATED) Expected no assertion message, but found one.'
 }];
 
 const header = `const test = require('ava');`;

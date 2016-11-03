@@ -44,12 +44,12 @@ const create = context => {
 				if (!hasMessage && shouldHaveMessage) {
 					context.report({
 						node,
-						message: 'Expected an assertion message, but found none.'
+						message: '(DEPRECATED) Expected an assertion message, but found none.'
 					});
 				} else if (hasMessage && !shouldHaveMessage) {
 					context.report({
 						node,
-						message: 'Expected no assertion message, but found one.'
+						message: '(DEPRECATED) Expected no assertion message, but found one.'
 					});
 				}
 			}
@@ -67,6 +67,7 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
-		schema
+		schema,
+		deprecated: true
 	}
 };
