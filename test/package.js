@@ -5,7 +5,7 @@ import pify from 'pify';
 import index from '../';
 
 test('Every rule is defined in index file', async t => {
-	const ruleDir = '../rules';
+	const ruleDir = path.resolve(__dirname, '../rules');
 	const files = await pify(fs.readdir)(ruleDir);
 
 	const rules = files.filter(file =>

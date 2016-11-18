@@ -11,7 +11,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const header = `const test = require('ava');\n`;
-const rootDir = path.dirname(process.cwd());
+const rootDir = path.dirname(__dirname);
 
 function toPath(subPath) {
 	return path.join(rootDir, subPath);
