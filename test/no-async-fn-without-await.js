@@ -36,6 +36,9 @@ ruleTesterOptions.forEach(options => {
 			`${header} test(async t => { if (bar) { await foo(); } });`,
 			`${header} test(async t => { if (bar) {} else { await foo(); } });`,
 			`${header} test.after(async () => { await foo(); });`,
+			`${header} test('title', fn);`,
+			`${header} test('title', function(t) {});`,
+			`${header} test('title', async t => { await foo(); });`,
 			// shouldn't be triggered since it's not a test file
 			'test(async t => {});'
 		],
@@ -58,6 +61,10 @@ ruleTesterOptions.forEach(options => {
 			},
 			{
 				code: `${header} test(async t => { await foo(); }); test(async t => {});`,
+				errors: [error]
+			},
+			{
+				code: `${header} test('title', async t => {});`,
 				errors: [error]
 			}
 		]
