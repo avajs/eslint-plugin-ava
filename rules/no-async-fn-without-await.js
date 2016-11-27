@@ -13,13 +13,14 @@ const create = context => {
 		}
 	};
 
+	const isAsync = node => Boolean(node && node.async);
+
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			const implementationFn = node.arguments[0];
-			testIsAsync = implementationFn && implementationFn.async;
+			testIsAsync = isAsync(node.arguments[0]) || isAsync(node.arguments[1]);
 		}),
 		AwaitExpression: registerUseOfAwait,
 		YieldExpression: registerUseOfAwait,
