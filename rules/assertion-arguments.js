@@ -8,10 +8,6 @@ const expectedNbArguments = {
 		min: 2,
 		max: 3
 	},
-	end: {
-		min: 0,
-		max: 0
-	},
 	fail: {
 		min: 0,
 		max: 1
@@ -74,21 +70,6 @@ const expectedNbArguments = {
 	}
 };
 
-function nbArguments(node) {
-	const name = node.property.name;
-	const nArgs = expectedNbArguments[name];
-
-	if (nArgs) {
-		return nArgs;
-	}
-
-	if (node.object.type === 'MemberExpression') {
-		return nbArguments(node.object);
-	}
-
-	return false;
-}
-
 const create = context => {
 	const ava = createAvaRule();
 	const options = context.options[0] || {};
@@ -115,7 +96,18 @@ const create = context => {
 			}
 
 			const gottenArgs = node.arguments.length;
-			const nArgs = nbArguments(callee);
+			const members = util.getMembers(callee)
+				.filter(name => name !== 'skip');
+
+			if (members[0] === 'end') {
+				if (gottenArgs > 1) {
+					report(node, `Too many arguments. Expected at most 1.`);
+				}
+
+				return;
+			}
+
+			const nArgs = expectedNbArguments[members[0]];
 
 			if (!nArgs) {
 				return;

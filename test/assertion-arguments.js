@@ -35,7 +35,6 @@ function testCase(message, content, errorMessage, useHeader) {
 ruleTester.run('assertion-arguments', rule, {
 	valid: [
 		testCase(false, `t.plan(1);`),
-		testCase(false, `t.end();`),
 		testCase(false, `t.deepEqual({}, {}, 'message');`),
 		testCase(false, `t.fail('message');`),
 		testCase(false, `t.false(false, 'message');`),
@@ -82,7 +81,6 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, `t.foo(1, 2, 3, 4);`),
 
 		testCase('always', `t.plan(1);`),
-		testCase('always', `t.end();`),
 		testCase('always', `t.pass('message');`),
 		testCase('always', `t.fail('message');`),
 		testCase('always', `t.truthy('unicorn', 'message');`),
@@ -108,7 +106,6 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', `t.foo(1, 2, 3, 4);`),
 
 		testCase('never', `t.plan(1);`),
-		testCase('never', `t.end();`),
 		testCase('never', `t.pass();`),
 		testCase('never', `t.fail();`),
 		testCase('never', `t.truthy('unicorn');`),
@@ -132,7 +129,27 @@ ruleTester.run('assertion-arguments', rule, {
 
 		testCase('never', `t.context.a(1, 2, 3, 4);`),
 		testCase('never', `t.context.is(1, 2, 3, 4);`),
-		testCase('never', `t.foo(1, 2, 3, 4);`)
+		testCase('never', `t.foo(1, 2, 3, 4);`),
+
+		// Special case for `t.end()``
+		testCase(false, `t.end();`),
+		testCase(false, `t.end(error);`),
+		testCase(false, `t.end.skip();`),
+		testCase(false, `t.end.skip(error);`),
+		testCase(false, `t.skip.end();`),
+		testCase(false, `t.skip.end(error);`),
+		testCase('always', `t.end();`),
+		testCase('always', `t.end(error);`),
+		testCase('always', `t.end.skip();`),
+		testCase('always', `t.end.skip(error);`),
+		testCase('always', `t.skip.end();`),
+		testCase('always', `t.skip.end(error);`),
+		testCase('never', `t.end();`),
+		testCase('never', `t.end(error);`),
+		testCase('never', `t.end.skip();`),
+		testCase('never', `t.end.skip(error);`),
+		testCase('never', `t.skip.end();`),
+		testCase('never', `t.skip.end(error);`)
 	],
 	invalid: [
 		// Not enough arguments
@@ -155,7 +172,6 @@ ruleTester.run('assertion-arguments', rule, {
 
 		// Too many arguments
 		testCase(false, `t.plan(1, 'extra argument');`, tooManyError(1)),
-		testCase(false, `t.end('extra argument');`, tooManyError(0)),
 		testCase(false, `t.pass('message', 'extra argument');`, tooManyError(1)),
 		testCase(false, `t.fail('message', 'extra argument');`, tooManyError(1)),
 		testCase(false, `t.truthy('unicorn', 'message', 'extra argument');`, tooManyError(2)),
@@ -209,6 +225,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', `t.notRegex(a, /a/, 'message');`, foundError),
 		testCase('never', `t.ifError(new Error(), 'message');`, foundError),
 		testCase('never', `t.skip.is('same', 'same', 'message');`, foundError),
-		testCase('never', `t.is.skip('same', 'same', 'message');`, foundError)
+		testCase('never', `t.is.skip('same', 'same', 'message');`, foundError),
+
+		testCase(false, `t.end('too many', 'arguments');`, tooManyError(1)),
+		testCase(false, `t.skip.end('too many', 'arguments');`, tooManyError(1)),
+		testCase(false, `t.end.skip('too many', 'arguments');`, tooManyError(1))
 	]
 });
