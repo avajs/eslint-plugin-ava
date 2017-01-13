@@ -69,7 +69,7 @@
     "espurify": "^1.5.0",
     "multimatch": "^2.1.0",
     "pkg-up": "^1.0.0",
-    "req-all": "^0.1.0"
+    "req-all": "^1.0.0"
   },
   "devDependencies": {
     "ava": "*",
