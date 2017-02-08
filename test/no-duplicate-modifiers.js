@@ -28,10 +28,9 @@ const modifiers = [
 const valid = modifiers.map(modifier => `${header} test.${modifier}(t => {});`);
 const invalid = modifiers.map(modifier => ({
 	code: `${header} test.${modifier}.${modifier}(t => {});`,
-	errors: [{
-		...ruleError,
-		message: `Duplicate test modifier \`${modifier}\`.`
-	}]
+	errors: [
+		Object.assign({}, ruleError, {message: `Duplicate test modifier \`${modifier}\`.`})
+	]
 }));
 
 ruleTester.run('no-duplicate-modifiers', rule, {
@@ -48,10 +47,7 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		{
 			code: `${header} test.serial.cb.only.serial(t => {});`,
 			errors: [
-				{
-					...ruleError,
-					message: 'Duplicate test modifier `serial`.'
-				}
+				Object.assign({}, ruleError, {message: 'Duplicate test modifier `serial`.'})
 			]
 		}
 	])
