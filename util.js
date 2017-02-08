@@ -78,6 +78,7 @@ const assertionMethodsNumArguments = new Map([
 	['pass', 0],
 	['regex', 2],
 	['notRegex', 2],
+	['snapshot', 1],
 	['throws', 1],
 	['true', 1],
 	['truthy', 1]

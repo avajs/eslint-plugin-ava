@@ -56,6 +56,10 @@ const expectedNbArguments = {
 		min: 2,
 		max: 3
 	},
+	snapshot: {
+		min: 1,
+		max: 2
+	},
 	throws: {
 		min: 1,
 		max: 3
