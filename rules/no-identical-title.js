@@ -2,6 +2,7 @@
 const espurify = require('espurify');
 const visitIf = require('enhance-visitors').visitIf;
 const deepStrictEqual = require('deep-strict-equal');
+const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
 const purify = node => node && espurify(node);
@@ -34,6 +35,11 @@ const create = context => {
 
 			// don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
 			if (titleNode === undefined || !isStatic(titleNode)) {
+				return;
+			}
+
+			// Don't flag what look to be macros
+			if (args.length > 2 && !util.isFunctionExpression(args[1])) {
 				return;
 			}
 

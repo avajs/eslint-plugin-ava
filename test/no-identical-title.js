@@ -32,6 +32,25 @@ ruleTester.run('no-identical-title', rule, {
 		// multiple anonymous tests covered by the if-multiple rule
 		header + 'test(t => {}); test(t => {});',
 		header + 'test(t => {}); test.cb(t => {});',
+		// macros
+		` ${header}
+			const macro = (t, value) => { t.true(value); };
+
+			test(macro, true);
+			test(macro, false);
+		`,
+		` ${header}
+			const macro = (t, value) => { t.true(value); };
+
+			test('should work', macro, true);
+			test('should fail', macro, false);
+		`,
+		` ${header}
+			const macro = (t, value) => { t.true(value); };
+
+			test('same title', macro, true);
+			test('same title', macro, false);
+		`,
 		// shouldn't be triggered since it's not a test file
 		'test(t => {}); test(t => {});',
 		'test("a", t => {}); test("a", t => {});'
