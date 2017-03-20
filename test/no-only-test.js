@@ -17,7 +17,7 @@ ruleTester.run('no-only-test', rule, {
 		header + 'test.cb("my test name", t => { t.pass(); t.end(); });',
 		header + 'test(t => { t.pass(); }); test(t => { t.pass(); });',
 		header + 'notTest.only();',
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test.only(t => {});'
 	],
 	invalid: [

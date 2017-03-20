@@ -34,7 +34,7 @@ ruleTester.run('max-asserts', rule, {
 			options: [2]
 		},
 		`${header} test(t => { t.context.bar(); ${nbAssertions(5)} });`,
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		`test(t => { ${nbAssertions(10)} });`
 	],
 	invalid: [

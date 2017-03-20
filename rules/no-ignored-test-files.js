@@ -57,7 +57,7 @@ const create = context => {
 	let hasTestCall = false;
 
 	if (!packageInfo.rootDir) {
-		// could not find a package.json folder
+		// Could not find a package.json folder
 		return {};
 	}
 

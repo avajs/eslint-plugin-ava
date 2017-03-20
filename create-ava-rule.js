@@ -83,13 +83,13 @@ module.exports = () => {
 		},
 		CallExpression: node => {
 			if (isTestFunctionCall(node.callee)) {
-				// entering test function
+				// Entering test function
 				currentTestNode = node;
 			}
 		},
 		'CallExpression:exit': node => {
 			if (currentTestNode === node) {
-				// leaving test function
+				// Leaving test function
 				currentTestNode = null;
 			}
 		},

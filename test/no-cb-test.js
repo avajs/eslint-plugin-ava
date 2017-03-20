@@ -16,7 +16,7 @@ ruleTester.run('no-cb-test', rule, {
 		header + 'test("my test name", t => { t.pass(); });',
 		header + 'test.only("my test name", t => { t.pass(); });',
 		header + 'notTest.cb(t => { t.pass(); });',
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test.cb(t => {});'
 	],
 	invalid: [

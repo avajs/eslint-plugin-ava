@@ -54,7 +54,7 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.deepEqual;'),
 		testCase('t.plan(1);'),
 		testCase('a.foo();'),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase('t.foo(a, a);', false),
 		testCase('t.foo;', false)
 	],

@@ -16,7 +16,7 @@ ruleTester.run('no-todo-test', rule, {
 		header + 'test("my test name", t => { t.pass(); });',
 		header + 'test.only("my test name", t => { t.pass(); });',
 		header + 'notTest.todo(t => { t.pass(); });',
-			// shouldn't be triggered since it's not a test file
+			// Shouldn't be triggered since it's not a test file
 		'test.todo("my test name");'
 	],
 	invalid: [

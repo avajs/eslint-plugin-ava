@@ -29,10 +29,10 @@ ruleTester.run('no-identical-title', rule, {
 		header + 'test.beforeEach(t => {}); test.beforeEach(t => {});',
 		header + 'test.afterEach(t => {}); test.afterEach(t => {});',
 		header + 'test.cb.before(t => {}); test.before.cb(t => {});',
-		// multiple anonymous tests covered by the if-multiple rule
+		// Multiple anonymous tests covered by the if-multiple rule
 		header + 'test(t => {}); test(t => {});',
 		header + 'test(t => {}); test.cb(t => {});',
-		// macros
+		// Macros
 		` ${header}
 			const macro = (t, value) => { t.true(value); };
 
@@ -51,7 +51,7 @@ ruleTester.run('no-identical-title', rule, {
 			test('same title', macro, true);
 			test('same title', macro, false);
 		`,
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test(t => {}); test(t => {});',
 		'test("a", t => {}); test("a", t => {});'
 	],

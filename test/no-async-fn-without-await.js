@@ -39,7 +39,7 @@ ruleTesterOptions.forEach(options => {
 			`${header} test('title', fn);`,
 			`${header} test('title', function(t) {});`,
 			`${header} test('title', async t => { await foo(); });`,
-			// shouldn't be triggered since it's not a test file
+			// Shouldn't be triggered since it's not a test file
 			'test(async t => {});'
 		],
 		invalid: [

@@ -53,7 +53,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, `t.true(true, 'message');`),
 		testCase(false, `t.truthy('unicorn', 'message');`),
 		testCase(false, `t.snapshot(value, 'message');`),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase(false, `t.true(true);`, false, false),
 
 		testCase(false, `t.deepEqual({}, {});`),
@@ -75,7 +75,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, `t.true(true);`),
 		testCase(false, `t.truthy('unicorn');`),
 		testCase(false, `t.snapshot(value);`),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase(false, `t.true(true, 'message');`, [], false),
 
 		testCase(false, `t.context.a(1, 2, 3, 4);`),
@@ -102,7 +102,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', `t.is.skip('same', 'same', 'message');`),
 		testCase('always', `t.snapshot(value, 'message');`),
 
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase('always', `t.true(true);`, [], false),
 
 		testCase('always', `t.context.a(1, 2, 3, 4);`),
@@ -129,7 +129,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', `t.skip.is('same', 'same');`),
 		testCase('never', `t.is.skip('same', 'same');`),
 		testCase('never', `t.snapshot(value);`),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase('never', `t.true(true, 'message');`, [], false),
 
 		testCase('never', `t.context.a(1, 2, 3, 4);`),

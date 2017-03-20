@@ -13,7 +13,7 @@ const header = `const test = require('ava');\n`;
 
 ruleTester.run('test-title', rule, {
 	valid: [
-			// default options should be `['if-multiple']`
+			// Default options should be `['if-multiple']`
 		header + 'test(t => { t.pass(); t.end(); });',
 		{
 			code: header + 'test("my test name", t => { t.pass(); t.end(); });',
@@ -67,7 +67,7 @@ ruleTester.run('test-title', rule, {
 			code: header + 'test(macroFn, arg1, arg2);',
 			options: ['always']
 		},
-			// shouldn't be triggered since it's not a test file
+			// Shouldn't be triggered since it's not a test file
 		{
 			code: 'test(t => {});',
 			options: ['always']

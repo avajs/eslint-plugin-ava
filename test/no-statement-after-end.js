@@ -29,7 +29,7 @@ ruleTester.run('no-statement-after-end', rule, {
 		cbTest('if (t.context.a === 1) { return t.end(); } \n t.is(1, 1); t.end();'),
 		cbTest('return t.end();'),
 		cbTest('t.end(); return;'),
-			// valid because it is not a test file (no header)
+			// Valid because it is not a test file (no header)
 		cbTest('t.end(); t.is(1, 1);', false)
 	],
 	invalid: [
