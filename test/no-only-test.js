@@ -5,6 +5,9 @@ import rule from '../rules/no-only-test';
 const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
+	},
+	parserOptions: {
+		sourceType: 'module'
 	}
 });
 
@@ -23,14 +26,17 @@ ruleTester.run('no-only-test', rule, {
 	invalid: [
 		{
 			code: header + 'test.only(t => { t.pass(); });',
+			output: header + 'test(t => { t.pass(); });',
 			errors
 		},
 		{
 			code: header + 'test.cb.only(t => { t.pass(); t.end(); });',
+			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors
 		},
 		{
 			code: header + 'test.only.cb(t => { t.pass(); t.end(); });',
+			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors
 		}
 	]
