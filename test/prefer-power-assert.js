@@ -1,9 +1,9 @@
 import test from 'ava';
-import {RuleTester} from 'eslint';
+import avaRuleTester from 'eslint-ava-rule-tester';
 import {permutationCombination} from 'js-combinatorics';
 import rule from '../rules/prefer-power-assert';
 
-const ruleTester = new RuleTester({
+const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
 	},
@@ -16,20 +16,18 @@ const ruleTester = new RuleTester({
 const errors = [{ruleId: 'prefer-power-assert'}];
 
 function testNotAllowedMethod(methodName) {
-	test(`${methodName} is not allowed`, () => {
-		ruleTester.run('prefer-power-assert', rule, {
-			valid: [],
-			invalid: [
-				{
-					code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
-					errors
-				},
-				{
-					code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
-					errors
-				}
-			]
-		});
+	ruleTester.run('prefer-power-assert', rule, {
+		valid: [],
+		invalid: [
+			{
+				code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
+				errors
+			},
+			{
+				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
+				errors
+			}
+		]
 	});
 }
 
@@ -49,18 +47,16 @@ for (const methodName of notAllowedMethods) {
 }
 
 function testAllowedMethod(methodName) {
-	test(`${methodName} is allowed`, () => {
-		ruleTester.run('prefer-power-assert', rule, {
-			valid: [
-				{
-					code: `import test from 'ava';\n test(t => { t.${methodName}; });`
-				},
-				{
-					code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`
-				}
-			],
-			invalid: []
-		});
+	ruleTester.run('prefer-power-assert', rule, {
+		valid: [
+			{
+				code: `import test from 'ava';\n test(t => { t.${methodName}; });`
+			},
+			{
+				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`
+			}
+		],
+		invalid: []
 	});
 }
 
@@ -79,20 +75,18 @@ for (const methodName of allowedMethods) {
 }
 
 function testWithModifier(modifier) {
-	test(`with modifier test.${modifier}`, () => {
-		ruleTester.run('prefer-power-assert', rule, {
-			valid: [
-				{
-					code: `import test from 'ava';\n test.${modifier}(t => { t.true(foo); });`
-				}
-			],
-			invalid: [
-				{
-					code: `import test from 'ava';\n test.${modifier}(t => { t.is(foo); });`,
-					errors
-				}
-			]
-		});
+	ruleTester.run('prefer-power-assert', rule, {
+		valid: [
+			{
+				code: `import test from 'ava';\n test.${modifier}(t => { t.true(foo); });`
+			}
+		],
+		invalid: [
+			{
+				code: `import test from 'ava';\n test.${modifier}(t => { t.is(foo); });`,
+				errors
+			}
+		]
 	});
 }
 
@@ -101,20 +95,18 @@ for (const modifiers of permutationCombination(['skip', 'only', 'cb', 'serial'])
 }
 
 function testDeclaration(declaration) {
-	test(`with ava declaration ${declaration}`, () => {
-		ruleTester.run('prefer-power-assert', rule, {
-			valid: [
-				{
-					code: `${declaration}\n test(t => { t.true(foo); });`
-				}
-			],
-			invalid: [
-				{
-					code: `${declaration}\n test(t => { t.is(foo); });`,
-					errors
-				}
-			]
-		});
+	ruleTester.run('prefer-power-assert', rule, {
+		valid: [
+			{
+				code: `${declaration}\n test(t => { t.true(foo); });`
+			}
+		],
+		invalid: [
+			{
+				code: `${declaration}\n test(t => { t.is(foo); });`,
+				errors
+			}
+		]
 	});
 }
 
@@ -138,30 +130,20 @@ test(t => {
 });
 `;
 
-test('assertion in nested code', () => {
-	ruleTester.run('prefer-power-assert', rule, {
-		valid: [
-		],
-		invalid: [
-			{
-				code: assertionInNestedCode,
-				errors
-			}
-		]
-	});
-});
-
-test('misc', () => {
-	ruleTester.run('prefer-power-assert', rule, {
-		valid: [
-			{
-				code: `import test from 'ava';\n test.cb(function (t) { t.true(foo); t.end(); });`
-			},
-			// Shouldn't be triggered since it's not a test file
-			{
-				code: 'test(t => {});'
-			}
-		],
-		invalid: []
-	});
+ruleTester.run('prefer-power-assert', rule, {
+	valid: [
+		{
+			code: `import test from 'ava';\n test.cb(function (t) { t.true(foo); t.end(); });`
+		},
+		// Shouldn't be triggered since it's not a test file
+		{
+			code: 'test(t => {});'
+		}
+	],
+	invalid: [
+		{
+			code: assertionInNestedCode,
+			errors
+		}
+	]
 });

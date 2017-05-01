@@ -85,10 +85,7 @@
   "peerDependencies": {
     "eslint": ">=3.6"
   },
-  "xo": {
-    "esnext": true,
-    "rules": {
-      "prefer-template": "off"
-    }
+  "ava": {
+    "failWithoutAssertions": true
   }
 }
