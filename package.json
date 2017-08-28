@@ -1,91 +1,91 @@
 {
-  "name": "eslint-plugin-ava",
-  "version": "4.2.1",
-  "description": "ESLint rules for AVA",
-  "license": "MIT",
-  "repository": "avajs/eslint-plugin-ava",
-  "author": {
-    "name": "Sindre Sorhus",
-    "email": "sindresorhus@gmail.com",
-    "url": "sindresorhus.com"
-  },
-  "maintainers": [
-    {
-      "name": "Vadim Demedes",
-      "email": "vdemedes@gmail.com",
-      "url": "github.com/vdemedes"
-    },
-    {
-      "name": "James Talmage",
-      "email": "james@talmage.io",
-      "url": "github.com/jamestalmage"
-    },
-    {
-      "name": "Mark Wubben",
-      "email": "mark@novemberborn.net",
-      "url": "novemberborn.net"
-    },
-    {
-      "name": "Takuto Wada",
-      "email": "takuto.wada@gmail.com",
-      "url": "github.com/twada"
-    },
-    {
-      "name": "Jeroen Engels",
-      "email": "jfm.engels@gmail.com",
-      "url": "github.com/jfmengels"
-    }
-  ],
-  "engines": {
-    "node": ">=4"
-  },
-  "scripts": {
-    "test": "xo && nyc ava",
-    "coveralls": "nyc report --reporter=text-lcov | coveralls"
-  },
-  "files": [
-    "index.js",
-    "create-ava-rule.js",
-    "util.js",
-    "rules"
-  ],
-  "keywords": [
-    "eslint",
-    "eslintplugin",
-    "eslint-plugin",
-    "ava",
-    "test",
-    "runner",
-    "assert",
-    "asserts",
-    "assertion",
-    "mocha"
-  ],
-  "dependencies": {
-    "arrify": "^1.0.1",
-    "deep-strict-equal": "^0.2.0",
-    "enhance-visitors": "^1.0.0",
-    "espree": "^3.1.3",
-    "espurify": "^1.5.0",
-    "import-modules": "^1.1.0",
-    "multimatch": "^2.1.0",
-    "pkg-up": "^2.0.0"
-  },
-  "devDependencies": {
-    "ava": "*",
-    "babel-eslint": "^7.1.0",
-    "coveralls": "^2.11.9",
-    "eslint": "^4.5.0",
-    "eslint-ava-rule-tester": "^2.0.0",
-    "js-combinatorics": "^0.5.0",
-    "nyc": "^11.1.0",
-    "pify": "^3.0.0",
-    "xo": "*"
-  },
-  "peerDependencies": {
-    "eslint": ">=3.6"
-  },
-  "ava": {
-    "failWithoutAssertions": true
-  }
+	"name": "eslint-plugin-ava",
+	"version": "4.2.1",
+	"description": "ESLint rules for AVA",
+	"license": "MIT",
+	"repository": "avajs/eslint-plugin-ava",
+	"author": {
+		"name": "Sindre Sorhus",
+		"email": "sindresorhus@gmail.com",
+		"url": "sindresorhus.com"
+	},
+	"maintainers": [
+		{
+			"name": "Vadim Demedes",
+			"email": "vdemedes@gmail.com",
+			"url": "github.com/vdemedes"
+		},
+		{
+			"name": "James Talmage",
+			"email": "james@talmage.io",
+			"url": "github.com/jamestalmage"
+		},
+		{
+			"name": "Mark Wubben",
+			"email": "mark@novemberborn.net",
+			"url": "novemberborn.net"
+		},
+		{
+			"name": "Takuto Wada",
+			"email": "takuto.wada@gmail.com",
+			"url": "github.com/twada"
+		},
+		{
+			"name": "Jeroen Engels",
+			"email": "jfm.engels@gmail.com",
+			"url": "github.com/jfmengels"
+		}
+	],
+	"engines": {
+		"node": ">=4"
+	},
+	"scripts": {
+		"test": "xo && nyc ava",
+		"coveralls": "nyc report --reporter=text-lcov | coveralls"
+	},
+	"files": [
+		"index.js",
+		"create-ava-rule.js",
+		"util.js",
+		"rules"
+	],
+	"keywords": [
+		"eslint",
+		"eslintplugin",
+		"eslint-plugin",
+		"ava",
+		"test",
+		"runner",
+		"assert",
+		"asserts",
+		"assertion",
+		"mocha"
+	],
+	"dependencies": {
+		"arrify": "^1.0.1",
+		"deep-strict-equal": "^0.2.0",
+		"enhance-visitors": "^1.0.0",
+		"espree": "^3.1.3",
+		"espurify": "^1.5.0",
+		"import-modules": "^1.1.0",
+		"multimatch": "^2.1.0",
+		"pkg-up": "^2.0.0"
+	},
+	"devDependencies": {
+		"ava": "*",
+		"babel-eslint": "^7.1.0",
+		"coveralls": "^2.11.9",
+		"eslint": "^4.5.0",
+		"eslint-ava-rule-tester": "^2.0.0",
+		"js-combinatorics": "^0.5.0",
+		"nyc": "^11.1.0",
+		"pify": "^3.0.0",
+		"xo": "*"
+	},
+	"peerDependencies": {
+		"eslint": ">=3.6"
+	},
+	"ava": {
+		"failWithoutAssertions": true
+	}
 }
