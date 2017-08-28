@@ -88,4 +88,4 @@ const assertionMethodNames = Array.from(assertionMethodsNumArguments.keys());
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.assertionMethods = new Set(assertionMethodNames);
-exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan']));
+exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));
