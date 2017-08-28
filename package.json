@@ -75,11 +75,11 @@
     "ava": "*",
     "babel-eslint": "^7.1.0",
     "coveralls": "^2.11.9",
-    "eslint": "^3.7.1",
+    "eslint": "^4.5.0",
     "eslint-ava-rule-tester": "^2.0.0",
     "js-combinatorics": "^0.5.0",
-    "nyc": "^10.0.0",
-    "pify": "^2.3.0",
+    "nyc": "^11.1.0",
+    "pify": "^3.0.0",
     "xo": "*"
   },
   "peerDependencies": {
