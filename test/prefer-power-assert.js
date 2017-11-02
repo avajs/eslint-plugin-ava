@@ -157,7 +157,7 @@ test('misc', () => {
 			{
 				code: `import test from 'ava';\n test.cb(function (t) { t.true(foo); t.end(); });`
 			},
-			// shouldn't be triggered since it's not a test file
+			// Shouldn't be triggered since it's not a test file
 			{
 				code: 'test(t => {});'
 			}

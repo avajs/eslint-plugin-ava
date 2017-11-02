@@ -16,7 +16,7 @@ ruleTester.run('no-skip-assert', rule, {
 		header + 'test(t => { t.is(1, 1); });',
 		header + 'test.skip(t => { t.is(1, 1); });',
 		header + 'test(t => { notT.skip.is(1, 1); });',
-			// shouldn't be triggered since it's not a test file
+			// Shouldn't be triggered since it's not a test file
 		'test(t => { t.skip.is(1, 1); });'
 	],
 	invalid: [

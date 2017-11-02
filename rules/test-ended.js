@@ -26,7 +26,7 @@ const create = context => {
 				return;
 			}
 
-			// leaving test function
+			// Leaving test function
 			if (endCalled) {
 				endCalled = false;
 			} else {

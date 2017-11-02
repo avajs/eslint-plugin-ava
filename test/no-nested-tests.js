@@ -24,7 +24,7 @@ ruleTester.run('no-nested-tests', rule, {
 		header + 'test.skip(t => {}); test.skip(t => {});',
 		header + 'test.only(t => {});',
 		header + 'test.only(t => {}); test.only(t => {});',
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test(t => { test(t => {}); });'
 	],
 	invalid: [

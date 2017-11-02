@@ -40,7 +40,7 @@ const create = context => {
 			}
 		}),
 		'CallExpression:exit': visitIf([ava.isTestNode])(() => {
-			// leaving test function
+			// Leaving test function
 			if (assertionCount > maxAssertions) {
 				context.report({
 					node: nodeToReport,

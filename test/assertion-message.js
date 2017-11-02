@@ -55,7 +55,7 @@ ruleTester.run('assertion-message', rule, {
 		testCase('always', `t.is.skip('same', 'same', 'message');`),
 		testCase('always', `t.plan('a', 'b', 'c', 'd', 'message');`),
 		testCase('always', `t.end('a', 'b', 'c', 'd', 'message');`),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase('always', `t.true(true);`, [], false),
 
 		testCase('never', `t.pass();`),
@@ -77,7 +77,7 @@ ruleTester.run('assertion-message', rule, {
 		testCase('never', `t.is.skip('same', 'same');`),
 		testCase('never', `t.plan('a', 'b', 'c', 'd');`),
 		testCase('never', `t.end('a', 'b', 'c', 'd');`),
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		testCase('never', `t.true(true, 'message');`, [], false)
 	],
 	invalid: [

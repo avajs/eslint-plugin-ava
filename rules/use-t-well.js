@@ -58,9 +58,9 @@ const create = context => {
 			const stats = getMemberStats(members);
 
 			if (members[0] === 'context') {
-				// anything is fine when of the form `t.context...`
+				// Anything is fine when of the form `t.context...`
 				if (members.length === 1 && isCallExpression(node)) {
-					// except `t.context()`
+					// Except `t.context()`
 					context.report({
 						node,
 						message: 'Unknown assertion method `context`.'

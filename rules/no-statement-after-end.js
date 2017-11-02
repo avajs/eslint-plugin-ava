@@ -20,7 +20,7 @@ const create = context => {
 	let currentSegmentInfo = null;
 
 	function segmentStart(segment) {
-		// a new CodePathSegment has started, create an "info" object to track this segments state.
+		// A new CodePathSegment has started, create an "info" object to track this segments state.
 		segmentInfoStack.push(currentSegmentInfo);
 
 		currentSegmentInfo = {
@@ -53,7 +53,7 @@ const create = context => {
 		// If this segment or any previous segment is already ended, further statements are not allowed, report as an error.
 		if (ended.length > 0) {
 			ended.forEach(info => {
-				// unset ended state to avoid generating lots of errors
+				// Unset ended state to avoid generating lots of errors
 				info.ended = false;
 			});
 
@@ -77,7 +77,7 @@ const create = context => {
 		ForInStatement: checkStatement,
 		ForOfStatement: checkStatement,
 		ReturnStatement: node => {
-			// empty return statements are OK even after `t.end`,
+			// Empty return statements are OK even after `t.end`,
 			// only check it if there is an argument
 			if (node.argument) {
 				checkStatement(node);

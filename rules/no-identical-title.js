@@ -33,7 +33,7 @@ const create = context => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
-			// don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
+			// Don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
 			if (titleNode === undefined || !isStatic(titleNode)) {
 				return;
 			}

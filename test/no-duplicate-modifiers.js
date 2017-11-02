@@ -40,7 +40,7 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		`${header} test.after.always(t => {});`,
 		`${header} test.afterEach.always(t => {});`,
 		`${header} test.failing.cb(t => {});`,
-		// shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		`test.serial.serial(t => {});`
 	]),
 	invalid: invalid.concat([
