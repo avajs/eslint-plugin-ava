@@ -1,20 +1,7 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
-
-const getTestModifier = function (node, mod) {
-	if (node.type === 'CallExpression') {
-		return getTestModifier(node.callee, mod);
-	} else if (node.type === 'MemberExpression') {
-		if (node.property.type === 'Identifier' && node.property.name === mod) {
-			return node.property;
-		}
-
-		return getTestModifier(node.object, mod);
-	}
-
-	return undefined;
-};
+const getTestModifier = require('../util').getTestModifier;
 
 const create = context => {
 	const ava = createAvaRule();
@@ -29,9 +16,9 @@ const create = context => {
 					node,
 					message: '`test.only()` should not be used.',
 					fix: fixer => {
-						const range = getTestModifier(node, 'only').range;
+						const range = getTestModifier(node, 'only').range.slice();
 						range[0] -= 1;
-						return fixer.remove(getTestModifier(node, 'only'));
+						return fixer.removeRange(range);
 					}
 				});
 			}
