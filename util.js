@@ -81,7 +81,8 @@ const assertionMethodsNumArguments = new Map([
 	['snapshot', 1],
 	['throws', 1],
 	['true', 1],
-	['truthy', 1]
+	['truthy', 1],
+	['log', 1]
 ]);
 
 const assertionMethodNames = Array.from(assertionMethodsNumArguments.keys());
