@@ -63,6 +63,8 @@ exports.getTestModifier = function getTestModifier(node, mod) {
 
 		return getTestModifier(node.object, mod);
 	}
+
+	return undefined;
 };
 
 const getMembers = node => {

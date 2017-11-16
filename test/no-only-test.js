@@ -11,7 +11,8 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-only-test'}];
+const ruleId = 'no-only-test';
+const message = '`test.only()` should not be used.';
 const header = `const test = require('ava');\n`;
 
 ruleTester.run('no-only-test', rule, {
@@ -27,47 +28,101 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test\n\t.only(t => { t.pass(); });',
 			output: header + 'test\n\t(t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 3,
+				column: 3
+			}]
 		},
 		{
 			code: header + 'test\n  .only(t => { t.pass(); });',
 			output: header + 'test\n  (t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 3,
+				column: 4
+			}]
 		},
 		{
 			code: header + 'test\t.only(t => { t.pass(); });',
 			output: header + 'test\t(t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 7
+			}]
 		},
 		{
 			code: header + 'test  .only(t => { t.pass(); });',
 			output: header + 'test  (t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 8
+			}]
 		},
 		{
 			code: header + 'test.\n\tonly(t => { t.pass(); });',
 			output: header + 'test\n\t(t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 3,
+				column: 2
+			}]
 		},
 		{
 			code: header + 'test.\n  only(t => { t.pass(); });',
 			output: header + 'test\n  (t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 3,
+				column: 3
+			}]
 		},
 		{
 			code: header + 'test.only(t => { t.pass(); });',
 			output: header + 'test(t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 6
+			}]
 		},
 		{
 			code: header + 'test.cb.only(t => { t.pass(); t.end(); });',
 			output: header + 'test.cb(t => { t.pass(); t.end(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 9
+			}]
 		},
 		{
 			code: header + 'test.only.cb(t => { t.pass(); t.end(); });',
 			output: header + 'test.cb(t => { t.pass(); t.end(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 6
+			}]
 		}
 	]
 });
