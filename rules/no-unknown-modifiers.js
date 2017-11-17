@@ -18,7 +18,7 @@ const modifiers = [
 ];
 
 const unknownModifiers = node => util.getTestModifiers(node)
-	.filter(modifier => modifiers.indexOf(modifier) === -1);
+	.filter(modifier => modifiers.indexOf(modifier.name) === -1);
 
 const create = context => {
 	const ava = createAvaRule();
@@ -32,8 +32,8 @@ const create = context => {
 
 			if (unknown.length !== 0) {
 				context.report({
-					node,
-					message: `Unknown test modifier \`${unknown[0]}\`.`
+					node: unknown[0],
+					message: `Unknown test modifier \`${unknown[0].name}\`.`
 				});
 			}
 		})

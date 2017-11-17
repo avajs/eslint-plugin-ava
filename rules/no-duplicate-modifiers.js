@@ -11,7 +11,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			const testModifiers = util.getTestModifiers(node).sort();
+			const testModifiers = util.getTestModifierNames(node).sort();
 			if (testModifiers.length === 0) {
 				return;
 			}
