@@ -1,6 +1,7 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
@@ -12,8 +13,8 @@ const create = context => {
 		])(node => {
 			if (ava.hasTestModifier('cb')) {
 				context.report({
-					node,
-					message: '`test.cb()` should be not be used.'
+					node: util.getTestModifier(node, 'cb'),
+					message: '`test.cb()` should not be used.'
 				});
 			}
 		})
