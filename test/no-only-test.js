@@ -25,6 +25,36 @@ ruleTester.run('no-only-test', rule, {
 	],
 	invalid: [
 		{
+			code: header + 'test\n\t.only(t => { t.pass(); });',
+			output: header + 'test\n\t(t => { t.pass(); });',
+			errors
+		},
+		{
+			code: header + 'test\n  .only(t => { t.pass(); });',
+			output: header + 'test\n  (t => { t.pass(); });',
+			errors
+		},
+		{
+			code: header + 'test\t.only(t => { t.pass(); });',
+			output: header + 'test\t(t => { t.pass(); });',
+			errors
+		},
+		{
+			code: header + 'test  .only(t => { t.pass(); });',
+			output: header + 'test  (t => { t.pass(); });',
+			errors
+		},
+		{
+			code: header + 'test.\n\tonly(t => { t.pass(); });',
+			output: header + 'test\n\t(t => { t.pass(); });',
+			errors
+		},
+		{
+			code: header + 'test.\n  only(t => { t.pass(); });',
+			output: header + 'test\n  (t => { t.pass(); });',
+			errors
+		},
+		{
 			code: header + 'test.only(t => { t.pass(); });',
 			output: header + 'test(t => { t.pass(); });',
 			errors

@@ -17,8 +17,14 @@ const create = context => {
 					message: '`test.only()` should not be used.',
 					fix: fixer => {
 						const range = getTestModifier(node, 'only').range.slice();
-						range[0] -= 1;
-						return fixer.removeRange(range);
+						const source = context.getSourceCode().getText();
+						let dotPosition = range[0] - 1;
+						while (source.charAt(dotPosition) !== '.') {
+							dotPosition -= 1;
+						}
+						let snippet = source.substring(dotPosition, range[1]);
+						snippet = snippet.replace(/\.|only/g, '');
+						return fixer.replaceTextRange([dotPosition, range[1]], snippet);
 					}
 				});
 			}
