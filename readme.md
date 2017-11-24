@@ -76,7 +76,7 @@ The rules will only activate in test files.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
-- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
+- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present. *(fixable)*
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
 - [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.

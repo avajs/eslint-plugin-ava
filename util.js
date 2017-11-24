@@ -53,6 +53,18 @@ exports.getTestModifiers = function getTestModifiers(node) {
 	return [];
 };
 
+exports.getTestModifier = function getTestModifier(node, mod) {
+	if (node.type === 'CallExpression') {
+		return getTestModifier(node.callee, mod);
+	} else if (node.type === 'MemberExpression') {
+		if (node.property.type === 'Identifier' && node.property.name === mod) {
+			return node.property;
+		}
+
+		return getTestModifier(node.object, mod);
+	}
+};
+
 const getMembers = node => {
 	const name = node.property.name;
 
