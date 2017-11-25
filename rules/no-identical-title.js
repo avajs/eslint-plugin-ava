@@ -45,7 +45,7 @@ const create = context => {
 
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report({
-					node,
+					node: titleNode,
 					message: 'Test title is used multiple times in the same file.'
 				});
 				return;

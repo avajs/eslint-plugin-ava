@@ -2,6 +2,7 @@
 const espurify = require('espurify');
 const enhance = require('enhance-visitors');
 const deepStrictEqual = require('deep-strict-equal');
+const util = require('./util');
 
 const avaImportDeclarationAst = {
 	type: 'ImportDeclaration',
@@ -51,18 +52,8 @@ function isTestFunctionCall(node) {
 	return false;
 }
 
-function hasTestModifier(node, mod) {
-	if (node.type === 'CallExpression') {
-		return hasTestModifier(node.callee, mod);
-	} else if (node.type === 'MemberExpression') {
-		if (node.property.type === 'Identifier' && node.property.name === mod) {
-			return true;
-		}
-
-		return hasTestModifier(node.object, mod);
-	}
-
-	return false;
+function getTestModifierNames(node) {
+	return util.getTestModifiers(node).map(property => property.name);
 }
 
 module.exports = () => {
@@ -99,11 +90,14 @@ module.exports = () => {
 	};
 
 	return {
-		hasTestModifier: mod => hasTestModifier(currentTestNode, mod),
-		hasNoHookModifier: () => !hasTestModifier(currentTestNode, 'before') &&
-				!hasTestModifier(currentTestNode, 'beforeEach') &&
-				!hasTestModifier(currentTestNode, 'after') &&
-				!hasTestModifier(currentTestNode, 'afterEach'),
+		hasTestModifier: mod => getTestModifierNames(currentTestNode).indexOf(mod) >= 0,
+		hasNoHookModifier: () => {
+			const modifiers = getTestModifierNames(currentTestNode);
+			return modifiers.indexOf('before') === -1 &&
+				modifiers.indexOf('beforeEach') === -1 &&
+				modifiers.indexOf('after') === -1 &&
+				modifiers.indexOf('afterEach') === -1;
+		},
 		isInTestFile: () => isTestFile,
 		isInTestNode: () => currentTestNode,
 		isTestNode: node => currentTestNode === node,

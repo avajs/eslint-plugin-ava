@@ -1,6 +1,7 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
@@ -10,9 +11,10 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			if (ava.hasTestModifier('skip')) {
+			const propertyNode = util.getTestModifier(node, 'skip');
+			if (propertyNode) {
 				context.report({
-					node,
+					node: propertyNode,
 					message: 'No tests should be skipped.'
 				});
 			}

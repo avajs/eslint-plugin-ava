@@ -1,7 +1,7 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
-const getTestModifier = require('../util').getTestModifier;
+const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
@@ -11,12 +11,13 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			if (ava.hasTestModifier('only')) {
+			const propertyNode = util.getTestModifier(node, 'only');
+			if (propertyNode) {
 				context.report({
-					node,
+					node: propertyNode,
 					message: '`test.only()` should not be used.',
 					fix: fixer => {
-						const range = getTestModifier(node, 'only').range.slice();
+						const range = propertyNode.range.slice();
 						const source = context.getSourceCode().getText();
 						let dotPosition = range[0] - 1;
 						while (source.charAt(dotPosition) !== '.') {

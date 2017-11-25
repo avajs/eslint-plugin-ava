@@ -8,7 +8,8 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-skip-test'}];
+const ruleId = 'no-skip-test';
+const message = 'No tests should be skipped.';
 const header = `const test = require('ava');\n`;
 
 ruleTester.run('no-skip-test', rule, {
@@ -24,15 +25,33 @@ ruleTester.run('no-skip-test', rule, {
 	invalid: [
 		{
 			code: header + 'test.skip(t => { t.pass(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 6
+			}]
 		},
 		{
 			code: header + 'test.cb.skip(t => { t.pass(); t.end(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 9
+			}]
 		},
 		{
 			code: header + 'test.skip.cb(t => { t.pass(); t.end(); });',
-			errors
+			errors: [{
+				ruleId,
+				message,
+				type: 'Identifier',
+				line: 2,
+				column: 6
+			}]
 		}
 	]
 });

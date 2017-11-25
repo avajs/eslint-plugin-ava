@@ -41,28 +41,23 @@ exports.isFunctionExpression = node => {
 	return node && functionExpressions.indexOf(node.type) !== -1;
 };
 
-exports.getTestModifiers = function getTestModifiers(node) {
+function getTestModifiers(node) {
 	if (node.type === 'CallExpression') {
 		return getTestModifiers(node.callee);
 	}
 
 	if (node.type === 'MemberExpression') {
-		return getTestModifiers(node.object).concat(node.property.name);
+		return getTestModifiers(node.object).concat(node.property);
 	}
 
 	return [];
-};
+}
 
-exports.getTestModifier = function getTestModifier(node, mod) {
-	if (node.type === 'CallExpression') {
-		return getTestModifier(node.callee, mod);
-	} else if (node.type === 'MemberExpression') {
-		if (node.property.type === 'Identifier' && node.property.name === mod) {
-			return node.property;
-		}
+exports.getTestModifiers = getTestModifiers;
 
-		return getTestModifier(node.object, mod);
-	}
+exports.getTestModifier = (node, mod) => {
+	const testModifiers = getTestModifiers(node);
+	return testModifiers.find(property => property.name === mod);
 };
 
 const getMembers = node => {
