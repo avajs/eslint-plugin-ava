@@ -77,6 +77,6 @@ ruleTester.run('no-skip-test', rule, {
 				line: 2,
 				column: 8
 			}]
-		},
+		}
 	]
 });
