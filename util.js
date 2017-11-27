@@ -60,6 +60,39 @@ exports.getTestModifier = (node, mod) => {
 	return testModifiers.find(property => property.name === mod);
 };
 
+exports.getTestModifier = function getTestModifier(node, mod) {
+	if (node.type === 'CallExpression') {
+		return getTestModifier(node.callee, mod);
+	} else if (node.type === 'MemberExpression') {
+		if (node.property.type === 'Identifier' && node.property.name === mod) {
+			return node.property;
+		}
+
+		return getTestModifier(node.object, mod);
+	}
+};
+
+// Removes given test-modifier from node-chars
+// Takes params-object
+// modifier: string: name of modifier
+// node: node: node object as returned by estree
+// context: context: context-object of the given test
+// returns range and cleaned string to be used with
+// eslints fix.replaceTextRange
+exports.removeTestModifier = function (params) {
+	const modifier = params.modifier.trim();
+	const range = exports.getTestModifier(params.node, modifier).range.slice();
+	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
+	const source = params.context.getSourceCode().getText();
+	let dotPosition = range[0] - 1;
+	while (source.charAt(dotPosition) !== '.') {
+		dotPosition -= 1;
+	}
+	let snippet = source.substring(dotPosition, range[1]);
+	snippet = snippet.replace(replacementRegExp, '');
+	return [[dotPosition, range[1]], snippet];
+};
+
 const getMembers = node => {
 	const name = node.property.name;
 
