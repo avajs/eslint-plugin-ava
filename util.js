@@ -72,13 +72,15 @@ exports.getTestModifier = function getTestModifier(node, mod) {
 	}
 };
 
-// Removes given test-modifier from node-chars
-// Takes params-object
-// modifier: string: name of modifier
-// node: node: node object as returned by estree
-// context: context: context-object of the given test
-// returns range and cleaned string to be used with
-// eslints fix.replaceTextRange
+/**
+ * Removes given test-modifier from the source surrounding the given node
+ *
+ * @param {string} params.modifier - Name of the modifier
+ * @param {Node} params.node - Estree-node as provided by Eslint
+ * @param {Context} params.context - Eslint-context as provided
+ *
+ * @return {Array} Compound parameters to be used as arguments for `fix.replaceTextRange()`
+ */
 exports.removeTestModifier = function (params) {
 	const modifier = params.modifier.trim();
 	const range = exports.getTestModifier(params.node, modifier).range.slice();
