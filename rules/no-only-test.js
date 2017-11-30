@@ -17,7 +17,7 @@ const create = context => {
 					node: propertyNode,
 					message: '`test.only()` should not be used.',
 					fix: fixer => {
-						return fixer.replaceTextRange(...util.removeTestModifier({
+						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
 							modifier: 'only',
 							node,
 							context

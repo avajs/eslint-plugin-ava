@@ -17,7 +17,7 @@ const create = context => {
 					node: propertyNode,
 					message: 'No tests should be skipped.',
 					fix: fixer => {
-						return fixer.replaceTextRange(...util.removeTestModifier({
+						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
 							modifier: 'skip',
 							node,
 							context
