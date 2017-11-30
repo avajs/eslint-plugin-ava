@@ -60,18 +60,6 @@ exports.getTestModifier = (node, mod) => {
 	return testModifiers.find(property => property.name === mod);
 };
 
-exports.getTestModifier = function getTestModifier(node, mod) {
-	if (node.type === 'CallExpression') {
-		return getTestModifier(node.callee, mod);
-	} else if (node.type === 'MemberExpression') {
-		if (node.property.type === 'Identifier' && node.property.name === mod) {
-			return node.property;
-		}
-
-		return getTestModifier(node.object, mod);
-	}
-};
-
 /**
  * Removes given test-modifier from the source surrounding the given node
  *
