@@ -78,7 +78,7 @@ exports.removeTestModifier = function (params) {
 	while (source.charAt(dotPosition) !== '.') {
 		dotPosition -= 1;
 	}
-	let snippet = source.substring(dotPosition, range[1]);
+	let snippet = source.slice(dotPosition, range[1]);
 	snippet = snippet.replace(replacementRegExp, '');
 	return [[dotPosition, range[1]], snippet];
 };
