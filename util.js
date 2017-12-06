@@ -64,8 +64,8 @@ exports.getTestModifier = (node, mod) => {
  * Removes given test-modifier from the source surrounding the given node
  *
  * @param {string} params.modifier - Name of the modifier
- * @param {Node} params.node - Estree-node as provided by Eslint
- * @param {Context} params.context - Eslint-context as provided
+ * @param {Node} params.node - ESTree-node as provided by ESLint
+ * @param {Context} params.context - ESLint-context as provided
  *
  * @return {Array} Compound parameters to be used as arguments for `fix.replaceTextRange()`
  */
