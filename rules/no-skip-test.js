@@ -15,7 +15,14 @@ const create = context => {
 			if (propertyNode) {
 				context.report({
 					node: propertyNode,
-					message: 'No tests should be skipped.'
+					message: 'No tests should be skipped.',
+					fix: fixer => {
+						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
+							modifier: 'skip',
+							node,
+							context
+						}));
+					}
 				});
 			}
 		})
@@ -24,5 +31,7 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		fixable: 'code'
+	}
 };

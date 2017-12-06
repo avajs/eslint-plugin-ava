@@ -60,6 +60,29 @@ exports.getTestModifier = (node, mod) => {
 	return testModifiers.find(property => property.name === mod);
 };
 
+/**
+ * Removes given test-modifier from the source surrounding the given node
+ *
+ * @param {string} params.modifier - Name of the modifier
+ * @param {Node} params.node - ESTree-node as provided by ESLint
+ * @param {Context} params.context - ESLint-context as provided
+ *
+ * @return {Array} Compound parameters to be used as arguments for `fix.replaceTextRange()`
+ */
+exports.removeTestModifier = function (params) {
+	const modifier = params.modifier.trim();
+	const range = exports.getTestModifier(params.node, modifier).range.slice();
+	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
+	const source = params.context.getSourceCode().getText();
+	let dotPosition = range[0] - 1;
+	while (source.charAt(dotPosition) !== '.') {
+		dotPosition -= 1;
+	}
+	let snippet = source.slice(dotPosition, range[1]);
+	snippet = snippet.replace(replacementRegExp, '');
+	return [[dotPosition, range[1]], snippet];
+};
+
 const getMembers = node => {
 	const name = node.property.name;
 

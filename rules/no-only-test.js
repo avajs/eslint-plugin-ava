@@ -17,15 +17,11 @@ const create = context => {
 					node: propertyNode,
 					message: '`test.only()` should not be used.',
 					fix: fixer => {
-						const range = propertyNode.range.slice();
-						const source = context.getSourceCode().getText();
-						let dotPosition = range[0] - 1;
-						while (source.charAt(dotPosition) !== '.') {
-							dotPosition -= 1;
-						}
-						let snippet = source.substring(dotPosition, range[1]);
-						snippet = snippet.replace(/\.|only/g, '');
-						return fixer.replaceTextRange([dotPosition, range[1]], snippet);
+						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
+							modifier: 'only',
+							node,
+							context
+						}));
 					}
 				});
 			}
