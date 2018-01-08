@@ -68,7 +68,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/assertion-message.md'
+			url: 'https://github.com/avajs/eslint-plugin-ava/blob/4211212daf1bfcfff3ebc5d4efdc4ba1a87acbf1/docs/rules/assertion-message.md'
 		},
 		schema,
 		deprecated: true
