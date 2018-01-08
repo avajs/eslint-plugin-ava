@@ -23,5 +23,9 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-todo-implementation.md'
+		}
+	}
 };

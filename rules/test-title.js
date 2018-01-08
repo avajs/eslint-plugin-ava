@@ -42,6 +42,9 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
+		docs: {
+			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/test-title.md'
+		},
 		schema
 	}
 };

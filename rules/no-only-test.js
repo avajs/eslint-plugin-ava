@@ -32,6 +32,9 @@ const create = context => {
 module.exports = {
 	create,
 	meta: {
+		docs: {
+			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-only-test.md'
+		},
 		fixable: 'code'
 	}
 };
