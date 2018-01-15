@@ -1,6 +1,7 @@
 'use strict';
 const espurify = require('espurify');
 const deepStrictEqual = require('deep-strict-equal');
+const util = require('../util');
 
 const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
@@ -40,7 +41,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/use-test.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

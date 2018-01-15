@@ -103,7 +103,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-ignored-test-files.md'
+			url: util.getDocsUrl()
 		},
 		schema
 	}

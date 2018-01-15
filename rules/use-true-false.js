@@ -88,7 +88,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/use-true-false.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

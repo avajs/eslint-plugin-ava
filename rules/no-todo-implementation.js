@@ -25,7 +25,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-todo-implementation.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

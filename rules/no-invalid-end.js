@@ -27,7 +27,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-invalid-end.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

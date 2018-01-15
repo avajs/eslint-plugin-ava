@@ -26,7 +26,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-skip-assert.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

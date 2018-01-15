@@ -3,6 +3,7 @@ const espurify = require('espurify');
 const visitIf = require('enhance-visitors').visitIf;
 const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 const notAllowed = [
 	'truthy',
@@ -81,7 +82,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/prefer-power-assert.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

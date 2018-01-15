@@ -1,5 +1,6 @@
 'use strict';
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 // This rule makes heavy use of eslints code path analysis
 // See: http://eslint.org/docs/developer-guide/code-path-analysis.html
@@ -93,7 +94,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-statement-after-end.md'
+			url: util.getDocsUrl()
 		}
 	}
 };

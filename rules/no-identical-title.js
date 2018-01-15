@@ -63,7 +63,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: 'https://github.com/avajs/eslint-plugin-ava/tree/master/docs/rules/no-identical-title.md'
+			url: util.getDocsUrl()
 		}
 	}
 };
