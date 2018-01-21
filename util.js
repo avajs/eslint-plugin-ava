@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const pkg = require('./package');
 
 const functionExpressions = [
 	'FunctionExpression',
@@ -105,7 +106,7 @@ const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
  */
 const getDocsUrl = (ruleName, commitHash) => {
 	ruleName = ruleName || path.basename(module.parent.filename, '.js');
-	commitHash = commitHash || 'master';
+	commitHash = commitHash || `v${pkg.version}`;
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
 exports.getDocsUrl = getDocsUrl;
