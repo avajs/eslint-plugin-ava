@@ -25,5 +25,9 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		}
+	}
 };

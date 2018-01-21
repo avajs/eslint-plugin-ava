@@ -1,5 +1,6 @@
 'use strict';
 const fs = require('fs');
+const path = require('path');
 
 const functionExpressions = [
 	'FunctionExpression',
@@ -94,6 +95,20 @@ const getMembers = node => {
 };
 
 exports.getMembers = getMembers;
+
+const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
+/**
+ * Return the URL of the rule's documentation, either from parameter or the
+ * requiring file's name.
+ * @param  {String} ruleName The name of the rule to generate a URL for.
+ * @return {String}          The URL of the rule's documentation.
+ */
+const getDocsUrl = (ruleName, commitHash) => {
+	ruleName = ruleName || path.basename(module.parent.filename, '.js');
+	commitHash = commitHash || 'master';
+	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
+};
+exports.getDocsUrl = getDocsUrl;
 
 const assertionMethodsNumArguments = new Map([
 	['deepEqual', 2],

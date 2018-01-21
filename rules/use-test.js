@@ -1,6 +1,7 @@
 'use strict';
 const espurify = require('espurify');
 const deepStrictEqual = require('deep-strict-equal');
+const util = require('../util');
 
 const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
@@ -38,5 +39,9 @@ const create = context => ({
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		}
+	}
 };

@@ -32,6 +32,9 @@ const create = context => {
 module.exports = {
 	create,
 	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		},
 		fixable: 'code'
 	}
 };

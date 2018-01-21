@@ -102,6 +102,9 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		},
 		schema
 	}
 };

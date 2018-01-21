@@ -1,5 +1,6 @@
 'use strict';
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 // This rule makes heavy use of eslints code path analysis
 // See: http://eslint.org/docs/developer-guide/code-path-analysis.html
@@ -91,5 +92,9 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		}
+	}
 };

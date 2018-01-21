@@ -3,6 +3,7 @@ const espurify = require('espurify');
 const visitIf = require('enhance-visitors').visitIf;
 const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 const notAllowed = [
 	'truthy',
@@ -79,5 +80,9 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		}
+	}
 };

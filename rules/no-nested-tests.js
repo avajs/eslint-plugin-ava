@@ -1,6 +1,7 @@
 'use strict';
 const visitIf = require('enhance-visitors').visitIf;
 const createAvaRule = require('../create-ava-rule');
+const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
@@ -31,5 +32,9 @@ const create = context => {
 
 module.exports = {
 	create,
-	meta: {}
+	meta: {
+		docs: {
+			url: util.getDocsUrl()
+		}
+	}
 };
