@@ -19,7 +19,7 @@ ruleTester.run('no-skip-test', rule, {
 		header + 'test(t => { t.pass(); }); test(t => { t.pass(); });',
 		header + 'test(t => { t.skip.is(1, 2); });',
 		header + 'notTest.skip();',
-			// Shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test.skip(t => {});'
 	],
 	invalid: [

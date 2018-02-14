@@ -45,7 +45,9 @@ const avaVariableDeclaratorAst = {
 function isTestFunctionCall(node) {
 	if (node.type === 'Identifier') {
 		return node.name === 'test';
-	} else if (node.type === 'MemberExpression') {
+	}
+
+	if (node.type === 'MemberExpression') {
 		return isTestFunctionCall(node.object);
 	}
 

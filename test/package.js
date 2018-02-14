@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import test from 'ava';
 import pify from 'pify';
-import index from '../';
+import index from '..';
 
 test('Every rule is defined in index file', async t => {
 	const ruleDir = path.resolve(__dirname, '../rules');
@@ -10,8 +10,7 @@ test('Every rule is defined in index file', async t => {
 
 	const rules = files.filter(file =>
 		file.indexOf('.js') === file.length - 3 &&
-		!fs.readFileSync(path.join(ruleDir, file), 'utf8').includes('deprecated: true')
-	);
+		!fs.readFileSync(path.join(ruleDir, file), 'utf8').includes('deprecated: true'));
 
 	rules.forEach(file => {
 		const name = file.slice(0, -3);

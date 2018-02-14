@@ -29,11 +29,11 @@ ruleTester.run('use-t', rule, {
 		header + 'test(() => {});',
 		header + 'test(t => {});',
 		header + 'test.cb(t => {});',
-			// Header + 'test("test name", t => {});',
+		// Header + 'test("test name", t => {});',
 		header + 'test(function (t) {});',
 		header + 'test(testFunction);',
 		header + 'test.todo("test name");',
-			// Shouldn't be triggered since it's not a test file
+		// Shouldn't be triggered since it's not a test file
 		'test(foo => {});'
 	],
 	invalid: [
