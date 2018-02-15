@@ -104,8 +104,8 @@ const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
  * @param  {String} ruleName The name of the rule to generate a URL for.
  * @return {String}          The URL of the rule's documentation.
  */
-const getDocsUrl = (ruleName, commitHash) => {
-	ruleName = ruleName || path.basename(module.parent.filename, '.js');
+const getDocsUrl = (filename, commitHash) => {
+	const ruleName = path.basename(filename, '.js');
 	commitHash = commitHash || `v${pkg.version}`;
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
