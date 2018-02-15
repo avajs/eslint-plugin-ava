@@ -68,7 +68,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: util.getDocsUrl('assertion-message', '4211212daf1bfcfff3ebc5d4efdc4ba1a87acbf1')
+			url: util.getDocsUrl(__filename, '4211212daf1bfcfff3ebc5d4efdc4ba1a87acbf1')
 		},
 		schema,
 		deprecated: true

@@ -27,7 +27,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: util.getDocsUrl()
+			url: util.getDocsUrl(__filename)
 		}
 	}
 };
