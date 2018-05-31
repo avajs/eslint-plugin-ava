@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const pkg = require('./package');
+const esmRequire = require('esm')(module);
 
 const functionExpressions = [
 	'FunctionExpression',
@@ -33,7 +34,15 @@ exports.getAvaConfig = filepath => {
 
 	try {
 		const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'));
-		return (packageContent && packageContent.ava) || defaultResult;
+
+		if (packageContent && packageContent.ava) {
+			return packageContent.ava;
+		}
+
+		const fileOptions = path.parse(filepath);
+		const avaConfig = esmRequire(path.join(fileOptions.dir, 'ava.config.js'));
+
+		return avaConfig.default;
 	} catch (err) {
 		return defaultResult;
 	}

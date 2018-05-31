@@ -65,6 +65,7 @@
 		"arrify": "^1.0.1",
 		"deep-strict-equal": "^0.2.0",
 		"enhance-visitors": "^1.0.0",
+		"esm": "^3.0.41",
 		"espree": "^3.1.3",
 		"espurify": "^1.5.0",
 		"import-modules": "^1.1.0",
