@@ -37,7 +37,8 @@ module.exports = {
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error',
-				'ava/use-true-false': 'error'
+				'ava/use-true-false': 'error',
+				'ava/no-import-test-files': 'error',
 			}
 		}
 	}
