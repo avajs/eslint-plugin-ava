@@ -17,12 +17,10 @@ function isTestFile(files, rootDir, sourceFile, importedFile) {
 	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
 
-	console.log(sourceFile, importedFile, absoluteImportedPath, relativePath);
-
 	return multimatch([relativePath], files).length === 1;
 }
 
-function getPackageInfo() {
+function getProjectInfo() {
 	const packageFilePath = pkgUp.sync();
 
 	return {
@@ -38,18 +36,18 @@ const create = context => {
 		return {};
 	}
 
-	const packageInfo = getPackageInfo();
+	const projectInfo = getProjectInfo();
 	const options = context.options[0] || {};
-	const files = arrify(options.files || packageInfo.files || defaultFiles);
+	const files = arrify(options.files || projectInfo.files || defaultFiles);
 
-	if (!packageInfo.rootDir) {
+	if (!projectInfo.rootDir) {
 		// Could not find a package.json folder
 		return {};
 	}
 
 	return {
 		ImportDeclaration: node => {
-			const isImportingTestFile = isTestFile(files, packageInfo.rootDir, filename, node.source.value);
+			const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, node.source.value);
 
 			if (isImportingTestFile) {
 				context.report({
@@ -67,7 +65,7 @@ const create = context => {
 				return;
 			}
 
-			const isImportingTestFile = isTestFile(files, packageInfo.rootDir, filename, node.arguments[0].value);
+			const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, node.arguments[0].value);
 
 			if (isImportingTestFile) {
 				context.report({
