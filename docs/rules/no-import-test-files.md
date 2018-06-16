@@ -1,0 +1,60 @@
+# Ensure no tests are imported anywhere
+
+This rule will verify that you don't import any test files. It will consider the root of the project to be the closest folder containing a `package.json` file, and will not do anything if it can't find one. Test files in `node_modules` will not be linted as they are ignored by ESLint.
+
+Note that this rule will not be able to warn correctly if you use AVA by specifying the files in the command line ( `ava "lib/**/*.test.js"` ). Prefer configuring AVA as described in the link above.
+
+## Fail
+
+```js
+// File: src/index.js
+// Invalid because *.test.js is considered as a test file.
+import tests from './index.test.js';
+
+// File: src/index.js
+// Invalid because any files inside __tests__ are considered test files
+import tests from './__tests__/index.js';
+
+test('foo', t => {
+	t.pass();
+});
+
+// File: utils/index.js
+// with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
+// in either `package.json` under 'ava key' or in the rule options
+// Invalid because the imported file matches lib/**/*.test.js
+import tests from '../lib/index.test.js';
+
+test('foo', t => {
+	t.pass();
+});
+```
+
+
+## Pass
+
+```js
+// File: src/index.js
+import sinon from 'sinon';
+
+
+// File: src/index.js
+import utils from './utils';
+
+// File: lib/index.js
+// with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
+// in either `package.json` under 'ava key' or in the rule options
+import utils from '../utils/index.js';
+```
+
+## Options
+
+This rule supports the following options:
+
+`files`: An array of strings representing the files glob that AVA will use to find test files. Overrides the default and the configuration found in the `package.json` file.
+
+You can set the options like this:
+
+```js
+"ava/no-ignored-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
+```
