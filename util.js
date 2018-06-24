@@ -43,9 +43,9 @@ exports.getAvaConfig = filepath => {
 		const avaConfig = esmRequire(path.join(fileOptions.dir, 'ava.config.js'));
 
 		return typeof avaConfig.default === 'function'
-			? avaConfig.default({ projectDir: fileOptions.dir })
+			? avaConfig.default({projectDir: fileOptions.dir})
 			: avaConfig.default;
-	} catch (err) {
+	} catch (_) {
 		return defaultResult;
 	}
 };
