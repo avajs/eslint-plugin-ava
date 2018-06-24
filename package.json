@@ -40,7 +40,7 @@
 		"node": ">=4"
 	},
 	"scripts": {
-		"test": "xo && nyc ava",
+		"test": "nyc ava",
 		"coveralls": "nyc report --reporter=text-lcov | coveralls"
 	},
 	"files": [
