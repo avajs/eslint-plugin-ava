@@ -3,7 +3,7 @@ const path = require('path');
 const arrify = require('arrify');
 const pkgUp = require('pkg-up');
 const multimatch = require('multimatch');
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 

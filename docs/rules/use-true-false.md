@@ -14,7 +14,7 @@ import ava from 'ava';
 test(t => {
 	t.truthy(value < 2);
 	t.truthy(value === 1);
-	t.falsy([1, 2, 3].indexOf(value) === -1);
+	t.truthy([1, 2, 3].includes(value));
 	t.falsy(!value);
 	t.truthy(!!value);
 	t.truthy(Array.isArray(value));
@@ -29,7 +29,7 @@ import ava from 'ava';
 test(t => {
 	t.true(value < 2);
 	t.true(value === 1);
-	t.false([1, 2, 3].indexOf(value) === -1);
+	t.true([1, 2, 3].includes(value));
 	t.false(!value);
 	t.true(!!value);
 	t.true(Array.isArray(value));

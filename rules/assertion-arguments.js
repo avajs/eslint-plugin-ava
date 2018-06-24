@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -89,9 +89,10 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			const callee = node.callee;
+			const {callee} = node;
 
-			if (callee.type !== 'MemberExpression' ||
+			if (
+				callee.type !== 'MemberExpression' ||
 				!callee.property ||
 				util.nameOfRootObject(callee) !== 't' ||
 				util.isInContext(callee)
@@ -100,8 +101,7 @@ const create = context => {
 			}
 
 			const gottenArgs = node.arguments.length;
-			const members = util.getMembers(callee)
-				.filter(name => name !== 'skip');
+			const members = util.getMembers(callee).filter(name => name !== 'skip');
 
 			if (members[0] === 'end') {
 				if (gottenArgs > 1) {

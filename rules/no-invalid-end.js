@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -11,9 +11,11 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			if (node.property.name === 'end' &&
-					!ava.hasTestModifier('cb') &&
-					util.nameOfRootObject(node) === 't') {
+			if (
+				node.property.name === 'end' &&
+				!ava.hasTestModifier('cb') &&
+				util.nameOfRootObject(node) === 't'
+			) {
 				context.report({
 					node,
 					message: '`t.end()` should only be used inside of `test.cb()`.'

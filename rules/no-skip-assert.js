@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -11,8 +11,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			if (node.property.name === 'skip' &&
-					util.nameOfRootObject(node) === 't') {
+			if (node.property.name === 'skip' && util.nameOfRootObject(node) === 't') {
 				context.report({
 					node,
 					message: 'No assertions should be skipped.'

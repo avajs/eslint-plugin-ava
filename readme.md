@@ -116,14 +116,6 @@ See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#extending-co
 **Note**: This config will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
 
 
-## Credit
-
-- [AVA team](https://github.com/avajs/ava#team)
-- [Jeroen Engels](https://github.com/jfmengels)
-- [Takuto Wada](https://github.com/twada)
-- [Contributors…](https://github.com/avajs/eslint-plugin-ava/graphs/contributors)
-
-
 ## License
 
-MIT © [Sindre Sorhus](https://sindresorhus.com)
+MIT

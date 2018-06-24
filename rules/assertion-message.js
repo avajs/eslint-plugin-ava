@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -26,7 +26,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			const callee = node.callee;
+			const {callee} = node;
 
 			if (callee.type !== 'MemberExpression') {
 				return;
