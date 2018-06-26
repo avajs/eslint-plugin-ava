@@ -9,11 +9,11 @@ const functionExpressions = [
 ];
 
 const defaultFiles = [
-  'test.js',
-  'test-*.js',
-  'test/**/*.js',
-  '**/__tests__/**/*.js',
-  '**/*.test.js'
+	'test.js',
+	'test-*.js',
+	'test/**/*.js',
+	'**/__tests__/**/*.js',
+	'**/*.test.js'
 ];
 
 exports.nameOfRootObject = node => {
@@ -138,7 +138,7 @@ const assertionMethodsNumArguments = new Map([
 	['truthy', 1]
 ]);
 
-const assertionMethodNames = Array.from(assertionMethodsNumArguments.keys());
+const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.defaultFiles = defaultFiles;

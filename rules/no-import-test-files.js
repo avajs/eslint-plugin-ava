@@ -22,16 +22,16 @@ function getProjectInfo() {
 }
 
 function createImportValidator(context, files, projectInfo, filename) {
-  return (node, importPath) => {
-	const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
+	return (node, importPath) => {
+		const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
 
-	if (isImportingTestFile) {
-	  context.report({
-		node,
-		message: `Test files should not be imported`,
-	  });
-	}
-  }
+		if (isImportingTestFile) {
+			context.report({
+				node,
+				message: `Test files should not be imported`
+			});
+		}
+	};
 }
 
 const create = context => {
@@ -62,9 +62,9 @@ const create = context => {
 			}
 
 			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
-		    	validateImportPath(node, node.arguments[0].value);
+				validateImportPath(node, node.arguments[0].value);
 			}
-		},
+		}
 	};
 };
 
