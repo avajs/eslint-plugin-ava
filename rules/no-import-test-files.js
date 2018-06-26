@@ -21,6 +21,19 @@ function getProjectInfo() {
 	};
 }
 
+function createImportValidator(context, files, projectInfo, filename) {
+  return (node, importPath) => {
+	const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
+
+	if (isImportingTestFile) {
+	  context.report({
+		node,
+		message: `Test files should not be imported`,
+	  });
+	}
+  }
+}
+
 const create = context => {
 	const filename = context.getFilename();
 
@@ -37,33 +50,19 @@ const create = context => {
 		return {};
 	}
 
+	const validateImportPath = createImportValidator(context, files, projectInfo, filename);
+
 	return {
 		ImportDeclaration: node => {
-			const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, node.source.value);
-
-			if (isImportingTestFile) {
-				context.report({
-					node,
-					message: `You are importing a test file`,
-				});
-			}
+			validateImportPath(node, node.source.value);
 		},
 		CallExpression: node => {
-			if (node.callee.type !== 'Identifier' || node.callee.name !== 'require') {
+			if (!(node.callee.type === 'Identifier' && node.callee.name === 'require')) {
 				return;
 			}
 
-			if (!node.arguments[0] || node.arguments[0].type !== 'Literal') {
-				return;
-			}
-
-			const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, node.arguments[0].value);
-
-			if (isImportingTestFile) {
-				context.report({
-					node,
-					message: `You are importing a test file`,
-				});
+			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+		    	validateImportPath(node, node.arguments[0].value);
 			}
 		},
 	};
