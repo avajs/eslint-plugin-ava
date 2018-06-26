@@ -5,14 +5,6 @@ const pkgUp = require('pkg-up');
 const multimatch = require('multimatch');
 const util = require('../util');
 
-const defaultFiles = [
-	'test.js',
-	'test-*.js',
-	'test/**/*.js',
-	'**/__tests__/**/*.js',
-	'**/*.test.js'
-];
-
 function isTestFile(files, rootDir, sourceFile, importedFile) {
 	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
@@ -38,7 +30,7 @@ const create = context => {
 
 	const projectInfo = getProjectInfo();
 	const options = context.options[0] || {};
-	const files = arrify(options.files || projectInfo.files || defaultFiles);
+	const files = arrify(options.files || projectInfo.files || util.defaultFiles);
 
 	if (!projectInfo.rootDir) {
 		// Could not find a package.json folder
