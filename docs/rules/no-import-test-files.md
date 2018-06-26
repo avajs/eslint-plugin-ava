@@ -1,8 +1,8 @@
-# Ensure no tests are imported anywhere
+# Ensure no test files are imported anywhere
 
 This rule will verify that you don't import any test files. It will consider the root of the project to be the closest folder containing a `package.json` file, and will not do anything if it can't find one. Test files in `node_modules` will not be linted as they are ignored by ESLint.
 
-Note that this rule will not be able to warn correctly if you use AVA by specifying the files in the command line ( `ava "lib/**/*.test.js"` ). Prefer configuring AVA as described in the link above.
+Note that this rule will not be able to warn correctly if you use AVA by specifying the files in the command line ( `ava "lib/**/*.test.js"` ). Prefer configuring AVA as described [here](https://github.com/sindresorhus/ava#configuration).
 
 ## Fail
 
@@ -10,7 +10,9 @@ Note that this rule will not be able to warn correctly if you use AVA by specify
 // File: src/index.js
 // Invalid because *.test.js is considered as a test file.
 import tests from './index.test.js';
+```
 
+```js
 // File: src/index.js
 // Invalid because any files inside __tests__ are considered test files
 import tests from './__tests__/index.js';
@@ -18,7 +20,9 @@ import tests from './__tests__/index.js';
 test('foo', t => {
 	t.pass();
 });
+```
 
+```js
 // File: utils/index.js
 // with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
 // in either `package.json` under 'ava key' or in the rule options
@@ -37,10 +41,14 @@ test('foo', t => {
 // File: src/index.js
 import sinon from 'sinon';
 
+```
 
+```js
 // File: src/index.js
 import utils from './utils';
+```
 
+```js
 // File: lib/index.js
 // with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
 // in either `package.json` under 'ava key' or in the rule options
