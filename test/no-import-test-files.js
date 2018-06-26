@@ -39,12 +39,12 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'const test = require(\'./foo.test.js\');',
 			filename: toPath('lib/foo.js'),
-			errors: [{message: 'You are importing a test file'}]
+			errors: [{message: 'Test files should not be imported'}]
 		},
 		{
 			code: 'import test from \'./foo.test.js\';',
 			filename: toPath('lib/foo.js'),
-			errors: [{message: 'You are importing a test file'}]
+			errors: [{message: 'Test files should not be imported'}]
 		},
 	]
 });
