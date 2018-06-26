@@ -40,6 +40,7 @@ Configure it in `package.json`.
 			"ava/no-duplicate-modifiers": "error",
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
+			"ava/no-import-test-files": "error",
 			"ava/no-invalid-end": "error",
 			"ava/no-nested-tests": "error",
 			"ava/no-only-test": "error",
@@ -74,6 +75,7 @@ The rules will only activate in test files.
 - [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md) - Ensure tests do not have duplicate modifiers.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
+- [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no tests files are imported anywhere.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present. *(fixable)*
