@@ -26,8 +26,16 @@ function report(context, node) {
 
 const create = context => ({
 	ImportDeclaration: node => {
-		if (node.source.value === 'ava' && node.specifiers[0].local.name !== 'test') {
-			report(context, node);
+		if (node.source.value === 'ava') {
+			const defaultImport = node.specifiers.find(({type}) => type === 'ImportDefaultSpecifier');
+			if (defaultImport && defaultImport.local.name !== 'test') {
+				report(context, node);
+			}
+
+			const namedImports = node.specifiers.filter(({type}) => type === 'ImportSpecifier');
+			if (namedImports.some(i => i.imported.name === 'test')) {
+				report(context, node);
+			}
 		}
 	},
 	VariableDeclarator: node => {

@@ -11,6 +11,7 @@ var ava = require('ava');
 let ava = require('ava');
 const ava = require('ava');
 import ava from 'ava';
+import {test} from 'ava';
 ```
 
 ### Pass

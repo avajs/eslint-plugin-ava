@@ -22,7 +22,8 @@ ruleTester.run('use-test', rule, {
 		`const test = require('foo');`,
 		`import test from 'ava';`,
 		`import test, {} from 'ava';`,
-		`import test from 'foo';`
+		`import test from 'foo';`,
+		`import {serial as test} from 'ava';`
 	],
 	invalid: [
 		{
@@ -44,6 +45,10 @@ ruleTester.run('use-test', rule, {
 		{
 			code: `import ava from 'ava';`,
 			errors
-		}
+		},
+		{
+			code: `import {test} from 'ava';`,
+			errors
+		},
 	]
 });
