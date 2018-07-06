@@ -26,8 +26,35 @@ function report(context, node) {
 
 const create = context => ({
 	ImportDeclaration: node => {
-		if (node.source.value === 'ava' && node.specifiers[0].local.name !== 'test') {
-			report(context, node);
+		if (node.source.value === 'ava') {
+			const defaultImport = node.specifiers.find(({type}) => type === 'ImportDefaultSpecifier');
+			if (defaultImport && defaultImport.local.name !== 'test') {
+				report(context, node);
+			}
+			const namedImports = node.specifiers.filter(({type}) => type === 'ImportSpecifier');
+			const testNamedImport = namedImports.find(({imported}) => imported.name === 'test');
+
+			if (testNamedImport) {
+				context.report({
+					node,
+					message: 'AVA test can not be imported by name. Use default import.',
+					fix: (fixer) => {
+						if (!defaultImport || defaultImport.local.name === 'test') {
+							if (namedImports.length === 1) {
+								return fixer.replaceText(node, "import test from 'ava';")
+							} else {
+								const namedImportsStr = namedImports.filter(i => i !== testNamedImport).map(i =>
+									i.imported.name !== i.local.name
+										? `${i.imported.name} as ${i.local.name}`
+										: i.imported.name
+								).join(', ');
+
+								return fixer.replaceText(node, `import test, {${namedImportsStr}} from 'ava';`)
+							}
+						}
+					}
+				});
+			}
 		}
 	},
 	VariableDeclarator: node => {
@@ -42,6 +69,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		fixable: 'code'
 	}
 };
