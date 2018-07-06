@@ -11,7 +11,7 @@ var ava = require('ava');
 let ava = require('ava');
 const ava = require('ava');
 import ava from 'ava';
-import {test} from 'ava';
+import {test} from 'ava'; // auto-fixable
 ```
 
 ### Pass
@@ -21,6 +21,7 @@ var test = require('ava');
 let test = require('ava');
 const test = require('ava');
 import test from 'ava';
+import {serial as test} from 'ava';
 
 var test = require('foo');
 import test from 'foo';
