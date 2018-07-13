@@ -2,7 +2,10 @@
 const fs = require('fs');
 const path = require('path');
 const pkg = require('./package');
-const esmRequire = require('esm')(module);
+const esmRequire = require('esm')(module, {
+	cjs: false,
+	mode: 'all'
+});
 
 const functionExpressions = [
 	'FunctionExpression',
