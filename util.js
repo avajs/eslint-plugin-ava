@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const isPlainObject = require('is-plain-object');
 const pkg = require('./package');
 const esmRequire = require('esm')(module, {
 	cjs: false,
@@ -28,6 +29,12 @@ exports.isInContext = node => {
 	return node.property.name === 'context';
 };
 
+const NO_SUCH_FILE = Symbol('no ava.config.js file');
+const MISSING_DEFAULT_EXPORT = Symbol('missing default export');
+
+// Based on https://github.com/avajs/ava/blob/v1.0.0-beta.6/lib/load-config.js,
+// except where AVA would exit with an exception, this function returns an empty
+// config object.
 exports.getAvaConfig = packageFilepath => {
 	const defaultResult = {};
 
@@ -36,18 +43,39 @@ exports.getAvaConfig = packageFilepath => {
 	}
 
 	try {
-		const packageContent = JSON.parse(fs.readFileSync(packageFilepath, 'utf8'));
-
-		if (packageContent && packageContent.ava) {
-			return packageContent.ava;
-		}
+		const {ava: packageConf = defaultResult} = JSON.parse(fs.readFileSync(packageFilepath, 'utf8'));
 
 		const projectDir = path.dirname(packageFilepath);
-		const avaConfig = esmRequire(path.join(projectDir, 'ava.config.js'));
+		let fileConf;
+		try {
+			({default: fileConf = MISSING_DEFAULT_EXPORT} = esmRequire(path.join(projectDir, 'ava.config.js')));
+		} catch (err) {
+			if (err && err.code === 'MODULE_NOT_FOUND') {
+				fileConf = NO_SUCH_FILE;
+			} else {
+				return defaultResult;
+			}
+		}
 
-		return typeof avaConfig.default === 'function'
-			? avaConfig.default({projectDir})
-			: avaConfig.default;
+		if (fileConf === MISSING_DEFAULT_EXPORT) {
+			return defaultResult
+		}
+
+		if (fileConf === NO_SUCH_FILE) {
+			return packageConf;
+		}
+
+		if (Object.keys(packageConf).length > 0) {
+			return defaultResult;
+		}
+
+		if (typeof fileConf === 'function') {
+			fileConf = fileConf({projectDir});
+		}
+
+		return !fileConf || typeof fileConf.then === 'function' || !isPlainObject(fileConf) ?
+			defaultResult :
+			fileConf;
 	} catch (_) {
 		return defaultResult;
 	}

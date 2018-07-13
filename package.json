@@ -37,6 +37,7 @@
 		"espree": "^4.0.0",
 		"espurify": "^1.5.0",
 		"import-modules": "^1.1.0",
+		"is-plain-object": "^2.0.4",
 		"multimatch": "^2.1.0",
 		"pkg-up": "^2.0.0"
 	},
