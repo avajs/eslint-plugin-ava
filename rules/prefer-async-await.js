@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
@@ -11,7 +11,7 @@ function containsThen(node) {
 		return false;
 	}
 
-	const callee = node.callee;
+	const {callee} = node;
 	if (callee.property.type === 'Identifier' &&
 		callee.property.name === 'then'
 	) {

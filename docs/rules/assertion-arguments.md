@@ -18,12 +18,12 @@ test(t => {
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
 test(t => {
-	t.true(array.indexOf(value) !== -1);
+	t.true(array.includes(value));
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
 test(t => {
-	t.true(array.indexOf(value) !== -1, 'value is not in array');
+	t.true(array.includes(value), 'value is not in array');
 });
 ```
 
@@ -40,12 +40,12 @@ test(t => {
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
 test(t => {
-	t.true(array.indexOf(value) !== -1, 'value is not in array');
+	t.true(array.includes(value), 'value is not in array');
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
 test(t => {
-	t.true(array.indexOf(value) !== -1);
+	t.true(array.includes(value));
 });
 ```
 

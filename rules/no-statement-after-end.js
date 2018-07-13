@@ -2,10 +2,10 @@
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
-// This rule makes heavy use of eslints code path analysis
+// This rule makes heavy use of ESLint's code path analysis
 // See: http://eslint.org/docs/developer-guide/code-path-analysis.html
 
-// returns true if this node represents a call to `t.end(...)`
+// Returns true if this node represents a call to `t.end(...)`
 const isEndExpression = node =>
 	node.type === 'CallExpression' &&
 	node.callee.type === 'MemberExpression' &&
@@ -16,7 +16,7 @@ const isEndExpression = node =>
 
 const create = context => {
 	const ava = createAvaRule();
-	const segmentInfoMap = Object.create(null);
+	const segmentInfoMap = new Map();
 	const segmentInfoStack = [];
 	let currentSegmentInfo = null;
 
@@ -26,10 +26,10 @@ const create = context => {
 
 		currentSegmentInfo = {
 			ended: false,
-			prev: segment.prevSegments.map(prevSegment => segmentInfoMap[prevSegment.id])
+			prev: segment.prevSegments.map(prevSegment => segmentInfoMap.get(prevSegment.id))
 		};
 
-		segmentInfoMap[segment.id] = currentSegmentInfo;
+		segmentInfoMap.set(segment.id, currentSegmentInfo);
 	}
 
 	function segmentEnd() {
@@ -53,10 +53,10 @@ const create = context => {
 
 		// If this segment or any previous segment is already ended, further statements are not allowed, report as an error.
 		if (ended.length > 0) {
-			ended.forEach(info => {
+			for (const info of ended) {
 				// Unset ended state to avoid generating lots of errors
 				info.ended = false;
-			});
+			}
 
 			context.report({
 				node,

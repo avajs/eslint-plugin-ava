@@ -34,7 +34,10 @@ ruleTester.run('use-t', rule, {
 		header + 'test(testFunction);',
 		header + 'test.todo("test name");',
 		// Shouldn't be triggered since it's not a test file
-		'test(foo => {});'
+		'test(foo => {});',
+		header + 'test(macro, arg1, (p1) => {})',
+		header + 'test("name", macro, arg1, (p1) => {})',
+		header + 'test("name", macro, (p1) => {})'
 	],
 	invalid: [
 		{

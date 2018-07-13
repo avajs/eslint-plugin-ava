@@ -50,9 +50,7 @@ exports.getAvaConfig = filepath => {
 	}
 };
 
-exports.isFunctionExpression = node => {
-	return node && functionExpressions.indexOf(node.type) !== -1;
-};
+exports.isFunctionExpression = node => node && functionExpressions.includes(node.type);
 
 function getTestModifiers(node) {
 	if (node.type === 'CallExpression') {
@@ -69,8 +67,7 @@ function getTestModifiers(node) {
 exports.getTestModifiers = getTestModifiers;
 
 exports.getTestModifier = (node, mod) => {
-	const testModifiers = getTestModifiers(node);
-	return testModifiers.find(property => property.name === mod);
+	return getTestModifiers(node).find(property => property.name === mod);
 };
 
 /**
@@ -82,7 +79,7 @@ exports.getTestModifier = (node, mod) => {
  *
  * @return {Array} Compound parameters to be used as arguments for `fix.replaceTextRange()`
  */
-exports.removeTestModifier = function (params) {
+exports.removeTestModifier = params => {
 	const modifier = params.modifier.trim();
 	const range = exports.getTestModifier(params.node, modifier).range.slice();
 	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
@@ -97,7 +94,7 @@ exports.removeTestModifier = function (params) {
 };
 
 const getMembers = node => {
-	const name = node.property.name;
+	const {name} = node.property;
 
 	if (node.object.type === 'MemberExpression') {
 		return getMembers(node.object).concat(name);
@@ -141,7 +138,7 @@ const assertionMethodsNumArguments = new Map([
 	['truthy', 1]
 ]);
 
-const assertionMethodNames = Array.from(assertionMethodsNumArguments.keys());
+const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.assertionMethods = new Set(assertionMethodNames);

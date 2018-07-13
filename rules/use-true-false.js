@@ -1,7 +1,7 @@
 'use strict';
 const espree = require('espree');
 const espurify = require('espurify');
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const deepStrictEqual = require('deep-strict-equal');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -62,7 +62,7 @@ const create = context => {
 				const arg = node.arguments[0];
 
 				if (arg &&
-					((arg.type === 'BinaryExpression' && booleanBinaryOperators.indexOf(arg.operator) !== -1) ||
+					((arg.type === 'BinaryExpression' && booleanBinaryOperators.includes(arg.operator)) ||
 					(arg.type === 'UnaryExpression' && arg.operator === '!') ||
 					(arg.type === 'Literal' && arg.value === Boolean(arg.value)) ||
 					(matchesKnownBooleanExpression(arg)))

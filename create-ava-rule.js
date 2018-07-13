@@ -95,16 +95,14 @@ module.exports = () => {
 		hasTestModifier: mod => getTestModifierNames(currentTestNode).indexOf(mod) >= 0,
 		hasNoHookModifier: () => {
 			const modifiers = getTestModifierNames(currentTestNode);
-			return modifiers.indexOf('before') === -1 &&
-				modifiers.indexOf('beforeEach') === -1 &&
-				modifiers.indexOf('after') === -1 &&
-				modifiers.indexOf('afterEach') === -1;
+			return !modifiers.includes('before') &&
+				!modifiers.includes('beforeEach') &&
+				!modifiers.includes('after') &&
+				!modifiers.includes('afterEach');
 		},
 		isInTestFile: () => isTestFile,
 		isInTestNode: () => currentTestNode,
 		isTestNode: node => currentTestNode === node,
-		merge: customHandlers => {
-			return enhance.mergeVisitors([predefinedRules, customHandlers]);
-		}
+		merge: customHandlers => enhance.mergeVisitors([predefinedRules, customHandlers])
 	};
 };

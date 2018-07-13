@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -18,7 +18,7 @@ const modifiers = [
 ];
 
 const unknownModifiers = node => util.getTestModifiers(node)
-	.filter(modifier => modifiers.indexOf(modifier.name) === -1);
+	.filter(modifier => !modifiers.includes(modifier.name));
 
 const create = context => {
 	const ava = createAvaRule();

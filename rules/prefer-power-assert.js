@@ -1,6 +1,6 @@
 'use strict';
 const espurify = require('espurify');
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -65,14 +65,14 @@ const create = context => {
 			const callee = espurify(node.callee);
 
 			if (callee.type === 'MemberExpression') {
-				notAllowed.forEach(methodName => {
+				for (const methodName of notAllowed) {
 					if (isCalleeMatched(callee, methodName)) {
 						context.report({
 							node,
 							message: 'Only asserts with no power-assert alternative are allowed.'
 						});
 					}
-				});
+				}
 			}
 		})
 	});

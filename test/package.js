@@ -12,11 +12,11 @@ test('Every rule is defined in index file', async t => {
 		file.indexOf('.js') === file.length - 3 &&
 		!fs.readFileSync(path.join(ruleDir, file), 'utf8').includes('deprecated: true'));
 
-	rules.forEach(file => {
+	for (const file of rules) {
 		const name = file.slice(0, -3);
 		t.truthy(index.rules[name], `'${name}' is not exported in 'index.js'`);
 		t.truthy(index.configs.recommended.rules[`ava/${name}`], `'${name}' is not set in the recommended config`);
-	});
+	}
 
 	t.is(Object.keys(index.configs.recommended.rules).length, rules.length,
 		'There are more exported rules in the recommended config than rule files.');

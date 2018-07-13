@@ -8,7 +8,7 @@ const ruleTester = avaRuleTester(test, {
 		es6: true
 	},
 	parserOptions: {
-		ecmaVersion: 6,
+		ecmaVersion: 2018,
 		sourceType: 'module'
 	}
 });

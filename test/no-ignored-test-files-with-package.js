@@ -13,19 +13,12 @@ const ruleTester = avaRuleTester(test, {
 const header = `const test = require('ava');\n`;
 const rootDir = path.dirname(__dirname);
 
-function toPath(subPath) {
-	return path.join(rootDir, subPath);
-}
+const toPath = subPath => path.join(rootDir, subPath);
+const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
 
-function code(hasHeader) {
-	return (hasHeader ? header : '') + 'test(t => { t.pass(); });';
-}
-
-util.getAvaConfig = function () {
-	return {
-		files: ['lib/**/*.test.js']
-	};
-};
+util.getAvaConfig = () => ({
+	files: ['lib/**/*.test.js']
+});
 
 ruleTester.run('no-ignored-test-files', rule, {
 	valid: [

@@ -1,5 +1,5 @@
 'use strict';
-const visitIf = require('enhance-visitors').visitIf;
+const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
@@ -11,7 +11,12 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			const functionArg = node.arguments[node.arguments.length - 1];
+			const functionArgIndex = node.arguments.length - 1;
+			if (functionArgIndex > 1) {
+				return;
+			}
+
+			const functionArg = node.arguments[functionArgIndex];
 
 			if (!(functionArg && functionArg.params && functionArg.params.length > 0)) {
 				return;
