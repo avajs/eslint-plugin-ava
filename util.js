@@ -28,21 +28,21 @@ exports.isInContext = node => {
 	return node.property.name === 'context';
 };
 
-exports.getAvaConfig = filepath => {
+exports.getAvaConfig = packageFilepath => {
 	const defaultResult = {};
 
-	if (!filepath) {
+	if (!packageFilepath) {
 		return defaultResult;
 	}
 
 	try {
-		const packageContent = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+		const packageContent = JSON.parse(fs.readFileSync(packageFilepath, 'utf8'));
 
 		if (packageContent && packageContent.ava) {
 			return packageContent.ava;
 		}
 
-		const fileOptions = path.parse(filepath);
+		const fileOptions = path.parse(packageFilepath);
 		const avaConfig = esmRequire(path.join(fileOptions.dir, 'ava.config.js'));
 
 		return typeof avaConfig.default === 'function'
