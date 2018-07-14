@@ -33,9 +33,11 @@
 		"arrify": "^1.0.1",
 		"deep-strict-equal": "^0.2.0",
 		"enhance-visitors": "^1.0.0",
+		"esm": "^3.0.69",
 		"espree": "^4.0.0",
 		"espurify": "^1.5.0",
 		"import-modules": "^1.1.0",
+		"is-plain-object": "^2.0.4",
 		"multimatch": "^2.1.0",
 		"pkg-up": "^2.0.0"
 	},
