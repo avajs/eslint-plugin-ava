@@ -7,14 +7,6 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const defaultFiles = [
-	'test.js',
-	'test-*.js',
-	'test/**/*.js',
-	'**/__tests__/**/*.js',
-	'**/*.test.js'
-];
-
 const excludedFolders = [
 	'**/fixtures/**',
 	'**/helpers/**'
@@ -53,7 +45,7 @@ const create = context => {
 	const ava = createAvaRule();
 	const packageInfo = getPackageInfo();
 	const options = context.options[0] || {};
-	const files = arrify(options.files || packageInfo.files || defaultFiles);
+	const files = arrify(options.files || packageInfo.files || util.defaultFiles);
 	let hasTestCall = false;
 
 	if (!packageInfo.rootDir) {
@@ -91,10 +83,7 @@ const schema = [{
 	type: 'object',
 	properties: {
 		files: {
-			anyOf: [
-				{type: 'array'},
-				{type: 'string'}
-			]
+			type: 'array',
 		}
 	}
 }];

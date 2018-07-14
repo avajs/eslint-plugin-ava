@@ -34,7 +34,7 @@ ruleTester.run('no-ignored-test-files', rule, {
 		{
 			code: code(true),
 			filename: toPath('bar/foo.test.js'),
-			options: [{files: 'bar/**/*.test.js'}]
+			options: [{files: ['bar/**/*.test.js']}]
 		},
 		{
 			code: code(true),
@@ -72,7 +72,7 @@ ruleTester.run('no-ignored-test-files', rule, {
 		{
 			code: code(true),
 			filename: toPath('lib/foo.test.js'),
-			options: [{files: 'bar/**/*.test.js'}],
+			options: [{files: ['bar/**/*.test.js']}],
 			errors: [{message: 'Test file is ignored because it is not in `bar/**/*.test.js`.'}]
 		}
 	]

@@ -13,6 +13,14 @@ const functionExpressions = [
 	'ArrowFunctionExpression'
 ];
 
+const defaultFiles = [
+	'test.js',
+	'test-*.js',
+	'test/**/*.js',
+	'**/__tests__/**/*.js',
+	'**/*.test.js'
+];
+
 exports.nameOfRootObject = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.nameOfRootObject(node.object);
@@ -172,5 +180,6 @@ const assertionMethodsNumArguments = new Map([
 const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
+exports.defaultFiles = defaultFiles;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));
