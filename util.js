@@ -5,6 +5,7 @@ const isPlainObject = require('is-plain-object');
 const pkg = require('./package');
 const esmRequire = require('esm')(module, {
 	cjs: false,
+	force: true,
 	mode: 'all'
 });
 
