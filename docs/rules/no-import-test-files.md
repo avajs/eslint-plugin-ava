@@ -59,7 +59,7 @@ import utils from '../utils/index.js';
 
 This rule supports the following options:
 
-`files`: An array of strings representing the files glob that AVA will use to find test files. Overrides the default and the configuration found in the `package.json` file.
+`files`: An array of strings representing the files glob that AVA will use to find test files. Overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
 
 You can set the options like this:
 
