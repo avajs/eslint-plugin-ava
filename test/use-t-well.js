@@ -42,6 +42,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.notDeepEqual(v, v);'),
 		testCase('t.throws(fn);'),
 		testCase('t.notThrows(fn);'),
+		testCase('t.throwsAsync(fn);'),
+		testCase('t.notThrowsAsync(fn);'),
 		testCase('t.regex(v, /v/);'),
 		testCase('t.notRegex(v, /v/);'),
 		testCase('t.snapshot(v);'),
