@@ -168,12 +168,14 @@ const assertionMethodsNumArguments = new Map([
 	['is', 2],
 	['not', 2],
 	['notDeepEqual', 2],
+	['notRegex', 2],
 	['notThrows', 1],
+	['notThrowsAsync', 1],
 	['pass', 0],
 	['regex', 2],
-	['notRegex', 2],
 	['snapshot', 1],
 	['throws', 1],
+	['throwsAsync', 1],
 	['true', 1],
 	['truthy', 1]
 ]);
