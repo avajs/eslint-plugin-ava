@@ -13,6 +13,9 @@ module.exports = {
 				ecmaVersion: 2018,
 				sourceType: 'module'
 			},
+			plugins: [
+				'ava'
+			],
 			rules: {
 				'ava/assertion-arguments': 'error',
 				'ava/max-asserts': ['off', 5],

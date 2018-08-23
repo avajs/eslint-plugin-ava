@@ -105,9 +105,6 @@ Enable it in your `package.json` with the `extends` option:
 {
 	"name": "my-awesome-project",
 	"eslintConfig": {
-		"plugins": [
-			"ava"
-		],
 		"extends": "plugin:ava/recommended"
 	}
 }
