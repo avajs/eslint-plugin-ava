@@ -8,8 +8,7 @@
 		"node": ">=6"
 	},
 	"scripts": {
-		"test": "nyc ava",
-		"coveralls": "nyc report --reporter=text-lcov | coveralls"
+		"test": "nyc ava"
 	},
 	"files": [
 		"index.js",
