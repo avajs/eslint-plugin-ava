@@ -18,7 +18,7 @@ const falseErrors = [{
 	message: '`t.false()` should be used instead of `t.falsy()`.'
 }];
 
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 function testCase(contents, prependHeader) {
 	const content = `test(t => { ${contents} });`;

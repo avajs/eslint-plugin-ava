@@ -13,7 +13,7 @@ const ruleTester = avaRuleTester(test, {
 
 const ruleId = 'no-only-test';
 const message = '`test.only()` should not be used.';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-only-test', rule, {
 	valid: [

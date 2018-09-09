@@ -11,7 +11,7 @@ const ruleTester = avaRuleTester(test, {
 const ruleId = 'no-identical-title';
 const message = 'Test title is used multiple times in the same file.';
 
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-identical-title', rule, {
 	valid: [

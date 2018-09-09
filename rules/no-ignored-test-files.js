@@ -83,7 +83,7 @@ const schema = [{
 	type: 'object',
 	properties: {
 		files: {
-			type: 'array',
+			type: 'array'
 		}
 	}
 }];

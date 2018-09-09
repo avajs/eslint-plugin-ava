@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const ruleError = {ruleId: 'use-t-well'};
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 function error(message) {
 	return Object.assign({}, ruleError, {message});
@@ -100,7 +100,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqual.is(a, a);'),
-			errors: [error(`Can't chain assertion methods.`)]
+			errors: [error('Can\'t chain assertion methods.')]
 		},
 		{
 			code: testCase('t.paln(1);'),

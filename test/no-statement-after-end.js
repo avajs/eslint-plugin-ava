@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const errors = [{ruleId: 'no-statement-after-end'}];
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 function cbTest(contents, prependHeader) {
 	let ret = `test.cb(t => { ${contents} });`;

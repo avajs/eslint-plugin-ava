@@ -15,34 +15,34 @@ const errors = [{ruleId: 'use-test'}];
 
 ruleTester.run('use-test', rule, {
 	valid: [
-		`var test = require('ava');`,
-		`let test = require('ava');`,
-		`const test = require('ava');`,
-		`const a = 1, test = require('ava'), b = 2;`,
-		`const test = require('foo');`,
-		`import test from 'ava';`,
-		`import test, {} from 'ava';`,
-		`import test from 'foo';`
+		'var test = require(\'ava\');',
+		'let test = require(\'ava\');',
+		'const test = require(\'ava\');',
+		'const a = 1, test = require(\'ava\'), b = 2;',
+		'const test = require(\'foo\');',
+		'import test from \'ava\';',
+		'import test, {} from \'ava\';',
+		'import test from \'foo\';'
 	],
 	invalid: [
 		{
-			code: `var ava = require('ava');`,
+			code: 'var ava = require(\'ava\');',
 			errors
 		},
 		{
-			code: `let ava = require('ava');`,
+			code: 'let ava = require(\'ava\');',
 			errors
 		},
 		{
-			code: `const ava = require('ava');`,
+			code: 'const ava = require(\'ava\');',
 			errors
 		},
 		{
-			code: `const a = 1, ava = require('ava'), b = 2;`,
+			code: 'const a = 1, ava = require(\'ava\'), b = 2;',
 			errors
 		},
 		{
-			code: `import ava from 'ava';`,
+			code: 'import ava from \'ava\';',
 			errors
 		}
 	]

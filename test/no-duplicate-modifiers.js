@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const ruleId = 'no-duplicate-modifiers';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 const modifiers = [
 	'after',
@@ -47,7 +47,7 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		`${header}test.afterEach.always(t => {});`,
 		`${header}test.failing.cb(t => {});`,
 		// Shouldn't be triggered since it's not a test file
-		`test.serial.serial(t => {});`
+		'test.serial.serial(t => {});'
 	]),
 	invalid: invalid.concat([
 		{

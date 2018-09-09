@@ -2,12 +2,12 @@
 const fs = require('fs');
 const path = require('path');
 const isPlainObject = require('is-plain-object');
-const pkg = require('./package');
 const esmRequire = require('esm')(module, {
 	cjs: false,
 	force: true,
 	mode: 'all'
 });
+const pkg = require('./package');
 
 const functionExpressions = [
 	'FunctionExpression',
@@ -58,8 +58,8 @@ exports.getAvaConfig = packageFilepath => {
 		let fileConf;
 		try {
 			({default: fileConf = MISSING_DEFAULT_EXPORT} = esmRequire(path.join(projectDir, 'ava.config.js')));
-		} catch (err) {
-			if (err && err.code === 'MODULE_NOT_FOUND') {
+		} catch (error) {
+			if (error && error.code === 'MODULE_NOT_FOUND') {
 				fileConf = NO_SUCH_FILE;
 			} else {
 				return defaultResult;
@@ -67,7 +67,7 @@ exports.getAvaConfig = packageFilepath => {
 		}
 
 		if (fileConf === MISSING_DEFAULT_EXPORT) {
-			return defaultResult
+			return defaultResult;
 		}
 
 		if (fileConf === NO_SUCH_FILE) {

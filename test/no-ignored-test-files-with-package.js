@@ -10,7 +10,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 const rootDir = path.dirname(__dirname);
 
 const toPath = subPath => path.join(rootDir, subPath);

@@ -8,7 +8,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 const errors = [{
 	ruleId: 'prefer-async-await',
 	message: 'Prefer using async/await instead of returning a Promise.'

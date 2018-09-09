@@ -21,7 +21,7 @@ const tooManyParametersErrors = [{
 	message: 'Test should only have one parameter named `t`.'
 }];
 
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('use-t', rule, {
 	valid: [

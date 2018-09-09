@@ -4,7 +4,7 @@ import rule from '../rules/no-async-fn-without-await';
 
 const ruleId = 'no-async-fn-without-await';
 const message = 'Function was declared as `async` but doesn\'t use `await`';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 const ruleTesterOptions = [
 	{
@@ -23,7 +23,7 @@ const ruleTesterOptions = [
 ruleTesterOptions.forEach(options => {
 	const ruleTester = avaRuleTester(test, options);
 
-	ruleTester.run(`no-async-fn-without-await`, rule, {
+	ruleTester.run('no-async-fn-without-await', rule, {
 		valid: [
 			`${header}test(fn);`,
 			`${header}test(t => {});`,

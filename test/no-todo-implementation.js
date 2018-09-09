@@ -12,7 +12,7 @@ const errors = [{
 	ruleId: 'no-todo-implementation',
 	message: '`test.todo()` should not be passed an implementation function.'
 }];
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-implementation', rule, {
 	valid: [

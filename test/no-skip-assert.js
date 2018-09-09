@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const errors = [{ruleId: 'no-skip-assert'}];
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-skip-assert', rule, {
 	valid: [
