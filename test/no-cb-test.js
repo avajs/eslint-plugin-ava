@@ -10,7 +10,7 @@ const ruleTester = avaRuleTester(test, {
 
 const ruleId = 'no-cb-test';
 const message = '`test.cb()` should not be used.';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-cb-test', rule, {
 	valid: [

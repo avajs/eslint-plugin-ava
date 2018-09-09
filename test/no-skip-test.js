@@ -10,7 +10,7 @@ const ruleTester = avaRuleTester(test, {
 
 const ruleId = 'no-skip-test';
 const message = 'No tests should be skipped.';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-skip-test', rule, {
 	valid: [

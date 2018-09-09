@@ -111,10 +111,10 @@ function testDeclaration(declaration) {
 }
 
 for (const declaration of [
-	`var test = require('ava');`,
-	`let test = require('ava');`,
-	`const test = require('ava');`,
-	`import test from 'ava';`
+	'var test = require(\'ava\');',
+	'let test = require(\'ava\');',
+	'const test = require(\'ava\');',
+	'import test from \'ava\';'
 ]) {
 	testDeclaration(declaration);
 }
@@ -133,7 +133,7 @@ test(t => {
 ruleTester.run('prefer-power-assert', rule, {
 	valid: [
 		{
-			code: `import test from 'ava';\n test.cb(function (t) { t.true(foo); t.end(); });`
+			code: 'import test from \'ava\';\n test.cb(function (t) { t.true(foo); t.end(); });'
 		},
 		// Shouldn't be triggered since it's not a test file
 		{

@@ -105,7 +105,7 @@ const create = context => {
 
 			if (members[0] === 'end') {
 				if (gottenArgs > 1) {
-					report(node, `Too many arguments. Expected at most 1.`);
+					report(node, 'Too many arguments. Expected at most 1.');
 				}
 
 				return;

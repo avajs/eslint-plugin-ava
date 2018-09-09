@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const ruleId = 'no-unknown-modifiers';
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-unknown-modifiers', rule, {
 	valid: [
@@ -28,7 +28,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		`${header}test.afterEach.always(t => {});`,
 		`${header}test.failing(t => {});`,
 		// Shouldn't be triggered since it's not a test file
-		`test.foo(t => {});`
+		'test.foo(t => {});'
 	],
 	invalid: [
 		{

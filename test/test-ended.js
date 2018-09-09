@@ -9,7 +9,7 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const errors = [{ruleId: 'test-ended'}];
-const header = `const test = require('ava');\n`;
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('test-ended', rule, {
 	valid: [
