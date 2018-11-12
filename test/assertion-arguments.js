@@ -27,7 +27,7 @@ function testCase(message, content, errorMessage, useHeader) {
 			ruleId: 'assertion-arguments',
 			message: errorMessage
 		}],
-		options: message && [{message}],
+		options: message ? [{message}] : [],
 		code: (useHeader === false ? '' : header) + testFn
 	};
 }

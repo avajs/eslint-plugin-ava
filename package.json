@@ -32,8 +32,8 @@
 		"arrify": "^1.0.1",
 		"deep-strict-equal": "^0.2.0",
 		"enhance-visitors": "^1.0.0",
-		"esm": "^3.0.82",
-		"espree": "^4.0.0",
+		"esm": "^3.0.84",
+		"espree": "^4.1.0",
 		"espurify": "^1.8.1",
 		"import-modules": "^1.1.0",
 		"is-plain-object": "^2.0.4",
@@ -41,14 +41,14 @@
 		"pkg-up": "^2.0.0"
 	},
 	"devDependencies": {
-		"ava": "*",
-		"babel-eslint": "^9.0.0",
+		"ava": "^1.0.0-rc.1",
+		"babel-eslint": "^10.0.1",
 		"coveralls": "^3.0.2",
-		"eslint": "^5.5.0",
-		"eslint-ava-rule-tester": "^2.0.2",
-		"js-combinatorics": "^0.5.3",
-		"nyc": "^13.0.1",
-		"pify": "^4.0.0",
+		"eslint": "^5.9.0",
+		"eslint-ava-rule-tester": "^3.0.0",
+		"js-combinatorics": "^0.5.4",
+		"nyc": "^13.1.0",
+		"pify": "^4.0.1",
 		"xo": "^0.23.0"
 	},
 	"peerDependencies": {

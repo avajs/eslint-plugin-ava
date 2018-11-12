@@ -11,19 +11,20 @@ const ruleTesterOptions = [
 		parserOptions: {
 			ecmaVersion: 2018
 		}
-	},
-	{
-		parser: 'babel-eslint',
-		env: {
-			es6: true
-		}
 	}
+	// Disabled for now because of `eslint-ava-rule-tester` problem
+	// {
+	// 	parser: 'babel-eslint',
+	// 	env: {
+	// 		es6: true
+	// 	}
+	// }
 ];
 
-ruleTesterOptions.forEach(options => {
+for (const options of ruleTesterOptions) {
 	const ruleTester = avaRuleTester(test, options);
 
-	ruleTester.run('no-async-fn-without-await', rule, {
+	ruleTester.run(`no-async-fn-without-await - parser:${options.parser || 'default'}`, rule, {
 		valid: [
 			`${header}test(fn);`,
 			`${header}test(t => {});`,
@@ -109,4 +110,4 @@ ruleTesterOptions.forEach(options => {
 			}
 		]
 	});
-});
+}
