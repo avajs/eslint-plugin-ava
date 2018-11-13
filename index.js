@@ -18,7 +18,10 @@ module.exports = {
 			],
 			rules: {
 				'ava/assertion-arguments': 'error',
-				'ava/max-asserts': ['off', 5],
+				'ava/max-asserts': [
+					'off',
+					5
+				],
 				'ava/no-async-fn-without-await': 'error',
 				'ava/no-cb-test': 'off',
 				'ava/no-duplicate-modifiers': 'error',
@@ -37,7 +40,10 @@ module.exports = {
 				'ava/prefer-async-await': 'error',
 				'ava/prefer-power-assert': 'off',
 				'ava/test-ended': 'error',
-				'ava/test-title': ['error', 'if-multiple'],
+				'ava/test-title': [
+					'error',
+					'if-multiple'
+				],
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error',

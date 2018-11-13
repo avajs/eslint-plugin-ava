@@ -9,7 +9,7 @@ const header = 'const test = require(\'ava\');\n';
 const ruleTesterOptions = [
 	{
 		parserOptions: {
-			ecmaVersion: 2018
+			ecmaVersion: 2019
 		}
 	}
 	// Disabled for now because of `eslint-ava-rule-tester` problem
