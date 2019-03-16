@@ -34,6 +34,7 @@ for (const options of ruleTesterOptions) {
 			`${header}test(async function(t) { await foo(); });`,
 			`${header}test(async t => { if (bar) { await foo(); } });`,
 			`${header}test(async t => { if (bar) {} else { await foo(); } });`,
+			`${header}test(async t => { for await (const foo of bar) {} });`,
 			`${header}test.after(async () => { await foo(); });`,
 			`${header}test('title', fn);`,
 			`${header}test('title', function(t) {});`,

@@ -27,6 +27,7 @@ const create = context => {
 		}),
 		AwaitExpression: registerUseOfAwait,
 		YieldExpression: registerUseOfAwait,
+		'ForOfStatement[await=true]': registerUseOfAwait,
 		'CallExpression:exit': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
