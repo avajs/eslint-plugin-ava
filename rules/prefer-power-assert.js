@@ -7,6 +7,7 @@ const util = require('../util');
 
 const notAllowed = [
 	'truthy',
+	'true',
 	'falsy',
 	'false',
 	'is',

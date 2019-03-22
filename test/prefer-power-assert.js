@@ -34,6 +34,7 @@ function testNotAllowedMethod(methodName) {
 const notAllowedMethods = [
 	'truthy(foo)',
 	'falsy(foo)',
+	'true(foo)',
 	'false(foo)',
 	'is(foo, bar)',
 	'not(foo, bar)',
@@ -61,7 +62,7 @@ function testAllowedMethod(methodName) {
 }
 
 const allowedMethods = [
-	'true(foo)',
+	'assert(foo)',
 	'deepEqual(foo, bar)',
 	'notDeepEqual(foo, bar)',
 	'throws(block)',
@@ -78,7 +79,7 @@ function testWithModifier(modifier) {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
 			{
-				code: `import test from 'ava';\n test.${modifier}(t => { t.true(foo); });`
+				code: `import test from 'ava';\n test.${modifier}(t => { t.assert(foo); });`
 			}
 		],
 		invalid: [
@@ -98,7 +99,7 @@ function testDeclaration(declaration) {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
 			{
-				code: `${declaration}\n test(t => { t.true(foo); });`
+				code: `${declaration}\n test(t => { t.assert(foo); });`
 			}
 		],
 		invalid: [
@@ -133,7 +134,7 @@ test(t => {
 ruleTester.run('prefer-power-assert', rule, {
 	valid: [
 		{
-			code: 'import test from \'ava\';\n test.cb(function (t) { t.true(foo); t.end(); });'
+			code: 'import test from \'ava\';\n test.cb(function (t) { t.assert(foo); t.end(); });'
 		},
 		// Shouldn't be triggered since it's not a test file
 		{
