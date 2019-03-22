@@ -32,6 +32,7 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.end();'),
 		testCase('t.pass();'),
 		testCase('t.fail();'),
+		testCase('t.assert(v);'),
 		testCase('t.truthy(v);'),
 		testCase('t.falsy(v);'),
 		testCase('t.true(v);'),

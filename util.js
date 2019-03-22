@@ -177,7 +177,8 @@ const assertionMethodsNumArguments = new Map([
 	['throws', 1],
 	['throwsAsync', 1],
 	['true', 1],
-	['truthy', 1]
+	['truthy', 1],
+	['assert', 1]
 ]);
 
 const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
