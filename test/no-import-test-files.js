@@ -33,6 +33,30 @@ ruleTester.run('no-import-test-files', rule, {
 		},
 		{
 			code: 'const value = require(somePath);'
+		},
+		{
+			code: 'const highlight = require("highlight.js");',
+			filename: toPath('lib/foo.js')
+		},
+		{
+			code: 'const highlight = require("highlight.js");',
+			filename: toPath('test/foo.test.js')
+		},
+		{
+			code: 'const noninstalled = require("noninstalled.js");',
+			filename: toPath('lib/foo.js')
+		},
+		{
+			code: 'const noninstalled = require("noninstalled.js");',
+			filename: toPath('lib/foo.test.js')
+		},
+		{
+			code: 'import h from \'highlight.js\'',
+			filename: toPath('lib/foo.test.js')
+		},
+		{
+			code: 'import * as highlight from \'highlight.js\'',
+			filename: toPath('lib/foo.test.js')
 		}
 	],
 	invalid: [

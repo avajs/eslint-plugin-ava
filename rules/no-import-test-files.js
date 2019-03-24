@@ -1,23 +1,34 @@
 'use strict';
-const path = require('path');
+const {resolve, relative, dirname} = require('path');
 const arrify = require('arrify');
-const pkgUp = require('pkg-up');
+const {sync} = require('pkg-up');
 const multimatch = require('multimatch');
-const util = require('../util');
+const {getAvaConfig, defaultFiles, getDocsUrl} = require('../util');
 
 function isTestFile(files, rootDir, sourceFile, importedFile) {
-	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
-	const relativePath = path.relative(rootDir, absoluteImportedPath);
+	const absoluteImportedPath = resolve(dirname(sourceFile), importedFile);
+	const relativePath = relative(rootDir, absoluteImportedPath);
 
-	return multimatch([relativePath], files).length === 1;
+	const isNotResolved = (importedFile) => {
+		let isResolved
+		try {
+			require.resolve(importedFile)
+			isResolved = true
+		} catch (error) {
+			isResolved = false
+		}
+		return !isResolved
+	}
+
+	return multimatch([relativePath], files).length === 1 && isNotResolved(importedFile)
 }
 
 function getProjectInfo() {
-	const packageFilePath = pkgUp.sync();
+	const packageFilePath = sync();
 
 	return {
-		rootDir: packageFilePath && path.dirname(packageFilePath),
-		files: util.getAvaConfig(packageFilePath).files
+		rootDir: packageFilePath && dirname(packageFilePath),
+		files: getAvaConfig(packageFilePath).files
 	};
 }
 
@@ -43,7 +54,7 @@ const create = context => {
 
 	const projectInfo = getProjectInfo();
 	const options = context.options[0] || {};
-	const files = arrify(options.files || projectInfo.files || util.defaultFiles);
+	const files = arrify(options.files || projectInfo.files || defaultFiles);
 
 	if (!projectInfo.rootDir) {
 		// Could not find a package.json folder
@@ -81,7 +92,7 @@ module.exports = {
 	create,
 	meta: {
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: getDocsUrl(__filename)
 		},
 		schema
 	}
