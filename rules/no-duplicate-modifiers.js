@@ -36,6 +36,7 @@ const create = context => {
 						message: `Duplicate test modifier \`${current.name}\`.`
 					});
 				}
+
 				return current;
 			});
 		})

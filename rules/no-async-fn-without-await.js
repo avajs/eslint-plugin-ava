@@ -42,6 +42,7 @@ const create = context => {
 					message: 'Function was declared as `async` but doesn\'t use `await`'
 				});
 			}
+
 			asyncTest = null;
 			testUsed = false;
 		})

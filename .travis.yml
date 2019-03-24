@@ -1,9 +1,8 @@
 language: node_js
 node_js:
-  - '10'
-  - '8'
-  - '6'
-before_install:
-  - npm install --global npm
-after_success:
-  - './node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/.bin/coveralls'
+  - 11
+  - 10
+  - 8
+  - 6
+before_install: npm install --global npm
+after_success: npx codecov --file=./coverage/lcov.info
