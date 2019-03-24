@@ -57,6 +57,12 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'import * as highlight from \'highlight.js\'',
 			filename: toPath('lib/foo.test.js')
+		},
+		{
+			code: 'const foo = require(\'\')'
+		},
+		{
+			code: 'const foo = require(false)'
 		}
 	],
 	invalid: [

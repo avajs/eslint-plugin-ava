@@ -65,14 +65,16 @@ const create = context => {
 
 	return {
 		ImportDeclaration: node => {
-			validateImportPath(node, node.source.value);
+			if (typeof node.source.value === 'string') {
+				validateImportPath(node, node.source.value);
+			}
 		},
 		CallExpression: node => {
 			if (!(node.callee.type === 'Identifier' && node.callee.name === 'require')) {
 				return;
 			}
 
-			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+			if (node.arguments[0] && node.arguments[0].type === 'Literal' && typeof node.arguments[0].value === 'string') {
 				validateImportPath(node, node.arguments[0].value);
 			}
 		}
