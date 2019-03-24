@@ -9,18 +9,18 @@ function isTestFile(files, rootDir, sourceFile, importedFile) {
 	const absoluteImportedPath = resolve(dirname(sourceFile), importedFile);
 	const relativePath = relative(rootDir, absoluteImportedPath);
 
-	const isNotResolved = (importedFile) => {
-		let isResolved
+	const isNotResolved = importedFile => {
+		let isResolved;
 		try {
-			require.resolve(importedFile)
-			isResolved = true
+			require.resolve(importedFile);
+			isResolved = true;
 		} catch (error) {
-			isResolved = false
+			isResolved = false;
 		}
-		return !isResolved
-	}
+		return !isResolved;
+	};
 
-	return multimatch([relativePath], files).length === 1 && isNotResolved(importedFile)
+	return multimatch([relativePath], files).length === 1 && isNotResolved(importedFile);
 }
 
 function getProjectInfo() {
