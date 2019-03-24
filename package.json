@@ -54,9 +54,6 @@
 	"peerDependencies": {
 		"eslint": ">=5.9.0"
 	},
-	"ava": {
-		"failWithoutAssertions": true
-	},
 	"nyc": {
 		"reporter": [
 			"html",
