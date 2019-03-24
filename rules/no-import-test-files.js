@@ -10,15 +10,14 @@ function isTestFile(files, rootDir, sourceFile, importedFile) {
 	const relativePath = relative(rootDir, absoluteImportedPath);
 
 	const isNotResolved = importedFile => {
-		let isResolved;
+		let isHavingError;
 		try {
 			require.resolve(importedFile);
-			isResolved = true;
+			isHavingError = false;
 		} catch (error) {
-			isResolved = false;
+			isHavingError = true;
 		}
-		
-		return !isResolved;
+		return isHavingError;
 	};
 
 	return multimatch([relativePath], files).length === 1 && isNotResolved(importedFile);
