@@ -110,15 +110,6 @@ exports.getTestModifier = (node, mod) => {
 	return getTestModifiers(node).find(property => property.name === mod);
 };
 
-/**
- * Removes given test-modifier from the source surrounding the given node
- *
- * @param {string} params.modifier - Name of the modifier
- * @param {Node} params.node - ESTree-node as provided by ESLint
- * @param {Context} params.context - ESLint-context as provided
- *
- * @return {Array} Compound parameters to be used as arguments for `fix.replaceTextRange()`
- */
 exports.removeTestModifier = params => {
 	const modifier = params.modifier.trim();
 	const range = exports.getTestModifier(params.node, modifier).range.slice();
@@ -147,12 +138,7 @@ const getMembers = node => {
 exports.getMembers = getMembers;
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
-/**
- * Return the URL of the rule's documentation, either from parameter or the
- * requiring file's name.
- * @param  {String} ruleName The name of the rule to generate a URL for.
- * @return {String}          The URL of the rule's documentation.
- */
+
 const getDocsUrl = (filename, commitHash) => {
 	const ruleName = path.basename(filename, '.js');
 	commitHash = commitHash || `v${pkg.version}`;
