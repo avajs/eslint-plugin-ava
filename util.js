@@ -128,6 +128,7 @@ exports.removeTestModifier = params => {
 	while (source.charAt(dotPosition) !== '.') {
 		dotPosition -= 1;
 	}
+
 	let snippet = source.slice(dotPosition, range[1]);
 	snippet = snippet.replace(replacementRegExp, '');
 	return [[dotPosition, range[1]], snippet];
@@ -157,6 +158,7 @@ const getDocsUrl = (filename, commitHash) => {
 	commitHash = commitHash || `v${pkg.version}`;
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
+
 exports.getDocsUrl = getDocsUrl;
 
 const assertionMethodsNumArguments = new Map([
