@@ -2,7 +2,7 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
 
-- [`t.true()`](https://github.com/avajs/ava#truevalue-message)
+- [`t.assert()`](https://github.com/avajs/ava#assertvalue-message)
 - [`t.deepEqual()`](https://github.com/avajs/ava#deepequalvalue-expected-message)
 - [`t.notDeepEqual()`](https://github.com/avajs/ava#notdeepequalvalue-expected-message)
 - [`t.throws()`](https://github.com/avajs/ava#throwsfunctionpromise-error-message)
@@ -21,6 +21,7 @@ import test from 'ava';
 test(t => {
 	t.truthy(foo);
 	t.falsy(foo);
+	t.true(foo === bar);
 	t.false(foo === bar);
 	t.is(foo, bar);
 	t.not(foo, bar);
@@ -36,7 +37,7 @@ test(t => {
 import test from 'ava';
 
 test(t => {
-	t.true(foo === bar);
+	t.assert(foo === bar);
 	t.deepEqual(foo, bar);
 	t.notDeepEqual(foo, bar);
 	t.throws(foo);

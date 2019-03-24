@@ -160,6 +160,7 @@ const getDocsUrl = (filename, commitHash) => {
 exports.getDocsUrl = getDocsUrl;
 
 const assertionMethodsNumArguments = new Map([
+	['assert', 1],
 	['deepEqual', 2],
 	['fail', 0],
 	['false', 1],
