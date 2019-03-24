@@ -17,6 +17,7 @@ function isTestFile(files, rootDir, sourceFile, importedFile) {
 		} catch (error) {
 			isHavingError = true;
 		}
+
 		return isHavingError;
 	};
 
