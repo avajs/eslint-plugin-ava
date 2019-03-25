@@ -61,7 +61,8 @@ const schema = [{
 	enum: [
 		'always',
 		'never'
-	]
+	],
+	default: 'always'
 }];
 
 module.exports = {

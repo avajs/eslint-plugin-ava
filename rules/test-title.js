@@ -34,6 +34,8 @@ const create = context => {
 };
 
 const schema = [{
+	type: 'string',
+	default: 'if-multiple',
 	enum: [
 		'always',
 		'if-multiple'

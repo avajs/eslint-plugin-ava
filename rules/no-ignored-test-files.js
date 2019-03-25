@@ -80,10 +80,21 @@ const create = context => {
 };
 
 const schema = [{
+	title: 'one option: files',
+	$comment: 'the default value of option `files` is from package.json or ava.config.js',
 	type: 'object',
 	properties: {
 		files: {
-			type: 'array'
+			type: 'array',
+			minItems: 0,
+			uniqueItems: true,
+			items: {
+				type: 'string'
+			},
+			examples: [
+				['lib/**/*.test.js', 'utils/**/*.test.js']
+			],
+			default: null
 		}
 	}
 }];

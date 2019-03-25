@@ -56,7 +56,10 @@ const create = context => {
 };
 
 const schema = [{
-	type: 'integer'
+	title: 'maximum number of assertions for each test',
+	type: 'integer',
+	minimum: 0,
+	default: 5
 }];
 
 module.exports = {
