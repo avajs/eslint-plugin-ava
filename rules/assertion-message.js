@@ -68,6 +68,7 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
 			url: util.getDocsUrl(__filename, '4211212daf1bfcfff3ebc5d4efdc4ba1a87acbf1')
 		},

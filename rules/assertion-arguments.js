@@ -150,6 +150,7 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
