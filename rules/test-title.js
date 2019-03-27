@@ -5,8 +5,11 @@ const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
-	const ifMultiple = context.options[0] !== 'always';
-	let testCount = 0;
+	const functionTypes = [
+		'FunctionDeclaration',
+		'FunctionExpression',
+		'ArrowFunctionExpression'
+	];
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -14,38 +17,23 @@ const create = context => {
 			ava.isTestNode,
 			ava.hasNoHookModifier
 		])(node => {
-			testCount++;
+			const firstArgumentIsFunction = node.arguments.length < 1 || functionTypes.includes(node.arguments[0].type);
 
-			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
-			const hasNoTitle = node.arguments.length < requiredLength;
-			const isOverThreshold = !ifMultiple || testCount > 1;
-
-			if (hasNoTitle && isOverThreshold) {
+			if (firstArgumentIsFunction) {
 				context.report({
 					node,
 					message: 'Test should have a title.'
 				});
 			}
-		}),
-		'Program:exit': () => {
-			testCount = 0;
-		}
+		})
 	});
 };
-
-const schema = [{
-	enum: [
-		'always',
-		'if-multiple'
-	]
-}];
 
 module.exports = {
 	create,
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		},
-		schema
+		}
 	}
 };
