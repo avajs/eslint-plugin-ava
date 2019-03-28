@@ -5,11 +5,6 @@ const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
-	const functionTypes = [
-		'FunctionDeclaration',
-		'FunctionExpression',
-		'ArrowFunctionExpression'
-	];
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -17,7 +12,7 @@ const create = context => {
 			ava.isTestNode,
 			ava.hasNoHookModifier
 		])(node => {
-			const firstArgumentIsFunction = node.arguments.length < 1 || functionTypes.includes(node.arguments[0].type);
+			const firstArgumentIsFunction = node.arguments.length < 1 || util.isFunctionExpression(node.arguments[0]);
 
 			if (firstArgumentIsFunction) {
 				context.report({
