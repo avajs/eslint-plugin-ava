@@ -22,6 +22,10 @@ const defaultFiles = [
 	'**/*.test.js'
 ];
 
+const defaultExtensions = [
+	'js' // FIXME: Define the desired default extensions
+];
+
 exports.nameOfRootObject = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.nameOfRootObject(node.object);
@@ -173,5 +177,6 @@ const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.defaultFiles = defaultFiles;
+exports.defaultExtensions = defaultExtensions;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));

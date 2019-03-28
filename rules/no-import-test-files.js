@@ -14,10 +14,12 @@ function isTestFile(files, rootDir, sourceFile, importedFile) {
 
 function getProjectInfo() {
 	const packageFilePath = pkgUp.sync();
+	const {files, babel} = util.getAvaConfig(packageFilePath);
 
 	return {
 		rootDir: packageFilePath && path.dirname(packageFilePath),
-		files: util.getAvaConfig(packageFilePath).files
+		files,
+		babel
 	};
 }
 
@@ -43,7 +45,14 @@ const create = context => {
 
 	const projectInfo = getProjectInfo();
 	const options = context.options[0] || {};
-	const files = arrify(options.files || projectInfo.files || util.defaultFiles);
+
+	const extensions = arrify(options.extensions || (projectInfo.babel && projectInfo.babel.extensions) || util.defaultExtensions);
+	const extensionsPattern = `.+(${extensions.join('|')})`;
+
+	// FIXME: Extensions option override the chosen extension on files option
+	const files = arrify(options.files || projectInfo.files || util.defaultFiles).map(path => {
+		return path.replace(/.(\w+)$/, extensionsPattern);
+	});
 
 	if (!projectInfo.rootDir) {
 		// Could not find a package.json folder
