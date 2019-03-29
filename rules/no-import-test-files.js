@@ -6,7 +6,7 @@ const multimatch = require('multimatch');
 const util = require('../util');
 
 function isTestFile(files, rootDir, sourceFile, importedFile) {
-	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
+	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), String(importedFile));
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
 
 	return multimatch([relativePath], files).length === 1;
