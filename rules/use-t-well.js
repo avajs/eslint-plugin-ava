@@ -12,6 +12,7 @@ const isCallExpression = node =>
 const getMemberStats = members => {
 	const initial = {
 		skip: [],
+		falsey: [],
 		method: [],
 		other: []
 	};
@@ -19,6 +20,8 @@ const getMemberStats = members => {
 	return members.reduce((res, member) => {
 		if (member === 'skip') {
 			res.skip.push(member);
+		} else if (member === 'falsey') {
+			res.falsey.push(member);
 		} else if (isMethod(member)) {
 			res.method.push(member);
 		} else {
@@ -81,6 +84,14 @@ const create = context => {
 						node,
 						message: 'Too many chained uses of `skip`.'
 					});
+				} else if (stats.falsey.length > 0) {
+					context.report({
+						node,
+						message: 'Misspelled `falsy` to `falsey`.',
+						fix: fixer => {
+							return fixer.replaceTextRange(node.property.range, 'falsy');
+						}
+					});
 				} else if (stats.method.length > 1) {
 					context.report({
 						node,
@@ -107,6 +118,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		fixable: 'code'
 	}
 };
