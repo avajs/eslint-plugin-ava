@@ -23,7 +23,7 @@ const defaultFiles = [
 ];
 
 const defaultExtensions = [
-	'js' // FIXME: Define the desired default extensions
+	'js'
 ];
 
 exports.nameOfRootObject = node => {
