@@ -6,7 +6,7 @@ const multimatch = require('multimatch');
 const util = require('../util');
 
 function isTestFile(files, rootDir, sourceFile, importedFile) {
-	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), String(importedFile));
+	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
 
 	return multimatch([relativePath], files).length === 1;
@@ -23,6 +23,10 @@ function getProjectInfo() {
 
 function createImportValidator(context, files, projectInfo, filename) {
 	return (node, importPath) => {
+		if (!importPath || typeof importPath !== "string") {
+			return;
+		}
+
 		const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
 
 		if (isImportingTestFile) {
@@ -61,7 +65,7 @@ const create = context => {
 				return;
 			}
 
-			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+			if (node.arguments[0]) {
 				validateImportPath(node, node.arguments[0].value);
 			}
 		}

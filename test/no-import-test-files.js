@@ -34,7 +34,8 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'const value = require(somePath);'
 		},
-		'const value = require(true);'
+		'const value = require(true);',
+		'const value = require();'
 	],
 	invalid: [
 		{
