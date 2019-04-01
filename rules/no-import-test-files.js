@@ -23,7 +23,7 @@ function getProjectInfo() {
 
 function createImportValidator(context, files, projectInfo, filename) {
 	return (node, importPath) => {
-		if (!importPath || typeof importPath !== "string") {
+		if (!importPath || typeof importPath !== 'string') {
 			return;
 		}
 
