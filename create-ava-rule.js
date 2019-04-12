@@ -4,7 +4,7 @@ const enhance = require('enhance-visitors');
 const deepStrictEqual = require('deep-strict-equal');
 const util = require('./util');
 
-const avaImportDeclarationAst = {
+const avaImportDeclarationAsts = [{
 	type: 'ImportDeclaration',
 	specifiers: [
 		{
@@ -19,9 +19,66 @@ const avaImportDeclarationAst = {
 		type: 'Literal',
 		value: 'ava'
 	}
-};
+}, {
+	type: 'ImportDeclaration',
+	specifiers: [
+		{
+			type: 'ImportSpecifier',
+			imported: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			local: {
+				type: 'Identifier',
+				name: 'test'
+			}
+		}
+	],
+	source: {
+		type: 'Literal',
+		value: 'ava'
+	}
+}, {
+	type: 'ImportDeclaration',
+	specifiers: [
+		{
+			type: 'ImportSpecifier',
+			imported: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			local: {
+				type: 'Identifier',
+				name: 'test'
+			}
+		}
+	],
+	source: {
+		type: 'Literal',
+		value: 'ava'
+	}
+}, {
+	type: 'ImportDeclaration',
+	specifiers: [
+		{
+			type: 'ImportSpecifier',
+			imported: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			local: {
+				type: 'Identifier',
+				name: 'serial'
+			}
+		}
+	],
+	source: {
+		type: 'Literal',
+		value: 'ava'
+	}
+}];
 
-const avaVariableDeclaratorAst = {
+const avaVariableDeclaratorAsts = [{
 	type: 'VariableDeclarator',
 	id: {
 		type: 'Identifier',
@@ -40,7 +97,73 @@ const avaVariableDeclaratorAst = {
 			}
 		]
 	}
-};
+}, {
+	type: 'VariableDeclarator',
+	id: {
+		type: 'ObjectPattern',
+		properties: [{
+			type: 'Property',
+			key: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			value: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			kind: 'init',
+			method: false,
+			shorthand: true,
+			computed: false
+		}]
+	},
+	init: {
+		type: 'CallExpression',
+		callee: {
+			type: 'Identifier',
+			name: 'require'
+		},
+		arguments: [
+			{
+				type: 'Literal',
+				value: 'ava'
+			}
+		]
+	}
+}, {
+	type: 'VariableDeclarator',
+	id: {
+		type: 'ObjectPattern',
+		properties: [{
+			type: 'Property',
+			key: {
+				type: 'Identifier',
+				name: 'serial'
+			},
+			value: {
+				type: 'Identifier',
+				name: 'test'
+			},
+			kind: 'init',
+			method: false,
+			shorthand: false,
+			computed: false
+		}]
+	},
+	init: {
+		type: 'CallExpression',
+		callee: {
+			type: 'Identifier',
+			name: 'require'
+		},
+		arguments: [
+			{
+				type: 'Literal',
+				value: 'ava'
+			}
+		]
+	}
+}];
 
 function isTestFunctionCall(node) {
 	if (node.type === 'Identifier') {
@@ -65,12 +188,12 @@ module.exports = () => {
 	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
 		ImportDeclaration: node => {
-			if (!isTestFile && deepStrictEqual(espurify(node), avaImportDeclarationAst)) {
+			if (!isTestFile && avaImportDeclarationAsts.some(ast => deepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
 		VariableDeclarator: node => {
-			if (!isTestFile && deepStrictEqual(espurify(node), avaVariableDeclaratorAst)) {
+			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => console.log(JSON.stringify(espurify(node), null, 2)) || deepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
