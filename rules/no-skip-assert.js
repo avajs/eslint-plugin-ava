@@ -11,7 +11,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			if (node.property.name === 'skip' && util.nameOfRootObject(node) === 't') {
+			if (node.property.name === 'skip' && node.object.name === 't') {
 				context.report({
 					node,
 					message: 'No assertions should be skipped.'

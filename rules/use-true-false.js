@@ -57,7 +57,7 @@ const create = context => {
 			if (
 				node.callee.type === 'MemberExpression' &&
 				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
-				util.nameOfRootObject(node.callee) === 't'
+				node.callee.object.name === 't'
 			) {
 				const arg = node.arguments[0];
 

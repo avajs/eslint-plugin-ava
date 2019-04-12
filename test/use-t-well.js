@@ -58,6 +58,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.plan(1);'),
 		testCase('t.log(\'Unicorns\');'),
 		testCase('a.foo();'),
+		testCase('t.context.foo(a, a);'),
+		testCase('foo.t.bar(a, a);'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.foo(a, a);', false),
 		testCase('t.foo;', false)
