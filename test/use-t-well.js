@@ -53,6 +53,10 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.skip.deepEqual(a, a);'),
 		testCase('t.context.a = 1;'),
 		testCase('t.context.foo.skip();'),
+		testCase('console.log(t.context);'),
+		testCase('t.true(t.context.title(foo));'),
+		testCase('console.log(t.title);'),
+		testCase('t.true(t.title.includes(\'Unicorns\'));'),
 		testCase('setImmediate(t.end);'),
 		testCase('t.deepEqual;'),
 		testCase('t.plan(1);'),
@@ -86,6 +90,10 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.context();'),
 			errors: [error('Unknown assertion method `context`.')]
+		},
+		{
+			code: testCase('t.title();'),
+			errors: [error('Unknown assertion method `title`.')]
 		},
 		{
 			code: testCase('t.a = 1;'),
