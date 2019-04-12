@@ -30,6 +30,7 @@ import test from 'ava';
 test(t => {
 	t.deepEqual(value, [2]);
 	t.context.a = 100;
+	require('fixtures/' + t.title);
 	t.deepEqual.skip();
 });
 ```
