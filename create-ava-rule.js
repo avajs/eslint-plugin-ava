@@ -193,7 +193,7 @@ module.exports = () => {
 			}
 		},
 		VariableDeclarator: node => {
-			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => console.log(JSON.stringify(espurify(node), null, 2)) || deepStrictEqual(espurify(node), ast))) {
+			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => deepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
