@@ -44,6 +44,7 @@ module.exports = {
 					'error',
 					'if-multiple'
 				],
+				'ava/test-title-format': 'off',
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error',

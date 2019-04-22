@@ -58,6 +58,6 @@ ruleTester.run('test-title-format', rule, {
 			code: header + 'test.todo("Test something");',
 			options: [{regexp: '^Should'}],
 			errors
-		},
+		}
 	]
 });
