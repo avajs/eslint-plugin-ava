@@ -47,11 +47,10 @@ const create = context => {
 	const options = context.options[0] || {};
 
 	const extensions = arrify(options.extensions || (projectInfo.babel && projectInfo.babel.extensions) || util.defaultExtensions);
-	const extensionsPattern = `.+(${extensions.join('|')})`;
 
-	// FIXME: Extensions option override the chosen extension on files option
-	const files = arrify(options.files || projectInfo.files || util.defaultFiles).map(path => {
-		return path.replace(/.(\w+)$/, extensionsPattern);
+	const files = arrify(options.files || projectInfo.files || util.defaultFiles).filter(file => {
+		const extension = path.extname(file).substr(1);
+		return extensions.includes(extension);
 	});
 
 	if (!projectInfo.rootDir) {

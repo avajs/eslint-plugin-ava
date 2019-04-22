@@ -17,7 +17,11 @@ const rootDir = path.dirname(__dirname);
 const toPath = subPath => path.join(rootDir, subPath);
 
 util.getAvaConfig = () => ({
-	files: ['lib/*.test.js'],
+	files: [
+		'lib/*.test.js',
+		'lib/*.test.jsx',
+		'lib/*.test.mjs',
+	],
 	babel: {
 		extensions: ['js', 'jsx']
 	}
