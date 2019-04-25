@@ -2,13 +2,13 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
 
-- [`t.assert()`](https://github.com/avajs/ava#assertvalue-message)
-- [`t.deepEqual()`](https://github.com/avajs/ava#deepequalvalue-expected-message)
-- [`t.notDeepEqual()`](https://github.com/avajs/ava#notdeepequalvalue-expected-message)
-- [`t.throws()`](https://github.com/avajs/ava#throwsfunctionpromise-error-message)
-- [`t.notThrows()`](https://github.com/avajs/ava#notthrowsfunctionpromise-message)
-- [`t.pass()`](https://github.com/avajs/ava#passmessage)
-- [`t.fail()`](https://github.com/avajs/ava#failmessage)
+- [`t.assert()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#assertvalue-message)
+- [`t.deepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#deepequalvalue-expected-message)
+- [`t.notDeepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notdeepequalvalue-expected-message)
+- [`t.throws()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#throwsfn-expected-message)
+- [`t.notThrows()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notthrowsfn-message)
+- [`t.pass()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#passmessage)
+- [`t.fail()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#failmessage)
 
 Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 
