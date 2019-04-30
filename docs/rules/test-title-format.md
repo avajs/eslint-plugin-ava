@@ -1,21 +1,20 @@
 # Ensure tests have a correct title format
 
-Translations: 
-
 Tests should have a title matching the format option.
 
 
 ## Fail
 
 ```js
-/*eslint ava/test-title: ["error", {regexp: "^Should"}]*/
+/* eslint ava/test-title: ["error", {regexp: "^Should"}] */
 import test from 'ava';
 
-test("Not starting with 'Should'", t => {
+test('Not starting with `Should`', t => {
 	t.pass();
 });
 
-/*eslint ava/test-title: ["error", {regexp: "\\.$"}]*/
+```js
+/* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
 import test from 'ava';
 
 test('Doesn\'t end with a dot', t => {
@@ -27,7 +26,7 @@ test('Doesn\'t end with a dot', t => {
 ## Pass
 
 ```js
-/*eslint ava/test-title: ["error", {regexp: "^Should"}]*/
+/* eslint ava/test-title: ["error", {regexp: "^Should"}] */
 import test from 'ava';
 
 test('Should pass tests', t => {
@@ -38,13 +37,15 @@ test('Should behave as expected', t => {
 	t.pass();
 });
 
-/*eslint ava/test-title: ["error", {regexp: "\\.$"}]*/
+```js
+/* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
 import test from 'ava';
 
 test('End with a dot.', t => {
 	t.pass();
 });
 ```
+
 
 ## Options
 
@@ -54,6 +55,11 @@ This rule supports the following options:
 
 You can set the options like this:
 
-```js
-"ava/test-title-format": ["error", {"regexp": "^Should"}]
+```json
+"ava/test-title-format": [
+	"error",
+	{
+		"regexp": "^Should"
+	}
+]
 ```
