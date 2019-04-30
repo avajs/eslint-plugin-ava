@@ -28,7 +28,7 @@ const create = context => {
 				if (title.type === 'Literal' && !titleRegExp.test(title.value)) {
 					context.report({
 						node,
-						message: 'Title doesn\'t match required format.'
+						message: `The test title doesn't match the required format: ${titleRegExp}`
 					});
 				}
 			}
