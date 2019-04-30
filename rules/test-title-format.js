@@ -14,6 +14,10 @@ const create = context => {
 		console.warn(error);
 	}
 
+	if (!titleRegExp) {
+		return {};
+	}
+
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
@@ -23,7 +27,7 @@ const create = context => {
 			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
 			const hasTitle = node.arguments.length >= requiredLength;
 
-			if (hasTitle && titleRegExp) {
+			if (hasTitle) {
 				const title = node.arguments[0];
 				if (title.type === 'Literal' && !titleRegExp.test(title.value)) {
 					context.report({
