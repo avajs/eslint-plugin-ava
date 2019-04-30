@@ -30,7 +30,7 @@ exports.getRoot = node => {
 	return node;
 };
 
-exports.nameOfRootObject = node => {
+exports.nameOfPropertyRootObject = node => {
 	return exports.getRoot(node).object.name;
 };
 
