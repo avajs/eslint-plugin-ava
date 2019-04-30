@@ -31,10 +31,6 @@ ruleTester.run('test-title-format', rule, {
 			options: [{format: '^Should'}]
 		},
 		{
-			code: header + 'test("Foo", t => { t.pass(); });',
-			options: [{format: '(]'}] // Invalid regexp
-		},
-		{
 			code: header + 'notTest("Foo", t => { t.pass(); });',
 			options: [{format: '^Should'}]
 		},
@@ -58,6 +54,11 @@ ruleTester.run('test-title-format', rule, {
 			code: header + 'test.todo("Test something");',
 			options: [{format: '^Should'}],
 			errors
-		}
+		},
+		{
+			code: header + 'test("Foo", t => { t.pass(); });',
+			options: [{format: '(]'}], // Invalid regexp
+			errors
+		},
 	]
 });

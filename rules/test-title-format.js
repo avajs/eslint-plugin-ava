@@ -11,7 +11,15 @@ const create = context => {
 			titleRegExp = new RegExp(context.options[0].format);
 		}
 	} catch (error) {
-		console.warn(error);
+		context.report({
+			loc: {
+				start: {
+					line: 1,
+					column: 0
+				}
+			},
+			message: `${error.message} in rule configuration.`
+		});
 	}
 
 	if (!titleRegExp) {
