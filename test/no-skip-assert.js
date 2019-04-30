@@ -27,6 +27,10 @@ ruleTester.run('no-skip-assert', rule, {
 			errors
 		},
 		{
+			code: header + 'test(t => { t.is.skip(1, 1); });',
+			errors
+		},
+		{
 			code: header + 'test.cb(t => { t.skip.is(1, 1); t.end(); });',
 			errors
 		},

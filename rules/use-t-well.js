@@ -50,7 +50,7 @@ const create = context => {
 			ava.isInTestNode
 		])(node => {
 			if (node.parent.type === 'MemberExpression' ||
-					util.nameOfRootObject(node) !== 't') {
+					util.getNameOfRootNodeObject(node) !== 't') {
 				return;
 			}
 

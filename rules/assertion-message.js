@@ -32,7 +32,7 @@ const create = context => {
 				return;
 			}
 
-			if (callee.property && util.nameOfRootObject(callee) === 't') {
+			if (callee.property && util.getNameOfRootNodeObject(callee) === 't') {
 				const nArgs = nbArguments(callee);
 
 				if (nArgs === -1) {
