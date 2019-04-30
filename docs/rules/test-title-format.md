@@ -53,7 +53,7 @@ test('End with a dot.', t => {
 
 This rule supports the following options:
 
-`regexp`: A regular expression string to match against the test titles. Overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
+`format`: A regular expression string to match against the test titles. Overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
 
 You can set the options like this:
 

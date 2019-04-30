@@ -16,47 +16,47 @@ ruleTester.run('test-title-format', rule, {
 		header + 'test("Foo", t => { t.pass(); });',
 		{
 			code: header + 'test("Foo", t => { t.pass(); });',
-			options: [{regexp: '.'}]
+			options: [{format: '.'}]
 		},
 		{
 			code: header + 'test("Should pass tests.", t => { t.pass(); });',
-			options: [{regexp: '^Should .+\\.$'}]
+			options: [{format: '^Should .+\\.$'}]
 		},
 		{
 			code: header + 'test.todo("Should pass tests.");',
-			options: [{regexp: '^Should .+\\.$'}]
+			options: [{format: '^Should .+\\.$'}]
 		},
 		{
 			code: header + 'test(t => { t.pass(); });',
-			options: [{regexp: '^Should'}]
+			options: [{format: '^Should'}]
 		},
 		{
 			code: header + 'test("Foo", t => { t.pass(); });',
-			options: [{regexp: '(]'}] // Invalid regexp
+			options: [{format: '(]'}] // Invalid regexp
 		},
 		{
 			code: header + 'notTest("Foo", t => { t.pass(); });',
-			options: [{regexp: '^Should'}]
+			options: [{format: '^Should'}]
 		},
 		{
 			code: header + 'test(macro, t => { t.pass(); });',
-			options: [{regexp: '^Should'}]
+			options: [{format: '^Should'}]
 		},
 		// Shouldn't be triggered since it's not a test file
 		{
 			code: 'test("Test", t => { t.pass(); });',
-			options: [{regexp: '^Should'}]
+			options: [{format: '^Should'}]
 		}
 	],
 	invalid: [
 		{
 			code: header + 'test("Test something", t => { t.pass(); });',
-			options: [{regexp: '^Should'}],
+			options: [{format: '^Should'}],
 			errors
 		},
 		{
 			code: header + 'test.todo("Test something");',
-			options: [{regexp: '^Should'}],
+			options: [{format: '^Should'}],
 			errors
 		}
 	]

@@ -7,8 +7,8 @@ const create = context => {
 	const ava = createAvaRule();
 	let titleRegExp;
 	try {
-		if (context.options[0] && context.options[0].regexp) {
-			titleRegExp = new RegExp(context.options[0].regexp);
+		if (context.options[0] && context.options[0].format) {
+			titleRegExp = new RegExp(context.options[0].format);
 		}
 	} catch (error) {
 		console.warn(error);
