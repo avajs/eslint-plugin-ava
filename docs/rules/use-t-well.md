@@ -10,7 +10,7 @@ Prevent the use of unknown assertion methods and the access to members other tha
 ```js
 import test from 'ava';
 
-test(t => {
+test('main', t => {
 	t(value); // `t` is not a function
 	t.depEqual(value, [2]); // Unknown assertion method `depEqual`
 	t.contxt.foo = 100; // Unknown member `contxt`. Use `context.contxt` instead
@@ -27,9 +27,10 @@ test(t => {
 ```js
 import test from 'ava';
 
-test(t => {
+test('main', t => {
 	t.deepEqual(value, [2]);
 	t.context.a = 100;
+	require(`fixtures/${t.title}`);
 	t.deepEqual.skip();
 });
 ```

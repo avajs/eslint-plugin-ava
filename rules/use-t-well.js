@@ -70,6 +70,19 @@ const create = context => {
 				return;
 			}
 
+			if (members[0] === 'title') {
+				// Anything is fine when of the form `t.title...`
+				if (members.length === 1 && isCallExpression(node)) {
+					// Except `t.title()`
+					context.report({
+						node,
+						message: 'Unknown assertion method `title`.'
+					});
+				}
+
+				return;
+			}
+
 			if (isCallExpression(node)) {
 				if (stats.other.length > 0) {
 					context.report({
