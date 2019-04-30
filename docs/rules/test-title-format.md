@@ -6,7 +6,7 @@ Tests should have a title matching the format option.
 ## Fail
 
 ```js
-/* eslint ava/test-title: ["error", {regexp: "^Should"}] */
+/* eslint ava/test-title: ["error", {format: "^Should"}] */
 import test from 'ava';
 
 test('Not starting with `Should`', t => {
@@ -15,7 +15,7 @@ test('Not starting with `Should`', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
+/* eslint ava/test-title: ["error", {format: "\\.$"}] */
 import test from 'ava';
 
 test('Doesn\'t end with a dot', t => {
@@ -27,7 +27,7 @@ test('Doesn\'t end with a dot', t => {
 ## Pass
 
 ```js
-/* eslint ava/test-title: ["error", {regexp: "^Should"}] */
+/* eslint ava/test-title: ["error", {format: "^Should"}] */
 import test from 'ava';
 
 test('Should pass tests', t => {
@@ -40,7 +40,7 @@ test('Should behave as expected', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
+/* eslint ava/test-title: ["error", {format: "\\.$"}] */
 import test from 'ava';
 
 test('End with a dot.', t => {
@@ -53,7 +53,7 @@ test('End with a dot.', t => {
 
 This rule supports the following options:
 
-`format`: A regular expression string to match against the test titles. Overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
+`format`: A regular expression string to match against the test titles.
 
 You can set the options like this:
 
@@ -61,7 +61,7 @@ You can set the options like this:
 "ava/test-title-format": [
 	"error",
 	{
-		"regexp": "^Should"
+		"format": "^Should"
 	}
 ]
 ```
