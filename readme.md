@@ -60,6 +60,7 @@ Configure it in `package.json`.
 				"error",
 				"if-multiple"
 			],
+			"ava/test-title-format": "off",
 			"ava/use-t-well": "error",
 			"ava/use-t": "error",
 			"ava/use-test": "error",
@@ -95,6 +96,7 @@ The rules will only activate in test files.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
+- [test-title-format](docs/rules/test-title-format.md) - Ensure tests have a correct title format.
 - [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`.
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
