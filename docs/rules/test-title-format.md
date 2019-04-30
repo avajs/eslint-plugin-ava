@@ -12,6 +12,7 @@ import test from 'ava';
 test('Not starting with `Should`', t => {
 	t.pass();
 });
+```
 
 ```js
 /* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
@@ -36,6 +37,7 @@ test('Should pass tests', t => {
 test('Should behave as expected', t => {
 	t.pass();
 });
+```
 
 ```js
 /* eslint ava/test-title: ["error", {regexp: "\\.$"}] */
