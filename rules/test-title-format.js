@@ -6,23 +6,9 @@ const util = require('../util');
 const create = context => {
 	const ava = createAvaRule();
 	let titleRegExp;
-	try {
-		if (context.options[0] && context.options[0].format) {
-			titleRegExp = new RegExp(context.options[0].format);
-		}
-	} catch (error) {
-		context.report({
-			loc: {
-				start: {
-					line: 1,
-					column: 0
-				}
-			},
-			message: `${error.message} in rule configuration.`
-		});
-	}
-
-	if (!titleRegExp) {
+	if (context.options[0] && context.options[0].format) {
+		titleRegExp = new RegExp(context.options[0].format);
+	} else {
 		return {};
 	}
 
