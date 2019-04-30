@@ -88,9 +88,7 @@ const create = context => {
 					context.report({
 						node,
 						message: 'Misspelled `falsy` as `falsey`.',
-						fix: fixer => {
-							return fixer.replaceTextRange(node.property.range, 'falsy');
-						}
+						fix: fixer => fixer.replaceTextRange(node.property.range, 'falsy')
 					});
 				} else if (stats.method.length > 1) {
 					context.report({
