@@ -43,6 +43,7 @@ module.exports = {
 				'ava/prefer-async-await': 'error',
 				'ava/prefer-power-assert': 'off',
 				'ava/prefer-t-regex': 'error',
+				'ava/prevent-errortype': 'error',
 				'ava/test-ended': 'error',
 				'ava/test-title': 'error',
 				'ava/test-title-format': 'off',
