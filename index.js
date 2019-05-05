@@ -39,6 +39,7 @@ module.exports = {
 				'ava/no-statement-after-end': 'error',
 				'ava/no-todo-implementation': 'error',
 				'ava/no-todo-test': 'warn',
+				'ava/no-typeerror-with-notthrows': 'error',
 				'ava/no-unknown-modifiers': 'error',
 				'ava/prefer-async-await': 'error',
 				'ava/prefer-power-assert': 'off',

@@ -3,7 +3,7 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const nameRegexp = /^(?:[A-Z][a-z0-9]*)*Error$/;
+const errorNameRegex = /^(?:[A-Z][a-z\d]*)*Error$/;
 
 const create = context => {
 	const ava = createAvaRule();
@@ -14,7 +14,6 @@ const create = context => {
 			ava.isInTestNode
 		])(node => {
 			const functionArgIndex = node.arguments.length - 1;
-			let functionArgName;
 
 			if (typeof node.callee.property === 'undefined') {
 				return;
@@ -22,14 +21,14 @@ const create = context => {
 
 			const calleeProperty = node.callee.property.name;
 
-			if (functionArgIndex === 1) {
-				functionArgName = node.arguments[1].name;
-			} else {
+			if (functionArgIndex !== 1) {
 				return;
 			}
 
+			const functionArgName = node.arguments[1].name;
+
 			if (calleeProperty === 'notThrows') {
-				if (nameRegexp.test(functionArgName)) {
+				if (errorNameRegex.test(functionArgName)) {
 					context.report({
 						node,
 						message: 'Do not specify Error in t.notThrows()'
