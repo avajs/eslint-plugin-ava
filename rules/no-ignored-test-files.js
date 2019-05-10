@@ -80,8 +80,8 @@ const create = context => {
 };
 
 const schema = [{
-	title: 'one option: files',
-	$comment: 'the default value of option `files` is from package.json or ava.config.js',
+	title: 'The `files` option is an array of strings representing the files glob that AVA will use to find test files.',
+	$comment: 'The default value of the `files` option is from `package.json` or `ava.config.js`.',
 	type: 'object',
 	properties: {
 		files: {
@@ -94,7 +94,7 @@ const schema = [{
 			examples: [
 				['lib/**/*.test.js', 'utils/**/*.test.js']
 			],
-			default: null
+			default: undefined
 		}
 	}
 }];
@@ -102,10 +102,10 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
-		type: 'problem',
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
+		type: 'problem',
 		schema
 	}
 };

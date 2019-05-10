@@ -62,7 +62,8 @@ const create = context => {
 module.exports = {
 	create,
 	meta: {
-		type: 'suggestion',
+		// This is actually a `problem` as AVA will not allow tests with identical titles
+		type: 'problem',
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},

@@ -5,9 +5,11 @@ const createAvaRule = require('../create-ava-rule');
 
 const notAssertionMethods = ['plan', 'end'];
 
+const MAX_NUMBER_ASSERTIONS_BY_DEFAULT = 5;
+
 const create = context => {
 	const ava = createAvaRule();
-	const maxAssertions = context.options[0] || 5;
+	const maxAssertions = context.options[0] || MAX_NUMBER_ASSERTIONS_BY_DEFAULT;
 	let assertionCount = 0;
 	let nodeToReport = null;
 
@@ -55,13 +57,6 @@ const create = context => {
 	});
 };
 
-const schema = [{
-	title: 'maximum number of assertions for each test',
-	type: 'integer',
-	minimum: 0,
-	default: 5
-}];
-
 module.exports = {
 	create,
 	meta: {
@@ -69,6 +64,11 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema: [{
+			title: 'Maximum number of assertions for each test',
+			type: 'integer',
+			minimum: 0,
+			default: MAX_NUMBER_ASSERTIONS_BY_DEFAULT
+		}]
 	}
 };
