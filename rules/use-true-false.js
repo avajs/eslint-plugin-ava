@@ -90,7 +90,6 @@ module.exports = {
 		type: 'suggestion',
 		docs: {
 			url: util.getDocsUrl(__filename)
-		},
-		schema: []
+		}
 	}
 };
