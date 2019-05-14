@@ -13,8 +13,8 @@ const create = context => {
 		])(node => {
 			if (
 				node.property.name === 'end' &&
-				!ava.hasTestModifier('cb') &&
-				util.nameOfRootObject(node) === 't'
+				node.object.name === 't' &&
+				!ava.hasTestModifier('cb')
 			) {
 				context.report({
 					node,
