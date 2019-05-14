@@ -42,6 +42,7 @@ Configure it in `package.json`.
 			"ava/no-async-fn-without-await": "error",
 			"ava/no-cb-test": "off",
 			"ava/no-duplicate-modifiers": "error",
+			"ava/no-error-ctor-with-notthrows": "error",
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
 			"ava/no-import-test-files": "error",
@@ -55,7 +56,6 @@ Configure it in `package.json`.
 			"ava/no-statement-after-end": "error",
 			"ava/no-todo-implementation": "error",
 			"ava/no-todo-test": "warn",
-			"ava/no-typeerror-with-notthrows": "error",
 			"ava/no-unknown-modifiers": "error",
 			"ava/prefer-async-await": "error",
 			"ava/prefer-power-assert": "off",
@@ -83,6 +83,7 @@ The rules will only activate in test files.
 - [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md) - Ensure tests do not have duplicate modifiers.
+- [no-error-ctor-with-notthrows](docs/rules/no-error-ctor-with-notthrows.md) - Prevent use of typerror with notthrows.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
@@ -96,7 +97,6 @@ The rules will only activate in test files.
 - [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.
 - [no-todo-implementation](docs/rules/no-todo-implementation.md) - Ensure `test.todo()` is not given an implementation function.
 - [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
-- [no-typeerror-with-notthrows](docs/rules/no-typeerror-with-notthrows.md) - Prevent use of typerror with notthrows.
 - [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
 - [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
