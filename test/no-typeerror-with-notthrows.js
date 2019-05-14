@@ -8,27 +8,114 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-typerror-with-notthrows'}];
+const errors = [{ruleId: 'no-typeerror-with-notthrows'}];
 
 const header = `const test = require('ava');\n`; // eslint-disable-line quotes
 
 ruleTester.run('no-typeerror-with-notthrows', rule, {
 	valid: [
-		`${header} test('some test',t => {t.notThrows(() => {t.pass();});});`,
-		`${header} test(t => {t.notThrows(() => {t.pass();});});`,
-		`${header} test(t => {t.throws(() => {t.pass();}, TypeError);});`,
-		`${header} test(t => {t.end(); })`,
-		`${header} test('some test',t => {t.notThrows(() => {t.pass();}, true);});`,
-		`${header} test('some test',t => {t.notThrows(() => {t.pass();}, 'some string');});`,
-		`${header} test('some test',t => {t.notThrows(() => {t.pass();}, {firstName:'some', lastName: 'object'});});`
+		`${header}
+		test('some test',t => {
+			t.notThrows(() => {
+				t.pass();
+			});
+		});`,
+
+		`${header}
+		test(t => {
+			t.notThrows(() => {
+				t.pass();
+			});
+		});`,
+
+		`${header}
+		test(t => {
+			t.throws(() => {
+				t.pass();
+			}, TypeError);
+		});`,
+
+		`${header}
+		test(t => {
+			t.end(); })`,
+
+		`${header}
+		test('some test',t => {
+			t.notThrows(() => {
+				t.pass();
+			}, true);
+		});`,
+
+		`${header}
+		test('some test',t => {
+			t.notThrows(() => {
+				t.pass();
+			}, 'some string');
+		});`,
+
+		`${header}
+		test('some test',t => {
+			t.notThrows(() => {
+				t.pass();
+			}, {firstName:'some', lastName: 'object'});
+		});`,
+
+		`${header}
+		test('some test',t => {
+			t.notThrowsAsync(() => {
+				t.pass();
+			});
+		});`,
+
+		`${header}
+		test(t => {
+			t.notThrowsAsync(() => {
+				t.pass();
+			});
+		});`,
+
+		`${header}
+		test('some test',t => {
+			t.notThrowsAsync(() => {
+				t.pass();
+			}, {firstName:'some', lastName: 'object'});
+		});`
 	],
 	invalid: [
 		{
-			code: `${header} test(t => {t.notThrows(() => {t.pass();}, TypeError);});`,
+			code: `${header}
+			test(t => {
+				t.notThrows(() => {
+					t.pass();
+				}, TypeError);
+			});`,
 			errors
 		},
 		{
-			code: `${header} test('some test',t => {t.notThrows(() => {t.pass();}, TypeError);});`,
+			code: `${header}
+			test('some test',t => {
+				t.notThrows(() => {
+					t.pass();
+				}, TypeError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test(t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, TypeError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, TypeError);
+			});`,
 			errors
 		}
 	]
