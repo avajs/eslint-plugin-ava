@@ -27,11 +27,11 @@ const create = context => {
 
 			const functionArgName = node.arguments[1].name;
 
-			if (calleeProperty === 'notThrows') {
+			if (calleeProperty === 'notThrows' || calleeProperty === 'notThrowsAsync') {
 				if (errorNameRegex.test(functionArgName)) {
 					context.report({
 						node,
-						message: 'Do not specify Error in t.notThrows()'
+						message: 'Do not specify an error constructor in the second argument of t.notThrows()'
 					});
 				}
 			}
@@ -44,6 +44,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'problem'
 	}
 };

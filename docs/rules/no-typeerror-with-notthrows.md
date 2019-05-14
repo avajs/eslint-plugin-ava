@@ -1,6 +1,6 @@
-# Prevent specifying error type in `t.notThrows()`
+# No specifying error type in `t.notThrows()`
 
-AVA will fail if error type is specified with `t.notThrows()`.
+AVA will fail if error constructor is specified in the second argument of `t.notThrows()`.
 
 
 ## Fail
