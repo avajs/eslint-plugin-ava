@@ -1,6 +1,6 @@
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/no-typeerror-with-notthrows';
+import rule from '../rules/no-error-ctor-with-notthrows';
 
 const ruleTester = avaRuleTester(test, {
 	env: {
@@ -8,11 +8,11 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-typeerror-with-notthrows'}];
+const errors = [{ruleId: 'no-error-ctor-with-notthrows'}];
 
 const header = `const test = require('ava');\n`; // eslint-disable-line quotes
 
-ruleTester.run('no-typeerror-with-notthrows', rule, {
+ruleTester.run('no-error-ctor-with-notthrows', rule, {
 	valid: [
 		`${header}
 		test('some test',t => {
