@@ -54,11 +54,6 @@ ruleTester.run('test-title-format', rule, {
 			code: header + 'test.todo("Test something");',
 			options: [{format: '^Should'}],
 			errors
-		},
-		{
-			code: header + 'test("Foo", t => { t.pass(); });',
-			options: [{format: '(]'}], // Invalid regexp
-			errors
 		}
 	]
 });
