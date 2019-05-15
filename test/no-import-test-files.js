@@ -18,9 +18,7 @@ const toPath = subPath => path.join(rootDir, subPath);
 
 util.getAvaConfig = () => ({
 	files: [
-		'lib/*.test.js',
-		'lib/*.test.jsx',
-		'lib/*.test.mjs',
+		'lib/*.test.*',
 		'test/**/*.js'
 	],
 	babel: {
@@ -34,10 +32,11 @@ ruleTester.run('no-import-test-files', rule, {
 		'const test = require(\'ava\');',
 		'console.log()',
 		'const value = require(somePath);',
+		// Ok because not a valid extension
 		'import test from \'./foo.test.mjs\';',
-		'var highlight = require(\'highlight.js\')',
+		'const highlight = require(\'highlight.js\')',
 		{
-			code: 'var highlight = require(\'highlight.js\')',
+			code: 'const highlight = require(\'highlight.js\')',
 			filename: toPath('test/index.js')
 		}
 	],
