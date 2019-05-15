@@ -49,7 +49,7 @@ const create = context => {
 	const extensions = arrify(options.extensions || (projectInfo.babel && projectInfo.babel.extensions) || util.defaultExtensions);
 
 	const files = arrify(options.files || projectInfo.files || util.defaultFiles).filter(file => {
-		const extension = path.extname(file).substr(1);
+		const extension = path.extname(file).slice(1);
 		return extensions.includes(extension);
 	});
 
