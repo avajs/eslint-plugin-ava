@@ -53,6 +53,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.true(true, \'message\');'),
 		testCase(false, 't.truthy(\'unicorn\', \'message\');'),
 		testCase(false, 't.snapshot(value, \'message\');'),
+		testCase(false, 't.context.plan();'),
+		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
 		testCase(false, 't.true(true);', false, false),
 

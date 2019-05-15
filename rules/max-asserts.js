@@ -25,7 +25,7 @@ const create = context => {
 			if (
 				callee.property &&
 				!notAssertionMethods.includes(callee.property.name) &&
-				util.nameOfRootObject(callee) === 't'
+				util.getNameOfRootNodeObject(callee) === 't'
 			) {
 				const members = util.getMembers(callee).filter(name => name !== 'skip');
 
