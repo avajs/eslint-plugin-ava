@@ -28,17 +28,27 @@ const create = context => {
 			if (node.callee.type === 'MemberExpression' &&
 				booleanTests.includes(node.callee.property.name) &&
 				util.nameOfRootObject(node.callee) === 't') {
-				const called = node.arguments[0];
+				const arg = node.arguments[0];
 
 				// Call the `test` function
-				if (called.type === 'CallExpression' && called.callee.property.name === 'test') {
-					let isRegExp = called.callee.object.regex;
+				if (arg.type === 'CallExpression') {
+					const name = arg.callee.property.name;
+					let lookup = {};
+
+					if (name === 'test') {
+						lookup = arg.callee.object;
+					} else if (name === 'search' || name === 'match') {
+						lookup = arg.arguments[0];
+					}
+
+					let isRegExp = lookup.regex;
 
 					// It's not a regexp but an identifier
-					if (!isRegExp && called.callee.object.type === 'Identifier') {
-						const reference = findReference(called.callee.object.name);
+					if (!isRegExp && lookup.type === 'Identifier') {
+						const reference = findReference(lookup.name);
 						isRegExp = reference.init.regex;
 					}
+
 					if (isRegExp) {
 						context.report({
 							node,
@@ -51,15 +61,12 @@ const create = context => {
 	});
 };
 
-const schema = [{
-}];
-
 module.exports = {
 	create,
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		type: 'suggestion'
 	}
 };
