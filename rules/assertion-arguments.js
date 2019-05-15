@@ -94,8 +94,8 @@ const create = context => {
 			if (
 				callee.type !== 'MemberExpression' ||
 				!callee.property ||
-				util.nameOfRootObject(callee) !== 't' ||
-				util.isInContext(callee)
+				util.getNameOfRootNodeObject(callee) !== 't' ||
+				util.isPropertyUnderContext(callee)
 			) {
 				return;
 			}

@@ -2,7 +2,7 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-duplicate-modifiers.md)
 
-Prevent the use of duplicate [test modifiers](https://github.com/avajs/ava#api).
+Prevent the use of duplicate [test modifiers](https://github.com/avajs/ava/blob/master/docs/01-writing-tests.md).
 
 
 ## Fail

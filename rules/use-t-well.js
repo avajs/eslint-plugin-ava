@@ -50,7 +50,7 @@ const create = context => {
 			ava.isInTestNode
 		])(node => {
 			if (node.parent.type === 'MemberExpression' ||
-					util.nameOfRootObject(node) !== 't') {
+					util.getNameOfRootNodeObject(node) !== 't') {
 				return;
 			}
 
@@ -64,6 +64,19 @@ const create = context => {
 					context.report({
 						node,
 						message: 'Unknown assertion method `context`.'
+					});
+				}
+
+				return;
+			}
+
+			if (members[0] === 'title') {
+				// Anything is fine when of the form `t.title...`
+				if (members.length === 1 && isCallExpression(node)) {
+					// Except `t.title()`
+					context.report({
+						node,
+						message: 'Unknown assertion method `title`.'
 					});
 				}
 

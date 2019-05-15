@@ -5,6 +5,11 @@ const pkgUp = require('pkg-up');
 const multimatch = require('multimatch');
 const util = require('../util');
 
+const externalModuleRegExp = /^\w/;
+function isExternalModule(name) {
+	return externalModuleRegExp.test(name);
+}
+
 function isTestFile(files, rootDir, sourceFile, importedFile) {
 	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
@@ -25,8 +30,12 @@ function getProjectInfo() {
 
 function createImportValidator(context, files, projectInfo, filename) {
 	return (node, importPath) => {
-		const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
+		const isImportingExternalModule = isExternalModule(importPath);
+		if (isImportingExternalModule) {
+			return;
+		}
 
+		const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
 		if (isImportingTestFile) {
 			context.report({
 				node,

@@ -21,6 +21,7 @@ util.getAvaConfig = () => ({
 		'lib/*.test.js',
 		'lib/*.test.jsx',
 		'lib/*.test.mjs',
+		'test/**/*.js'
 	],
 	babel: {
 		extensions: ['js', 'jsx']
@@ -33,7 +34,12 @@ ruleTester.run('no-import-test-files', rule, {
 		'const test = require(\'ava\');',
 		'console.log()',
 		'const value = require(somePath);',
-		'import test from \'./foo.test.mjs\';'
+		'import test from \'./foo.test.mjs\';',
+		'var highlight = require(\'highlight.js\')',
+		{
+			code: 'var highlight = require(\'highlight.js\')',
+			filename: toPath('test/index.js')
+		}
 	],
 	invalid: [
 		{
@@ -44,6 +50,11 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'import test from \'./foo.test.js\';',
 			filename: toPath('lib/foo.js'),
+			errors: [{message: 'Test files should not be imported'}]
+		},
+		{
+			code: 'import test from \'./bar.js\';',
+			filename: toPath('test/foo.js'),
 			errors: [{message: 'Test files should not be imported'}]
 		},
 		{
