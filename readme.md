@@ -57,6 +57,7 @@ Configure it in `package.json`.
 			"ava/no-unknown-modifiers": "error",
 			"ava/prefer-async-await": "error",
 			"ava/prefer-power-assert": "off",
+			"ava/prefer-t-regexp": "error",
 			"ava/test-ended": "error",
 			"ava/test-title": [
 				"error",
@@ -95,6 +96,7 @@ The rules will only activate in test files.
 - [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
 - [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
+- [prefer-t-regexp](docs/rules/prefer-t-regexp.md) - Prefer using `t.regexp` to test regular expression.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 - [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`.
