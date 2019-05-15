@@ -120,6 +120,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'problem'
 	}
 };

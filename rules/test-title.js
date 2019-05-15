@@ -46,6 +46,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'problem'
 	}
 };
