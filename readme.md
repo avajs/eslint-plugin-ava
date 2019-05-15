@@ -6,6 +6,8 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anything if you're using it.
 
+[**Propose or contribute a new rule ➡**](.github/contributing.md)
+
 
 ## Install
 

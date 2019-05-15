@@ -17,22 +17,22 @@ const rootDir = path.dirname(__dirname);
 const toPath = subPath => path.join(rootDir, subPath);
 
 util.getAvaConfig = () => ({
-	files: ['lib/*.test.js']
+	files: [
+		'lib/*.test.js',
+		'test/**/*.js'
+	]
 });
 
 ruleTester.run('no-import-test-files', rule, {
 	valid: [
+		'import test from \'ava\';',
+		'const test = require(\'ava\');',
+		'console.log()',
+		'const value = require(somePath);',
+		'var highlight = require(\'highlight.js\')',
 		{
-			code: 'import test from \'ava\';'
-		},
-		{
-			code: 'const test = require(\'ava\');'
-		},
-		{
-			code: 'console.log()'
-		},
-		{
-			code: 'const value = require(somePath);'
+			code: 'var highlight = require(\'highlight.js\')',
+			filename: toPath('test/index.js')
 		},
 		'const value = require(true);',
 		'const value = require();'
@@ -46,6 +46,11 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'import test from \'./foo.test.js\';',
 			filename: toPath('lib/foo.js'),
+			errors: [{message: 'Test files should not be imported'}]
+		},
+		{
+			code: 'import test from \'./bar.js\';',
+			filename: toPath('test/foo.js'),
 			errors: [{message: 'Test files should not be imported'}]
 		}
 	]

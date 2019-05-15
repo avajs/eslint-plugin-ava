@@ -2,7 +2,7 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-ignored-test-files.md)
 
-When searching for tests, AVA ignores files contained in `node_modules` or folders named `fixtures` or `helpers`. By default, it will search in `test.js test-*.js test/**/*.js **/__tests__/**/*.js **/*.test.js`, which you can override by specifying a path when launching AVA or in the [AVA configuration in the `package.json` or `ava.config.js` files](https://github.com/sindresorhus/ava#configuration).
+When searching for tests, AVA ignores files contained in `node_modules` or folders named `fixtures` or `helpers`. By default, it will search in `test.js test-*.js test/**/*.js **/__tests__/**/*.js **/*.test.js`, which you can override by specifying a path when launching AVA or in the [AVA configuration in the `package.json` or `ava.config.js` files](https://github.com/avajs/ava/blob/master/docs/06-configuration.md).
 
 This rule will verify that files which create tests are in the searched files and not in ignored folders. It will consider the root of the project to be the closest folder containing a `package.json` file, and will not do anything if it can't find one. Test files in `node_modules` will not be linted as they are ignored by ESLint.
 

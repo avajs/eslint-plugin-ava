@@ -20,6 +20,8 @@ ruleTester.run('no-invalid-end', rule, {
 		header + 'test.cb(t => { t.end.skip(); });',
 		header + 'test.cb.only(t => { t.end(); });',
 		header + 'notTest(t => { t.end(); });',
+		header + 'test(t => { t.context.end(); })',
+		header + 'test(t => { foo.t.end(); })',
 		// Shouldn't be triggered since it's not a test file
 		'test(t => { t.end(); });'
 	],
