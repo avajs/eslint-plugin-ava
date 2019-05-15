@@ -1,6 +1,8 @@
-# Ensure tests have a correct title format
+# Enforce test titles have a certain format
 
-Tests should have a title matching the format option.
+This rule is useful when you want to make sure all test title match a common pattern to increase readability when test fails.
+
+For example, titles like `"Should throw when invalid."`, `"Should fail when called."` or `"Should pass when using any number."` could be standardise by `"^Should (pass|fail|throw) when [\\w ]+\\.$"` (note the escaped `\`).
 
 
 ## Fail
