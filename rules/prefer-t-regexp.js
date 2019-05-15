@@ -10,7 +10,7 @@ const create = context => {
 		'true',
 		'false',
 		'truthy',
-		'falsy',
+		'falsy'
 	];
 
 	const findReference = name => {
@@ -27,12 +27,12 @@ const create = context => {
 			// Call a boolean assertion (eg: true, false ...)
 			if (node.callee.type === 'MemberExpression' &&
 				booleanTests.includes(node.callee.property.name) &&
-				util.nameOfRootObject(node.callee) === 't') {
+				util.getNameOfRootNodeObject(node.callee) === 't') {
 				const arg = node.arguments[0];
 
 				// Call the `test` function
 				if (arg.type === 'CallExpression') {
-					const name = arg.callee.property.name;
+					const {name} = arg.callee.property;
 					let lookup = {};
 
 					if (name === 'test') {

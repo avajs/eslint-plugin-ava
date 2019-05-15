@@ -21,7 +21,7 @@ ruleTester.run('prefer-t-regexp', rule, {
 		header + 'const a = /\\d+/;\ntest(t => t.truthy(a));',
 		header + 'const a = "not a regexp";\ntest(t => t.true(a.test("foo")));',
 		// Shouldn't be triggered since it's not a test file
-		'test(t => t.true(/\\d+/.test("foo")));',
+		'test(t => t.true(/\\d+/.test("foo")));'
 	],
 	invalid: [
 		{
