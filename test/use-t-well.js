@@ -124,6 +124,11 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
 			errors: [error('Too many chained uses of `skip`.')]
+		},
+		{
+			code: testCase('t.falsey(a);'),
+			output: testCase('t.falsy(a);'),
+			errors: [error('Misspelled `falsy` as `falsey`.')]
 		}
 	]
 });
