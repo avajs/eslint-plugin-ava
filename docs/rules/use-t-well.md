@@ -4,7 +4,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 Prevent the use of unknown assertion methods and the access to members other than the assertion methods and `context`, as well as some known misuses of `t`.
 
-This rule is automatically fixable, it will replace misspelled `falsey` by `falsy`.
+This rule is partly automatically fixable. It will replace misspelled `falsey` by `falsy`.
 
 
 ## Fail
