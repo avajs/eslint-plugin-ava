@@ -6,6 +6,8 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anything if you're using it.
 
+[**Propose or contribute a new rule ➡**](.github/contributing.md)
+
 
 ## Install
 
@@ -97,7 +99,7 @@ The rules will only activate in test files.
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 - [test-title-format](docs/rules/test-title-format.md) - Ensure tests have a correct title format.
-- [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`.
+- [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
 - [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.

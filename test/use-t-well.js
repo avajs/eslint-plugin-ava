@@ -53,11 +53,17 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.skip.deepEqual(a, a);'),
 		testCase('t.context.a = 1;'),
 		testCase('t.context.foo.skip();'),
+		testCase('console.log(t.context);'),
+		testCase('t.true(t.context.title(foo));'),
+		testCase('console.log(t.title);'),
+		testCase('t.true(t.title.includes(\'Unicorns\'));'),
 		testCase('setImmediate(t.end);'),
 		testCase('t.deepEqual;'),
 		testCase('t.plan(1);'),
 		testCase('t.log(\'Unicorns\');'),
 		testCase('a.foo();'),
+		testCase('t.context.foo(a, a);'),
+		testCase('foo.t.bar(a, a);'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.foo(a, a);', false),
 		testCase('t.foo;', false)
@@ -88,6 +94,10 @@ ruleTester.run('use-t-well', rule, {
 			errors: [error('Unknown assertion method `context`.')]
 		},
 		{
+			code: testCase('t.title();'),
+			errors: [error('Unknown assertion method `title`.')]
+		},
+		{
 			code: testCase('t.a = 1;'),
 			errors: [error('Unknown member `a`. Use `context.a` instead.')]
 		},
@@ -114,6 +124,11 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
 			errors: [error('Too many chained uses of `skip`.')]
+		},
+		{
+			code: testCase('t.falsey(a);'),
+			output: testCase('t.falsy(a);'),
+			errors: [error('Misspelled `falsy` as `falsey`.')]
 		}
 	]
 });
