@@ -28,6 +28,10 @@ function getProjectInfo() {
 
 function createImportValidator(context, files, projectInfo, filename) {
 	return (node, importPath) => {
+		if (!importPath || typeof importPath !== 'string') {
+			return;
+		}
+
 		const isImportingExternalModule = isExternalModule(importPath);
 		if (isImportingExternalModule) {
 			return;
@@ -70,7 +74,7 @@ const create = context => {
 				return;
 			}
 
-			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+			if (node.arguments[0]) {
 				validateImportPath(node, node.arguments[0].value);
 			}
 		}

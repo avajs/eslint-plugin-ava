@@ -33,7 +33,9 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'var highlight = require(\'highlight.js\')',
 			filename: toPath('test/index.js')
-		}
+		},
+		'const value = require(true);',
+		'const value = require();'
 	],
 	invalid: [
 		{
