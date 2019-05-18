@@ -1,4 +1,4 @@
-# Enforce test titles have a certain format
+# Ensure test titles have a certain format
 
 This rule is useful when you want to make sure all test titles match a common pattern to increase readability when tests fail.
 
