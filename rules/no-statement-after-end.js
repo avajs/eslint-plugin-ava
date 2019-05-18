@@ -96,6 +96,6 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		type: 'suggestion'
+		type: 'problem'
 	}
 };
