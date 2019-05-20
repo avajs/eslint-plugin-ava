@@ -130,6 +130,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		fixable: 'code'
+		fixable: 'code',
+		type: 'problem'
 	}
 };
