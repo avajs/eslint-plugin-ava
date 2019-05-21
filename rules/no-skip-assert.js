@@ -11,11 +11,14 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			if (node.property.name === 'skip' && util.nameOfRootObject(node) === 't') {
-				context.report({
-					node,
-					message: 'No assertions should be skipped.'
-				});
+			if (node.property.name === 'skip') {
+				const root = util.getRootNode(node);
+				if (root.object.name === 't' && util.assertionMethods.has(root.property.name)) {
+					context.report({
+						node,
+						message: 'No assertions should be skipped.'
+					});
+				}
 			}
 		})
 	});
@@ -26,6 +29,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'suggestion'
 	}
 };

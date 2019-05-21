@@ -25,7 +25,7 @@ const create = context => {
 			if (
 				callee.property &&
 				!notAssertionMethods.includes(callee.property.name) &&
-				util.nameOfRootObject(callee) === 't'
+				util.getNameOfRootNodeObject(callee) === 't'
 			) {
 				const members = util.getMembers(callee).filter(name => name !== 'skip');
 
@@ -65,6 +65,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'suggestion'
 	}
 };

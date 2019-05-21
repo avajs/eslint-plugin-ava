@@ -22,20 +22,20 @@ const defaultFiles = [
 	'**/*.test.js'
 ];
 
-exports.nameOfRootObject = node => {
+exports.getRootNode = node => {
 	if (node.object.type === 'MemberExpression') {
-		return exports.nameOfRootObject(node.object);
+		return exports.getRootNode(node.object);
 	}
 
-	return node.object.name;
+	return node;
 };
 
-exports.isInContext = node => {
-	if (node.object.type === 'MemberExpression') {
-		return exports.isInContext(node.object);
-	}
+exports.getNameOfRootNodeObject = node => {
+	return exports.getRootNode(node).object.name;
+};
 
-	return node.property.name === 'context';
+exports.isPropertyUnderContext = node => {
+	return exports.getRootNode(node).property.name === 'context';
 };
 
 const NO_SUCH_FILE = Symbol('no ava.config.js file');

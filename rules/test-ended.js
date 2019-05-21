@@ -5,28 +5,40 @@ const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
+	const hasCbModifier = () => ava.hasTestModifier('cb');
 	let endCalled = false;
 
 	return ava.merge({
 		MemberExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
+			hasCbModifier
 		])(node => {
-			if (ava.hasTestModifier('cb') &&
-				node.object.name === 't' &&
+			if (node.object.name === 't' &&
 				node.property.name === 'end'
 			) {
 				endCalled = true;
 			}
 		}),
+		CallExpression: visitIf([
+			ava.isInTestFile,
+			ava.isTestNode,
+			hasCbModifier
+		])(node => {
+			const firstArg = node.arguments[0];
+			if (node.callee.property.name === 'cb' && firstArg.type === 'Identifier') {
+				const scope = context.getScope();
+				const exists = scope.references.some(ref => ref.identifier.name === firstArg.name);
+				if (exists) {
+					endCalled = true;
+				}
+			}
+		}),
 		'CallExpression:exit': visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
+			hasCbModifier
 		])(node => {
-			if (!ava.hasTestModifier('cb')) {
-				return;
-			}
-
 			// Leaving test function
 			if (endCalled) {
 				endCalled = false;
@@ -45,6 +57,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'problem'
 	}
 };
