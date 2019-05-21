@@ -90,7 +90,7 @@ const create = context => {
 				if (stats.other.length > 0) {
 					context.report({
 						node,
-						message: `Unknown assertion method \`${stats.other[0]}\`.`
+						message: `Unknown assertion method \`.${stats.other[0]}\`.`
 					});
 				} else if (stats.skip.length > 1) {
 					context.report({
