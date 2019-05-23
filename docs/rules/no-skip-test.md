@@ -6,6 +6,8 @@ It's easy to make a test skipped with `test.skip()` and then forget about it. It
 
 This rule is fixable. It will remove the `.skip` test modifier.
 
+This rule is fixable.
+
 
 ## Fail
 

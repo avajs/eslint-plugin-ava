@@ -9,7 +9,7 @@ const create = context => {
 	const ava = createAvaRule();
 	const maxAssertions = context.options[0] || 5;
 	let assertionCount = 0;
-	let nodeToReport = null;
+	let nodeToReport;
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -50,7 +50,7 @@ const create = context => {
 			}
 
 			assertionCount = 0;
-			nodeToReport = null;
+			nodeToReport = undefined;
 		})
 	});
 };

@@ -16,7 +16,6 @@ const header = 'const test = require(\'ava\');\n';
 ruleTester.run('no-identical-title', rule, {
 	valid: [
 		header + 'test("my test name", t => {});',
-		header + 'test("a", t => {}); test(t => {});',
 		header + 'test("a", t => {}); test("b", t => {});',
 		header + 'test("a", t => {}); test.cb("b", t => {});',
 		header + 'test.todo("a"); test.todo("b");',
@@ -31,16 +30,7 @@ ruleTester.run('no-identical-title', rule, {
 		header + 'test.beforeEach(t => {}); test.beforeEach(t => {});',
 		header + 'test.afterEach(t => {}); test.afterEach(t => {});',
 		header + 'test.cb.before(t => {}); test.before.cb(t => {});',
-		// Multiple anonymous tests covered by the if-multiple rule
-		header + 'test(t => {}); test(t => {});',
-		header + 'test(t => {}); test.cb(t => {});',
 		// Macros
-		` ${header}
-			const macro = (t, value) => { t.true(value); };
-
-			test(macro, true);
-			test(macro, false);
-		`,
 		` ${header}
 			const macro = (t, value) => { t.true(value); };
 

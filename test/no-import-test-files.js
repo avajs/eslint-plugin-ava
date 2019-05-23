@@ -23,6 +23,12 @@ util.getAvaConfig = () => ({
 	]
 });
 
+const errors = [
+	{
+		message: 'Test files should not be imported.'
+	}
+];
+
 ruleTester.run('no-import-test-files', rule, {
 	valid: [
 		'import test from \'ava\';',
@@ -41,17 +47,17 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'const test = require(\'./foo.test.js\');',
 			filename: toPath('lib/foo.js'),
-			errors: [{message: 'Test files should not be imported'}]
+			errors
 		},
 		{
 			code: 'import test from \'./foo.test.js\';',
 			filename: toPath('lib/foo.js'),
-			errors: [{message: 'Test files should not be imported'}]
+			errors
 		},
 		{
 			code: 'import test from \'./bar.js\';',
 			filename: toPath('test/foo.js'),
-			errors: [{message: 'Test files should not be imported'}]
+			errors
 		}
 	]
 });

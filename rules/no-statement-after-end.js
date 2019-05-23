@@ -18,7 +18,8 @@ const create = context => {
 	const ava = createAvaRule();
 	const segmentInfoMap = new Map();
 	const segmentInfoStack = [];
-	let currentSegmentInfo = null;
+
+	let currentSegmentInfo;
 
 	function segmentStart(segment) {
 		// A new CodePathSegment has started, create an "info" object to track this segments state.
