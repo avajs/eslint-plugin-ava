@@ -12,7 +12,7 @@ const ruleError = {ruleId: 'use-t-well'};
 const header = 'const test = require(\'ava\');\n';
 
 function error(message) {
-	return Object.assign({}, ruleError, {message});
+	return {...ruleError, message};
 }
 
 function testCase(contents, prependHeader) {

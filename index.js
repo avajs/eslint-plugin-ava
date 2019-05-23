@@ -40,10 +40,7 @@ module.exports = {
 				'ava/prefer-async-await': 'error',
 				'ava/prefer-power-assert': 'off',
 				'ava/test-ended': 'error',
-				'ava/test-title': [
-					'error',
-					'if-multiple'
-				],
+				'ava/test-title': 'error',
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error',
