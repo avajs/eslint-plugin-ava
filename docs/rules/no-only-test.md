@@ -4,6 +4,8 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 It's easy to run only one test with `test.only()` and then forget about it. It's visible in the results, but still easily missed. Forgetting to remove `.only`, means only this one test in the whole file will run, and if not caught, can let serious bugs slip into your codebase.
 
+This rule is fixable.
+
 
 ## Fail
 

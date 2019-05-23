@@ -82,6 +82,7 @@ exports.getAvaConfig = packageFilepath => {
 			fileConf = fileConf({projectDir});
 		}
 
+		// eslint-disable-next-line promise/prefer-await-to-then
 		return !fileConf || typeof fileConf.then === 'function' || !isPlainObject(fileConf) ?
 			defaultResult :
 			fileConf;

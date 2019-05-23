@@ -41,7 +41,7 @@ function createImportValidator(context, files, projectInfo, filename) {
 		if (isImportingTestFile) {
 			context.report({
 				node,
-				message: 'Test files should not be imported'
+				message: 'Test files should not be imported.'
 			});
 		}
 	};
@@ -96,6 +96,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'suggestion'
 	}
 };
