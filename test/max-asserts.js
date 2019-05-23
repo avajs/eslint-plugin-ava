@@ -1,6 +1,7 @@
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/max-asserts';
+import testCaseBuilder from './helpers/test-case';
 
 const ruleTester = avaRuleTester(test, {
 	env: {
@@ -8,8 +9,10 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'max-asserts'}];
-const header = 'const test = require(\'ava\');\n';
+const ruleId = 'max-asserts';
+const basicTestCase = testCaseBuilder(ruleId);
+const lowerTestCase = testCaseBuilder(ruleId, [2]);
+const errorMessage = (expected, found) => `Expected at most ${expected} assertions, but found ${found}.`;
 
 function nbAssertions(n) {
 	return Array.from({length: n}).map(() => 't.is(1, 1);').join('\n');
@@ -17,64 +20,43 @@ function nbAssertions(n) {
 
 ruleTester.run('max-asserts', rule, {
 	valid: [
-		`${header} test(t => { ${nbAssertions(3)} });`,
-		`${header}
+		basicTestCase(`test(t => { ${nbAssertions(3)} });`),
+		basicTestCase(`
 			test(t => { ${nbAssertions(3)} });
 			test(t => { ${nbAssertions(3)} });
-		`,
-		`${header} test(t => { t.plan(5); ${nbAssertions(5)} });`,
-		`${header} test(t => { t.is.skip(1, 1); ${nbAssertions(4)} });`,
-		`${header} test.cb(t => { ${nbAssertions(5)} t.end(); });`,
-		{
-			code: `${header} test(t => { ${nbAssertions(3)} });`,
-			options: [3]
-		},
-		{
-			code: `${header} test(t => { notT.is(1, 1); notT.is(1, 1); notT.is(1, 1); });`,
-			options: [2]
-		},
-		`${header} test(t => { t.context.bar(); ${nbAssertions(5)} });`,
-		`${header} test(t => { ${'t.context.is(1, 1); '.repeat(6)}});`,
-		`${header} test(t => { ${'foo.t.is(1, 1); '.repeat(6)}});`,
+		`),
+		basicTestCase(`test(t => { t.plan(5); ${nbAssertions(5)} });`),
+		basicTestCase(`test(t => { t.is.skip(1, 1); ${nbAssertions(4)} });`),
+		basicTestCase(`test.cb(t => { ${nbAssertions(5)} t.end(); });`),
+		basicTestCase(`test(t => { t.context.bar(); ${nbAssertions(5)} });`),
+		basicTestCase(`test(t => { ${'t.context.is(1, 1); '.repeat(6)}});`),
+		basicTestCase(`test(t => { ${'foo.t.is(1, 1); '.repeat(6)}});`),
 		// Shouldn't be triggered since it's not a test file
-		`test(t => { ${nbAssertions(10)} });`
+		basicTestCase(`test(t => { ${nbAssertions(10)} });`, undefined, true),
+
+		lowerTestCase(`test(t => { ${nbAssertions(2)} });`),
+		lowerTestCase(`test(t => { notT.is(1, 1); notT.is(1, 1); notT.is(1, 1); });`)
 	],
 	invalid: [
-		{
-			code: `${header} test(t => { ${nbAssertions(6)} });`,
-			errors
-		},
-		{
-			code: `${header}
-				test(t => { ${nbAssertions(3)} });
-				test(t => { ${nbAssertions(6)} });
-			`,
-			errors
-		},
-		{
-			code: `${header} test(t => { t.plan(5); ${nbAssertions(6)} });`,
-			errors
-		},
-		{
-			code: `${header} test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`,
-			errors
-		},
-		{
-			code: `${header} test.cb(t => { ${nbAssertions(6)} t.end(); });`,
-			errors
-		},
-		{
-			code: `${header} test(t => { ${nbAssertions(4)} });`,
-			options: [3],
-			errors
-		},
-		{
-			code: `${header} test(t => { ${nbAssertions(10)} });`,
-			errors
-		},
-		{
-			code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
-			errors: errors.concat(errors) // Should have two errors, one per test
-		}
+		basicTestCase(`test(t => { ${nbAssertions(6)} });`, errorMessage(5, 6)),
+		basicTestCase(`test(t => { ${nbAssertions(10)} });`, errorMessage(5, 10)),
+		basicTestCase(`
+			test(t => { ${nbAssertions(3)} });
+			test(t => { ${nbAssertions(6)} });
+		`, errorMessage(5, 6)),
+		basicTestCase(`test(t => { t.plan(5); ${nbAssertions(6)} });`, errorMessage(5, 6)),
+		basicTestCase(`test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`, errorMessage(5, 6)),
+		basicTestCase(`test.cb(t => { ${nbAssertions(6)} t.end(); });`, errorMessage(5, 6)),
+		basicTestCase(`test.cb(t => { ${nbAssertions(6)} t.end(); });`, errorMessage(5, 6)),
+
+		lowerTestCase(`test(t => { ${nbAssertions(3)} });`, errorMessage(2, 3)),
+
+		basicTestCase(`
+			test(t => { ${nbAssertions(6)} });
+			test(t => { ${nbAssertions(10)} });
+		`, [
+			errorMessage(5, 6),
+			errorMessage(5, 10) // Should have two errors, one per test
+		])
 	]
 });
