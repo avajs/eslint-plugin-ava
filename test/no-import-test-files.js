@@ -22,7 +22,10 @@ util.getAvaConfig = () => ({
 		'test/**/*.js'
 	],
 	babel: {
-		extensions: ['js', 'jsx']
+		extensions: [
+			'js',
+			'jsx'
+		]
 	}
 });
 
