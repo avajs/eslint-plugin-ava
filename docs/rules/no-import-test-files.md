@@ -6,6 +6,7 @@ This rule will verify that you don't import any test files. It will consider the
 
 Note that this rule will not be able to warn correctly if you use AVA by specifying the files in the command line ( `ava "lib/**/*.test.js"` ). Prefer configuring AVA as described [here](https://github.com/avajs/ava/blob/master/docs/06-configuration.md).
 
+
 ## Fail
 
 ```js
@@ -26,8 +27,8 @@ test('foo', t => {
 
 ```js
 // File: utils/index.js
-// with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
-// in either `package.json` under 'ava key' or in the rule options
+// with `{"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}`
+// in either `package.json` under the `"ava"` key or in the rule options
 // Invalid because the imported file matches `lib/**/*.test.js`
 import tests from '../lib/index.test.js';
 
@@ -38,8 +39,8 @@ test('foo', t => {
 
 ```js
 // File: utils/index.js
-// with { "extensions": ["js", "mjs"] }
-// in either `package.json` under 'ava key' or in the rule options
+// with `{"extensions": ["js", "mjs"]}`
+// in either `package.json` under the `"ava"` key or in the rule options
 // Invalid because the imported file extension matches `mjs`
 import tests from 'index.test.mjs';
 
@@ -64,17 +65,18 @@ import utils from './utils';
 
 ```js
 // File: lib/index.js
-// with { "files": ["lib/**/*.test.js", "utils/**/*.test.js"] }
+// with `{"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}`
 // in either `package.json` under 'ava key' or in the rule options
 import utils from 'test.js';
 ```
 
 ```js
 // File: lib/index.js
-// with { "extensions": ["js", "mjs"] }
+// `with {"extensions": ["js", "mjs"]}`
 // in either `package.json` under 'ava key' or in the rule options
 import utils from 'test.jsx';
 ```
+
 
 ## Options
 
@@ -88,12 +90,20 @@ You can set the options like this:
 "ava/no-ignored-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
 ```
 
-`extensions`: An array of strings representing the files extensions that AVA will use to find the test files. Overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
+`extensions`: An array of strings representing the file extensions that AVA will use to find the test files. It overrides the default and the configuration found in the `package.json` or `ava.config.js` files.
 
 This extension will filter out files from the `files` option.
 
 You can set the options like this:
 
 ```json
-"ava/no-ignored-test-files": ["error", {"extensions": ["js", "mjs"]}]
+"ava/no-ignored-test-files": [
+	"error",
+	{
+		"extensions": [
+			"js",
+			"mjs"
+		]
+	}
+]
 ```
