@@ -35,7 +35,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		type: 'problem',
-		fixable: 'code'
+		fixable: 'code',
+		type: 'suggestion'
 	}
 };
