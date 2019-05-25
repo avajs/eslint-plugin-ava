@@ -62,6 +62,7 @@ Configure it in `package.json`.
 				"error",
 				"if-multiple"
 			],
+			"ava/test-title": "error",
 			"ava/use-t": "error",
 			"ava/use-t-well": "error",
 			"ava/use-test": "error",

@@ -66,7 +66,7 @@ const create = context => {
 					// Except `t.context()`
 					context.report({
 						node,
-						message: 'Unknown assertion method `context`.'
+						message: 'Unknown assertion method `.context`.'
 					});
 				}
 
@@ -79,7 +79,7 @@ const create = context => {
 					// Except `t.title()`
 					context.report({
 						node,
-						message: 'Unknown assertion method `title`.'
+						message: 'Unknown assertion method `.title`.'
 					});
 				}
 
@@ -90,18 +90,18 @@ const create = context => {
 				if (stats.other.length > 0) {
 					context.report({
 						node,
-						message: `Unknown assertion method \`${stats.other[0]}\`.`
+						message: `Unknown assertion method \`.${stats.other[0]}\`.`
 					});
 				} else if (stats.skip.length > 1) {
 					context.report({
 						node,
-						message: 'Too many chained uses of `skip`.'
+						message: 'Too many chained uses of `.skip`.'
 					});
 				} else if (stats.falsey.length > 0) {
 					context.report({
 						node,
-						message: 'Misspelled `falsy` as `falsey`.',
-						fix: fixer => fixer.replaceTextRange(node.property.range, 'falsy')
+						message: 'Misspelled `.falsy` as `.falsey`.',
+						fix: fixer => fixer.replaceText(node.property, 'falsy')
 					});
 				} else if (stats.method.length > 1) {
 					context.report({
@@ -117,7 +117,7 @@ const create = context => {
 			} else if (stats.other.length > 0) {
 				context.report({
 					node,
-					message: `Unknown member \`${stats.other[0]}\`. Use \`context.${stats.other[0]}\` instead.`
+					message: `Unknown member \`.${stats.other[0]}\`. Use \`.context.${stats.other[0]}\` instead.`
 				});
 			}
 		})

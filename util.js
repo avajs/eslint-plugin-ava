@@ -22,6 +22,10 @@ const defaultFiles = [
 	'**/*.test.js'
 ];
 
+const defaultExtensions = [
+	'js'
+];
+
 exports.getRootNode = node => {
 	if (node.object.type === 'MemberExpression') {
 		return exports.getRootNode(node.object);
@@ -82,6 +86,7 @@ exports.getAvaConfig = packageFilepath => {
 			fileConf = fileConf({projectDir});
 		}
 
+		// eslint-disable-next-line promise/prefer-await-to-then
 		return !fileConf || typeof fileConf.then === 'function' || !isPlainObject(fileConf) ?
 			defaultResult :
 			fileConf;
@@ -173,5 +178,6 @@ const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.defaultFiles = defaultFiles;
+exports.defaultExtensions = defaultExtensions;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));
