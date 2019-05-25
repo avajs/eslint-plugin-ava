@@ -33,7 +33,7 @@ const create = context => {
 				if (prev.name === current.name) {
 					context.report({
 						node: current,
-						message: `Duplicate test modifier \`${current.name}\`.`
+						message: `Duplicate test modifier \`.${current.name}\`.`
 					});
 				}
 
@@ -48,6 +48,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'problem'
 	}
 };

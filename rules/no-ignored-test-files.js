@@ -22,8 +22,6 @@ function isIgnored(rootDir, files, filepath) {
 	if (multimatch([relativeFilePath], files).length === 0) {
 		return `Test file is ignored because it is not in \`${files.join(' ')}\`.`;
 	}
-
-	return null;
 }
 
 function getPackageInfo() {
@@ -94,6 +92,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'suggestion'
 	}
 };

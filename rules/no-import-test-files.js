@@ -33,6 +33,10 @@ function getProjectInfo() {
 
 function createImportValidator(context, files, extensions, projectInfo, filename) {
 	return (node, importPath) => {
+		if (!importPath || typeof importPath !== 'string') {
+			return;
+		}
+
 		const isImportingExternalModule = isExternalModule(importPath);
 		if (isImportingExternalModule) {
 			return;
@@ -42,7 +46,7 @@ function createImportValidator(context, files, extensions, projectInfo, filename
 		if (isImportingTestFile) {
 			context.report({
 				node,
-				message: 'Test files should not be imported'
+				message: 'Test files should not be imported.'
 			});
 		}
 	};
@@ -78,7 +82,7 @@ const create = context => {
 				return;
 			}
 
-			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+			if (node.arguments[0]) {
 				validateImportPath(node, node.arguments[0].value);
 			}
 		}
@@ -100,6 +104,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'suggestion'
 	}
 };

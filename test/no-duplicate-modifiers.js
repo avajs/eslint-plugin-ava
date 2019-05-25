@@ -31,7 +31,7 @@ const invalid = modifiers.map(modifier => ({
 	errors: [
 		{
 			ruleId,
-			message: `Duplicate test modifier \`${modifier}\`.`,
+			message: `Duplicate test modifier \`.${modifier}\`.`,
 			type: 'Identifier',
 			line: 2,
 			column: 7 + modifier.length
@@ -55,7 +55,7 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 			errors: [
 				{
 					ruleId,
-					message: 'Duplicate test modifier `serial`.',
+					message: 'Duplicate test modifier `.serial`.',
 					type: 'Identifier',
 					line: 2,
 					column: 21
