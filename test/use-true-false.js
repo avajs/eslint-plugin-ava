@@ -53,6 +53,10 @@ ruleTester.run('use-true-false', rule, {
 		testCase('t.falsy(value + value)'),
 		testCase('t.truthy()'),
 		testCase('t.falsy()'),
+		testCase('t.context.truthy(true)'),
+		testCase('t.context.falsy(false)'),
+		testCase('foo.t.truthy(true)'),
+		testCase('foo.t.falsy(false)'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.truthy(value === 1)', false)
 	],

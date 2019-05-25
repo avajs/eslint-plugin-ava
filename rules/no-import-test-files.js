@@ -5,30 +5,48 @@ const pkgUp = require('pkg-up');
 const multimatch = require('multimatch');
 const util = require('../util');
 
-function isTestFile(files, rootDir, sourceFile, importedFile) {
+const externalModuleRegExp = /^\w/;
+function isExternalModule(name) {
+	return externalModuleRegExp.test(name);
+}
+
+function isTestFile(files, extensions, rootDir, sourceFile, importedFile) {
 	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
 	const relativePath = path.relative(rootDir, absoluteImportedPath);
 
-	return multimatch([relativePath], files).length === 1;
+	return multimatch([relativePath], files).filter(file => {
+		const extension = path.extname(file).slice(1);
+		return extensions.includes(extension);
+	}).length === 1;
 }
 
 function getProjectInfo() {
 	const packageFilePath = pkgUp.sync();
+	const {files, babel} = util.getAvaConfig(packageFilePath);
 
 	return {
 		rootDir: packageFilePath && path.dirname(packageFilePath),
-		files: util.getAvaConfig(packageFilePath).files
+		files,
+		babel
 	};
 }
 
-function createImportValidator(context, files, projectInfo, filename) {
+function createImportValidator(context, files, extensions, projectInfo, filename) {
 	return (node, importPath) => {
-		const isImportingTestFile = isTestFile(files, projectInfo.rootDir, filename, importPath);
+		if (!importPath || typeof importPath !== 'string') {
+			return;
+		}
 
+		const isImportingExternalModule = isExternalModule(importPath);
+		if (isImportingExternalModule) {
+			return;
+		}
+
+		const isImportingTestFile = isTestFile(files, extensions, projectInfo.rootDir, filename, importPath);
 		if (isImportingTestFile) {
 			context.report({
 				node,
-				message: 'Test files should not be imported'
+				message: 'Test files should not be imported.'
 			});
 		}
 	};
@@ -43,6 +61,9 @@ const create = context => {
 
 	const projectInfo = getProjectInfo();
 	const options = context.options[0] || {};
+
+	const extensions = arrify(options.extensions || (projectInfo.babel && projectInfo.babel.extensions) || util.defaultExtensions);
+
 	const files = arrify(options.files || projectInfo.files || util.defaultFiles);
 
 	if (!projectInfo.rootDir) {
@@ -50,7 +71,7 @@ const create = context => {
 		return {};
 	}
 
-	const validateImportPath = createImportValidator(context, files, projectInfo, filename);
+	const validateImportPath = createImportValidator(context, files, extensions, projectInfo, filename);
 
 	return {
 		ImportDeclaration: node => {
@@ -61,7 +82,7 @@ const create = context => {
 				return;
 			}
 
-			if (node.arguments[0] && node.arguments[0].type === 'Literal') {
+			if (node.arguments[0]) {
 				validateImportPath(node, node.arguments[0].value);
 			}
 		}
@@ -83,6 +104,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'suggestion'
 	}
 };

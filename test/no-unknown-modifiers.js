@@ -35,7 +35,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `foo`.',
+				message: 'Unknown test modifier `.foo`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -45,7 +45,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.onlu(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `onlu`.',
+				message: 'Unknown test modifier `.onlu`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -55,7 +55,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.beforeeach(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `beforeeach`.',
+				message: 'Unknown test modifier `.beforeeach`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -65,7 +65,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.c.only(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `c`.',
+				message: 'Unknown test modifier `.c`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -75,7 +75,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.cb.onlu(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `onlu`.',
+				message: 'Unknown test modifier `.onlu`.',
 				type: 'Identifier',
 				line: 2,
 				column: 9
@@ -85,7 +85,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo.bar.baz(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `foo`.',
+				message: 'Unknown test modifier `.foo`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -95,7 +95,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.default(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `default`.',
+				message: 'Unknown test modifier `.default`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
@@ -105,7 +105,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.test(t => {});`,
 			errors: [{
 				ruleId,
-				message: 'Unknown test modifier `test`.',
+				message: 'Unknown test modifier `.test`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6

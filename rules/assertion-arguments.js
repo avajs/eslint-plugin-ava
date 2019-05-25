@@ -94,8 +94,8 @@ const create = context => {
 			if (
 				callee.type !== 'MemberExpression' ||
 				!callee.property ||
-				util.nameOfRootObject(callee) !== 't' ||
-				util.isInContext(callee)
+				util.getNameOfRootNodeObject(callee) !== 't' ||
+				util.isPropertyUnderContext(callee)
 			) {
 				return;
 			}
@@ -152,6 +152,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		schema
+		schema,
+		type: 'problem'
 	}
 };

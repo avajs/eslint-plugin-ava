@@ -1,12 +1,12 @@
 import path from 'path';
 import test from 'ava';
 import util from '../util';
-import pkg from '../package';
+import packageJson from '../package';
 
 const buildPackageFilepath = fixture => path.join(__dirname, 'fixtures', 'load-config', fixture, 'package.json');
 
 test('returns the URL of the a named rule\'s documentation', t => {
-	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${pkg.version}/docs/rules/foo.md`;
+	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${packageJson.version}/docs/rules/foo.md`;
 	t.is(util.getDocsUrl('foo.js'), url);
 });
 
@@ -16,13 +16,13 @@ test('returns the URL of the a named rule\'s documentation at a commit hash', t 
 });
 
 test('determines the rule name from the file', t => {
-	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${pkg.version}/docs/rules/util.md`;
+	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${packageJson.version}/docs/rules/util.md`;
 	t.is(util.getDocsUrl(__filename), url);
 });
 
 test('finds config in package.json', t => {
-	const conf = util.getAvaConfig(buildPackageFilepath('package-only'));
-	t.is(conf.failFast, true);
+	const config = util.getAvaConfig(buildPackageFilepath('package-only'));
+	t.is(config.failFast, true);
 });
 
 test('returns an empty object if both configs are present', t => {
@@ -30,13 +30,13 @@ test('returns an empty object if both configs are present', t => {
 });
 
 test('loads config from file with `export default` syntax', t => {
-	const conf = util.getAvaConfig(buildPackageFilepath('package-no-file-yes'));
-	t.is(conf.files, 'config-file-esm-test-value');
+	const config = util.getAvaConfig(buildPackageFilepath('package-no-file-yes'));
+	t.is(config.files, 'config-file-esm-test-value');
 });
 
 test('loads config from factory function', t => {
-	const conf = util.getAvaConfig(buildPackageFilepath('package-no-file-yes-factory'));
-	t.true(conf.files.startsWith(__dirname));
+	const config = util.getAvaConfig(buildPackageFilepath('package-no-file-yes-factory'));
+	t.true(config.files.startsWith(__dirname));
 });
 
 test('returns an empty object if a config factory returns a promise', t => {

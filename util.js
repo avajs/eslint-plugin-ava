@@ -22,20 +22,24 @@ const defaultFiles = [
 	'**/*.test.js'
 ];
 
-exports.nameOfRootObject = node => {
+const defaultExtensions = [
+	'js'
+];
+
+exports.getRootNode = node => {
 	if (node.object.type === 'MemberExpression') {
-		return exports.nameOfRootObject(node.object);
+		return exports.getRootNode(node.object);
 	}
 
-	return node.object.name;
+	return node;
 };
 
-exports.isInContext = node => {
-	if (node.object.type === 'MemberExpression') {
-		return exports.isInContext(node.object);
-	}
+exports.getNameOfRootNodeObject = node => {
+	return exports.getRootNode(node).object.name;
+};
 
-	return node.property.name === 'context';
+exports.isPropertyUnderContext = node => {
+	return exports.getRootNode(node).property.name === 'context';
 };
 
 const NO_SUCH_FILE = Symbol('no ava.config.js file');
@@ -82,6 +86,7 @@ exports.getAvaConfig = packageFilepath => {
 			fileConf = fileConf({projectDir});
 		}
 
+		// eslint-disable-next-line promise/prefer-await-to-then
 		return !fileConf || typeof fileConf.then === 'function' || !isPlainObject(fileConf) ?
 			defaultResult :
 			fileConf;
@@ -173,5 +178,6 @@ const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.defaultFiles = defaultFiles;
+exports.defaultExtensions = defaultExtensions;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));

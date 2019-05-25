@@ -1,5 +1,7 @@
 # Creating a new rule
 
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/new-rule.md)
+
 ## Prerequisite
 
 - [Read the ESLint docs on creating a new rule.](https://eslint.org/docs/developer-guide/working-with-rules)

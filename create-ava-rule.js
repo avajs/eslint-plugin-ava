@@ -60,7 +60,7 @@ function getTestModifierNames(node) {
 
 module.exports = () => {
 	let isTestFile = false;
-	let currentTestNode = null;
+	let currentTestNode;
 
 	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
@@ -83,7 +83,7 @@ module.exports = () => {
 		'CallExpression:exit': node => {
 			if (currentTestNode === node) {
 				// Leaving test function
-				currentTestNode = null;
+				currentTestNode = undefined;
 			}
 		},
 		'Program:exit': () => {
@@ -92,7 +92,7 @@ module.exports = () => {
 	};
 
 	return {
-		hasTestModifier: mod => getTestModifierNames(currentTestNode).indexOf(mod) >= 0,
+		hasTestModifier: mod => getTestModifierNames(currentTestNode).includes(mod),
 		hasNoHookModifier: () => {
 			const modifiers = getTestModifierNames(currentTestNode);
 			return !modifiers.includes('before') &&
