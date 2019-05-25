@@ -65,12 +65,11 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'import test from \'./bar.js\';',
 			filename: toPath('test/foo.js'),
-			errors: [{message: 'Test files should not be imported'}]
+			errors
 		},
 		{
 			code: 'import test from \'./foo.test.jsx\';',
 			filename: toPath('lib/foo.js'),
-			errors: [{message: 'Test files should not be imported'}]
 			errors
 		}
 	]
