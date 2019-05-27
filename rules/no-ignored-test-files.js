@@ -10,11 +10,6 @@ const create = context => {
 		return {};
 	}
 
-	const avaHelper = util.loadAvaHelper(filename);
-	if (!avaHelper) {
-		return {};
-	}
-
 	let hasTestCall = false;
 
 	const ava = createAvaRule();
@@ -28,6 +23,11 @@ const create = context => {
 		'Program:exit': node => {
 			if (!hasTestCall) {
 				return;
+			}
+
+			const avaHelper = util.loadAvaHelper(filename);
+			if (!avaHelper) {
+				return {};
 			}
 
 			const {isHelper, isSource, isTest} = avaHelper.classifyFile(filename);

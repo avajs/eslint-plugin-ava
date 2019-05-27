@@ -14,12 +14,11 @@ const create = context => {
 		return {};
 	}
 
-	const avaHelper = util.loadAvaHelper(filename);
-	if (!avaHelper) {
-		return {};
-	}
-
 	const resolveFrom = path.dirname(filename);
+
+	let loadedAvaHelper = false;
+	let avaHelper;
+
 	const validateImportPath = (node, importPath) => {
 		if (!importPath || typeof importPath !== 'string') {
 			return;
@@ -28,6 +27,15 @@ const create = context => {
 		const isImportingExternalModule = isExternalModule(importPath);
 		if (isImportingExternalModule) {
 			return;
+		}
+
+		if (!loadedAvaHelper) {
+			avaHelper = util.loadAvaHelper(filename);
+			loadedAvaHelper = true;
+		}
+
+		if (!avaHelper) {
+			return {};
 		}
 
 		const {isTest} = avaHelper.classifyImport(path.resolve(resolveFrom, importPath));
