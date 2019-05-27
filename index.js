@@ -41,6 +41,7 @@ module.exports = {
 				'ava/prefer-power-assert': 'off',
 				'ava/test-ended': 'error',
 				'ava/test-title': 'error',
+				'ava/test-title-format': 'off',
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
 				'ava/use-test': 'error',
