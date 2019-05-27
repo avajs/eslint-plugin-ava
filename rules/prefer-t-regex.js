@@ -52,7 +52,7 @@ const create = context => {
 					if (isRegExp) {
 						context.report({
 							node,
-							message: 'Prefer using the `regexp` assert function.'
+							message: 'Prefer using the `.regex` assert function.'
 						});
 					}
 				}

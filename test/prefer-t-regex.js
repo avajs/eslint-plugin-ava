@@ -1,6 +1,6 @@
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/prefer-t-regexp';
+import rule from '../rules/prefer-t-regex';
 
 const ruleTester = avaRuleTester(test, {
 	env: {
@@ -8,10 +8,10 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'prefer-t-regexp'}];
+const errors = [{ruleId: 'prefer-t-regex'}];
 const header = 'const test = require(\'ava\');\n';
 
-ruleTester.run('prefer-t-regexp', rule, {
+ruleTester.run('prefer-t-regex', rule, {
 	valid: [
 		header + 'test(t => t.regex("foo", /\\d+/));',
 		header + 'test(t => t.regex(foo(), /\\d+/));',

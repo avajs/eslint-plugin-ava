@@ -39,7 +39,7 @@ module.exports = {
 				'ava/no-unknown-modifiers': 'error',
 				'ava/prefer-async-await': 'error',
 				'ava/prefer-power-assert': 'off',
-				'ava/prefer-t-regexp': 'error',
+				'ava/prefer-t-regex': 'error',
 				'ava/test-ended': 'error',
 				'ava/test-title': [
 					'error',
