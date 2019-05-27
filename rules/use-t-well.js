@@ -12,6 +12,7 @@ const isCallExpression = node =>
 const getMemberStats = members => {
 	const initial = {
 		skip: [],
+		falsey: [],
 		method: [],
 		other: []
 	};
@@ -19,6 +20,8 @@ const getMemberStats = members => {
 	return members.reduce((res, member) => {
 		if (member === 'skip') {
 			res.skip.push(member);
+		} else if (member === 'falsey') {
+			res.falsey.push(member);
 		} else if (isMethod(member)) {
 			res.method.push(member);
 		} else {
@@ -63,7 +66,7 @@ const create = context => {
 					// Except `t.context()`
 					context.report({
 						node,
-						message: 'Unknown assertion method `context`.'
+						message: 'Unknown assertion method `.context`.'
 					});
 				}
 
@@ -76,7 +79,7 @@ const create = context => {
 					// Except `t.title()`
 					context.report({
 						node,
-						message: 'Unknown assertion method `title`.'
+						message: 'Unknown assertion method `.title`.'
 					});
 				}
 
@@ -87,12 +90,18 @@ const create = context => {
 				if (stats.other.length > 0) {
 					context.report({
 						node,
-						message: `Unknown assertion method \`${stats.other[0]}\`.`
+						message: `Unknown assertion method \`.${stats.other[0]}\`.`
 					});
 				} else if (stats.skip.length > 1) {
 					context.report({
 						node,
-						message: 'Too many chained uses of `skip`.'
+						message: 'Too many chained uses of `.skip`.'
+					});
+				} else if (stats.falsey.length > 0) {
+					context.report({
+						node,
+						message: 'Misspelled `.falsy` as `.falsey`.',
+						fix: fixer => fixer.replaceText(node.property, 'falsy')
 					});
 				} else if (stats.method.length > 1) {
 					context.report({
@@ -108,7 +117,7 @@ const create = context => {
 			} else if (stats.other.length > 0) {
 				context.report({
 					node,
-					message: `Unknown member \`${stats.other[0]}\`. Use \`context.${stats.other[0]}\` instead.`
+					message: `Unknown member \`.${stats.other[0]}\`. Use \`.context.${stats.other[0]}\` instead.`
 				});
 			}
 		})
@@ -120,6 +129,8 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		fixable: 'code',
+		type: 'problem'
 	}
 };

@@ -12,7 +12,7 @@ const ruleError = {ruleId: 'use-t-well'};
 const header = 'const test = require(\'ava\');\n';
 
 function error(message) {
-	return Object.assign({}, ruleError, {message});
+	return {...ruleError, message};
 }
 
 function testCase(contents, prependHeader) {
@@ -75,39 +75,39 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.foo(a, a);'),
-			errors: [error('Unknown assertion method `foo`.')]
+			errors: [error('Unknown assertion method `.foo`.')]
 		},
 		{
 			code: testCase('t.depEqual(a, a);'),
-			errors: [error('Unknown assertion method `depEqual`.')]
+			errors: [error('Unknown assertion method `.depEqual`.')]
 		},
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
-			errors: [error('Unknown assertion method `skp`.')]
+			errors: [error('Unknown assertion method `.skp`.')]
 		},
 		{
 			code: testCase('t.skp.deepEqual(a, a);'),
-			errors: [error('Unknown assertion method `skp`.')]
+			errors: [error('Unknown assertion method `.skp`.')]
 		},
 		{
 			code: testCase('t.context();'),
-			errors: [error('Unknown assertion method `context`.')]
+			errors: [error('Unknown assertion method `.context`.')]
 		},
 		{
 			code: testCase('t.title();'),
-			errors: [error('Unknown assertion method `title`.')]
+			errors: [error('Unknown assertion method `.title`.')]
 		},
 		{
 			code: testCase('t.a = 1;'),
-			errors: [error('Unknown member `a`. Use `context.a` instead.')]
+			errors: [error('Unknown member `.a`. Use `.context.a` instead.')]
 		},
 		{
 			code: testCase('t.ctx.a = 1;'),
-			errors: [error('Unknown member `ctx`. Use `context.ctx` instead.')]
+			errors: [error('Unknown member `.ctx`. Use `.context.ctx` instead.')]
 		},
 		{
 			code: testCase('t.deepEqu;'),
-			errors: [error('Unknown member `deepEqu`. Use `context.deepEqu` instead.')]
+			errors: [error('Unknown member `.deepEqu`. Use `.context.deepEqu` instead.')]
 		},
 		{
 			code: testCase('t.deepEqual.is(a, a);'),
@@ -115,7 +115,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.paln(1);'),
-			errors: [error('Unknown assertion method `paln`.')]
+			errors: [error('Unknown assertion method `.paln`.')]
 		},
 		{
 			code: testCase('t.skip();'),
@@ -123,7 +123,12 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
-			errors: [error('Too many chained uses of `skip`.')]
+			errors: [error('Too many chained uses of `.skip`.')]
+		},
+		{
+			code: testCase('t.falsey(a);'),
+			output: testCase('t.falsy(a);'),
+			errors: [error('Misspelled `.falsy` as `.falsey`.')]
 		}
 	]
 });

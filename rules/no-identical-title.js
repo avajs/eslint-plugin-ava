@@ -7,13 +7,11 @@ const createAvaRule = require('../create-ava-rule');
 
 const purify = node => node && espurify(node);
 
-let isStatic = null;
-
 const isStaticTemplateLiteral = node => node.expressions.every(isStatic);
 
-isStatic = node => node.type === 'Literal' ||
-		(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||
-		(node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
+const isStatic = node => node.type === 'Literal' ||
+	(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||
+	(node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
 
 function isTitleUsed(usedTitleNodes, titleNode) {
 	const purifiedNode = purify(titleNode);
@@ -33,8 +31,8 @@ const create = context => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
-			// Don't flag computed titles or anonymous tests (anon tests covered in the if-multiple rule)
-			if (titleNode === undefined || !isStatic(titleNode)) {
+			// Don't flag computed titles
+			if (!isStatic(titleNode)) {
 				return;
 			}
 
@@ -64,6 +62,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'problem'
 	}
 };

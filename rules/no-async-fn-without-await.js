@@ -5,8 +5,8 @@ const util = require('../util');
 
 const create = context => {
 	const ava = createAvaRule();
-	let asyncTest = null;
 	let testUsed = false;
+	let asyncTest;
 
 	const registerUseOfAwait = () => {
 		if (asyncTest) {
@@ -22,8 +22,7 @@ const create = context => {
 			ava.isTestNode
 		])(node => {
 			asyncTest = (isAsync(node.arguments[0]) && node.arguments[0]) ||
-				(isAsync(node.arguments[1]) && node.arguments[1]) ||
-				null;
+				(isAsync(node.arguments[1]) && node.arguments[1]);
 		}),
 		AwaitExpression: registerUseOfAwait,
 		YieldExpression: registerUseOfAwait,
@@ -39,11 +38,11 @@ const create = context => {
 						start: asyncTest.loc.start,
 						end: asyncTest.loc.start + 5
 					},
-					message: 'Function was declared as `async` but doesn\'t use `await`'
+					message: 'Function was declared as `async` but doesn\'t use `await`.'
 				});
 			}
 
-			asyncTest = null;
+			asyncTest = undefined;
 			testUsed = false;
 		})
 	});
@@ -54,6 +53,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'suggestion'
 	}
 };

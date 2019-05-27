@@ -36,12 +36,12 @@ const knownBooleanSignatures = [
 	'Reflect.isExtensible()'
 ].map(signature => espurify(espree.parse(signature).body[0].expression.callee));
 
-function matchesKnownBooleanExpression(arg) {
-	if (arg.type !== 'CallExpression') {
+function matchesKnownBooleanExpression(argument) {
+	if (argument.type !== 'CallExpression') {
 		return false;
 	}
 
-	const callee = espurify(arg.callee);
+	const callee = espurify(argument.callee);
 
 	return knownBooleanSignatures.some(signature => deepStrictEqual(callee, signature));
 }
@@ -59,13 +59,13 @@ const create = context => {
 				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
 				node.callee.object.name === 't'
 			) {
-				const arg = node.arguments[0];
+				const argument = node.arguments[0];
 
-				if (arg &&
-					((arg.type === 'BinaryExpression' && booleanBinaryOperators.includes(arg.operator)) ||
-					(arg.type === 'UnaryExpression' && arg.operator === '!') ||
-					(arg.type === 'Literal' && arg.value === Boolean(arg.value)) ||
-					(matchesKnownBooleanExpression(arg)))
+				if (argument &&
+					((argument.type === 'BinaryExpression' && booleanBinaryOperators.includes(argument.operator)) ||
+					(argument.type === 'UnaryExpression' && argument.operator === '!') ||
+					(argument.type === 'Literal' && argument.value === Boolean(argument.value)) ||
+					(matchesKnownBooleanExpression(argument)))
 				) {
 					if (node.callee.property.name === 'falsy') {
 						context.report({
@@ -89,6 +89,7 @@ module.exports = {
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
-		}
+		},
+		type: 'suggestion'
 	}
 };
