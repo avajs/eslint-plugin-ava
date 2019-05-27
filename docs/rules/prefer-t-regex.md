@@ -1,4 +1,4 @@
-# Prefer using `t.regex()` to test regular expression
+# Prefer using `t.regex()` to test regular expressions
 
 The AVA [`t.regex()` assertion](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#regexcontents-regex-message) can test a string against a regular expression.
 
