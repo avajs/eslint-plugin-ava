@@ -1,29 +1,27 @@
 'use strict';
-const fs = require('fs');
 const path = require('path');
-const isPlainObject = require('is-plain-object');
-const esmRequire = require('esm')(module, {
-	cjs: false,
-	force: true,
-	mode: 'all'
-});
+const pkgDir = require('pkg-dir');
+const resolveFrom = require('resolve-from');
 const pkg = require('./package');
+
+exports.loadAvaHelper = filename => {
+	const rootDir = pkgDir.sync(filename);
+	if (!rootDir) {
+		return undefined;
+	}
+
+	const avaHelperPath = resolveFrom.silent(rootDir, 'ava/eslint-plugin-helper');
+	if (!avaHelperPath) {
+		return undefined;
+	}
+
+	const avaHelper = require(avaHelperPath);
+	return avaHelper.load(rootDir);
+};
 
 const functionExpressions = [
 	'FunctionExpression',
 	'ArrowFunctionExpression'
-];
-
-const defaultFiles = [
-	'test.js',
-	'test-*.js',
-	'test/**/*.js',
-	'**/__tests__/**/*.js',
-	'**/*.test.js'
-];
-
-const defaultExtensions = [
-	'js'
 ];
 
 exports.getRootNode = node => {
@@ -40,59 +38,6 @@ exports.getNameOfRootNodeObject = node => {
 
 exports.isPropertyUnderContext = node => {
 	return exports.getRootNode(node).property.name === 'context';
-};
-
-const NO_SUCH_FILE = Symbol('no ava.config.js file');
-const MISSING_DEFAULT_EXPORT = Symbol('missing default export');
-
-// Based on https://github.com/avajs/ava/blob/v1.0.0-beta.6/lib/load-config.js,
-// except where AVA would exit with an exception, this function returns an empty
-// config object.
-exports.getAvaConfig = packageFilepath => {
-	const defaultResult = {};
-
-	if (!packageFilepath) {
-		return defaultResult;
-	}
-
-	try {
-		const {ava: packageConf = defaultResult} = JSON.parse(fs.readFileSync(packageFilepath, 'utf8'));
-
-		const projectDir = path.dirname(packageFilepath);
-		let fileConf;
-		try {
-			({default: fileConf = MISSING_DEFAULT_EXPORT} = esmRequire(path.join(projectDir, 'ava.config.js')));
-		} catch (error) {
-			if (error && error.code === 'MODULE_NOT_FOUND') {
-				fileConf = NO_SUCH_FILE;
-			} else {
-				return defaultResult;
-			}
-		}
-
-		if (fileConf === MISSING_DEFAULT_EXPORT) {
-			return defaultResult;
-		}
-
-		if (fileConf === NO_SUCH_FILE) {
-			return packageConf;
-		}
-
-		if (Object.keys(packageConf).length > 0) {
-			return defaultResult;
-		}
-
-		if (typeof fileConf === 'function') {
-			fileConf = fileConf({projectDir});
-		}
-
-		// eslint-disable-next-line promise/prefer-await-to-then
-		return !fileConf || typeof fileConf.then === 'function' || !isPlainObject(fileConf) ?
-			defaultResult :
-			fileConf;
-	} catch (_) {
-		return defaultResult;
-	}
 };
 
 exports.isFunctionExpression = node => node && functionExpressions.includes(node.type);
@@ -177,7 +122,5 @@ const assertionMethodsNumArguments = new Map([
 const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
-exports.defaultFiles = defaultFiles;
-exports.defaultExtensions = defaultExtensions;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));

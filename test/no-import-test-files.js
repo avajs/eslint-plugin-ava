@@ -16,16 +16,14 @@ const ruleTester = avaRuleTester(test, {
 const rootDir = path.dirname(__dirname);
 const toPath = subPath => path.join(rootDir, subPath);
 
-util.getAvaConfig = () => ({
-	files: [
-		'lib/*.test.*',
-		'test/**/*.js'
-	],
-	babel: {
-		extensions: [
-			'js',
-			'jsx'
-		]
+util.loadAvaHelper = () => ({
+	classifyImport: importPath => {
+		switch (importPath) {
+			case toPath('lib/foo.test.js'):
+				return {isHelper: false, isSource: false, isTest: true};
+			default:
+				return {isHelper: false, isSource: false, isTest: false};
+		}
 	}
 });
 
@@ -41,8 +39,6 @@ ruleTester.run('no-import-test-files', rule, {
 		'const test = require(\'ava\');',
 		'console.log()',
 		'const value = require(somePath);',
-		// Ok because not a valid extension
-		'import test from \'./foo.test.mjs\';',
 		'const highlight = require(\'highlight.js\')',
 		{
 			code: 'const highlight = require(\'highlight.js\')',
@@ -54,21 +50,6 @@ ruleTester.run('no-import-test-files', rule, {
 	invalid: [
 		{
 			code: 'const test = require(\'./foo.test.js\');',
-			filename: toPath('lib/foo.js'),
-			errors
-		},
-		{
-			code: 'import test from \'./foo.test.js\';',
-			filename: toPath('lib/foo.js'),
-			errors
-		},
-		{
-			code: 'import test from \'./bar.js\';',
-			filename: toPath('test/foo.js'),
-			errors
-		},
-		{
-			code: 'import test from \'./foo.test.jsx\';',
 			filename: toPath('lib/foo.js'),
 			errors
 		}

@@ -1,6 +1,0 @@
-{
-	"ava": {
-		"failFast": true,
-		"concurrency": 10
-	}
-}

@@ -29,16 +29,13 @@
 		"mocha"
 	],
 	"dependencies": {
-		"arrify": "^2.0.1",
 		"deep-strict-equal": "^0.2.0",
 		"enhance-visitors": "^1.0.0",
-		"esm": "^3.2.25",
 		"espree": "^5.0.0",
 		"espurify": "^2.0.0",
 		"import-modules": "^1.1.0",
-		"is-plain-object": "^3.0.0",
-		"multimatch": "^4.0.0",
-		"pkg-up": "^3.1.0"
+		"pkg-dir": "^4.2.0",
+		"resolve-from": "^5.0.0"
 	},
 	"devDependencies": {
 		"ava": "^1.0.1",
