@@ -1,6 +1,6 @@
 {
 	"name": "eslint-plugin-ava",
-	"version": "6.0.0",
+	"version": "7.0.0-rc.1",
 	"description": "ESLint rules for AVA",
 	"license": "MIT",
 	"repository": "avajs/eslint-plugin-ava",
