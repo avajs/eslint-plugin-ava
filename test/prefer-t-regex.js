@@ -8,7 +8,10 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'prefer-t-regex'}];
+const errors = assertion => [{
+	ruleId: 'prefer-t-regex',
+	message: `Prefer using the \`t.${assertion}()\` assertion.`
+}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('prefer-t-regex', rule, {
@@ -27,37 +30,37 @@ ruleTester.run('prefer-t-regex', rule, {
 		{
 			code: header + 'test(t => t.true(/\\d+/.test("foo")));',
 			output: header + 'test(t => t.regex("foo", /\\d+/));',
-			errors
+			errors: errors('regex')
 		},
 		{
 			code: header + 'test(t => t.false(foo.search(/\\d+/)));',
 			output: header + 'test(t => t.notRegex(foo, /\\d+/));',
-			errors
+			errors: errors('notRegex')
 		},
 		{
 			code: header + 'const regexp = /\\d+/;\ntest(t => t.true(foo.search(regexp)));',
 			output: header + 'const regexp = /\\d+/;\ntest(t => t.regex(foo, regexp));',
-			errors
+			errors: errors('regex')
 		},
 		{
 			code: header + 'test(t => t.truthy(foo.match(/\\d+/)));',
 			output: header + 'test(t => t.regex(foo, /\\d+/));',
-			errors
+			errors: errors('regex')
 		},
 		{
 			code: header + 'test(t => t.false(/\\d+/.test("foo")));',
 			output: header + 'test(t => t.notRegex("foo", /\\d+/));',
-			errors
+			errors: errors('notRegex')
 		},
 		{
 			code: header + 'test(t => t.true(/\\d+/.test(foo())));',
 			output: header + 'test(t => t.regex(foo(), /\\d+/));',
-			errors
+			errors: errors('regex')
 		},
 		{
 			code: header + 'const reg = /\\d+/;\ntest(t => t.true(reg.test(foo.bar())));',
 			output: header + 'const reg = /\\d+/;\ntest(t => t.regex(foo.bar(), reg));',
-			errors
+			errors: errors('regex')
 		}
 	]
 });

@@ -76,14 +76,11 @@ const create = context => {
 				];
 			};
 
-						context.report({
-							node,
-							message: 'Prefer using the `.regex` assert function.',
-							fix
-						});
-					}
-				}
-			}
+			context.report({
+				node,
+				message: `Prefer using the \`t.${assertion}()\` assertion.`,
+				fix
+			});
 		})
 	});
 };
