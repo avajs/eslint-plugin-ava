@@ -14,7 +14,7 @@ const create = context => {
 	];
 
 	const findReference = name => {
-		const reference = context.getScope().references.find(ref => ref.identifier.name === name);
+		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
 		const definitions = reference.resolved.defs;
 		return definitions[definitions.length - 1].node;
 	};
@@ -24,7 +24,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			// Call a boolean assertion (eg: `t.true`, `t.false` ...)
+			// Call a boolean assertion, for example, `t.true`, `t.false`, …
 			const isBooleanAssertion = node.callee.type === 'MemberExpression' &&
 				booleanTests.includes(node.callee.property.name) &&
 				util.getNameOfRootNodeObject(node.callee) === 't';
@@ -68,6 +68,7 @@ const create = context => {
 			}
 
 			const assertion = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
+
 			const fix = fixer => {
 				const source = context.getSourceCode();
 				return [
