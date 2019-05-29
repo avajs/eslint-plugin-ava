@@ -24,45 +24,57 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			// Call a boolean assertion (eg: `.true`, `.false` ...)
-			if (node.callee.type === 'MemberExpression' &&
+			// Call a boolean assertion (eg: `t.true`, `t.false` ...)
+			const isBooleanAssertion = node.callee.type === 'MemberExpression' &&
 				booleanTests.includes(node.callee.property.name) &&
-				util.getNameOfRootNodeObject(node.callee) === 't') {
-				const arg = node.arguments[0];
+				util.getNameOfRootNodeObject(node.callee) === 't';
 
-				// Call the `test` function
-				if (arg.type === 'CallExpression') {
-					const {name} = arg.callee.property;
-					let lookup = {};
-					let variable = {};
+			if (!isBooleanAssertion) {
+				return;
+			}
 
-					if (name === 'test') {
-						// `lookup.test(variable)`
-						lookup = arg.callee.object;
-						variable = arg.arguments[0];
-					} else if (['search', 'match'].includes(name)) {
-						// `variable.match(lookup)`
-						lookup = arg.arguments[0];
-						variable = arg.callee.object;
-					}
+			const firstArg = node.arguments[0];
 
-					let isRegExp = lookup.regex;
+			// First argument is a call expression
+			const isFunctionCall = firstArg.type === 'CallExpression';
+			if (!isFunctionCall) {
+				return;
+			}
 
-					// It's not a regexp but an identifier
-					if (!isRegExp && lookup.type === 'Identifier') {
-						const reference = findReference(lookup.name);
-						isRegExp = reference.init.regex;
-					}
+			const {name} = firstArg.callee.property;
+			let lookup = {};
+			let variable = {};
 
-					if (isRegExp) {
-						const fix = fixer => {
-							const assert = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
-							const source = context.getSourceCode();
-							return [
-								fixer.replaceText(node.callee.property, assert),
-								fixer.replaceText(arg, `${source.getText(variable)}, ${source.getText(lookup)}`)
-							];
-						};
+			if (name === 'test') {
+				// `lookup.test(variable)`
+				lookup = firstArg.callee.object;
+				variable = firstArg.arguments[0];
+			} else if (['search', 'match'].includes(name)) {
+				// `variable.match(lookup)`
+				lookup = firstArg.arguments[0];
+				variable = firstArg.callee.object;
+			}
+
+			let isRegExp = lookup.regex;
+
+			// It's not a regexp but an identifier
+			if (!isRegExp && lookup.type === 'Identifier') {
+				const reference = findReference(lookup.name);
+				isRegExp = reference.init.regex;
+			}
+
+			if (!isRegExp) {
+				return;
+			}
+
+			const assertion = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
+			const fix = fixer => {
+				const source = context.getSourceCode();
+				return [
+					fixer.replaceText(node.callee.property, assertion),
+					fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`)
+				];
+			};
 
 						context.report({
 							node,
