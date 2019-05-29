@@ -4,7 +4,8 @@ The AVA [`t.regex()` assertion](https://github.com/avajs/ava/blob/master/docs/03
 
 This rule will enforce the use of `t.regex()` instead of manually using `RegExp#test()`, which will make your code look clearer and produce better failure output.
 
-This rule is fixable. It will replace the use of `RegExp#test()`, `String#match()` or `String#search()` by `t.regex()`.
+This rule is fixable. It will replace the use of `RegExp#test()`, `String#match()`, or `String#search()` with `t.regex()`.
+
 
 ## Fail
 
