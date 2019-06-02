@@ -2,10 +2,8 @@
 const path = require('path');
 const util = require('../util');
 
-const externalModuleRegExp = /^\w/;
-function isExternalModule(name) {
-	return externalModuleRegExp.test(name);
-}
+// Assume absolute paths can be classified by AVA.
+const isFileImport = name => path.isAbsolute(name) || name.startsWith('./') || name.startsWith('../');
 
 const create = context => {
 	const filename = context.getFilename();
@@ -24,8 +22,7 @@ const create = context => {
 			return;
 		}
 
-		const isImportingExternalModule = isExternalModule(importPath);
-		if (isImportingExternalModule) {
+		if (!isFileImport(importPath)) {
 			return;
 		}
 

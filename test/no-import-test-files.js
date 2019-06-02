@@ -21,6 +21,10 @@ util.loadAvaHelper = () => ({
 		switch (importPath) {
 			case toPath('lib/foo.test.js'):
 				return {isHelper: false, isSource: false, isTest: true};
+			case toPath('../foo.test.js'):
+				return {isHelper: false, isSource: false, isTest: true};
+			case toPath('@foo/bar'): // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
+				return {isHelper: false, isSource: false, isTest: true};
 			default:
 				return {isHelper: false, isSource: false, isTest: false};
 		}
@@ -36,6 +40,8 @@ const errors = [
 ruleTester.run('no-import-test-files', rule, {
 	valid: [
 		'import test from \'ava\';',
+		'import foo from \'@foo/bar\';',
+		'import foo from \'/foo/bar\';', // Classfied as not a test.
 		'const test = require(\'ava\');',
 		'console.log()',
 		'const value = require(somePath);',
@@ -51,6 +57,11 @@ ruleTester.run('no-import-test-files', rule, {
 		{
 			code: 'const test = require(\'./foo.test.js\');',
 			filename: toPath('lib/foo.js'),
+			errors
+		},
+		{
+			code: 'const test = require(\'../foo.test.js\');',
+			filename: toPath('foo.js'),
 			errors
 		}
 	]
