@@ -7,6 +7,7 @@ const isFileImport = name => path.isAbsolute(name) || name.startsWith('./') || n
 
 const create = context => {
 	const filename = context.getFilename();
+	const [overrides] = context.options;
 
 	if (filename === '<text>') {
 		return {};
@@ -27,7 +28,7 @@ const create = context => {
 		}
 
 		if (!loadedAvaHelper) {
-			avaHelper = util.loadAvaHelper(filename);
+			avaHelper = util.loadAvaHelper(filename, overrides);
 			loadedAvaHelper = true;
 		}
 
@@ -60,12 +61,25 @@ const create = context => {
 	};
 };
 
+const schema = [{
+	type: 'object',
+	properties: {
+		extensions: {
+			type: 'array'
+		},
+		files: {
+			type: 'array'
+		}
+	}
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
+		schema,
 		type: 'suggestion'
 	}
 };

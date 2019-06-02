@@ -5,6 +5,7 @@ const createAvaRule = require('../create-ava-rule');
 
 const create = context => {
 	const filename = context.getFilename();
+	const [overrides] = context.options;
 
 	if (filename === '<text>') {
 		return {};
@@ -25,7 +26,7 @@ const create = context => {
 				return;
 			}
 
-			const avaHelper = util.loadAvaHelper(filename);
+			const avaHelper = util.loadAvaHelper(filename, overrides);
 			if (!avaHelper) {
 				return {};
 			}
@@ -47,12 +48,28 @@ const create = context => {
 	});
 };
 
+const schema = [{
+	type: 'object',
+	properties: {
+		extensions: {
+			type: 'array'
+		},
+		files: {
+			type: 'array'
+		},
+		helpers: {
+			type: 'array'
+		}
+	}
+}];
+
 module.exports = {
 	create,
 	meta: {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
+		schema,
 		type: 'suggestion'
 	}
 };
