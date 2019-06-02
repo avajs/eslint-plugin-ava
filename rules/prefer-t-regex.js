@@ -37,7 +37,7 @@ const create = context => {
 
 			// First argument is a call expression
 			const isFunctionCall = firstArg.type === 'CallExpression';
-			if (!isFunctionCall) {
+			if (!isFunctionCall || !firstArg.callee.property) {
 				return;
 			}
 

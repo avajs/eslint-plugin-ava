@@ -23,6 +23,7 @@ ruleTester.run('prefer-t-regex', rule, {
 		header + 'test(t => t.true(foo.bar()));',
 		header + 'const a = /\\d+/;\ntest(t => t.truthy(a));',
 		header + 'const a = "not a regexp";\ntest(t => t.true(a.test("foo")));',
+		header + 'test("main", t => t.true(foo()));',
 		// Shouldn't be triggered since it's not a test file
 		'test(t => t.true(/\\d+/.test("foo")));'
 	],
