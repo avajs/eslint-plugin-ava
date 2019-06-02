@@ -4,7 +4,7 @@ const pkgDir = require('pkg-dir');
 const resolveFrom = require('resolve-from');
 const pkg = require('./package');
 
-exports.loadAvaHelper = filename => {
+exports.loadAvaHelper = (filename, overrides) => {
 	const rootDir = pkgDir.sync(filename);
 	if (!rootDir) {
 		return undefined;
@@ -16,7 +16,7 @@ exports.loadAvaHelper = filename => {
 	}
 
 	const avaHelper = require(avaHelperPath);
-	return avaHelper.load(rootDir);
+	return avaHelper.load(rootDir, overrides);
 };
 
 const functionExpressions = [
