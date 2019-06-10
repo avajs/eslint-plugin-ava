@@ -9,7 +9,8 @@ const notAssertionMethods = ['plan', 'end'];
 
 const create = context => {
 	const ava = createAvaRule();
-	// TODO: Convert to options to an object so we can set default using JSON Schema (without using this fallback)
+	// TODO: Convert options to object JSON Schema default works properly
+	// https://github.com/avajs/eslint-plugin-ava/issues/260
 	const maxAssertions = context.options[0] || MAX_ASSERTIONS_DEFAULT;
 	let assertionCount = 0;
 	let nodeToReport;
