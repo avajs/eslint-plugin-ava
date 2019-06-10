@@ -35,15 +35,17 @@ const create = context => {
 	});
 };
 
-const schema = [{
-	type: 'object',
-	properties: {
-		format: {
-			type: 'string',
-			default: undefined
+const schema = [
+	{
+		type: 'object',
+		properties: {
+			format: {
+				type: 'string',
+				default: undefined
+			}
 		}
 	}
-}];
+];
 
 module.exports = {
 	create,
