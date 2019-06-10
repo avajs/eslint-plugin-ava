@@ -38,7 +38,7 @@
 		"resolve-from": "^5.0.0"
 	},
 	"devDependencies": {
-		"ava": "^1.0.1",
+		"ava": "^2.0.0",
 		"babel-eslint": "^10.0.1",
 		"codecov": "^3.5.0",
 		"eslint": "^5.12.0",
@@ -51,6 +51,11 @@
 	},
 	"peerDependencies": {
 		"eslint": ">=5.9.0"
+	},
+	"ava": {
+		"files": [
+			"!rules"
+		]
 	},
 	"xo": {
 		"plugins": [
@@ -66,7 +71,10 @@
 					"eslint-plugin/require-meta-docs-url": "off"
 				}
 			}
-		]
+		],
+		"rules": {
+			"ava/no-ignored-test-files": "off"
+		}
 	},
 	"nyc": {
 		"reporter": [
