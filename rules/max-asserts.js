@@ -3,11 +3,15 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
+const MAX_ASSERTIONS_DEFAULT = 5;
+
 const notAssertionMethods = ['plan', 'end'];
 
 const create = context => {
 	const ava = createAvaRule();
-	const maxAssertions = context.options[0] || 5;
+	// TODO: Convert options to object JSON Schema default works properly
+	// https://github.com/avajs/eslint-plugin-ava/issues/260
+	const maxAssertions = context.options[0] || MAX_ASSERTIONS_DEFAULT;
 	let assertionCount = 0;
 	let nodeToReport;
 
@@ -55,9 +59,12 @@ const create = context => {
 	});
 };
 
-const schema = [{
-	type: 'integer'
-}];
+const schema = [
+	{
+		type: 'integer',
+		default: MAX_ASSERTIONS_DEFAULT
+	}
+];
 
 module.exports = {
 	create,
