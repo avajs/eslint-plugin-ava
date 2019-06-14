@@ -3,12 +3,13 @@ const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
-function report({ node, context }) {
+function report({node, context}) {
 	context.report({
-		node: node,
+		node,
 		message: 'Assertions should not be called from an inline function'
-	})
+	});
 }
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -28,24 +29,23 @@ const create = context => {
 				return;
 			}
 
-			const { body } = functionArg;
-			if (body.type === "CallExpression") {
-				report({ node, context });
+			const {body} = functionArg;
+			if (body.type === 'CallExpression') {
+				report({node, context});
 				return;
 			}
 
-			if (body.type === "BlockStatement") {
+			if (body.type === 'BlockStatement') {
 				if (body.loc.start.line !== body.loc.end.line) {
 					return;
 				}
 
-				if (!body.body.length) {
+				if (body.body.length === 0) {
 					return;
 				}
 
-				report({ node, context });
+				report({node, context});
 			}
-
 		})
 	});
 };
