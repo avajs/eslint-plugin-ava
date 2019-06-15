@@ -1,0 +1,62 @@
+# Enforce test hook ordering
+
+Hooks should be placed before any tests and in the proper semantic order.
+
+## Fail
+
+```js
+import test from 'ava';
+
+test.after((t) => {
+	doFoo();
+});
+
+test.before((t) => {
+	doFoo();
+});
+
+test('foo', (t) => {
+	t.true(true);
+});
+```
+
+----
+
+```js
+import test from 'ava';
+
+test('foo', (t) => {
+	t.true(true);
+});
+
+test.before((t) => {
+	doFoo();
+});
+```
+
+
+## Pass
+
+```js
+import test from 'ava';
+
+test.before((t) => {
+	doFoo();
+});
+
+test.after((t) => {
+	doFoo();
+});
+
+test.beforeEach((t) => {
+	doFoo();
+});
+
+test.afterEach((t) => {
+	doFoo();
+});
+
+test('foo', (t) => {
+	t.true(true);
+});
+```
