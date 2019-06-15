@@ -48,11 +48,19 @@ test.after((t) => {
 	doFoo();
 });
 
+test.after.always((t) => {
+	doFoo();
+});
+
 test.beforeEach((t) => {
 	doFoo();
 });
 
 test.afterEach((t) => {
+	doFoo();
+});
+
+test.afterEach.always((t) => {
 	doFoo();
 });
 

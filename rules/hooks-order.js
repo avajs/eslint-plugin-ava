@@ -10,8 +10,10 @@ const create = context => {
 
 	let before = null;
 	let after = null;
+	let afterAlways = null;
 	let beforeEach = null;
 	let afterEach = null;
+	let afterEachAlways = null;
 	let test = null;
 
 	return ava.merge({
@@ -21,7 +23,7 @@ const create = context => {
 		])(node => {
 			before = node.callee.property.name;
 
-			const invalidNode = after || beforeEach || afterEach || test;
+			const invalidNode = after || afterAlways || beforeEach || afterEach || afterEachAlways || test;
 
 			if (invalidNode) {
 				context.report({
@@ -40,7 +42,7 @@ const create = context => {
 		])(node => {
 			after = node.callee.property.name;
 
-			const invalidNode = beforeEach || afterEach || test;
+			const invalidNode = afterAlways || beforeEach || afterEach || afterEachAlways || test;
 
 			if (invalidNode) {
 				context.report({
@@ -53,13 +55,32 @@ const create = context => {
 				});
 			}
 		}),
+		'CallExpression[callee.object.object.name="test"][callee.object.property.name="after"][callee.property.name="always"]': visitIf([
+			ava.isInTestFile,
+			ava.isTestNode
+		])(node => {
+			afterAlways = 'after.always';
+
+			const invalidName = beforeEach || afterEach || afterEachAlways || test;
+
+			if (invalidName) {
+				context.report({
+					node,
+					messageId: MESSAGE_ID,
+					data: {
+						current: afterEach,
+						invalid: invalidName
+					}
+				});
+			}
+		}),
 		'CallExpression[callee.object.name="test"][callee.property.name="beforeEach"]': visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
 			beforeEach = node.callee.property.name;
 
-			const invalidNode = afterEach || test;
+			const invalidNode = afterEach || afterEachAlways || test;
 
 			if (invalidNode) {
 				context.report({
@@ -77,6 +98,25 @@ const create = context => {
 			ava.isTestNode
 		])(node => {
 			afterEach = node.callee.property.name;
+
+			const invalidName = afterEachAlways || test;
+
+			if (invalidName) {
+				context.report({
+					node,
+					messageId: MESSAGE_ID,
+					data: {
+						current: afterEach,
+						invalid: invalidName
+					}
+				});
+			}
+		}),
+		'CallExpression[callee.object.object.name="test"][callee.object.property.name="afterEach"][callee.property.name="always"]': visitIf([
+			ava.isInTestFile,
+			ava.isTestNode
+		])(node => {
+			afterEachAlways = 'afterEach.always';
 
 			const invalidName = test;
 

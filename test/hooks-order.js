@@ -26,11 +26,19 @@ ruleTester.run('no-todo-test', rule, {
 				doFoo();
 			});
 
+			test.after.always((t) => {
+				doFoo();
+			});
+
 			test.beforeEach((t) => {
 				doFoo();
 			});
 
 			test.afterEach((t) => {
+				doFoo();
+			});
+
+			test.afterEach.always((t) => {
 				doFoo();
 			});
 
@@ -60,6 +68,23 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: outdent`
 				${header}
+				test.after.always((t) => {
+					doFoo();
+				});
+
+				test.before((t) => {
+					doFoo();
+				});
+
+				test('foo', (t) => {
+					t.true(true);
+				});
+			`,
+			errors
+		},
+		{
+			code: outdent`
+				${header}
 				test.beforeEach((t) => {
 					doFoo();
 				});
@@ -94,6 +119,23 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: outdent`
 				${header}
+				test.afterEach.always((t) => {
+					doFoo();
+				});
+
+				test.before((t) => {
+					doFoo();
+				});
+
+				test('foo', (t) => {
+					t.true(true);
+				});
+			`,
+			errors
+		},
+		{
+			code: outdent`
+				${header}
 				test('foo', (t) => {
 					t.true(true);
 				});
@@ -105,6 +147,23 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 
+		{
+			code: outdent`
+				${header}
+				test.after.always((t) => {
+					doFoo();
+				});
+
+				test.after((t) => {
+					doFoo();
+				});
+
+				test('foo', (t) => {
+					t.true(true);
+				});
+			`,
+			errors
+		},
 		{
 			code: outdent`
 				${header}
@@ -126,6 +185,23 @@ ruleTester.run('no-todo-test', rule, {
 			code: outdent`
 				${header}
 				test.afterEach((t) => {
+					doFoo();
+				});
+
+				test.after((t) => {
+					doFoo();
+				});
+
+				test('foo', (t) => {
+					t.true(true);
+				});
+			`,
+			errors
+		},
+		{
+			code: outdent`
+				${header}
+				test.afterEach.always((t) => {
 					doFoo();
 				});
 
