@@ -34,7 +34,6 @@
 		"espree": "^5.0.0",
 		"espurify": "^2.0.0",
 		"import-modules": "^1.1.0",
-		"outdent": "^0.7.0",
 		"pkg-dir": "^4.2.0",
 		"resolve-from": "^5.0.0"
 	},

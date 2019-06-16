@@ -1,7 +1,6 @@
 
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
-import {outdent} from 'outdent';
 import rule from '../rules/hooks-order';
 
 const ruleTester = avaRuleTester(test, {
@@ -15,7 +14,7 @@ const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {
 	valid: [
-		outdent`
+		`
 			${header}
 
 			test.before((t) => {
@@ -49,7 +48,7 @@ ruleTester.run('no-todo-test', rule, {
 	],
 	invalid: [
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.after((t) => {
 					doFoo();
@@ -66,7 +65,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.after.always((t) => {
 					doFoo();
@@ -83,7 +82,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.beforeEach((t) => {
 					doFoo();
@@ -100,7 +99,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.afterEach((t) => {
 					doFoo();
@@ -117,7 +116,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.afterEach.always((t) => {
 					doFoo();
@@ -134,7 +133,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test('foo', (t) => {
 					t.true(true);
@@ -148,7 +147,7 @@ ruleTester.run('no-todo-test', rule, {
 		},
 
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.after.always((t) => {
 					doFoo();
@@ -165,7 +164,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.beforeEach((t) => {
 					doFoo();
@@ -182,7 +181,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.afterEach((t) => {
 					doFoo();
@@ -199,7 +198,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.afterEach.always((t) => {
 					doFoo();
@@ -216,7 +215,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test('foo', (t) => {
 					t.true(true);
@@ -230,7 +229,7 @@ ruleTester.run('no-todo-test', rule, {
 		},
 
 		{
-			code: outdent`
+			code: `
 				${header}
 				test.afterEach((t) => {
 					doFoo();
@@ -247,7 +246,7 @@ ruleTester.run('no-todo-test', rule, {
 			errors
 		},
 		{
-			code: outdent`
+			code: `
 				${header}
 				test('foo', (t) => {
 					t.true(true);
@@ -261,7 +260,7 @@ ruleTester.run('no-todo-test', rule, {
 		},
 
 		{
-			code: outdent`
+			code: `
 				${header}
 				test('foo', (t) => {
 					t.true(true);
