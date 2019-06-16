@@ -44,12 +44,83 @@ ruleTester.run('no-todo-test', rule, {
 			test('foo', (t) => {
 				t.true(true);
 			});
+		`,
+		`
+			test.before((t) => {
+				doFoo();
+			});
+
+			test.after((t) => {
+				doFoo();
+			});
+
+			test.after.always((t) => {
+				doFoo();
+			});
+
+			test.beforeEach((t) => {
+				doFoo();
+			});
+
+			test.afterEach((t) => {
+				doFoo();
+			});
+
+			test.afterEach.always((t) => {
+				doFoo();
+			});
+
+			test('foo', (t) => {
+				t.true(true);
+			});
+		`,
+		`
+			${header}
+
+			test.before((t) => {
+				doFoo();
+			});
+
+			test.after((t) => {
+				doFoo();
+			});
+		`,
+		`
+			test.after((t) => {
+				doFoo();
+			});
+
+			test.before((t) => {
+				doFoo();
+			});
+		`,
+		`
+			${header}
+
+			test('foo', (t) => {
+				t.true(true);
+			});
 		`
 	],
 	invalid: [
 		{
 			code: `
 				${header}
+
+				test.after((t) => {
+					doFoo();
+				});
+
+				test.before((t) => {
+					doFoo();
+				});
+			`,
+			errors
+		},
+		{
+			code: `
+				${header}
+
 				test.after((t) => {
 					doFoo();
 				});
@@ -67,6 +138,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.after.always((t) => {
 					doFoo();
 				});
@@ -84,6 +156,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.beforeEach((t) => {
 					doFoo();
 				});
@@ -101,6 +174,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.afterEach((t) => {
 					doFoo();
 				});
@@ -118,6 +192,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.afterEach.always((t) => {
 					doFoo();
 				});
@@ -135,6 +210,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test('foo', (t) => {
 					t.true(true);
 				});
@@ -149,6 +225,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.after.always((t) => {
 					doFoo();
 				});
@@ -166,6 +243,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.beforeEach((t) => {
 					doFoo();
 				});
@@ -183,6 +261,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.afterEach((t) => {
 					doFoo();
 				});
@@ -200,6 +279,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.afterEach.always((t) => {
 					doFoo();
 				});
@@ -217,6 +297,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test('foo', (t) => {
 					t.true(true);
 				});
@@ -231,6 +312,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test.afterEach((t) => {
 					doFoo();
 				});
@@ -248,6 +330,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test('foo', (t) => {
 					t.true(true);
 				});
@@ -262,6 +345,7 @@ ruleTester.run('no-todo-test', rule, {
 		{
 			code: `
 				${header}
+
 				test('foo', (t) => {
 					t.true(true);
 				});
