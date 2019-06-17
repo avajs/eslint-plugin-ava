@@ -6,7 +6,7 @@ const util = require('../util');
 function report({node, context}) {
 	context.report({
 		node,
-		message: 'Assertions should not be called from an inline function'
+		message: 'Assertions should not be called from an inline function.'
 	});
 }
 
