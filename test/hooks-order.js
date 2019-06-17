@@ -157,6 +157,20 @@ ruleTester.run('no-todo-test', rule, {
 			code: `
 				${header}
 
+				test('foo', (t) => {
+					t.true(true);
+				});
+
+				test.after.always((t) => {
+					doFoo();
+				});
+			`,
+			errors
+		},
+		{
+			code: `
+				${header}
+
 				test.beforeEach((t) => {
 					doFoo();
 				});
@@ -355,6 +369,22 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			errors
+		},
+
+		{
+			code: `
+				${header}
+
+				test('foo', (t) => {
+					t.true(true);
+				});
+
+				test.afterEach.always((t) => {
+					doFoo();
+				});
+			`,
+			errors
 		}
+
 	]
 });
