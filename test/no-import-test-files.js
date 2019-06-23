@@ -16,16 +16,18 @@ const ruleTester = avaRuleTester(test, {
 const rootDir = path.dirname(__dirname);
 const toPath = subPath => path.join(rootDir, subPath);
 
-util.getAvaConfig = () => ({
-	files: [
-		'lib/*.test.*',
-		'test/**/*.js'
-	],
-	babel: {
-		extensions: [
-			'js',
-			'jsx'
-		]
+util.loadAvaHelper = () => ({
+	classifyImport: importPath => {
+		switch (importPath) {
+			case toPath('lib/foo.test.js'):
+				return {isHelper: false, isSource: false, isTest: true};
+			case toPath('../foo.test.js'):
+				return {isHelper: false, isSource: false, isTest: true};
+			case toPath('@foo/bar'): // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
+				return {isHelper: false, isSource: false, isTest: true};
+			default:
+				return {isHelper: false, isSource: false, isTest: false};
+		}
 	}
 });
 
@@ -38,11 +40,11 @@ const errors = [
 ruleTester.run('no-import-test-files', rule, {
 	valid: [
 		'import test from \'ava\';',
+		'import foo from \'@foo/bar\';',
+		'import foo from \'/foo/bar\';', // Classfied as not a test.
 		'const test = require(\'ava\');',
 		'console.log()',
 		'const value = require(somePath);',
-		// Ok because not a valid extension
-		'import test from \'./foo.test.mjs\';',
 		'const highlight = require(\'highlight.js\')',
 		{
 			code: 'const highlight = require(\'highlight.js\')',
@@ -58,18 +60,8 @@ ruleTester.run('no-import-test-files', rule, {
 			errors
 		},
 		{
-			code: 'import test from \'./foo.test.js\';',
-			filename: toPath('lib/foo.js'),
-			errors
-		},
-		{
-			code: 'import test from \'./bar.js\';',
-			filename: toPath('test/foo.js'),
-			errors
-		},
-		{
-			code: 'import test from \'./foo.test.jsx\';',
-			filename: toPath('lib/foo.js'),
+			code: 'const test = require(\'../foo.test.js\');',
+			filename: toPath('foo.js'),
 			errors
 		}
 	]

@@ -57,10 +57,12 @@ Configure it in `package.json`.
 			"ava/no-unknown-modifiers": "error",
 			"ava/prefer-async-await": "error",
 			"ava/prefer-power-assert": "off",
+			"ava/prefer-t-regex": "error",
 			"ava/test-ended": "error",
 			"ava/test-title": "error",
-			"ava/use-t-well": "error",
+			"ava/test-title-format": "off",
 			"ava/use-t": "error",
+			"ava/use-t-well": "error",
 			"ava/use-test": "error",
 			"ava/use-true-false": "error"
 		}
@@ -92,10 +94,12 @@ The rules will only activate in test files.
 - [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
 - [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
+- [prefer-t-regex](docs/rules/prefer-t-regex.md) - Prefer using `t.regex()` to test regular expressions. *(fixable)*
 - [test-ended](docs/rules/test-ended.md) - Ensure callback tests are explicitly ended.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
-- [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
+- [test-title-format](docs/rules/test-title-format.md) - Ensure test titles have a certain format.
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
+- [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
 - [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
 

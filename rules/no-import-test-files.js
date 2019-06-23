@@ -1,77 +1,49 @@
 'use strict';
 const path = require('path');
-const arrify = require('arrify');
-const pkgUp = require('pkg-up');
-const multimatch = require('multimatch');
 const util = require('../util');
 
-const externalModuleRegExp = /^\w/;
-function isExternalModule(name) {
-	return externalModuleRegExp.test(name);
-}
+// Assume absolute paths can be classified by AVA.
+const isFileImport = name => path.isAbsolute(name) || name.startsWith('./') || name.startsWith('../');
 
-function isTestFile(files, extensions, rootDir, sourceFile, importedFile) {
-	const absoluteImportedPath = path.resolve(path.dirname(sourceFile), importedFile);
-	const relativePath = path.relative(rootDir, absoluteImportedPath);
+const create = context => {
+	const filename = context.getFilename();
+	const [overrides] = context.options;
 
-	return multimatch([relativePath], files).filter(file => {
-		const extension = path.extname(file).slice(1);
-		return extensions.includes(extension);
-	}).length === 1;
-}
+	if (filename === '<text>') {
+		return {};
+	}
 
-function getProjectInfo() {
-	const packageFilePath = pkgUp.sync();
-	const {files, babel} = util.getAvaConfig(packageFilePath);
+	const resolveFrom = path.dirname(filename);
 
-	return {
-		rootDir: packageFilePath && path.dirname(packageFilePath),
-		files,
-		babel
-	};
-}
+	let loadedAvaHelper = false;
+	let avaHelper;
 
-function createImportValidator(context, files, extensions, projectInfo, filename) {
-	return (node, importPath) => {
+	const validateImportPath = (node, importPath) => {
 		if (!importPath || typeof importPath !== 'string') {
 			return;
 		}
 
-		const isImportingExternalModule = isExternalModule(importPath);
-		if (isImportingExternalModule) {
+		if (!isFileImport(importPath)) {
 			return;
 		}
 
-		const isImportingTestFile = isTestFile(files, extensions, projectInfo.rootDir, filename, importPath);
-		if (isImportingTestFile) {
+		if (!loadedAvaHelper) {
+			avaHelper = util.loadAvaHelper(filename, overrides);
+			loadedAvaHelper = true;
+		}
+
+		if (!avaHelper) {
+			return {};
+		}
+
+		const {isTest} = avaHelper.classifyImport(path.resolve(resolveFrom, importPath));
+		if (isTest) {
 			context.report({
 				node,
 				message: 'Test files should not be imported.'
 			});
 		}
 	};
-}
-
-const create = context => {
-	const filename = context.getFilename();
-
-	if (filename === '<text>') {
-		return {};
-	}
-
-	const projectInfo = getProjectInfo();
-	const options = context.options[0] || {};
-
-	const extensions = arrify(options.extensions || (projectInfo.babel && projectInfo.babel.extensions) || util.defaultExtensions);
-
-	const files = arrify(options.files || projectInfo.files || util.defaultFiles);
-
-	if (!projectInfo.rootDir) {
-		// Could not find a package.json folder
-		return {};
-	}
-
-	const validateImportPath = createImportValidator(context, files, extensions, projectInfo, filename);
 
 	return {
 		ImportDeclaration: node => {
@@ -92,6 +64,9 @@ const create = context => {
 const schema = [{
 	type: 'object',
 	properties: {
+		extensions: {
+			type: 'array'
+		},
 		files: {
 			type: 'array'
 		}

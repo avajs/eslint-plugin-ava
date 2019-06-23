@@ -141,7 +141,8 @@ const schema = [{
 			enum: [
 				'always',
 				'never'
-			]
+			],
+			default: undefined
 		}
 	}
 }];
