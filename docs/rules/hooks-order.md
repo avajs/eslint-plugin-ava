@@ -2,34 +2,33 @@
 
 Hooks should be placed before any tests and in the proper semantic order.
 
+
 ## Fail
 
 ```js
 import test from 'ava';
 
-test.after((t) => {
+test.after(t => {
 	doFoo();
 });
 
-test.before((t) => {
+test.before(t => {
 	doFoo();
 });
 
-test('foo', (t) => {
+test('foo', t => {
 	t.true(true);
 });
 ```
 
-----
-
 ```js
 import test from 'ava';
 
-test('foo', (t) => {
+test('foo', t => {
 	t.true(true);
 });
 
-test.before((t) => {
+test.before(t => {
 	doFoo();
 });
 ```
@@ -40,31 +39,31 @@ test.before((t) => {
 ```js
 import test from 'ava';
 
-test.before((t) => {
+test.before(t => {
 	doFoo();
 });
 
-test.after((t) => {
+test.after(t => {
 	doFoo();
 });
 
-test.after.always((t) => {
+test.after.always(t => {
 	doFoo();
 });
 
-test.beforeEach((t) => {
+test.beforeEach(t => {
 	doFoo();
 });
 
-test.afterEach((t) => {
+test.afterEach(t => {
 	doFoo();
 });
 
-test.afterEach.always((t) => {
+test.afterEach.always(t => {
 	doFoo();
 });
 
-test('foo', (t) => {
+test('foo', t => {
 	t.true(true);
 });
 ```
