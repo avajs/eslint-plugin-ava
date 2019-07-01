@@ -1,4 +1,3 @@
-
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/hooks-order';
