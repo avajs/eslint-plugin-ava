@@ -1,4 +1,4 @@
-# Ensure assertions are not called from an inline function
+# Ensure no assertions are called from inline functions
 
 Prevent assertions being called from an inline function, to make it clear that it does not return.
 
@@ -18,7 +18,7 @@ test('foo', t => { t.true(fn()) });
 ```js
 import test from 'ava';
 
-test('foo', t => 
+test('foo', t =>
 	t.true(fn())
 );
 ```
