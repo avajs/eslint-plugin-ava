@@ -13,7 +13,9 @@ const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {
 	valid: [
+		// Shouldn't be treiggered as the test implementation is not an inline arrow function
 		header + 'test("my test name", t => {\n t.true(fn()); \n});',
+		header + 'test("my test name", function(t) { foo(); });',
 		// Shouldn't be triggered since test body is empty
 		header + 'test("my test name", () => {});',
 		header + 'test("my test name", (t) => {});',
@@ -27,10 +29,6 @@ ruleTester.run('no-todo-test', rule, {
 	],
 	invalid: [
 		{
-			code: header + 'test("my test name", t => { t.skip(); });',
-			errors
-		},
-		{
 			code: header + 'test("my test name", t => t.skip());',
 			errors
 		},
@@ -40,18 +38,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: header + 'test("my test name", t => \n t.true(fn()));',
-			errors
-		},
-		{
-			code: header + 'test("my test name", t => { t.true(fn()) });',
-			errors
-		},
-		{
-			code: header + 'test("my test name", function(t) { foo(); });',
-			errors
-		},
-		{
-			code: header + 'test("my test name", t => { return t.true(fn()) });',
 			errors
 		}
 	]

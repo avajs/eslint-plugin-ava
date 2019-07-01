@@ -6,7 +6,7 @@ const util = require('../util');
 function report({node, context}) {
 	context.report({
 		node,
-		message: 'Assertions should not be called from an inline function.'
+		message: 'The test implementation should not be an inline arrow function.'
 	});
 }
 
@@ -31,19 +31,6 @@ const create = context => {
 
 			const {body} = functionArg;
 			if (body.type === 'CallExpression') {
-				report({node, context});
-				return;
-			}
-
-			if (body.type === 'BlockStatement') {
-				if (body.loc.start.line !== body.loc.end.line) {
-					return;
-				}
-
-				if (body.body.length === 0) {
-					return;
-				}
-
 				report({node, context});
 			}
 		})
