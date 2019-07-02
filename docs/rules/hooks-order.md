@@ -1,7 +1,14 @@
 # Enforce test hook ordering
 
-Hooks should be placed before any tests and in the proper semantic order.
+Hooks should be placed before any tests and in the proper semantic order:
 
+* `test.after(…);`
+* `test.before(…);`
+* `test.after.always(…);`
+* `test.beforeEach(…);`
+* `test.afterEach(…);`
+* `test.afterEach.always(…);`
+* `test(…);`
 
 ## Fail
 
