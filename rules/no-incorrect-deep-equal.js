@@ -18,8 +18,16 @@ const fixNot = (fixer, node) => {
 const create = context => {
 	const ava = createAvaRule();
 
+	const callExpression = 'CallExpression';
+	const deepEqual = '[callee.property.name="deepEqual"]';
+	const notDeepEqual = '[callee.property.name="notDeepEqual"]';
+
+	const argumentsLiteral = ':matches([arguments.0.type="Literal"],[arguments.1.type="Literal"])';
+	const argumentsUndefined = ':matches([arguments.0.type="Identifier"][arguments.0.name="undefined"],[arguments.1.type="Identifier"][arguments.1.name="undefined"])';
+	const argumentsTemplate = ':matches([arguments.0.type="TemplateLiteral"],[arguments.1.type="TemplateLiteral"])';
+
 	return ava.merge({
-		'CallExpression[callee.property.name="deepEqual"][arguments.1.type="Literal"]': visitIf([
+		[`${callExpression}${deepEqual}${argumentsLiteral}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
@@ -32,7 +40,7 @@ const create = context => {
 				fix: fixer => fixIs(fixer, node)
 			});
 		}),
-		'CallExpression[callee.property.name="deepEqual"][arguments.1.type="Identifier"][arguments.1.name="undefined"]': visitIf([
+		[`${callExpression}${deepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
@@ -45,7 +53,7 @@ const create = context => {
 				fix: fixer => fixIs(fixer, node)
 			});
 		}),
-		'CallExpression[callee.property.name="deepEqual"][arguments.1.type="TemplateLiteral"]': visitIf([
+		[`${callExpression}${deepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
@@ -58,7 +66,7 @@ const create = context => {
 				fix: fixer => fixIs(fixer, node)
 			});
 		}),
-		'CallExpression[callee.property.name="notDeepEqual"][arguments.1.type="Literal"]': visitIf([
+		[`${callExpression}${notDeepEqual}${argumentsLiteral}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
@@ -71,7 +79,7 @@ const create = context => {
 				fix: fixer => fixNot(fixer, node)
 			});
 		}),
-		'CallExpression[callee.property.name="notDeepEqual"][arguments.1.type="Identifier"][arguments.1.name="undefined"]': visitIf([
+		[`${callExpression}${notDeepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
@@ -84,7 +92,7 @@ const create = context => {
 				fix: fixer => fixNot(fixer, node)
 			});
 		}),
-		'CallExpression[callee.property.name="notDeepEqual"][arguments.1.type="TemplateLiteral"]': visitIf([
+		[`${callExpression}${notDeepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
