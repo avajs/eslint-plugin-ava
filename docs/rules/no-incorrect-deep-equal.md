@@ -1,6 +1,6 @@
-# Avoid using `deepEqual` with literals
+# Avoid using `deepEqual` with primitives
 
-`deepEqual` and `notDeepEqual` are unnecessary when comparing literals, template strings or `undefined`. Use `is` or `not` instead.
+The `deepEqual` and `notDeepEqual` assertions are unnecessary when comparing primitives. Use `is` or `not` instead.
 
 This rule is fixable.
 
