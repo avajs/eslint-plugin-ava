@@ -45,6 +45,29 @@ ruleTester.run('no-todo-test', rule, {
 			});
 		`,
 		`
+			${header}
+
+			test.before((t) => {
+				doFoo();
+			});
+
+			console.log('foo');
+
+			test.after.always((t) => {
+				doFoo();
+			});
+
+			const foo = 'foo';
+
+			test.afterEach((t) => {
+				doFoo();
+			});
+
+			test('foo', (t) => {
+				t.true(true);
+			});
+		`,
+		`
 			test.before((t) => {
 				doFoo();
 			});
@@ -383,7 +406,23 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			errors
-		}
+		},
 
+		{
+			code: `
+				${header}
+
+				test.after((t) => {
+					doFoo();
+				});
+
+				console.log('foo');
+
+				test.before((t) => {
+					doFoo();
+				});
+			`,
+			errors
+		}
 	]
 });
