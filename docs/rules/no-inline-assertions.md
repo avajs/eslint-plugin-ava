@@ -9,20 +9,6 @@ import test from 'ava';
 test('foo', t => t.true(fn()));
 ```
 
-```js
-import test from 'ava';
-
-test('foo', t => { t.true(fn()) });
-```
-
-```js
-import test from 'ava';
-
-test('foo', t =>
-	t.true(fn())
-);
-```
-
 ## Pass
 ```js
 import test from 'ava';
