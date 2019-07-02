@@ -8,13 +8,13 @@ const MESSAGE_ID = 'hooks-order';
 const create = context => {
 	const ava = createAvaRule();
 
-	let before = null;
-	let after = null;
-	let afterAlways = null;
-	let beforeEach = null;
-	let afterEach = null;
-	let afterEachAlways = null;
-	let test = null;
+	let before;
+	let after;
+	let afterAlways;
+	let beforeEach;
+	let afterEach;
+	let afterEachAlways;
+	let test;
 
 	return ava.merge({
 		'CallExpression[callee.object.name="test"][callee.property.name="before"]': visitIf([
