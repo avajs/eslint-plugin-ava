@@ -3,13 +3,6 @@ const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
-function report({node, context}) {
-	context.report({
-		node,
-		message: 'The test implementation should not be an inline arrow function.'
-	});
-}
-
 const create = context => {
 	const ava = createAvaRule();
 
@@ -31,7 +24,11 @@ const create = context => {
 
 			const {body} = functionArg;
 			if (body.type === 'CallExpression') {
-				report({node, context});
+				context.report({
+					node,
+					message: 'The test implementation should not be an inline arrow function.',
+					fix: fixer => [fixer.insertTextBefore(body, '{'), fixer.insertTextAfter(body, '}')]
+				});
 			}
 		})
 	});
@@ -43,6 +40,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		type: 'suggestion'
+		type: 'suggestion',
+		fixable: 'code'
 	}
 };

@@ -30,15 +30,18 @@ ruleTester.run('no-todo-test', rule, {
 	invalid: [
 		{
 			code: header + 'test("my test name", t => t.skip());',
-			errors
+			errors,
+			output: header + 'test("my test name", t => {t.skip()});'
 		},
 		{
 			code: header + 'test("my test name", t => t.true(fn()));',
-			errors
+			errors,
+			output: header + 'test("my test name", t => {t.true(fn())});'
 		},
 		{
 			code: header + 'test("my test name", t => \n t.true(fn()));',
-			errors
+			errors,
+			output: header + 'test("my test name", t => \n {t.true(fn())});'
 		}
 	]
 });
