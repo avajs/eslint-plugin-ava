@@ -13,7 +13,7 @@ const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {
 	valid: [
-		// Shouldn't be treiggered as the test implementation is not an inline arrow function
+		// Shouldn't be triggered as the test implementation is not an inline arrow function
 		header + 'test("my test name", t => {\n t.true(fn()); \n});',
 		header + 'test("my test name", function (t) { foo(); });',
 		// Shouldn't be triggered since test body is empty
