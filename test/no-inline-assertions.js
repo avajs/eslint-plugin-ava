@@ -15,12 +15,12 @@ ruleTester.run('no-todo-test', rule, {
 	valid: [
 		// Shouldn't be treiggered as the test implementation is not an inline arrow function
 		header + 'test("my test name", t => {\n t.true(fn()); \n});',
-		header + 'test("my test name", function(t) { foo(); });',
+		header + 'test("my test name", function (t) { foo(); });',
 		// Shouldn't be triggered since test body is empty
 		header + 'test("my test name", () => {});',
-		header + 'test("my test name", (t) => {});',
+		header + 'test("my test name", t => {});',
 		// Shouldn't be triggered since test body is ill-defined
-		header + 'test("my test name", (t) => "foo");',
+		header + 'test("my test name", t => "foo");',
 		// Shouldn't be triggered since it's not a test file
 		'test.todo("my test name");',
 		// Shouldn't be triggered since the signature is incorrect
