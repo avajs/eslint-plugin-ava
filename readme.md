@@ -77,7 +77,7 @@ Configure it in `package.json`.
 The rules will only activate in test files.
 
 - [assertion-arguments](docs/rules/assertion-arguments.md) - Enforce passing correct arguments to assertions.
-- [hooks-order](docs/rules/hooks-order.md) - Enforce test hook ordering.
+- [hooks-order](docs/rules/hooks-order.md) - Enforce test hook ordering. *(fixable)*
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.

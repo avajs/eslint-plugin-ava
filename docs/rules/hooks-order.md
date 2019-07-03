@@ -10,6 +10,8 @@ Hooks should be placed before any tests and in the proper semantic order:
 * `test.afterEach.always(…);`
 * `test(…);`
 
+This rule is fixable as long as no other code is between the hooks that need to be reordered.
+
 ## Fail
 
 ```js
