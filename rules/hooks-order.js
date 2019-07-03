@@ -5,139 +5,105 @@ const util = require('../util');
 
 const MESSAGE_ID = 'hooks-order';
 
+const buildOrders = names => {
+	const orders = {};
+	for (const nameNext of names) {
+		for (const namePrev in orders) {
+			if (orders[namePrev]) {
+				orders[namePrev].push(nameNext);
+			}
+		}
+
+		orders[nameNext] = [];
+	}
+
+	return orders;
+};
+
+const buildMessage = (name, orders, visited) => {
+	const checks = orders[name] || [];
+
+	for (const check of checks) {
+		const invalidNode = visited[check];
+		if (invalidNode) {
+			return {
+				messageId: MESSAGE_ID,
+				data: {
+					current: name,
+					invalid: check
+				}
+			};
+		}
+	}
+
+	return null;
+};
+
 const create = context => {
 	const ava = createAvaRule();
 
-	let before;
-	let after;
-	let afterAlways;
-	let beforeEach;
-	let afterEach;
-	let afterEachAlways;
-	let test;
+	const orders = buildOrders([
+		'before',
+		'after',
+		'after.always',
+		'beforeEach',
+		'afterEach',
+		'afterEach.always',
+		'test'
+	]);
 
-	return ava.merge({
-		'CallExpression[callee.object.name="test"][callee.property.name="before"]': visitIf([
+	const visited = {};
+
+	const checks = [
+		{
+			selector: 'CallExpression[callee.object.name="test"][callee.property.name="before"]',
+			name: 'before'
+		},
+		{
+			selector: 'CallExpression[callee.object.name="test"][callee.property.name="after"]',
+			name: 'after'
+		},
+		{
+			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="after"][callee.property.name="always"]',
+			name: 'after.always'
+		},
+		{
+			selector: 'CallExpression[callee.object.name="test"][callee.property.name="beforeEach"]',
+			name: 'beforeEach'
+		},
+		{
+			selector: 'CallExpression[callee.object.name="test"][callee.property.name="afterEach"]',
+			name: 'afterEach'
+		},
+		{
+			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="afterEach"][callee.property.name="always"]',
+			name: 'afterEach.always'
+		},
+		{
+			selector: 'CallExpression[callee.name="test"]',
+			name: 'test'
+		}
+	];
+
+	const selectors = checks.reduce((result, check) => {
+		result[check.selector] = visitIf([
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			before = node.callee.property.name;
+			visited[check.name] = true;
 
-			const invalidNode = after || afterAlways || beforeEach || afterEach || afterEachAlways || test;
-
-			if (invalidNode) {
+			const message = buildMessage(check.name, orders, visited);
+			if (message) {
 				context.report({
 					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: before,
-						invalid: invalidNode
-					}
+					...message
 				});
 			}
-		}),
-		'CallExpression[callee.object.name="test"][callee.property.name="after"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			after = node.callee.property.name;
+		});
+		return result;
+	}, {});
 
-			const invalidNode = afterAlways || beforeEach || afterEach || afterEachAlways || test;
-
-			if (invalidNode) {
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: after,
-						invalid: invalidNode
-					}
-				});
-			}
-		}),
-		'CallExpression[callee.object.object.name="test"][callee.object.property.name="after"][callee.property.name="always"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			afterAlways = 'after.always';
-
-			const invalidName = beforeEach || afterEach || afterEachAlways || test;
-
-			if (invalidName) {
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: afterEach,
-						invalid: invalidName
-					}
-				});
-			}
-		}),
-		'CallExpression[callee.object.name="test"][callee.property.name="beforeEach"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			beforeEach = node.callee.property.name;
-
-			const invalidNode = afterEach || afterEachAlways || test;
-
-			if (invalidNode) {
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: beforeEach,
-						invalid: invalidNode
-					}
-				});
-			}
-		}),
-		'CallExpression[callee.object.name="test"][callee.property.name="afterEach"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			afterEach = node.callee.property.name;
-
-			const invalidName = afterEachAlways || test;
-
-			if (invalidName) {
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: afterEach,
-						invalid: invalidName
-					}
-				});
-			}
-		}),
-		'CallExpression[callee.object.object.name="test"][callee.object.property.name="afterEach"][callee.property.name="always"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			afterEachAlways = 'afterEach.always';
-
-			const invalidName = test;
-
-			if (invalidName) {
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					data: {
-						current: afterEach,
-						invalid: invalidName
-					}
-				});
-			}
-		}),
-		'CallExpression[callee.name="test"]': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode
-		])(node => {
-			test = node.callee.name;
-		})
-	});
+	return ava.merge(selectors);
 };
 
 module.exports = {
