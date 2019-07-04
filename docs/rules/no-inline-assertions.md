@@ -1,14 +1,19 @@
 # Ensure assertions are not called from inline arrow functions
 
-An inline arrow function is an arrow function with concise body, i.e. `x => x` will return `x` to the caller. The test implementation, composed of a series of assertions, should not be an inline arrow function as assertions do not return.
+The test implementation should not purely consist of an inline assertion as assertions do not return a value and having them inline also makes the tests less readable.
+
+
 ## Fail
+
 ```js
 import test from 'ava';
 
 test('foo', t => t.true(fn()));
 ```
 
+
 ## Pass
+
 ```js
 import test from 'ava';
 
