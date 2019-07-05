@@ -84,7 +84,7 @@ The rules will only activate in test files.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
-- [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline functions.
+- [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline arrow functions.
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present. *(fixable)*

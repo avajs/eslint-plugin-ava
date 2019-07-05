@@ -2,6 +2,8 @@
 
 The test implementation should not purely consist of an inline assertion as assertions do not return a value and having them inline also makes the tests less readable.
 
+This rule is fixable. It will wrap assertions into brackets `{}`. The fixer would not insert extra space or linebreaks around brackets.  
+
 
 ## Fail
 
