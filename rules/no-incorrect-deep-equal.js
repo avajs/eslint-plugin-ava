@@ -3,16 +3,28 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const MESSAGE_ID_LITERAL = 'no-deep-equal-with-literal';
-const MESSAGE_ID_TEMPLATE = 'no-deep-equal-with-template';
-const MESSAGE_ID_UNDEFINED = 'no-deep-equal-with-undefined';
+const MESSAGE_ID = 'no-deep-equal-with-primative';
 
-const fixIs = (fixer, node) => {
-	return fixer.replaceText(node.callee.property, 'is');
+const buildDeepEqualMessage = (context, node) => {
+	context.report({
+		node,
+		messageId: MESSAGE_ID,
+		data: {
+			callee: node.callee.property.name
+		},
+		fix: fixer => fixer.replaceText(node.callee.property, 'is')
+	});
 };
 
-const fixNot = (fixer, node) => {
-	return fixer.replaceText(node.callee.property, 'not');
+const buildNotDeepEqualMessage = (context, node) => {
+	context.report({
+		node,
+		messageId: MESSAGE_ID,
+		data: {
+			callee: node.callee.property.name
+		},
+		fix: fixer => fixer.replaceText(node.callee.property, 'not')
+	});
 };
 
 const create = context => {
@@ -31,79 +43,37 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_LITERAL,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixIs(fixer, node)
-			});
+			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${deepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_UNDEFINED,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixIs(fixer, node)
-			});
+			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${deepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_TEMPLATE,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixIs(fixer, node)
-			});
+			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsLiteral}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_LITERAL,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixNot(fixer, node)
-			});
+			buildNotDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_UNDEFINED,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixNot(fixer, node)
-			});
+			buildNotDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			context.report({
-				node,
-				messageId: MESSAGE_ID_TEMPLATE,
-				data: {
-					callee: node.callee.property.name
-				},
-				fix: fixer => fixNot(fixer, node)
-			});
+			buildNotDeepEqualMessage(context, node);
 		})
 	});
 };
@@ -116,9 +86,7 @@ module.exports = {
 		},
 		fixable: true,
 		messages: {
-			[MESSAGE_ID_LITERAL]: 'Avoid using `{{callee}}` with literals',
-			[MESSAGE_ID_TEMPLATE]: 'Avoid using `{{callee}}` with templates',
-			[MESSAGE_ID_UNDEFINED]: 'Avoid using `{{callee}}` with `undefined`'
+			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives',
 		},
 		type: 'suggestion'
 	}
