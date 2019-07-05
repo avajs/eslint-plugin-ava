@@ -19,25 +19,25 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 	valid: [
 		`
 			${header}
-			test(t => {
+			test('x', t => {
 				t.deepEqual(expression, otherExpression);
 			});
 		`,
 		`
 			${header}
-			test(t => {
+			test('x', t => {
 				t.deepEqual(expression, {});
 			});
 		`,
 		`
 			${header}
-			test(t => {
+			test('x', t => {
 				t.deepEqual(expression, []);
 			});
 		`,
 		`
 			${header}
-			test(t => {
+			test('x', t => {
 				t.notDeepEqual(expression, []);
 			});
 		`
