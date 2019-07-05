@@ -2,7 +2,7 @@
 
 The test implementation should not purely consist of an inline assertion as assertions do not return a value and having them inline also makes the tests less readable.
 
-This rule is fixable. It will wrap assertions into brackets `{}`. The fixer would not insert extra space or linebreaks around brackets.  
+This rule is fixable. It will wrap the assertion in braces `{}`. It will not do any whitespace or style changes.
 
 
 ## Fail
@@ -20,6 +20,6 @@ test('foo', t => t.true(fn()));
 import test from 'ava';
 
 test('foo', t => {
-	t.true(fn())
+	t.true(fn());
 });
 ```
