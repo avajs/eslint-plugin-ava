@@ -4,6 +4,7 @@ The `deepEqual` and `notDeepEqual` assertions are unnecessary when comparing pri
 
 This rule is fixable.
 
+
 ## Fail
 
 ```js
