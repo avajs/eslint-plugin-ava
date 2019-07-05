@@ -1,5 +1,7 @@
 # Ensure test titles have a certain format
 
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/test-title-format.md)
+
 This rule is useful when you want to make sure all test titles match a common pattern to increase readability when tests fail.
 
 For example, titles like `'Should throw when invalid.'`, `'Should fail when called.'` or `'Should pass when using any number.'` could be enforced with the following pattern `'^Should (pass|fail|throw) when [\\w ]+\\.$'` (Note the escaped `\`).

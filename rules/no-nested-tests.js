@@ -16,7 +16,7 @@ const create = context => {
 			if (nestedCount >= 2) {
 				context.report({
 					node,
-					message: 'Tests should not be nested'
+					message: 'Tests should not be nested.'
 				});
 			}
 		}),
