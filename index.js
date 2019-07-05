@@ -18,6 +18,7 @@ module.exports = {
 			],
 			rules: {
 				'ava/assertion-arguments': 'error',
+				'ava/hooks-order': 'error',
 				'ava/max-asserts': [
 					'off',
 					5
