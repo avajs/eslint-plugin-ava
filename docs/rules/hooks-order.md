@@ -2,15 +2,16 @@
 
 Hooks should be placed before any tests and in the proper semantic order:
 
-* `test.after(…);`
-* `test.before(…);`
-* `test.after.always(…);`
-* `test.beforeEach(…);`
-* `test.afterEach(…);`
-* `test.afterEach.always(…);`
-* `test(…);`
+- `test.before(…);`
+- `test.after(…);`
+- `test.after.always(…);`
+- `test.beforeEach(…);`
+- `test.afterEach(…);`
+- `test.afterEach.always(…);`
+- `test(…);`
 
 This rule is fixable as long as no other code is between the hooks that need to be reordered.
+
 
 ## Fail
 
