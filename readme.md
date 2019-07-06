@@ -47,6 +47,7 @@ Configure it in `package.json`.
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
 			"ava/no-import-test-files": "error",
+			"ava/no-incorrect-deep-equal": "error",
 			"ava/no-inline-assertions": "error",
 			"ava/no-invalid-end": "error",
 			"ava/no-nested-tests": "error",
@@ -86,6 +87,7 @@ The rules will only activate in test files.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
+- [no-incorrect-deep-equal](docs/rules/no-incorrect-deep-equal.md) - Avoid using `deepEqual` with primitives. *(fixable)*
 - [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline arrow functions. *(fixable)*
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
