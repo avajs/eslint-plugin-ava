@@ -86,7 +86,7 @@ module.exports = {
 		},
 		fixable: true,
 		messages: {
-			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives',
+			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives'
 		},
 		type: 'suggestion'
 	}
