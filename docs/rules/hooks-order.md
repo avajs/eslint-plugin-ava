@@ -1,5 +1,7 @@
 # Enforce test hook ordering
 
+Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/hooks-order.md)
+
 Hooks should be placed before any tests and in the proper semantic order:
 
 - `test.before(…);`
