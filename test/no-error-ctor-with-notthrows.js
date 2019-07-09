@@ -79,6 +79,13 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 			t.notThrowsAsync(() => {
 				t.pass();
 			}, {firstName:'some', lastName: 'object'});
+		});`,
+
+		// Shouldn't be triggered since it's not a test file
+		`test('some test',t => {
+			t.notThrowsAsync(() => {
+				t.pass();
+			}, TypeError);
 		});`
 	],
 	invalid: [
@@ -115,6 +122,60 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, TypeError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, Error);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, SyntaxError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, AssertionError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, ReferenceError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, RangeError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, SystemError);
 			});`,
 			errors
 		}
