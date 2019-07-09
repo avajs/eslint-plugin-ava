@@ -85,7 +85,7 @@ The rules will only activate in test files.
 - [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
 - [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md) - Ensure tests do not have duplicate modifiers.
-- [no-error-ctor-with-notthrows](docs/rules/no-error-ctor-with-notthrows.md) - Prevent use of typerror with notthrows.
+- [no-error-ctor-with-notthrows](docs/rules/no-error-ctor-with-notthrows.md) - No specifying error type in `t.notThrows()`.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
