@@ -14,7 +14,7 @@ const ruleTesterOptions = [
 	}
 	// Disabled for now because of `eslint-ava-rule-tester` problem
 	// {
-	// 	parser: 'babel-eslint',
+	// 	parser: require.resolve('babel-eslint'),
 	// 	env: {
 	// 		es6: true
 	// 	}

@@ -36,6 +36,7 @@ Configure it in `package.json`.
 		],
 		"rules": {
 			"ava/assertion-arguments": "error",
+			"ava/hooks-order": "error",
 			"ava/max-asserts": [
 				"off",
 				5
@@ -46,6 +47,8 @@ Configure it in `package.json`.
 			"ava/no-identical-title": "error",
 			"ava/no-ignored-test-files": "error",
 			"ava/no-import-test-files": "error",
+			"ava/no-incorrect-deep-equal": "error",
+			"ava/no-inline-assertions": "error",
 			"ava/no-invalid-end": "error",
 			"ava/no-nested-tests": "error",
 			"ava/no-only-test": "error",
@@ -76,6 +79,7 @@ Configure it in `package.json`.
 The rules will only activate in test files.
 
 - [assertion-arguments](docs/rules/assertion-arguments.md) - Enforce passing correct arguments to assertions.
+- [hooks-order](docs/rules/hooks-order.md) - Enforce test hook ordering. *(fixable)*
 - [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
 - [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
 - [no-cb-test](docs/rules/no-cb-test.md) - Ensure no `test.cb()` is used.
@@ -83,6 +87,8 @@ The rules will only activate in test files.
 - [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
 - [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
 - [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
+- [no-incorrect-deep-equal](docs/rules/no-incorrect-deep-equal.md) - Avoid using `deepEqual` with primitives. *(fixable)*
+- [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline arrow functions. *(fixable)*
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
 - [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present. *(fixable)*
