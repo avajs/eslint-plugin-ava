@@ -86,7 +86,14 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 			t.notThrowsAsync(() => {
 				t.pass();
 			}, TypeError);
-		});`
+		});`,
+		{
+		code: `const { notThrows } = require("./my-custom-not-throws")
+				${header}
+				test('some test',t => {
+					notThrows(foo);
+				});`
+		},
 	],
 	invalid: [
 		{
