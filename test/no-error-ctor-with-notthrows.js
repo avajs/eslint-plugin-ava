@@ -5,6 +5,9 @@ import rule from '../rules/no-error-ctor-with-notthrows';
 const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
+	},
+	parserOptions: {
+		ecmaVersion: 2019
 	}
 });
 
@@ -81,19 +84,27 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 			}, {firstName:'some', lastName: 'object'});
 		});`,
 
+		`${header}
+		test('some test',t => {
+			notThrows(foo);
+		});`,
+
+		`${header}
+		test('some test',t => {
+			myCustomNotThrows.notThrows(foo);
+		});`,
+
+		`${header}
+		t.notThrows(() => {
+			t.pass();
+		}, void 0);`,
+
 		// Shouldn't be triggered since it's not a test file
 		`test('some test',t => {
 			t.notThrowsAsync(() => {
 				t.pass();
 			}, TypeError);
-		});`,
-		{
-		code: `const { notThrows } = require("./my-custom-not-throws")
-				${header}
-				test('some test',t => {
-					notThrows(foo);
-				});`
-		},
+		});`
 	],
 	invalid: [
 		{
@@ -183,6 +194,15 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, SystemError);
+			});`,
+			errors
+		},
+		{
+			code: `${header}
+			test('some test',t => {
+				t.notThrowsAsync(() => {
+					t.pass();
+				}, $DOMError);
 			});`,
 			errors
 		}
