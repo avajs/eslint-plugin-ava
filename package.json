@@ -62,7 +62,7 @@
 	"ava": {
 		"files": [
 			"!rules",
- 			"test/*js"
+			"test/*.js"
 		]
 	},
 	"xo": {
