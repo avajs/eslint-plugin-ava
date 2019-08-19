@@ -28,7 +28,7 @@ Configure it in `package.json`.
 			"es6": true
 		},
 		"parserOptions": {
-			"ecmaVersion": 2019,
+			"ecmaVersion": 2020,
 			"sourceType": "module"
 		},
 		"plugins": [
@@ -128,8 +128,3 @@ Enable it in your `package.json` with the `extends` option:
 See the [ESLint docs](http://eslint.org/docs/user-guide/configuring#extending-configuration-files) for more information about extending config files.
 
 **Note**: This config will also enable the correct [parser options](http://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](http://eslint.org/docs/user-guide/configuring#specifying-environments).
-
-
-## License
-
-MIT
