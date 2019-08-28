@@ -9,7 +9,7 @@ const create = context => {
 	const filename = context.getFilename();
 	const [overrides] = context.options;
 
-	if (filename === '<text>') {
+	if (filename === '<input>' || filename === '<text>') {
 		return {};
 	}
 
