@@ -26,6 +26,12 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
+const errors = [
+	{
+		message: 'not a test file'
+	}
+];
+
 ruleTester.run('rule-fixture', rule, {
 	valid: [
 		'const test = require(\'ava\');',
@@ -39,27 +45,27 @@ ruleTester.run('rule-fixture', rule, {
 	invalid: [
 		{
 			code: 'const test2 = require(\'ava\');',
-			errors: [{message: 'not a test file'}]
+			errors
 		},
 		{
 			code: 'const {serial2} = require(\'ava\');',
-			errors: [{message: 'not a test file'}]
+			errors
 		},
 		{
 			code: 'const {serial2: test} = require(\'ava\');',
-			errors: [{message: 'not a test file'}]
+			errors
 		},
 		{
 			code: 'import test2 from \'ava\';',
-			errors: [{message: 'not a test file'}]
+			errors
 		},
 		{
 			code: 'import {serial2} from \'ava\';',
-			errors: [{message: 'not a test file'}]
+			errors
 		},
 		{
 			code: 'import {serial2 as test} from \'ava\';',
-			errors: [{message: 'not a test file'}]
+			errors
 		}
 	]
 });
