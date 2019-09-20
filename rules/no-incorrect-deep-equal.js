@@ -34,7 +34,7 @@ const create = context => {
 	const deepEqual = '[callee.property.name="deepEqual"]';
 	const notDeepEqual = '[callee.property.name="notDeepEqual"]';
 
-	const argumentsLiteral = ':matches([arguments.0.type="Literal"],[arguments.1.type="Literal"])';
+	const argumentsLiteral = ':matches([arguments.0.type="Literal"][arguments.0.regex="undefined"],[arguments.1.type="Literal"][arguments.1.regex="undefined"])';
 	const argumentsUndefined = ':matches([arguments.0.type="Identifier"][arguments.0.name="undefined"],[arguments.1.type="Identifier"][arguments.1.name="undefined"])';
 	const argumentsTemplate = ':matches([arguments.0.type="TemplateLiteral"],[arguments.1.type="TemplateLiteral"])';
 
