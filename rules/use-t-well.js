@@ -3,33 +3,100 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const isMethod = name => util.executionMethods.has(name);
+class MicroCorrecter {
+	constructor(words) {
+		this.words = new Set(words);
+
+		const letters = new Set();
+		words.forEach(word => word.split('').forEach(letter => letters.add(letter)));
+		this.letters = [...letters];
+	}
+
+	edits(word) {
+		const edits = [];
+		const {length} = word;
+		const {letters} = this;
+
+		for (let i = 0; i < length; i++) {
+			edits.push(word.slice(0, i) + word.slice(i + 1)); // Skip
+			for (const letter of letters) {
+				edits.push(word.slice(0, i) + letter + word.slice(i + 1)); // Replace
+			}
+		}
+
+		for (let i = 1; i < length; i++) {
+			edits.push(word.slice(0, i - 1) + word[i] + word[i - 1] + word.slice(i + 1)); // Transposition
+		}
+
+		for (let i = 0; i <= length; i++) {
+			for (const letter of letters) {
+				edits.push(word.slice(0, i) + letter + word.slice(i)); // Addition
+			}
+		}
+
+		return edits;
+	}
+
+	correct(word, distance) {
+		const {words} = this;
+
+		if (words.has(word)) {
+			return word;
+		}
+
+		if (distance > 0) {
+			const edits = this.edits(word);
+
+			for (const edit of edits) {
+				if (words.has(edit)) {
+					return edit;
+				}
+			}
+
+			if (distance > 1) {
+				for (const edit of edits) {
+					const correction = this.correct(edit, distance - 1);
+					if (correction !== undefined) {
+						return correction;
+					}
+				}
+			}
+		}
+	}
+}
+
+const nonMethods = new Set([
+	'context',
+	'title'
+]);
+
+const properties = new Set([
+	...nonMethods,
+	...util.executionMethods,
+	'skip'
+]);
+
+const correcter = new MicroCorrecter([...properties]);
 
 const isCallExpression = node =>
 	node.parent.type === 'CallExpression' &&
 	node.parent.callee === node;
 
-const getMemberStats = members => {
-	const initial = {
-		skip: [],
-		falsey: [],
-		method: [],
-		other: []
-	};
+const correctIfNeeded = (name, context, node) => {
+	const correction = correcter.correct(name, Math.max(0, Math.min(name.length - 2, 2)));
+	if (correction === undefined) {
+		return undefined;
+	}
 
-	return members.reduce((res, member) => {
-		if (member === 'skip') {
-			res.skip.push(member);
-		} else if (member === 'falsey') {
-			res.falsey.push(member);
-		} else if (isMethod(member)) {
-			res.method.push(member);
-		} else {
-			res.other.push(member);
-		}
+	if (correction !== name) {
+		context.report({
+			node,
+			message: `Misspelled \`.${correction}\` as \`.${name}\`.`,
+			fix: fixer => fixer.replaceText(node.property, correction)
+		});
+	}
 
-		return res;
-	}, initial);
+	return correction;
 };
 
 const create = context => {
@@ -58,66 +125,62 @@ const create = context => {
 			}
 
 			const members = util.getMembers(node);
-			const stats = getMemberStats(members);
 
-			if (members[0] === 'context') {
-				// Anything is fine when of the form `t.context...`
-				if (members.length === 1 && isCallExpression(node)) {
-					// Except `t.context()`
-					context.report({
-						node,
-						message: 'Unknown assertion method `.context`.'
-					});
+			let hadSkip = false;
+			let hadCall = false;
+			let needCall = true;
+			for (const [i, member] of members.entries()) {
+				const corrected = correctIfNeeded(member, context, node);
+				if (corrected === undefined) {
+					needCall = false;
+					if (isCallExpression(node)) {
+						context.report({
+							node,
+							message: `Unknown assertion method \`.${member}\`.`
+						});
+					} else {
+						context.report({
+							node,
+							message: `Unknown member \`.${member}\`. Use \`.context.${member}\` instead.`
+						});
+					}
+
+					break;
+				} else if (i === 0 && nonMethods.has(corrected)) {
+					needCall = false;
+					if (members.length === 1 && isCallExpression(node)) {
+						context.report({
+							node,
+							message: `Unknown assertion method \`.${member}\`.`
+						});
+					}
+
+					break;
+				} else if (corrected === 'skip') {
+					if (hadSkip) {
+						context.report({
+							node,
+							message: 'Too many chained uses of `.skip`.'
+						});
+					}
+
+					hadSkip = true;
+				} else {
+					if (hadCall) {
+						context.report({
+							node,
+							message: 'Can\'t chain assertion methods.'
+						});
+					}
+
+					hadCall = true;
 				}
-
-				return;
 			}
 
-			if (members[0] === 'title') {
-				// Anything is fine when of the form `t.title...`
-				if (members.length === 1 && isCallExpression(node)) {
-					// Except `t.title()`
-					context.report({
-						node,
-						message: 'Unknown assertion method `.title`.'
-					});
-				}
-
-				return;
-			}
-
-			if (isCallExpression(node)) {
-				if (stats.other.length > 0) {
-					context.report({
-						node,
-						message: `Unknown assertion method \`.${stats.other[0]}\`.`
-					});
-				} else if (stats.skip.length > 1) {
-					context.report({
-						node,
-						message: 'Too many chained uses of `.skip`.'
-					});
-				} else if (stats.falsey.length > 0) {
-					context.report({
-						node,
-						message: 'Misspelled `.falsy` as `.falsey`.',
-						fix: fixer => fixer.replaceText(node.property, 'falsy')
-					});
-				} else if (stats.method.length > 1) {
-					context.report({
-						node,
-						message: 'Can\'t chain assertion methods.'
-					});
-				} else if (stats.method.length === 0) {
-					context.report({
-						node,
-						message: 'Missing assertion method.'
-					});
-				}
-			} else if (stats.other.length > 0) {
+			if (needCall && !hadCall) {
 				context.report({
 					node,
-					message: `Unknown member \`.${stats.other[0]}\`. Use \`.context.${stats.other[0]}\` instead.`
+					message: 'Missing assertion method.'
 				});
 			}
 		})

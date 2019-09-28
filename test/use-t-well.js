@@ -79,15 +79,15 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.depEqual(a, a);'),
-			errors: [error('Unknown assertion method `.depEqual`.')]
+			errors: [error('Misspelled `.deepEqual` as `.depEqual`.')]
 		},
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
-			errors: [error('Unknown assertion method `.skp`.')]
+			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
 			code: testCase('t.skp.deepEqual(a, a);'),
-			errors: [error('Unknown assertion method `.skp`.')]
+			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
 			code: testCase('t.context();'),
@@ -107,7 +107,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqu;'),
-			errors: [error('Unknown member `.deepEqu`. Use `.context.deepEqu` instead.')]
+			errors: [error('Misspelled `.deepEqual` as `.deepEqu`.')]
 		},
 		{
 			code: testCase('t.deepEqual.is(a, a);'),
@@ -115,7 +115,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.paln(1);'),
-			errors: [error('Unknown assertion method `.paln`.')]
+			errors: [error('Misspelled `.plan` as `.paln`.')]
 		},
 		{
 			code: testCase('t.skip();'),
@@ -129,6 +129,56 @@ ruleTester.run('use-t-well', rule, {
 			code: testCase('t.falsey(a);'),
 			output: testCase('t.falsy(a);'),
 			errors: [error('Misspelled `.falsy` as `.falsey`.')]
+		},
+		{
+			code: testCase('t.truthey(a);'),
+			output: testCase('t.truthy(a);'),
+			errors: [error('Misspelled `.truthy` as `.truthey`.')]
+		},
+		{
+			code: testCase('t.deepequal(a, {});'),
+			output: testCase('t.deepEqual(a, {});'),
+			errors: [error('Misspelled `.deepEqual` as `.deepequal`.')]
+		},
+		{
+			code: testCase('t.contxt;'),
+			output: testCase('t.context;'),
+			errors: [error('Misspelled `.context` as `.contxt`.')]
+		},
+		{
+			code: testCase('t.notdeepEqual(a, {});'),
+			output: testCase('t.notDeepEqual(a, {});'),
+			errors: [error('Misspelled `.notDeepEqual` as `.notdeepEqual`.')]
+		},
+		{
+			code: testCase('t.throw(a);'),
+			output: testCase('t.throws(a);'),
+			errors: [error('Misspelled `.throws` as `.throw`.')]
+		},
+		{
+			code: testCase('t.notThrow(a);'),
+			output: testCase('t.notThrows(a);'),
+			errors: [error('Misspelled `.notThrows` as `.notThrow`.')]
+		},
+		{
+			code: testCase('t.throwAsync(a);'),
+			output: testCase('t.throwsAsync(a);'),
+			errors: [error('Misspelled `.throwsAsync` as `.throwAsync`.')]
+		},
+		{
+			code: testCase('t.notthrowAsync(a);'),
+			output: testCase('t.notThrowsAsync(a);'),
+			errors: [error('Misspelled `.notThrowsAsync` as `.notthrowAsync`.')]
+		},
+		{
+			code: testCase('t.regexp(a, /r/);'),
+			output: testCase('t.regex(a, /r/);'),
+			errors: [error('Misspelled `.regex` as `.regexp`.')]
+		},
+		{
+			code: testCase('t.notregexp(a, /r/);'),
+			output: testCase('t.notRegex(a, /r/);'),
+			errors: [error('Misspelled `.notRegex` as `.notregexp`.')]
 		}
 	]
 });
