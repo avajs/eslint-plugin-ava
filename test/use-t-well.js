@@ -184,6 +184,11 @@ ruleTester.run('use-t-well', rule, {
 			code: testCase('t.notregexp(a, /r/);'),
 			output: testCase('t.notRegex(a, /r/);'),
 			errors: [error('Misspelled `.notRegex` as `.notregexp`.')]
+		},
+		{
+			code: testCase('t.contxt.foo = 1;'),
+			output: testCase('t.context.foo = 1;'),
+			errors: [error('Misspelled `.context` as `.contxt`.')]
 		}
 	]
 });
