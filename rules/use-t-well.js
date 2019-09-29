@@ -82,6 +82,14 @@ const isCallExpression = node =>
 	node.parent.type === 'CallExpression' &&
 	node.parent.callee === node;
 
+const getMemberNodes = node => {
+	if (node.object.type === 'MemberExpression') {
+		return getMemberNodes(node.object).concat(node.property);
+	}
+
+	return [node.property];
+};
+
 const correctIfNeeded = (name, context, node) => {
 	const correction = correcter.correct(name, Math.max(0, Math.min(name.length - 2, 2)));
 	if (correction === undefined) {
@@ -92,7 +100,7 @@ const correctIfNeeded = (name, context, node) => {
 		context.report({
 			node,
 			message: `Misspelled \`.${correction}\` as \`.${name}\`.`,
-			fix: fixer => fixer.replaceText(node.property, correction)
+			fix: fixer => fixer.replaceText(node, correction)
 		});
 	}
 
@@ -124,24 +132,25 @@ const create = context => {
 				return;
 			}
 
-			const members = util.getMembers(node);
+			const members = getMemberNodes(node);
 
 			let hadSkip = false;
 			let hadCall = false;
 			let needCall = true;
 			for (const [i, member] of members.entries()) {
-				const corrected = correctIfNeeded(member, context, node);
+				const {name} = member;
+				const corrected = correctIfNeeded(name, context, member);
 				if (corrected === undefined) {
 					needCall = false;
 					if (isCallExpression(node)) {
 						context.report({
 							node,
-							message: `Unknown assertion method \`.${member}\`.`
+							message: `Unknown assertion method \`.${name}\`.`
 						});
 					} else {
 						context.report({
 							node,
-							message: `Unknown member \`.${member}\`. Use \`.context.${member}\` instead.`
+							message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`
 						});
 					}
 
@@ -151,7 +160,7 @@ const create = context => {
 					if (members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
-							message: `Unknown assertion method \`.${member}\`.`
+							message: `Unknown assertion method \`.${name}\`.`
 						});
 					}
 

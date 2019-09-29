@@ -79,14 +79,17 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.depEqual(a, a);'),
+			output: testCase('t.deepEqual(a, a);'),
 			errors: [error('Misspelled `.deepEqual` as `.depEqual`.')]
 		},
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
+			output: testCase('t.deepEqual.skip(a, a);'),
 			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
 			code: testCase('t.skp.deepEqual(a, a);'),
+			output: testCase('t.skip.deepEqual(a, a);'),
 			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
@@ -107,6 +110,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqu;'),
+			output: testCase('t.deepEqual;'),
 			errors: [error('Misspelled `.deepEqual` as `.deepEqu`.')]
 		},
 		{
@@ -115,6 +119,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.paln(1);'),
+			output: testCase('t.plan(1);'),
 			errors: [error('Misspelled `.plan` as `.paln`.')]
 		},
 		{
