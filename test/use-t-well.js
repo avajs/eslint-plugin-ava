@@ -50,7 +50,6 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.snapshot(v);'),
 		testCase('t.ifError(error);'),
 		testCase('t.deepEqual.skip(a, a);'),
-		testCase('t.skip.deepEqual(a, a);'),
 		testCase('t.context.a = 1;'),
 		testCase('t.context.foo.skip();'),
 		testCase('console.log(t.context);'),
@@ -85,11 +84,6 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
 			output: testCase('t.deepEqual.skip(a, a);'),
-			errors: [error('Misspelled `.skip` as `.skp`.')]
-		},
-		{
-			code: testCase('t.skp.deepEqual(a, a);'),
-			output: testCase('t.skip.deepEqual(a, a);'),
 			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
@@ -128,6 +122,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
+			output: testCase('t.deepEqual.skip(a, a);'),
 			errors: [error('Too many chained uses of `.skip`.')]
 		},
 		{
@@ -189,6 +184,21 @@ ruleTester.run('use-t-well', rule, {
 			code: testCase('t.contxt.foo = 1;'),
 			output: testCase('t.context.foo = 1;'),
 			errors: [error('Misspelled `.context` as `.contxt`.')]
+		},
+
+		{
+			code: testCase('t.skip.deepEqual(a, a);'),
+			output: testCase('t.deepEqual.skip(a, a);'),
+			errors: [error('`.skip` modifier should be the last in chain.')]
+		},
+		{
+			code: testCase('t.skp.deepEqual(a, a);'),
+			output: testCase('t.skip.deepEqual(a, a);'),
+			errors: [error('Misspelled `.skip` as `.skp`.')]
+		},
+		{
+			code: testCase('t.deepEqual.context(a, a);'),
+			errors: [error('Unknown assertion method `.context`.')]
 		}
 	]
 });

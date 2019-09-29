@@ -65,14 +65,10 @@ class MicroCorrecter {
 	}
 }
 
-const nonMethods = new Set([
-	'context',
-	'title'
-]);
-
 const properties = new Set([
-	...nonMethods,
 	...util.executionMethods,
+	'context',
+	'title',
 	'skip'
 ]);
 
@@ -90,22 +86,7 @@ const getMemberNodes = node => {
 	return [node.property];
 };
 
-const correctIfNeeded = (name, context, node) => {
-	const correction = correcter.correct(name, Math.max(0, Math.min(name.length - 2, 2)));
-	if (correction === undefined) {
-		return undefined;
-	}
-
-	if (correction !== name) {
-		context.report({
-			node,
-			message: `Misspelled \`.${correction}\` as \`.${name}\`.`,
-			fix: fixer => fixer.replaceText(node, correction)
-		});
-	}
-
-	return correction;
-};
+const correctIdentifier = name => correcter.correct(name, Math.max(0, Math.min(name.length - 2, 2)));
 
 const create = context => {
 	const ava = createAvaRule();
@@ -134,29 +115,42 @@ const create = context => {
 
 			const members = getMemberNodes(node);
 
-			let hadSkip = false;
+			const skipPositions = [];
 			let hadCall = false;
-			let needCall = true;
 			for (const [i, member] of members.entries()) {
 				const {name} = member;
-				const corrected = correctIfNeeded(name, context, member);
-				if (corrected === undefined) {
-					needCall = false;
-					if (isCallExpression(node)) {
-						context.report({
-							node,
-							message: `Unknown assertion method \`.${name}\`.`
-						});
+
+				let corrected = correctIdentifier(name);
+
+				if (i !== 0 && (corrected === 'context' || corrected === 'title')) { // `context` and `title` can only be first
+					corrected = undefined;
+				}
+
+				if (corrected !== name) {
+					if (corrected === undefined) {
+						if (isCallExpression(node)) {
+							context.report({
+								node,
+								message: `Unknown assertion method \`.${name}\`.`
+							});
+						} else {
+							context.report({
+								node,
+								message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`
+							});
+						}
 					} else {
 						context.report({
 							node,
-							message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`
+							message: `Misspelled \`.${corrected}\` as \`.${name}\`.`,
+							fix: fixer => fixer.replaceText(member, corrected)
 						});
 					}
 
-					break;
-				} else if (i === 0 && nonMethods.has(corrected)) {
-					needCall = false;
+					return; // Don't check further
+				}
+
+				if (name === 'context' || name === 'title') {
 					if (members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
@@ -164,16 +158,11 @@ const create = context => {
 						});
 					}
 
-					break;
-				} else if (corrected === 'skip') {
-					if (hadSkip) {
-						context.report({
-							node,
-							message: 'Too many chained uses of `.skip`.'
-						});
-					}
+					return; // Don't check further
+				}
 
-					hadSkip = true;
+				if (name === 'skip') {
+					skipPositions.push(i);
 				} else {
 					if (hadCall) {
 						context.report({
@@ -186,10 +175,32 @@ const create = context => {
 				}
 			}
 
-			if (needCall && !hadCall) {
+			if (!hadCall) {
 				context.report({
 					node,
 					message: 'Missing assertion method.'
+				});
+			}
+
+			if (skipPositions.length > 1) {
+				context.report({
+					node,
+					message: 'Too many chained uses of `.skip`.',
+					fix: fixer => {
+						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						return fixer.replaceText(node, chain.join('.'));
+					}
+				});
+			}
+
+			if (skipPositions.length === 1 && skipPositions[0] !== members.length - 1) {
+				context.report({
+					node,
+					message: '`.skip` modifier should be the last in chain.',
+					fix: fixer => {
+						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						return fixer.replaceText(node, chain.join('.'));
+					}
 				});
 			}
 		})

@@ -4,7 +4,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 Prevent the use of unknown assertion methods and the access to members other than the assertion methods and `.context`, as well as some known misuses of `t`.
 
-This rule is partly fixable. It will replace most misspelled assertion method names with proper names.
+This rule is partly fixable. It can fix most misspelled assertion method names and incorrect usages of `.skip`.
 
 
 ## Fail
