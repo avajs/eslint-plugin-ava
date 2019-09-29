@@ -48,6 +48,7 @@ module.exports = {
 				'ava/test-title-format': 'off',
 				'ava/use-t-well': 'error',
 				'ava/use-t': 'error',
+				'ava/use-t-throws-async-well': 'error',
 				'ava/use-test': 'error',
 				'ava/use-true-false': 'error'
 			}
