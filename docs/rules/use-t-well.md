@@ -16,10 +16,11 @@ test('main', t => {
 	t(value); // `t` is not a function
 	t.depEqual(value, [2]); // Misspelled `.deepEqual` as `.depEqual`, fixable
 	t.contxt.foo = 100; // Misspelled `.context` as `.contxt`, fixable
+	t.deepEqual.skip.skip(); // Too many chained uses of `.skip`, fixable
+	t.skip.deepEqual(1, 1); // `.skip` modifier should be the last in chain, fixable
 	t.foo = 1000; // Unknown member `.foo`. Use `.context.foo` instead
 	t.deepEqual.is(value, value); // Can't chain assertion methods
 	t.skip(); // Missing assertion method
-	t.deepEqual.skip.skip(); // Too many chained uses of `.skip`
 });
 ```
 
