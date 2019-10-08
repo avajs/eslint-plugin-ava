@@ -49,5 +49,5 @@ See also [AVA's configuration](https://github.com/avajs/ava/blob/master/docs/06-
 You can set the options like this:
 
 ```js
-"ava/no-ignored-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
+"ava/no-import-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
 ```
