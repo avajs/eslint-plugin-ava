@@ -10,7 +10,7 @@ For example, titles like `'Should throw when invalid.'`, `'Should fail when call
 ## Fail
 
 ```js
-/* eslint ava/test-title: ["error", {format: "^Should"}] */
+/* eslint ava/test-title-format: ["error", {format: "^Should"}] */
 import test from 'ava';
 
 test('Not starting with `Should`', t => {
@@ -19,7 +19,7 @@ test('Not starting with `Should`', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {format: "\\.$"}] */
+/* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
 import test from 'ava';
 
 test('Doesn\'t end with a dot', t => {
@@ -31,7 +31,7 @@ test('Doesn\'t end with a dot', t => {
 ## Pass
 
 ```js
-/* eslint ava/test-title: ["error", {format: "^Should"}] */
+/* eslint ava/test-title-format: ["error", {format: "^Should"}] */
 import test from 'ava';
 
 test('Should pass tests', t => {
@@ -44,7 +44,7 @@ test('Should behave as expected', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {format: "\\.$"}] */
+/* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
 import test from 'ava';
 
 test('End with a dot.', t => {
