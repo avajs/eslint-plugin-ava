@@ -44,7 +44,6 @@ This rule supports the following options:
 * `extensions`: an array of extensions of the files that AVA recognizes as test files or helpers. Overrides *both* the `babel.extensions` *and* `extensions` configuration otherwise used by AVA itself.
 * `files`: an array of glob patterns to select test files. Overrides the `files` configuration otherwise used by AVA itself.
 * `helpers`: an array of glob patterns to select helper files. Overrides the `helpers` configuration otherwise used by AVA itself.
-* `sources`: an array of glob patterns to match files that, when changed, cause tests to be re-run (when in watch mode). Overrides the `sources` configuration otherwise used by AVA itself.
 
 See also [AVA's configuration](https://github.com/avajs/ava/blob/master/docs/06-configuration.md#options).
 

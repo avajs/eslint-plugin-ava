@@ -31,13 +31,11 @@ const create = context => {
 				return {};
 			}
 
-			const {isHelper, isSource, isTest} = avaHelper.classifyFile(filename);
+			const {isHelper, isTest} = avaHelper.classifyFile(filename);
 
 			if (!isTest) {
 				if (isHelper) {
 					context.report({node, message: 'AVA treats this as a helper file.'});
-				} else if (isSource) {
-					context.report({node, message: 'AVA treats this as a source file.'});
 				} else {
 					context.report({node, message: 'AVA ignores this file.'});
 				}

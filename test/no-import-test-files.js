@@ -20,13 +20,13 @@ util.loadAvaHelper = () => ({
 	classifyImport: importPath => {
 		switch (importPath) {
 			case toPath('lib/foo.test.js'):
-				return {isHelper: false, isSource: false, isTest: true};
+				return {isHelper: false, isTest: true};
 			case toPath('../foo.test.js'):
-				return {isHelper: false, isSource: false, isTest: true};
+				return {isHelper: false, isTest: true};
 			case toPath('@foo/bar'): // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
-				return {isHelper: false, isSource: false, isTest: true};
+				return {isHelper: false, isTest: true};
 			default:
-				return {isHelper: false, isSource: false, isTest: false};
+				return {isHelper: false, isTest: false};
 		}
 	}
 });
