@@ -4,13 +4,13 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 It's easy to run only one test with `test.only()` and then forget about it. It's visible in the results, but still easily missed. Forgetting to remove `.only`, means only this one test in the whole file will run, and if not caught, can let serious bugs slip into your codebase.
 
-This rule is fixable. It will remove the `.only` test modifier. 
+This rule is fixable. It will remove the `.only` test modifier.
 
 
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.only('test 1', t => {
 	t.pass();
@@ -26,7 +26,7 @@ test('test 2', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('test 1', t => {
 	t.pass();

@@ -11,7 +11,7 @@ Skipped assertions are counted.
 
 ```js
 /*eslint ava/max-asserts: ["error", 5]*/
-import test from 'ava';
+const test = require('ava');
 
 test('getSomeObject should define the players\' names', t => {
 	const object = lib.getSomeObject();
@@ -30,7 +30,7 @@ test('getSomeObject should define the players\' names', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('getSomeObject should define the player\'s name', t => {
 	const object = lib.getSomeObject();

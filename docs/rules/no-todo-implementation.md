@@ -8,7 +8,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.todo('title', t => {
 	// ...
@@ -23,7 +23,7 @@ test.todo(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.todo('title');
 

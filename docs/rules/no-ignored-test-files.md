@@ -10,7 +10,7 @@ This rule will verify that files which create tests are treated as test files by
 ```js
 // File: test/_helper.js
 // Invalid because a helper.
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
@@ -18,7 +18,7 @@ test('foo', t => {
 
 // File: lib/foo.js
 // Invalid because not a test file.
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
@@ -30,7 +30,7 @@ test('foo', t => {
 
 ```js
 // File: test/foo.js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
