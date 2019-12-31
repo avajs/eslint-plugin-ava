@@ -8,7 +8,7 @@ Disallow the use of `test.cb()`. We instead recommend using `test()` with an asy
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.cb('some test', t => {
 	t.pass();
@@ -20,7 +20,7 @@ test.cb('some test', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('some test', async t => {
 	t.pass();

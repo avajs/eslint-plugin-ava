@@ -16,7 +16,7 @@ Useful for people wanting to fully embrace the power of [power-assert](https://g
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.truthy(foo);
@@ -34,7 +34,7 @@ test(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.assert(foo === bar);

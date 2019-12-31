@@ -10,7 +10,7 @@ This rule is fixable. It will remove the `.skip` test modifier.
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
@@ -25,7 +25,7 @@ test.skip('bar', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
