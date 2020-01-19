@@ -1,0 +1,28 @@
+name: Install and test eslint-plugin-ava
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    paths-ignore:
+    - '*.md'
+jobs:
+  nodejs:
+    name: Node.js
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [^10.18.0, ^12.14.0, ^13.5.0]
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm install --no-audit
+      - run: npm test
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
