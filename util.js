@@ -123,4 +123,4 @@ const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
 exports.assertionMethods = new Set(assertionMethodNames);
-exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log']));
+exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log', 'timeout']));
