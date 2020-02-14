@@ -22,5 +22,5 @@ const test = require('ava');
 import test from 'ava';
 
 var test = require('foo');
-import test from 'foo';
+const test = require('foo');
 ```

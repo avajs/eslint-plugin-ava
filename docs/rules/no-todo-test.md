@@ -8,7 +8,7 @@ Disallow the use of `test.todo()`. You might want to do this to only ship featur
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.todo('some test');
 ```
@@ -17,7 +17,7 @@ test.todo('some test');
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('some test', t => {
 	// Some implementation

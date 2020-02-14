@@ -1,6 +1,5 @@
 import test from 'ava';
 import avaRuleTester from 'eslint-ava-rule-tester';
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule';
 
 const rule = {
@@ -19,7 +18,7 @@ const rule = {
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true,
+		es6: true
 	},
 	parserOptions: {
 		sourceType: 'module'

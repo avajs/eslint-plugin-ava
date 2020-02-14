@@ -10,7 +10,7 @@ This rule is fixable. It will wrap the assertion in braces `{}`. It will not do 
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => t.true(fn()));
 ```
@@ -19,7 +19,7 @@ test('foo', t => t.true(fn()));
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.true(fn());

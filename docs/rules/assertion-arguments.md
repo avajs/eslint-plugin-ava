@@ -9,7 +9,7 @@ Assertion messages are optional arguments that can be given to any assertion cal
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.is(value); // Not enough arguments
@@ -31,7 +31,7 @@ test(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.is(value, expected);

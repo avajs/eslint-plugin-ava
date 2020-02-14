@@ -8,7 +8,7 @@ In AVA, you cannot nest tests, for example, create tests inside of other tests. 
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	const result = foo();
@@ -24,7 +24,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	const result = foo();

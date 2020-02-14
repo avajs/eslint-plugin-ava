@@ -7,7 +7,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.cb(t => {
 	t.end();
@@ -24,13 +24,13 @@ test.cb(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.cb(t => {
 	t.is(1, 1);
 	t.end();
 });
-import test from 'ava';
+const test = require('ava');
 
 test.cb(t => {
 	if (a) {

@@ -9,7 +9,7 @@ This rule enforces the use of the former when the tested expression is known to 
 ### Fail
 
 ```js
-import ava from 'ava';
+const ava = require('ava');
 
 test(t => {
 	t.truthy(value < 2);
@@ -24,7 +24,7 @@ test(t => {
 ### Pass
 
 ```js
-import ava from 'ava';
+const ava = require('ava');
 
 test(t => {
 	t.true(value < 2);
