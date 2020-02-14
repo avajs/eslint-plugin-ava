@@ -10,7 +10,7 @@ This rule is partly fixable. It will replace misspelled `.falsey` with `.falsy`.
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('main', t => {
 	t(value); // `t` is not a function
@@ -27,7 +27,7 @@ test('main', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('main', t => {
 	t.deepEqual(value, [2]);

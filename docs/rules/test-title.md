@@ -8,7 +8,7 @@ Tests should have a title. AVA [v1.0.1](https://github.com/avajs/ava/releases/ta
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.pass();
@@ -19,7 +19,7 @@ test(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();

@@ -8,7 +8,7 @@ Disallow tests with identical titles as it makes it hard to differentiate them.
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.pass();
@@ -23,7 +23,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	t.pass();

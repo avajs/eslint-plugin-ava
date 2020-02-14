@@ -128,7 +128,10 @@ const execute = name => {
 			title: 'Clean up',
 			task: () => del(dest, {force: true})
 		}
-	], {
+	].map(({title, task}) => ({
+		title: `${name} / ${title}`,
+		task
+	})), {
 		exitOnError: false
 	});
 };
@@ -155,7 +158,9 @@ const list = new Listr([
 			return tests;
 		}
 	}
-]);
+], {
+	renderer: process.env.INTEGRATION ? 'verbose' : 'default'
+});
 
 list.run()
 	.catch(error => {
@@ -163,6 +168,11 @@ list.run()
 			for (const error2 of error.errors) {
 				console.error('\n', chalk.red.bold.underline(error2.packageName), chalk.gray('(' + error2.cliArgs.join(' ') + ')'));
 				console.error(error2.message);
+
+				if (error2.stderr) {
+					console.error(chalk.gray(error2.stderr));
+				}
+
 				if (error2.eslintMessage) {
 					console.error(chalk.gray(error2.eslintFile.filePath), chalk.gray(JSON.stringify(error2.eslintMessage, null, 2)));
 				}

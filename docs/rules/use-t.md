@@ -7,7 +7,7 @@ The convention is to have the parameter in AVA's test function be named `t`. Mos
 ### Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(foo => { // Incorrect name
 	t.pass();
@@ -25,7 +25,7 @@ test((bar, t) => { // too many arguments
 ### Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(() => {
 	// ...

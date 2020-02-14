@@ -18,7 +18,7 @@ This rule is fixable as long as no other code is between the hooks that need to 
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.after(t => {
 	doFoo();
@@ -34,7 +34,7 @@ test('foo', t => {
 ```
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('foo', t => {
 	t.true(true);
@@ -49,7 +49,7 @@ test.before(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.before(t => {
 	doFoo();

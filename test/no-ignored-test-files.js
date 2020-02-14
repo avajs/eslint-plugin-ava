@@ -20,13 +20,13 @@ util.loadAvaHelper = () => ({
 	classifyFile: file => {
 		switch (file) {
 			case toPath('lib/foo.test.js'):
-				return {isHelper: false, isSource: false, isTest: true};
+				return {isHelper: false, isTest: true};
 			case toPath('lib/foo/fixtures/bar.test.js'):
-				return {isHelper: false, isSource: true, isTest: false};
+				return {isHelper: false, isTest: false};
 			case toPath('lib/foo/helpers/bar.test.js'):
-				return {isHelper: true, isSource: false, isTest: false};
+				return {isHelper: true, isTest: false};
 			default:
-				return {isHelper: false, isSource: false, isTest: false};
+				return {isHelper: false, isTest: false};
 		}
 	}
 });
@@ -42,7 +42,7 @@ ruleTester.run('no-ignored-test-files', rule, {
 		{
 			code: code(true),
 			filename: toPath('lib/foo/fixtures/bar.test.js'),
-			errors: [{message: 'AVA treats this as a source file.'}]
+			errors: [{message: 'AVA ignores this file.'}]
 		},
 		{
 			code: code(true),

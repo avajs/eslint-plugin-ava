@@ -10,7 +10,7 @@ This rule will report an error when it finds a test that returns an expression t
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(t => {
 	return foo().then(res => {
@@ -23,7 +23,7 @@ test(t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(async t => {
 	t.is(await foo(), 1);

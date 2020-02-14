@@ -10,8 +10,8 @@ For example, titles like `'Should throw when invalid.'`, `'Should fail when call
 ## Fail
 
 ```js
-/* eslint ava/test-title: ["error", {format: "^Should"}] */
-import test from 'ava';
+/* eslint ava/test-title-format: ["error", {format: "^Should"}] */
+const test = require('ava');
 
 test('Not starting with `Should`', t => {
 	t.pass();
@@ -19,8 +19,8 @@ test('Not starting with `Should`', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {format: "\\.$"}] */
-import test from 'ava';
+/* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
+const test = require('ava');
 
 test('Doesn\'t end with a dot', t => {
 	t.pass();
@@ -31,8 +31,8 @@ test('Doesn\'t end with a dot', t => {
 ## Pass
 
 ```js
-/* eslint ava/test-title: ["error", {format: "^Should"}] */
-import test from 'ava';
+/* eslint ava/test-title-format: ["error", {format: "^Should"}] */
+const test = require('ava');
 
 test('Should pass tests', t => {
 	t.pass();
@@ -44,8 +44,8 @@ test('Should behave as expected', t => {
 ```
 
 ```js
-/* eslint ava/test-title: ["error", {format: "\\.$"}] */
-import test from 'ava';
+/* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
+const test = require('ava');
 
 test('End with a dot.', t => {
 	t.pass();
