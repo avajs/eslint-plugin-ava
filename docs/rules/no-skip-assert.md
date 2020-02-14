@@ -8,7 +8,7 @@ It's easy to make an assertion skipped with `t.skip.xyz()` and then forget about
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('some title', t => {
 	t.skip.is(1, 1);
@@ -19,7 +19,7 @@ test('some title', t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test('some title', t => {
 	t.is(1, 1);

@@ -8,7 +8,7 @@ Prevent the use of duplicate [test modifiers](https://github.com/avajs/ava/blob/
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.only.only(t => {});
 test.serial.serial(t => {});
@@ -21,7 +21,7 @@ test.only.only.cb(t => {});
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.only(t => {});
 test.serial(t => {});

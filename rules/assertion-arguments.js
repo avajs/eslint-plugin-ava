@@ -71,6 +71,10 @@ const expectedNbArguments = {
 	truthy: {
 		min: 1,
 		max: 2
+	},
+	timeout: {
+		min: 1,
+		max: 1
 	}
 };
 

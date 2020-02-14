@@ -10,13 +10,13 @@ This rule will verify that you don't import any test files. It will consider the
 ```js
 // File: src/index.js
 // Invalid because *.test.js is considered as a test file.
-import tests from './index.test.js';
+const tests = require('./index.test.js');
 ```
 
 ```js
 // File: src/index.js
 // Invalid because any files inside __tests__ are considered test files
-import tests from './__tests__/index.js';
+const tests = require('./__tests__/index.js');
 
 test('foo', t => {
 	t.pass();
@@ -28,13 +28,13 @@ test('foo', t => {
 
 ```js
 // File: src/index.js
-import sinon from 'sinon';
+const sinon = require('sinon');
 
 ```
 
 ```js
 // File: src/index.js
-import utils from './utils';
+const utils = require('./utils');
 ```
 
 ## Options
@@ -49,5 +49,5 @@ See also [AVA's configuration](https://github.com/avajs/ava/blob/master/docs/06-
 You can set the options like this:
 
 ```js
-"ava/no-ignored-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
+"ava/no-import-test-files": ["error", {"files": ["lib/**/*.test.js", "utils/**/*.test.js"]}]
 ```

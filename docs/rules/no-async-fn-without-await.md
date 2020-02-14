@@ -12,7 +12,7 @@ This rule will report an error when it finds an async test which does not use th
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(async t => {
 	return foo().then(res => {
@@ -25,7 +25,7 @@ test(async t => {
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test(async t => {
 	t.is(await foo(), 1);

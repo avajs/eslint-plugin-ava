@@ -8,7 +8,7 @@ Prevent the use of unknown [test modifiers](https://github.com/avajs/ava/blob/ma
 ## Fail
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.onlu(t => {});
 test.seril(t => {});
@@ -21,7 +21,7 @@ test.unknown(t => {});
 ## Pass
 
 ```js
-import test from 'ava';
+const test = require('ava');
 
 test.only(t => {});
 test.serial(t => {});
