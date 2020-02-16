@@ -32,7 +32,7 @@ const create = context => {
 	return {
 		ImportDeclaration: node => {
 			if (node.source.value === 'ava') {
-				const {name} = node.specifiers[0].local
+				const {name} = node.specifiers[0].local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);
 				}
