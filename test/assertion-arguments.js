@@ -105,6 +105,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.is.skip(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.snapshot(value, \'message\');'),
 		testCase('always', 't.timeout(100);'),
+		testCase('always', 't.try(tt => tt.pass());'),
+		testCase('always', 't.try(tt => tt.pass(), 1, 2);'),
+		testCase('always', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
 		testCase('always', 't.true(true);', [], false),
@@ -134,6 +137,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.is.skip(\'same\', \'same\');'),
 		testCase('never', 't.snapshot(value);'),
 		testCase('never', 't.timeout(100);'),
+		testCase('never', 't.try(tt => tt.pass());'),
+		testCase('never', 't.try(tt => tt.pass(), 1, 2);'),
+		testCase('never', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
+
 		// Shouldn't be triggered since it's not a test file
 		testCase('never', 't.true(true, \'message\');', [], false),
 
@@ -181,6 +188,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.is.skip(\'same\');', tooFewError(2)),
 		testCase(false, 't.snapshot();', tooFewError(1)),
 		testCase(false, 't.timeout();', tooFewError(1)),
+		testCase(false, 't.try();', tooFewError(1)),
 
 		// Too many arguments
 		testCase(false, 't.plan(1, \'extra argument\');', tooManyError(1)),

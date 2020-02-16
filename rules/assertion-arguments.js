@@ -115,6 +115,14 @@ const create = context => {
 				return;
 			}
 
+			if (members[0] === 'try') {
+				if (gottenArgs < 1) {
+					report(node, 'Not enough arguments. Expected at least 1.');
+				}
+
+				return;
+			}
+
 			const nArgs = expectedNbArguments[members[0]];
 
 			if (!nArgs) {
