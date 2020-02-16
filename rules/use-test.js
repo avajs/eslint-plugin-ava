@@ -26,19 +26,24 @@ function report(context, node) {
 }
 
 const create = context => {
-	const isTypescript = ['.ts', '.tsx'].includes(path.extname(context.getFilename()));
+	const ext = path.extname(context.getFilename());
+	const isTypeScript = ext === '.ts' || ext === '.tsx';
 
 	return {
 		ImportDeclaration: node => {
-			if (node.source.value === 'ava' &&
-				!['test', ...(isTypescript ? ['anyTest'] : [])].includes(node.specifiers[0].local.name)) {
-				report(context, node);
+			if (node.source.value === 'ava') {
+				const {name} = node.specifiers[0].local
+				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
+					report(context, node);
+				}
 			}
 		},
 		VariableDeclarator: node => {
-			if (!['test', ...(isTypescript ? ['anyTest'] : [])].includes(node.id.name) &&
-				node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
-				report(context, node);
+			if (node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
+				const {name} = node.id;
+				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
+					report(context, node);
+				}
 			}
 		}
 	};
