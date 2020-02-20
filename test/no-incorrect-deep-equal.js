@@ -40,6 +40,18 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			test('x', t => {
 				t.notDeepEqual(expression, []);
 			});
+		`,
+		`
+			${header}
+			test('x', t => {
+				t.deepEqual(expression, /regex/);
+			});
+		`,
+		`
+			${header}
+			test('x', t => {
+				t.deepEqual(/regex/, expression);
+			});
 		`
 	],
 	invalid: [
