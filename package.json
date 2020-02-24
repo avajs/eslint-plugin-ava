@@ -35,6 +35,7 @@
 		"espree": "^6.1.2",
 		"espurify": "^2.0.1",
 		"import-modules": "^2.0.0",
+		"micro-spelling-correcter": "^1.1.0",
 		"pkg-dir": "^4.2.0",
 		"resolve-from": "^5.0.0"
 	},
