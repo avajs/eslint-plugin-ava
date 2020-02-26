@@ -4,7 +4,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 Prevent the use of unknown assertion methods and the access to members other than the assertion methods and `.context`, as well as some known misuses of `t`.
 
-This rule is partly fixable. It will replace misspelled `.falsey` with `.falsy`.
+This rule is partly fixable. It can fix most misspelled assertion method names and incorrect usages of `.skip`.
 
 
 ## Fail
@@ -14,12 +14,13 @@ const test = require('ava');
 
 test('main', t => {
 	t(value); // `t` is not a function
-	t.depEqual(value, [2]); // Unknown assertion method `.depEqual`
-	t.contxt.foo = 100; // Unknown member `.contxt`. Use `.context.contxt` instead
+	t.depEqual(value, [2]); // Misspelled `.deepEqual` as `.depEqual`, fixable
+	t.contxt.foo = 100; // Misspelled `.context` as `.contxt`, fixable
+	t.deepEqual.skip.skip(); // Too many chained uses of `.skip`, fixable
+	t.skip.deepEqual(1, 1); // `.skip` modifier should be the last in chain, fixable
 	t.foo = 1000; // Unknown member `.foo`. Use `.context.foo` instead
 	t.deepEqual.is(value, value); // Can't chain assertion methods
 	t.skip(); // Missing assertion method
-	t.deepEqual.skip.skip(); // Too many chained uses of `.skip`
 });
 ```
 

@@ -50,7 +50,6 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.snapshot(v);'),
 		testCase('t.ifError(error);'),
 		testCase('t.deepEqual.skip(a, a);'),
-		testCase('t.skip.deepEqual(a, a);'),
 		testCase('t.context.a = 1;'),
 		testCase('t.context.foo.skip();'),
 		testCase('console.log(t.context);'),
@@ -84,15 +83,13 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.depEqual(a, a);'),
-			errors: [error('Unknown assertion method `.depEqual`.')]
+			output: testCase('t.deepEqual(a, a);'),
+			errors: [error('Misspelled `.deepEqual` as `.depEqual`.')]
 		},
 		{
 			code: testCase('t.deepEqual.skp(a, a);'),
-			errors: [error('Unknown assertion method `.skp`.')]
-		},
-		{
-			code: testCase('t.skp.deepEqual(a, a);'),
-			errors: [error('Unknown assertion method `.skp`.')]
+			output: testCase('t.deepEqual.skip(a, a);'),
+			errors: [error('Misspelled `.skip` as `.skp`.')]
 		},
 		{
 			code: testCase('t.context();'),
@@ -112,7 +109,8 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqu;'),
-			errors: [error('Unknown member `.deepEqu`. Use `.context.deepEqu` instead.')]
+			output: testCase('t.deepEqual;'),
+			errors: [error('Misspelled `.deepEqual` as `.deepEqu`.')]
 		},
 		{
 			code: testCase('t.deepEqual.is(a, a);'),
@@ -120,7 +118,8 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.paln(1);'),
-			errors: [error('Unknown assertion method `.paln`.')]
+			output: testCase('t.plan(1);'),
+			errors: [error('Misspelled `.plan` as `.paln`.')]
 		},
 		{
 			code: testCase('t.skip();'),
@@ -128,12 +127,83 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.deepEqual.skip.skip(a, a);'),
+			output: testCase('t.deepEqual.skip(a, a);'),
 			errors: [error('Too many chained uses of `.skip`.')]
 		},
 		{
 			code: testCase('t.falsey(a);'),
 			output: testCase('t.falsy(a);'),
 			errors: [error('Misspelled `.falsy` as `.falsey`.')]
+		},
+		{
+			code: testCase('t.truthey(a);'),
+			output: testCase('t.truthy(a);'),
+			errors: [error('Misspelled `.truthy` as `.truthey`.')]
+		},
+		{
+			code: testCase('t.deepequal(a, {});'),
+			output: testCase('t.deepEqual(a, {});'),
+			errors: [error('Misspelled `.deepEqual` as `.deepequal`.')]
+		},
+		{
+			code: testCase('t.contxt;'),
+			output: testCase('t.context;'),
+			errors: [error('Misspelled `.context` as `.contxt`.')]
+		},
+		{
+			code: testCase('t.notdeepEqual(a, {});'),
+			output: testCase('t.notDeepEqual(a, {});'),
+			errors: [error('Misspelled `.notDeepEqual` as `.notdeepEqual`.')]
+		},
+		{
+			code: testCase('t.throw(a);'),
+			output: testCase('t.throws(a);'),
+			errors: [error('Misspelled `.throws` as `.throw`.')]
+		},
+		{
+			code: testCase('t.notThrow(a);'),
+			output: testCase('t.notThrows(a);'),
+			errors: [error('Misspelled `.notThrows` as `.notThrow`.')]
+		},
+		{
+			code: testCase('t.throwAsync(a);'),
+			output: testCase('t.throwsAsync(a);'),
+			errors: [error('Misspelled `.throwsAsync` as `.throwAsync`.')]
+		},
+		{
+			code: testCase('t.notthrowAsync(a);'),
+			output: testCase('t.notThrowsAsync(a);'),
+			errors: [error('Misspelled `.notThrowsAsync` as `.notthrowAsync`.')]
+		},
+		{
+			code: testCase('t.regexp(a, /r/);'),
+			output: testCase('t.regex(a, /r/);'),
+			errors: [error('Misspelled `.regex` as `.regexp`.')]
+		},
+		{
+			code: testCase('t.notregexp(a, /r/);'),
+			output: testCase('t.notRegex(a, /r/);'),
+			errors: [error('Misspelled `.notRegex` as `.notregexp`.')]
+		},
+		{
+			code: testCase('t.contxt.foo = 1;'),
+			output: testCase('t.context.foo = 1;'),
+			errors: [error('Misspelled `.context` as `.contxt`.')]
+		},
+
+		{
+			code: testCase('t.skip.deepEqual(a, a);'),
+			output: testCase('t.deepEqual.skip(a, a);'),
+			errors: [error('`.skip` modifier should be the last in chain.')]
+		},
+		{
+			code: testCase('t.skp.deepEqual(a, a);'),
+			output: testCase('t.skip.deepEqual(a, a);'),
+			errors: [error('Misspelled `.skip` as `.skp`.')]
+		},
+		{
+			code: testCase('t.deepEqual.context(a, a);'),
+			errors: [error('Unknown assertion method `.context`.')]
 		}
 	]
 });

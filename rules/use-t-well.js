@@ -1,35 +1,29 @@
 'use strict';
 const {visitIf} = require('enhance-visitors');
+const MicroSpellingCorrecter = require('micro-spelling-correcter');
+
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const isMethod = name => util.executionMethods.has(name);
+const properties = new Set([
+	...util.executionMethods,
+	'context',
+	'title',
+	'skip'
+]);
+
+const correcter = new MicroSpellingCorrecter([...properties]);
 
 const isCallExpression = node =>
 	node.parent.type === 'CallExpression' &&
 	node.parent.callee === node;
 
-const getMemberStats = members => {
-	const initial = {
-		skip: [],
-		falsey: [],
-		method: [],
-		other: []
-	};
+const getMemberNodes = node => {
+	if (node.object.type === 'MemberExpression') {
+		return getMemberNodes(node.object).concat(node.property);
+	}
 
-	return members.reduce((res, member) => {
-		if (member === 'skip') {
-			res.skip.push(member);
-		} else if (member === 'falsey') {
-			res.falsey.push(member);
-		} else if (isMethod(member)) {
-			res.method.push(member);
-		} else {
-			res.other.push(member);
-		}
-
-		return res;
-	}, initial);
+	return [node.property];
 };
 
 const create = context => {
@@ -57,67 +51,94 @@ const create = context => {
 				return;
 			}
 
-			const members = util.getMembers(node);
-			const stats = getMemberStats(members);
+			const members = getMemberNodes(node);
 
-			if (members[0] === 'context') {
-				// Anything is fine when of the form `t.context...`
-				if (members.length === 1 && isCallExpression(node)) {
-					// Except `t.context()`
-					context.report({
-						node,
-						message: 'Unknown assertion method `.context`.'
-					});
+			const skipPositions = [];
+			let hadCall = false;
+			for (const [i, member] of members.entries()) {
+				const {name} = member;
+
+				let corrected = correcter.correct(name);
+
+				if (i !== 0 && (corrected === 'context' || corrected === 'title')) { // `context` and `title` can only be first
+					corrected = undefined;
 				}
 
-				return;
+				if (corrected !== name) {
+					if (corrected === undefined) {
+						if (isCallExpression(node)) {
+							context.report({
+								node,
+								message: `Unknown assertion method \`.${name}\`.`
+							});
+						} else {
+							context.report({
+								node,
+								message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`
+							});
+						}
+					} else {
+						context.report({
+							node,
+							message: `Misspelled \`.${corrected}\` as \`.${name}\`.`,
+							fix: fixer => fixer.replaceText(member, corrected)
+						});
+					}
+
+					return; // Don't check further
+				}
+
+				if (name === 'context' || name === 'title') {
+					if (members.length === 1 && isCallExpression(node)) {
+						context.report({
+							node,
+							message: `Unknown assertion method \`.${name}\`.`
+						});
+					}
+
+					return; // Don't check further
+				}
+
+				if (name === 'skip') {
+					skipPositions.push(i);
+				} else {
+					if (hadCall) {
+						context.report({
+							node,
+							message: 'Can\'t chain assertion methods.'
+						});
+					}
+
+					hadCall = true;
+				}
 			}
 
-			if (members[0] === 'title') {
-				// Anything is fine when of the form `t.title...`
-				if (members.length === 1 && isCallExpression(node)) {
-					// Except `t.title()`
-					context.report({
-						node,
-						message: 'Unknown assertion method `.title`.'
-					});
-				}
-
-				return;
-			}
-
-			if (isCallExpression(node)) {
-				if (stats.other.length > 0) {
-					context.report({
-						node,
-						message: `Unknown assertion method \`.${stats.other[0]}\`.`
-					});
-				} else if (stats.skip.length > 1) {
-					context.report({
-						node,
-						message: 'Too many chained uses of `.skip`.'
-					});
-				} else if (stats.falsey.length > 0) {
-					context.report({
-						node,
-						message: 'Misspelled `.falsy` as `.falsey`.',
-						fix: fixer => fixer.replaceText(node.property, 'falsy')
-					});
-				} else if (stats.method.length > 1) {
-					context.report({
-						node,
-						message: 'Can\'t chain assertion methods.'
-					});
-				} else if (stats.method.length === 0) {
-					context.report({
-						node,
-						message: 'Missing assertion method.'
-					});
-				}
-			} else if (stats.other.length > 0) {
+			if (!hadCall) {
 				context.report({
 					node,
-					message: `Unknown member \`.${stats.other[0]}\`. Use \`.context.${stats.other[0]}\` instead.`
+					message: 'Missing assertion method.'
+				});
+			}
+
+			if (skipPositions.length > 1) {
+				context.report({
+					node,
+					message: 'Too many chained uses of `.skip`.',
+					fix: fixer => {
+						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						return fixer.replaceText(node, chain.join('.'));
+					}
+				});
+			}
+
+			if (skipPositions.length === 1 && skipPositions[0] !== members.length - 1) {
+				context.report({
+					node,
+					message: '`.skip` modifier should be the last in chain.',
+					fix: fixer => {
+						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						return fixer.replaceText(node, chain.join('.'));
+					}
 				});
 			}
 		})
