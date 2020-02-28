@@ -4,7 +4,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 
 The AVA [`t.regex()` assertion](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#regexcontents-regex-message) can test a string against a regular expression.
 
-This rule will enforce the use of `t.regex()` instead of manually using `RegExp#test()`, which will make your code look clearer and produce better failure output.
+This rule will enforce the use of `t.regex()` instead of manually using `RegExp#test()`, which will make your code look clearer and produce better failure output. The rule will also prevent equality assertions with a regex and a non-regex, which is almost always an error.
 
 This rule is fixable. It will replace the use of `RegExp#test()`, `String#match()`, or `String#search()` with `t.regex()`.
 
@@ -24,6 +24,14 @@ const test = require('ava');
 
 test('main', t => {
 	t.truthy('foo'.match(/\w+/));
+});
+```
+
+```js
+const test = require('ava');
+
+test('main', t => {
+	t.is('foo', /\w+/);
 });
 ```
 

@@ -18,7 +18,7 @@ ruleTester.run('prefer-t-regex', rule, {
 	valid: [
 		header + 'test(t => t.regex("foo", /\\d+/));',
 		header + 'test(t => t.regex(foo(), /\\d+/));',
-		header + 'test(t => t.is(/\\d+/.test("foo")), true);',
+		header + 'test(t => t.is(/\\d+/.test("foo"), true));',
 		header + 'test(t => t.true(1 === 1));',
 		header + 'test(t => t.true(foo.bar()));',
 		header + 'const a = /\\d+/;\ntest(t => t.truthy(a));',
@@ -61,6 +61,26 @@ ruleTester.run('prefer-t-regex', rule, {
 		{
 			code: header + 'const reg = /\\d+/;\ntest(t => t.true(reg.test(foo.bar())));',
 			output: header + 'const reg = /\\d+/;\ntest(t => t.regex(foo.bar(), reg));',
+			errors: errors('regex')
+		},
+		{
+			code: header + 'test(t => t.is(foo(), /\\d+/));',
+			output: header + 'test(t => t.regex(foo(), /\\d+/));',
+			errors: errors('regex')
+		},
+		{
+			code: header + 'test(t => t.is(/\\d+/, foo()));',
+			output: header + 'test(t => t.regex(foo(), /\\d+/));',
+			errors: errors('regex')
+		},
+		{
+			code: header + 'test(t => t.deepEqual(foo(), /\\d+/));',
+			output: header + 'test(t => t.regex(foo(), /\\d+/));',
+			errors: errors('regex')
+		},
+		{
+			code: header + 'test(t => t.deepEqual(/\\d+/, foo()));',
+			output: header + 'test(t => t.regex(foo(), /\\d+/));',
 			errors: errors('regex')
 		}
 	]

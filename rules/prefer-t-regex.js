@@ -13,10 +13,115 @@ const create = context => {
 		'falsy'
 	];
 
+	const equalityTests = ['is', 'deepEqual'];
+
 	const findReference = name => {
 		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
 		const definitions = reference.resolved.defs;
+
+		// Many integration tests have identifiers that match zero definitions
+		if (definitions.length === 0) {
+			return undefined;
+		}
+
 		return definitions[definitions.length - 1].node;
+	};
+
+	const isRegExp = lookup => {
+		let isRegex = lookup.regex;
+
+		// It's not a regexp but an identifier
+		if (!isRegex && lookup.type === 'Identifier') {
+			const reference = findReference(lookup.name);
+
+			// Not all possible references have an init field§
+			if (reference && reference.init) {
+				isRegex = reference.init.regex;
+			}
+		}
+
+		return isRegex;
+	};
+
+	const booleanHandler = node => {
+		const firstArg = node.arguments[0];
+
+		// First argument is a call expression
+		const isFunctionCall = firstArg.type === 'CallExpression';
+		if (!isFunctionCall || !firstArg.callee.property) {
+			return;
+		}
+
+		const {name} = firstArg.callee.property;
+		let lookup = {};
+		let variable = {};
+
+		if (name === 'test') {
+			// `lookup.test(variable)`
+			lookup = firstArg.callee.object;
+			variable = firstArg.arguments[0];
+		} else if (['search', 'match'].includes(name)) {
+			// `variable.match(lookup)`
+			lookup = firstArg.arguments[0];
+			variable = firstArg.callee.object;
+		}
+
+		if (!isRegExp(lookup)) {
+			return;
+		}
+
+		const assertion = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
+
+		const fix = fixer => {
+			const source = context.getSourceCode();
+			return [
+				fixer.replaceText(node.callee.property, assertion),
+				fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`)
+			];
+		};
+
+		context.report({
+			node,
+			message: `Prefer using the \`t.${assertion}()\` assertion.`,
+			fix
+		});
+	};
+
+	const equalityHandler = node => {
+		const firstArg = node.arguments[0];
+		const secondArg = node.arguments[1];
+
+		if (!firstArg || !secondArg) {
+			return;
+		}
+
+		const firstIsRx = isRegExp(firstArg);
+		const secondIsRx = isRegExp(secondArg);
+
+		// If both are regex, or neither are, the expression is ok
+		if (firstIsRx === secondIsRx) {
+			return;
+		}
+
+		const matchee = secondIsRx ? firstArg : secondArg;
+		const regex = secondIsRx ? secondArg : firstArg;
+
+		const assertion = 'regex';
+
+		const fix = fixer => {
+			const source = context.getSourceCode();
+			return [
+				fixer.replaceText(node.callee.property, 'regex'),
+				fixer.replaceText(firstArg, `${source.getText(matchee)}`),
+				fixer.replaceText(secondArg, `${source.getText(regex)}`)
+			];
+		};
+
+		context.report({
+			node,
+			message: `Prefer using the \`t.${assertion}()\` assertion.`,
+			fix
+		});
 	};
 
 	return ava.merge({
@@ -24,64 +129,22 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode
 		])(node => {
-			// Call a boolean assertion, for example, `t.true`, `t.false`, …
-			const isBooleanAssertion = node.callee.type === 'MemberExpression' &&
-				booleanTests.includes(node.callee.property.name) &&
+			const isAssertion = node.callee.type === 'MemberExpression' &&
 				util.getNameOfRootNodeObject(node.callee) === 't';
 
-			if (!isBooleanAssertion) {
-				return;
+			// Call a boolean assertion, for example, `t.true`, `t.false`, …
+			const isBooleanAssertion = isAssertion &&
+				booleanTests.includes(node.callee.property.name);
+
+			// Call an equality assertion, ie. 't.is', 't.deepEqual'
+			const isEqualityAssertion = isAssertion &&
+				equalityTests.includes(node.callee.property.name);
+
+			if (isBooleanAssertion) {
+				booleanHandler(node);
+			} else if (isEqualityAssertion) {
+				equalityHandler(node);
 			}
-
-			const firstArg = node.arguments[0];
-
-			// First argument is a call expression
-			const isFunctionCall = firstArg.type === 'CallExpression';
-			if (!isFunctionCall || !firstArg.callee.property) {
-				return;
-			}
-
-			const {name} = firstArg.callee.property;
-			let lookup = {};
-			let variable = {};
-
-			if (name === 'test') {
-				// `lookup.test(variable)`
-				lookup = firstArg.callee.object;
-				variable = firstArg.arguments[0];
-			} else if (['search', 'match'].includes(name)) {
-				// `variable.match(lookup)`
-				lookup = firstArg.arguments[0];
-				variable = firstArg.callee.object;
-			}
-
-			let isRegExp = lookup.regex;
-
-			// It's not a regexp but an identifier
-			if (!isRegExp && lookup.type === 'Identifier') {
-				const reference = findReference(lookup.name);
-				isRegExp = reference.init.regex;
-			}
-
-			if (!isRegExp) {
-				return;
-			}
-
-			const assertion = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
-
-			const fix = fixer => {
-				const source = context.getSourceCode();
-				return [
-					fixer.replaceText(node.callee.property, assertion),
-					fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`)
-				];
-			};
-
-			context.report({
-				node,
-				message: `Prefer using the \`t.${assertion}()\` assertion.`,
-				fix
-			});
 		})
 	});
 };
