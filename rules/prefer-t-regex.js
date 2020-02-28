@@ -34,7 +34,7 @@ const create = context => {
 		if (!isRegex && lookup.type === 'Identifier') {
 			const reference = findReference(lookup.name);
 
-			// Not all possible references have an init field§
+			// Not all possible references have an init field
 			if (reference && reference.init) {
 				isRegex = reference.init.regex;
 			}
@@ -91,10 +91,6 @@ const create = context => {
 		const firstArg = node.arguments[0];
 		const secondArg = node.arguments[1];
 
-		if (!firstArg || !secondArg) {
-			return;
-		}
-
 		const firstIsRx = isRegExp(firstArg);
 		const secondIsRx = isRegExp(secondArg);
 
@@ -111,7 +107,7 @@ const create = context => {
 		const fix = fixer => {
 			const source = context.getSourceCode();
 			return [
-				fixer.replaceText(node.callee.property, 'regex'),
+				fixer.replaceText(node.callee.property, assertion),
 				fixer.replaceText(firstArg, `${source.getText(matchee)}`),
 				fixer.replaceText(secondArg, `${source.getText(regex)}`)
 			];
