@@ -106,7 +106,7 @@ The rules will only activate in test files.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 - [test-title-format](docs/rules/test-title-format.md) - Ensure test titles have a certain format.
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
-- [use-t-throws-async-well](docs/rules/use-t-throws-async-well.md) - Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` aren't called without await.
+- [use-t-throws-async-well](docs/rules/use-t-throws-async-well.md) - Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.
 - [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
 - [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
