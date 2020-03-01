@@ -10,8 +10,18 @@ const ruleTester = avaRuleTester(test, {
 
 const header = 'const test = require(\'ava\');\n';
 
-function testCase(contents, prependHeader) {
+function asyncTestCase(contents, prependHeader) {
 	const content = `test(async t => { ${contents} });`;
+
+	if (prependHeader !== false) {
+		return header + content;
+	}
+
+	return content;
+}
+
+function syncTestCase(contents, prependHeader) {
+	const content = `test(t => { ${contents} });`;
 
 	if (prependHeader !== false) {
 		return header + content;
@@ -22,26 +32,42 @@ function testCase(contents, prependHeader) {
 
 ruleTester.run('use-t-throws-async-well', rule, {
 	valid: [
-		testCase('await t.throwsAsync(f)'),
-		testCase('await t.notThrowsAsync(f)'),
-		testCase('t.throws(f)'),
-		testCase('t.notThrows(f)'),
-		testCase('f(t.throwsAsync(f))'),
-		testCase('let p = t.throwsAsync(f)'),
-		testCase('p = t.throwsAsync(f)'),
-		// // Shouldn't be triggered since it's not a test file
-		testCase('t.throwsAsync(f)', false)
+		asyncTestCase('await t.throwsAsync(f)'),
+		asyncTestCase('await t.notThrowsAsync(f)'),
+		asyncTestCase('t.throws(f)'),
+		asyncTestCase('t.notThrows(f)'),
+		asyncTestCase('f(t.throwsAsync(f))'),
+		asyncTestCase('let p = t.throwsAsync(f)'),
+		asyncTestCase('p = t.throwsAsync(f)'),
+		asyncTestCase('t.throwsAsync(f)', false), // Shouldn't be triggered since it's not a test file
+		syncTestCase('t.throwsAsync(f)', false) // Shouldn't be triggered since it's not a test file
 	],
 	invalid: [
 		{
-			code: testCase('t.throwsAsync(f)'),
+			code: syncTestCase('t.throwsAsync(f)'),
 			errors: [{
 				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.throwsAsync()`.'
 			}]
 		},
 		{
-			code: testCase('t.notThrowsAsync(f)'),
+			code: syncTestCase('t.notThrowsAsync(f)'),
+			errors: [{
+				ruleId: 'use-t-throws-async-well',
+				message: 'Use `await` with `t.notThrowsAsync()`.'
+			}]
+		},
+		{
+			code: asyncTestCase('t.throwsAsync(f)'),
+			output: asyncTestCase('await t.throwsAsync(f)'),
+			errors: [{
+				ruleId: 'use-t-throws-async-well',
+				message: 'Use `await` with `t.throwsAsync()`.'
+			}]
+		},
+		{
+			code: asyncTestCase('t.notThrowsAsync(f)'),
+			output: asyncTestCase('await t.notThrowsAsync(f)'),
 			errors: [{
 				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.notThrowsAsync()`.'

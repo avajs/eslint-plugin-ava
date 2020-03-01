@@ -17,10 +17,19 @@ const create = context => {
 				(node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync') &&
 				node.callee.object.name === 't'
 			) {
-				context.report({
-					node,
-					message: `Use \`await\` with \`t.${node.callee.property.name}()\`.`
-				});
+				const message = `Use \`await\` with \`t.${node.callee.property.name}()\`.`;
+				if (ava.isInTestNode().arguments[0].async) {
+					context.report({
+						node,
+						message,
+						fix: fixer => fixer.replaceText(node.callee, `await ${context.getSourceCode().getText(node.callee)}`)
+					});
+				} else {
+					context.report({
+						node,
+						message
+					});
+				}
 			}
 		})
 	});
@@ -32,6 +41,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
+		fixable: 'code',
 		type: 'problem'
 	}
 };
