@@ -88,19 +88,18 @@ const create = context => {
 	};
 
 	const equalityHandler = node => {
-		const firstArg = node.arguments[0];
-		const secondArg = node.arguments[1];
+		const [firstArg, secondArg] = node.arguments;
 
-		const firstIsRx = isRegExp(firstArg);
-		const secondIsRx = isRegExp(secondArg);
+		const firstArgumentIsRegex = isRegExp(firstArg);
+		const secondArgumentIsRegex = isRegExp(secondArg);
 
 		// If both are regex, or neither are, the expression is ok
-		if (firstIsRx === secondIsRx) {
+		if (firstArgumentIsRegex === secondArgumentIsRegex) {
 			return;
 		}
 
-		const matchee = secondIsRx ? firstArg : secondArg;
-		const regex = secondIsRx ? secondArg : firstArg;
+		const matchee = secondArgumentIsRegex ? firstArg : secondArg;
+		const regex = secondArgumentIsRegex ? secondArg : firstArg;
 
 		const assertion = 'regex';
 
