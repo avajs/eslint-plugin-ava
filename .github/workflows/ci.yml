@@ -24,8 +24,6 @@ jobs:
       - run: npm install --no-audit
       - run: npm test
       - uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
 
   integration:
     name: Integration tests
@@ -40,5 +38,3 @@ jobs:
       - run: npm install --no-audit
       - run: npm run integration
       - uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
