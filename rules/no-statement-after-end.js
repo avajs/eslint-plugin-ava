@@ -3,7 +3,7 @@ const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
 // This rule makes heavy use of ESLint's code path analysis
-// See: http://eslint.org/docs/developer-guide/code-path-analysis.html
+// See: https://eslint.org/docs/developer-guide/code-path-analysis.html
 
 // Returns true if this node represents a call to `t.end(...)`
 const isEndExpression = node =>
