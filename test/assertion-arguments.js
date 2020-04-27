@@ -54,6 +54,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.truthy(\'unicorn\', \'message\');'),
 		testCase(false, 't.snapshot(value, \'message\');'),
 		testCase(false, 't.context.plan();'),
+		testCase(false, 't.teardown(() => {});'),
 		testCase(false, 't.timeout(100);'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
@@ -104,6 +105,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.skip.is(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.is.skip(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.snapshot(value, \'message\');'),
+		testCase('always', 't.teardown(() => {});'),
 		testCase('always', 't.timeout(100);'),
 		testCase('always', 't.try(tt => tt.pass());'),
 		testCase('always', 't.try(tt => tt.pass(), 1, 2);'),
@@ -136,6 +138,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.skip.is(\'same\', \'same\');'),
 		testCase('never', 't.is.skip(\'same\', \'same\');'),
 		testCase('never', 't.snapshot(value);'),
+		testCase('never', 't.teardown(() => {});'),
 		testCase('never', 't.timeout(100);'),
 		testCase('never', 't.try(tt => tt.pass());'),
 		testCase('never', 't.try(tt => tt.pass(), 1, 2);'),
@@ -187,6 +190,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.skip.is(\'same\');', tooFewError(2)),
 		testCase(false, 't.is.skip(\'same\');', tooFewError(2)),
 		testCase(false, 't.snapshot();', tooFewError(1)),
+		testCase(false, 't.teardown();', tooFewError(1)),
 		testCase(false, 't.timeout();', tooFewError(1)),
 		testCase(false, 't.try();', tooFewError(1)),
 
@@ -210,6 +214,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.skip.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError(2)),
+		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.timeout(1, \'extra argument\');', tooManyError(1)),
 
 		testCase('always', 't.pass();', missingError),
