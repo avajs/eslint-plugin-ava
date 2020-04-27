@@ -63,6 +63,7 @@ ruleTester.run('use-t-well', rule, {
 		testCase('a.foo();'),
 		testCase('t.context.foo(a, a);'),
 		testCase('foo.t.bar(a, a);'),
+		testCase('t.teardown(() => {});'),
 		testCase('t.timeout(100);'),
 		testCase('t.try(tt => tt.pass())'),
 		testCase('t.try(tt => tt.pass(), 1, 2)'),

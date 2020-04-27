@@ -60,6 +60,10 @@ const expectedNbArguments = {
 		min: 1,
 		max: 2
 	},
+	teardown: {
+		min: 1,
+		max: 1
+	},
 	throws: {
 		min: 1,
 		max: 3
