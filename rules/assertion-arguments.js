@@ -71,7 +71,7 @@ const expectedNbArguments = {
 	},
 	snapshot: {
 		min: 1,
-		max: 2
+		max: 3
 	},
 	teardown: {
 		min: 1,
