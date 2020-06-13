@@ -6,12 +6,12 @@ const util = require('../util');
 const create = context => {
 	const ava = createAvaRule();
 
-	const booleanTests = [
+	const booleanTests = new Set([
 		'true',
 		'false',
 		'truthy',
 		'falsy'
-	];
+	]);
 
 	const findReference = name => {
 		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
@@ -26,7 +26,7 @@ const create = context => {
 		])(node => {
 			// Call a boolean assertion, for example, `t.true`, `t.false`, …
 			const isBooleanAssertion = node.callee.type === 'MemberExpression' &&
-				booleanTests.includes(node.callee.property.name) &&
+				booleanTests.has(node.callee.property.name) &&
 				util.getNameOfRootNodeObject(node.callee) === 't';
 
 			if (!isBooleanAssertion) {

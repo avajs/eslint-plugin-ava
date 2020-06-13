@@ -19,10 +19,10 @@ exports.loadAvaHelper = (filename, overrides) => {
 	return avaHelper.load(rootDir, overrides);
 };
 
-const functionExpressions = [
+const functionExpressions = new Set([
 	'FunctionExpression',
 	'ArrowFunctionExpression'
-];
+]);
 
 exports.getRootNode = node => {
 	if (node.object.type === 'MemberExpression') {
@@ -40,7 +40,7 @@ exports.isPropertyUnderContext = node => {
 	return exports.getRootNode(node).property.name === 'context';
 };
 
-exports.isFunctionExpression = node => node && functionExpressions.includes(node.type);
+exports.isFunctionExpression = node => node && functionExpressions.has(node.type);
 
 function getTestModifiers(node) {
 	if (node.type === 'CallExpression') {
@@ -60,11 +60,11 @@ exports.getTestModifier = (node, mod) => {
 	return getTestModifiers(node).find(property => property.name === mod);
 };
 
-exports.removeTestModifier = params => {
-	const modifier = params.modifier.trim();
-	const range = exports.getTestModifier(params.node, modifier).range.slice();
+exports.removeTestModifier = parameters => {
+	const modifier = parameters.modifier.trim();
+	const range = exports.getTestModifier(parameters.node, modifier).range.slice();
 	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
-	const source = params.context.getSourceCode().getText();
+	const source = parameters.context.getSourceCode().getText();
 	let dotPosition = range[0] - 1;
 	while (source.charAt(dotPosition) !== '.') {
 		dotPosition -= 1;
@@ -97,7 +97,7 @@ const getDocsUrl = (filename, commitHash) => {
 
 exports.getDocsUrl = getDocsUrl;
 
-const assertionMethodsNumArguments = new Map([
+const assertionMethodsNumberArguments = new Map([
 	['assert', 1],
 	['deepEqual', 2],
 	['fail', 0],
@@ -120,8 +120,8 @@ const assertionMethodsNumArguments = new Map([
 	['try', 1]
 ]);
 
-const assertionMethodNames = [...assertionMethodsNumArguments.keys()];
+const assertionMethodNames = [...assertionMethodsNumberArguments.keys()];
 
-exports.assertionMethodsNumArguments = assertionMethodsNumArguments;
+exports.assertionMethodsNumArguments = assertionMethodsNumberArguments;
 exports.assertionMethods = new Set(assertionMethodNames);
 exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log', 'teardown', 'timeout']));

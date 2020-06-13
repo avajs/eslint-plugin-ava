@@ -5,7 +5,7 @@ const createAvaRule = require('../create-ava-rule');
 
 const MAX_ASSERTIONS_DEFAULT = 5;
 
-const notAssertionMethods = ['plan', 'end'];
+const notAssertionMethods = new Set(['plan', 'end']);
 
 const create = context => {
 	const ava = createAvaRule();
@@ -28,7 +28,7 @@ const create = context => {
 
 			if (
 				callee.property &&
-				!notAssertionMethods.includes(callee.property.name) &&
+				!notAssertionMethods.has(callee.property.name) &&
 				util.getNameOfRootNodeObject(callee) === 't'
 			) {
 				const members = util.getMembers(callee).filter(name => name !== 'skip');

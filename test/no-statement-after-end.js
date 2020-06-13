@@ -12,13 +12,13 @@ const errors = [{ruleId: 'no-statement-after-end'}];
 const header = 'const test = require(\'ava\');\n';
 
 function cbTest(contents, prependHeader) {
-	let ret = `test.cb(t => { ${contents} });`;
+	let returnValue = `test.cb(t => { ${contents} });`;
 
 	if (prependHeader !== false) {
-		ret = header + ret;
+		returnValue = header + returnValue;
 	}
 
-	return ret;
+	return returnValue;
 }
 
 ruleTester.run('no-statement-after-end', rule, {

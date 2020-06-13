@@ -6,7 +6,7 @@ const deepStrictEqual = require('deep-strict-equal');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const booleanBinaryOperators = [
+const booleanBinaryOperators = new Set([
 	'==',
 	'===',
 	'!=',
@@ -15,7 +15,7 @@ const booleanBinaryOperators = [
 	'<=',
 	'>',
 	'>='
-];
+]);
 
 const knownBooleanSignatures = [
 	'isFinite()',
@@ -62,7 +62,7 @@ const create = context => {
 				const argument = node.arguments[0];
 
 				if (argument &&
-					((argument.type === 'BinaryExpression' && booleanBinaryOperators.includes(argument.operator)) ||
+					((argument.type === 'BinaryExpression' && booleanBinaryOperators.has(argument.operator)) ||
 					(argument.type === 'UnaryExpression' && argument.operator === '!') ||
 					(argument.type === 'Literal' && argument.value === Boolean(argument.value)) ||
 					(matchesKnownBooleanExpression(argument)))

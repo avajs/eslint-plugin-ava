@@ -29,8 +29,10 @@ const create = context => {
 				return;
 			}
 
-			testModifiers.reduce((prev, current) => {
-				if (prev.name === current.name) {
+			// TODO: Remove `.reduce()` usage.
+			// eslint-disable-next-line unicorn/no-reduce
+			testModifiers.reduce((previous, current) => {
+				if (previous.name === current.name) {
 					context.report({
 						node: current,
 						message: `Duplicate test modifier \`.${current.name}\`.`

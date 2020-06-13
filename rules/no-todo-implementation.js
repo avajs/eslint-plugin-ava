@@ -11,7 +11,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			if (ava.hasTestModifier('todo') && node.arguments.some(util.isFunctionExpression)) {
+			if (ava.hasTestModifier('todo') && node.arguments.some(argument => util.isFunctionExpression(argument))) {
 				context.report({
 					node,
 					message: '`test.todo()` should not be passed an implementation function.'

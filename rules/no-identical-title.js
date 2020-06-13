@@ -7,7 +7,7 @@ const createAvaRule = require('../create-ava-rule');
 
 const purify = node => node && espurify(node);
 
-const isStaticTemplateLiteral = node => node.expressions.every(isStatic);
+const isStaticTemplateLiteral = node => node.expressions.every(expression => isStatic(expression));
 
 const isStatic = node => node.type === 'Literal' ||
 	(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||

@@ -3,7 +3,7 @@ const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
-const modifiers = [
+const modifiers = new Set([
 	'after',
 	'afterEach',
 	'always',
@@ -15,10 +15,10 @@ const modifiers = [
 	'skip',
 	'todo',
 	'failing'
-];
+]);
 
 const unknownModifiers = node => util.getTestModifiers(node)
-	.filter(modifier => !modifiers.includes(modifier.name));
+	.filter(modifier => !modifiers.has(modifier.name));
 
 const create = context => {
 	const ava = createAvaRule();

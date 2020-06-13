@@ -27,7 +27,7 @@ const create = context => {
 
 		currentSegmentInfo = {
 			ended: false,
-			prev: segment.prevSegments.map(prevSegment => segmentInfoMap.get(prevSegment.id))
+			prev: segment.prevSegments.map(previousSegment => segmentInfoMap.get(previousSegment.id))
 		};
 
 		segmentInfoMap.set(segment.id, currentSegmentInfo);

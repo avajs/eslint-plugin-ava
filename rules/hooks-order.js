@@ -88,6 +88,8 @@ const create = context => {
 
 	const sourceCode = context.getSourceCode();
 
+	// TODO: Remove `.reduce()` usage.
+	// eslint-disable-next-line unicorn/no-reduce
 	const selectors = checks.reduce((result, check) => {
 		result[check.selector] = visitIf([
 			ava.isInTestFile,
@@ -117,11 +119,11 @@ const create = context => {
 						const start = nodeEarlier.parent.range[1];
 						const end = node.parent.range[1];
 
-						let text = sourceCode.getText().substring(start, end);
+						let text = sourceCode.getText().slice(start, end);
 
 						// Preserve newline previously between hooks
 						if (source.length >= (start + 1) && source[start + 1] === '\n') {
-							text = text.substring(1) + '\n';
+							text = text.slice(1) + '\n';
 						}
 
 						// Preserve newline that was previously before hooks
