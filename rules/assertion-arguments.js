@@ -78,7 +78,7 @@ const expectedNbArguments = {
 	},
 	timeout: {
 		min: 1,
-		max: 1
+		max: 2
 	}
 };
 
