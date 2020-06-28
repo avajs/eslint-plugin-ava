@@ -8,7 +8,6 @@ const del = require('del');
 const chalk = require('chalk');
 
 const packages = new Map([
-	['ava', 'https://github.com/avajs/ava'],
 	['chalk', 'https://github.com/chalk/chalk'],
 	['wrap-ansi', 'https://github.com/chalk/wrap-ansi'],
 	['np', 'https://github.com/sindresorhus/np'],
