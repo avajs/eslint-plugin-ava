@@ -55,7 +55,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.snapshot(value, \'message\');'),
 		testCase(false, 't.context.plan();'),
 		testCase(false, 't.teardown(() => {});'),
-		testCase(false, 't.timeout(100);'),
+		testCase(false, 't.timeout(100, \'message\');'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
 		testCase(false, 't.true(true);', false, false),
@@ -106,7 +106,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.is.skip(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.snapshot(value, \'message\');'),
 		testCase('always', 't.teardown(() => {});'),
-		testCase('always', 't.timeout(100);'),
+		testCase('always', 't.timeout(100, \'message\');'),
 		testCase('always', 't.try(tt => tt.pass());'),
 		testCase('always', 't.try(tt => tt.pass(), 1, 2);'),
 		testCase('always', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
@@ -215,7 +215,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError(2)),
 		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
-		testCase(false, 't.timeout(1, \'extra argument\');', tooManyError(1)),
+		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError(2)),
 
 		testCase('always', 't.pass();', missingError),
 		testCase('always', 't.fail();', missingError),
