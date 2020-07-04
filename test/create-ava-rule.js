@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import createAvaRule from '../create-ava-rule';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const createAvaRule = require('../create-ava-rule');
 
 const rule = {
 	create: context => {

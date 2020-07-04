@@ -1,7 +1,7 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import {permutationCombination} from 'js-combinatorics';
-import rule from '../rules/prefer-power-assert';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const {permutationCombination} = require('js-combinatorics');
+const rule = require('../rules/prefer-power-assert');
 
 const ruleTester = avaRuleTester(test, {
 	env: {

@@ -1,8 +1,8 @@
-import path from 'path';
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import util from '../util';
-import rule from '../rules/no-import-test-files';
+const path = require('path');
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const util = require('../util');
+const rule = require('../rules/no-import-test-files');
 
 const ruleTester = avaRuleTester(test, {
 	env: {

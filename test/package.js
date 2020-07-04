@@ -1,8 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import test from 'ava';
-import pify from 'pify';
-import index from '..';
+const fs = require('fs');
+const path = require('path');
+const test = require('ava');
+const pify = require('pify');
+const index = require('..');
 
 let ruleFiles;
 

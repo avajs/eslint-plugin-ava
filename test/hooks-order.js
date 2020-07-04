@@ -1,7 +1,7 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import {outdent} from 'outdent';
-import rule from '../rules/hooks-order';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const {outdent} = require('outdent');
+const rule = require('../rules/hooks-order');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
