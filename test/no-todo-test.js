@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/no-todo-test';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const rule = require('../rules/no-todo-test');
 
 const ruleTester = avaRuleTester(test, {
 	env: {

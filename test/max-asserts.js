@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/max-asserts';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const rule = require('../rules/max-asserts');
 
 const ruleTester = avaRuleTester(test, {
 	env: {

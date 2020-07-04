@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/prefer-async-await';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const rule = require('../rules/prefer-async-await');
 
 const ruleTester = avaRuleTester(test, {
 	env: {

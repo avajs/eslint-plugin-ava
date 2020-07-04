@@ -1,6 +1,6 @@
-import test from 'ava';
-import util from '../util';
-import packageJson from '../package';
+const test = require('ava');
+const util = require('../util');
+const packageJson = require('../package');
 
 test('returns the URL of the a named rule\'s documentation', t => {
 	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${packageJson.version}/docs/rules/foo.md`;

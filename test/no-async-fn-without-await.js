@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/no-async-fn-without-await';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const rule = require('../rules/no-async-fn-without-await');
 
 const ruleId = 'no-async-fn-without-await';
 const message = 'Function was declared as `async` but doesn\'t use `await`.';
