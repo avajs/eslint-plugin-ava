@@ -69,6 +69,10 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.try(tt => tt.pass(), 1, 2)'),
 		testCase('t.try(\'title\', tt => tt.pass())'),
 		testCase('t.try(\'title\', tt => tt.pass(), 1, 2)'),
+		testCase('t.like'),
+		testCase('t.like(v, v)'),
+		testCase('t.like(actual, {}, "")'),
+		testCase('t.like.skip(v, v)'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.foo(a, a);', false),
 		testCase('t.foo;', false)
@@ -205,6 +209,11 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.deepEqual.context(a, a);'),
 			errors: [error('Unknown assertion method `.context`.')]
+		},
+		{
+			code: testCase('t.lik(a, a);'),
+			output: testCase('t.like(a, a);'),
+			errors: [error('Misspelled `.like` as `.lik`.')]
 		}
 	]
 });
