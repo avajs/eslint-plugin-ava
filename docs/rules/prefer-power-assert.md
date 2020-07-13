@@ -5,6 +5,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/re
 - [`t.assert()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#assertvalue-message)
 - [`t.deepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#deepequalvalue-expected-message)
 - [`t.notDeepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notdeepequalvalue-expected-message)
+- [`t.like()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#likevalue-selector-message)
 - [`t.throws()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#throwsfn-expected-message)
 - [`t.notThrows()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notthrowsfn-message)
 - [`t.pass()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#passmessage)
