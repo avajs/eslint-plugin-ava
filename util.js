@@ -105,6 +105,7 @@ const assertionMethodsNumberArguments = new Map([
 	['falsy', 1],
 	['ifError', 1],
 	['is', 2],
+	['like', 2],
 	['not', 2],
 	['notDeepEqual', 2],
 	['notRegex', 2],
