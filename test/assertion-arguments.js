@@ -53,6 +53,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.true(true, \'message\');'),
 		testCase(false, 't.truthy(\'unicorn\', \'message\');'),
 		testCase(false, 't.snapshot(value, \'message\');'),
+		testCase(false, 't.like({}, {}, \'message\');'),
 		testCase(false, 't.context.plan();'),
 		testCase(false, 't.teardown(() => {});'),
 		testCase(false, 't.timeout(100, \'message\');'),
@@ -79,6 +80,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.true(true);'),
 		testCase(false, 't.truthy(\'unicorn\');'),
 		testCase(false, 't.snapshot(value);'),
+		testCase(false, 't.like({}, {});'),
 		// Shouldn't be triggered since it's not a test file
 		testCase(false, 't.true(true, \'message\');', [], false),
 
@@ -105,6 +107,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.skip.is(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.is.skip(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.snapshot(value, \'message\');'),
+		testCase('always', 't.like({}, {}, \'message\');'),
 		testCase('always', 't.teardown(() => {});'),
 		testCase('always', 't.timeout(100, \'message\');'),
 		testCase('always', 't.try(tt => tt.pass());'),
@@ -138,6 +141,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.skip.is(\'same\', \'same\');'),
 		testCase('never', 't.is.skip(\'same\', \'same\');'),
 		testCase('never', 't.snapshot(value);'),
+		testCase('never', 't.like({}, {});'),
 		testCase('never', 't.teardown(() => {});'),
 		testCase('never', 't.timeout(100);'),
 		testCase('never', 't.try(tt => tt.pass());'),
@@ -190,6 +194,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.skip.is(\'same\');', tooFewError(2)),
 		testCase(false, 't.is.skip(\'same\');', tooFewError(2)),
 		testCase(false, 't.snapshot();', tooFewError(1)),
+		testCase(false, 't.like({});', tooFewError(2)),
 		testCase(false, 't.teardown();', tooFewError(1)),
 		testCase(false, 't.timeout();', tooFewError(1)),
 		testCase(false, 't.try();', tooFewError(1)),
@@ -214,6 +219,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.skip.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError(2)),
+		testCase(false, 't.like({}, {}, \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError(2)),
 
@@ -236,6 +242,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.skip.is(\'same\', \'same\');', missingError),
 		testCase('always', 't.is.skip(\'same\', \'same\');', missingError),
 		testCase('always', 't.snapshot(value);', missingError),
+		testCase('always', 't.like({}, {});', missingError),
 
 		testCase('never', 't.pass(\'message\');', foundError),
 		testCase('never', 't.fail(\'message\');', foundError),
@@ -255,6 +262,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.skip.is(\'same\', \'same\', \'message\');', foundError),
 		testCase('never', 't.is.skip(\'same\', \'same\', \'message\');', foundError),
 		testCase('never', 't.snapshot(value, \'message\');', foundError),
+		testCase('never', 't.like({}, {}, \'message\');', foundError),
 
 		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError(1)),
 		testCase(false, 't.skip.end(\'too many\', \'arguments\');', tooManyError(1)),
