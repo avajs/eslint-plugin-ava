@@ -45,6 +45,10 @@ const expectedNbArguments = {
 		min: 1,
 		max: 2
 	},
+	notThrowsAsync: {
+		min: 1,
+		max: 2
+	},
 	pass: {
 		min: 0,
 		max: 1
