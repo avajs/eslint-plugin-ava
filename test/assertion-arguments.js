@@ -19,24 +19,29 @@ const outOfOrderError = 'Expected values should come after actual values.';
 
 const header = 'const test = require(\'ava\');';
 
-function testCase(message, content, errorMessage, {
+function testCode(content, useHeader) {
+	const testFn = `
+		test(t => {
+			${content}
+		});
+	`;
+	const code = (useHeader === false ? '' : header) + testFn;
+	return code;
+}
+
+function testCase(message, content, errors = [], {
 	useHeader, output = null
 } = {}) {
-	function testCode(content, useHeader) {
-		const testFn = `
-			test(t => {
-				${content}
-			});
-		`;
-		const code = (useHeader === false ? '' : header) + testFn;
-		return code;
+	if (!Array.isArray(errors)) {
+		errors = [errors];
 	}
 
+	errors = errors
+		.map(error => typeof error === 'string' ? {message: error} : error)
+		.map(error => ({ruleId: 'assertion-arguments', ...error}));
+
 	return {
-		errors: errorMessage && [{
-			ruleId: 'assertion-arguments',
-			message: errorMessage
-		}],
+		errors,
 		options: message ? [{message}] : [],
 		code: testCode(content, useHeader),
 		output: output === null ? null : testCode(output, useHeader)
