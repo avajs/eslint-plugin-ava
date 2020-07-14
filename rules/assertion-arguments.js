@@ -73,6 +73,10 @@ const expectedNbArguments = {
 		min: 1,
 		max: 3
 	},
+	throwsAsync: {
+		min: 1,
+		max: 3
+	},
 	true: {
 		min: 1,
 		max: 2
