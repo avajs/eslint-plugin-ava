@@ -5,6 +5,9 @@ const rule = require('../rules/assertion-arguments');
 const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
+	},
+	parserOptions: {
+		ecmaVersion: 2020
 	}
 });
 
@@ -12,6 +15,7 @@ const missingError = 'Expected an assertion message, but found none.';
 const foundError = 'Expected no assertion message, but found one.';
 const tooFewError = n => `Not enough arguments. Expected at least ${n}.`;
 const tooManyError = n => `Too many arguments. Expected at most ${n}.`;
+const outOfOrderError = 'Expected values should come after actual values.';
 
 const header = 'const test = require(\'ava\');';
 
@@ -31,6 +35,84 @@ function testCase(message, content, errorMessage, useHeader) {
 		code: (useHeader === false ? '' : header) + testFn
 	};
 }
+
+const statics = [
+	'null',
+	'true',
+	'false',
+	'1.0',
+	'1n',
+	'"string"',
+	/* eslint-disable no-template-curly-in-string */
+	'`template ${"string"}`',
+	/* eslint-enable no-template-curly-in-string */
+	'/.*regex.*\\.js/ig',
+	'{}',
+	'{a: 1}',
+	'{a: {b: 1}}',
+	'{"c": 1}',
+	'{3: 1}',
+	'{["a" + "b"]: {c: 1}}',
+	'{...{a: 1}}',
+	'[]',
+	'[1, 2, {a: 3}]',
+	'[...[1, 2, 3]]',
+	'void 0',
+	'void a',
+	'~1',
+	'!""',
+	'+[]',
+	'-"a"',
+	'1 + "a"',
+	'1 && 0',
+	'null ?? false',
+	'true ? [] : [1]',
+	'true ? [] : a',
+	'{a: 1}.a',
+	'{a: 1}["a"]',
+	'{a: 1}.a["a"]',
+	'[1][0]',
+	'[[1]][0][0]',
+	'{a: 1}?.a?.["b"]',
+	'[{a: 1}]?.a?.[0]',
+	'a = 1'
+];
+
+const dynamics = [
+	'NaN',
+	'undefined',
+	'Infinity',
+	'-Infinity',
+	'a',
+	'a.b',
+	'a["b"]',
+	'{}[a]',
+	'{}.a[a]',
+	'[][a]',
+	'[[1]][0][a]',
+	'(() => {}).a',
+	'a()',
+	'new A()',
+	'class A {}',
+	'function a() {}',
+	'() => {}',
+	'tagged`template string`',
+	'new RegExp(\'[dynamic]\')',
+	'~a',
+	'++a',
+	'delete a.b',
+	'[delete a.b]',
+	'{...a}',
+	'{[a]: 1}',
+	'{ a() {} }',
+	'{ get a() {}}',
+	'{ set a(value) {} }',
+	'[...a]',
+	'a ? [] : [1]',
+	'true ? a : [1]',
+	'"a"?.()',
+	'{a: 1}?.[b]'
+];
 
 ruleTester.run('assertion-arguments', rule, {
 	valid: [
@@ -173,7 +255,20 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.end.skip();'),
 		testCase('never', 't.end.skip(error);'),
 		testCase('never', 't.skip.end();'),
-		testCase('never', 't.skip.end(error);')
+		testCase('never', 't.skip.end(error);'),
+
+		// Assertion argument order
+		testCase(false, 't.deepEqual(\'static\', \'static\');'),
+		testCase(false, 't.deepEqual(dynamic, \'static\');'),
+		testCase(false, 't.deepEqual(dynamic, dynamic);'),
+		testCase(false, 't.notDeepEqual(dynamic, \'static\');'),
+		testCase(false, 't.throws(() => {}, expected);'),
+		testCase(false, 't.throws(() => {}, null, "message");'),
+		// No documented actual/expected distinction for t.regex()
+		testCase(false, 't.regex(\'static\', new RegExp(\'[dynamic]+\'));'),
+		testCase(false, 't.regex(dynamic, /[static]/);'),
+		testCase(false, 't.notRegex(\'static\', new RegExp(\'[dynamic]+\'));'),
+		testCase(false, 't.notRegex(dynamic, /[static]/);')
 	],
 	invalid: [
 		// Not enough arguments
@@ -265,6 +360,19 @@ ruleTester.run('assertion-arguments', rule, {
 
 		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError(1)),
 		testCase(false, 't.skip.end(\'too many\', \'arguments\');', tooManyError(1)),
-		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1))
+		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1)),
+
+		// Assertion argument order
+		testCase(false, 't.deepEqual(\'static\', dynamic);', outOfOrderError),
+		testCase(false, 't.notDeepEqual({static: true}, dynamic);', outOfOrderError),
+		testCase(false, 't.throws({name: \'TypeError\'}, () => {})', outOfOrderError),
+		testCase('always', 't.deepEqual({}, actual, \'message\');', outOfOrderError),
+		testCase('never', 't.deepEqual({}, actual)', outOfOrderError),
+		...statics.map(expression =>
+			testCase(false, `t.deepEqual(${expression}, dynamic);`, outOfOrderError)
+		),
+		...dynamics.map(expression =>
+			testCase(false, `t.deepEqual('static', ${expression});`, outOfOrderError)
+		)
 	]
 });
