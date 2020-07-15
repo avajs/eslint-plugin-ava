@@ -370,16 +370,30 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1)),
 
 		// Assertion argument order
-		testCase(false, 't.deepEqual(\'static\', dynamic);', outOfOrderError),
-		testCase(false, 't.notDeepEqual({static: true}, dynamic);', outOfOrderError),
-		testCase(false, 't.throws({name: \'TypeError\'}, () => {})', outOfOrderError),
-		testCase('always', 't.deepEqual({}, actual, \'message\');', outOfOrderError),
-		testCase('never', 't.deepEqual({}, actual)', outOfOrderError),
+		testCase(false, 't.deepEqual(\'static\', dynamic);', outOfOrderError,
+			{output: 't.deepEqual(dynamic, \'static\');'}
+		),
+		testCase(false, 't.notDeepEqual({static: true}, dynamic);', outOfOrderError,
+			{output: 't.notDeepEqual(dynamic, {static: true});'}
+		),
+		testCase(false, 't.throws({name: \'TypeError\'}, () => {});', outOfOrderError,
+			{output: 't.throws(() => {}, {name: \'TypeError\'});'}
+		),
+		testCase('always', 't.deepEqual({}, actual, \'message\');', outOfOrderError,
+			{output: 't.deepEqual(actual, {}, \'message\');'}
+		),
+		testCase('never', 't.deepEqual({}, actual);', outOfOrderError,
+			{output: 't.deepEqual(actual, {});'}
+		),
 		...statics.map(expression =>
-			testCase(false, `t.deepEqual(${expression}, dynamic);`, outOfOrderError)
+			testCase(false, `t.deepEqual(${expression}, dynamic);`, outOfOrderError,
+				{output: `t.deepEqual(dynamic, ${expression});`}
+			)
 		),
 		...dynamics.map(expression =>
-			testCase(false, `t.deepEqual('static', ${expression});`, outOfOrderError)
+			testCase(false, `t.deepEqual('static', ${expression});`, outOfOrderError,
+				{output: `t.deepEqual(${expression}, 'static');`}
+			)
 		)
 	]
 });
