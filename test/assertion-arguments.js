@@ -316,6 +316,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual(dynamic, \'static\');'),
 		testCase(false, 't.deepEqual(dynamic, dynamic);'),
 		testCase(false, 't.is(dynamic, \'static\');'),
+		testCase(false, 't.like(dynamic, \'static\');'),
 		testCase(false, 't.not(dynamic, \'static\');'),
 		testCase(false, 't.notDeepEqual(dynamic, \'static\');'),
 		testCase(false, 't.throws(() => {}, expected);'),
@@ -447,6 +448,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.is(\'static\', dynamic);',
 			outOfOrderError(1, 6, 1, 23),
 			{output: 't.is(dynamic, \'static\');'}
+		),
+		testCase(false, 't.like({a: {b: 1}}, dynamic);',
+			outOfOrderError(1, 8, 1, 28),
+			{output: 't.like(dynamic, {a: {b: 1}});'}
 		),
 		testCase(false, 't.not(\'static\', dynamic);',
 			outOfOrderError(1, 7, 1, 24),
