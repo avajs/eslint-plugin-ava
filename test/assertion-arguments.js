@@ -487,6 +487,19 @@ ruleTester.run('assertion-arguments', rule, {
 			outOfOrderError(1, 13, 1, 25),
 			{output: 't.deepEqual((actual), {});'}
 		),
+		testCase(false, 't.deepEqual({}, actual/*: type */);',
+			outOfOrderError(1, 13, 1, 34)
+		),
+		testCase(
+			false,
+			`t.deepEqual(// Line comment 1
+				'static' // Line Comment 2
+				, // Line Comment 3
+				dynamic // Line Comment 4
+				// Line Comment 5
+			); // Line Comment 6`,
+			outOfOrderError(1, 13, 5, 22)
+		),
 		testCase(false, 't.assert(\'static\' !== dynamic);',
 			outOfOrderError(1, 10, 1, 30),
 			{output: 't.assert(dynamic !== \'static\');'}
@@ -506,6 +519,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.falsy(\'static\' >= dynamic);',
 			outOfOrderError(1, 9, 1, 28),
 			{output: 't.falsy(dynamic <= \'static\');'}
+		),
+		testCase(false, 't.true(\'static\' === actual/*: type */);',
+			outOfOrderError(1, 8, 1, 38)
 		),
 		...statics.map(expression =>
 			testCase(false, `t.deepEqual(${expression}, dynamic);`,
