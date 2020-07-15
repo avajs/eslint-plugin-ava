@@ -306,6 +306,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.notDeepEqual(dynamic, \'static\');'),
 		testCase(false, 't.throws(() => {}, expected);'),
 		testCase(false, 't.throws(() => {}, null, "message");'),
+		testCase(false, 't.true(dynamic === \'static\');'),
+		testCase(false, 't.false(dynamic === \'static\');'),
+		testCase(false, 't.truthy(dynamic === \'static\');'),
+		testCase(false, 't.falsy(dynamic === \'static\');'),
 		// No documented actual/expected distinction for t.regex()
 		testCase(false, 't.regex(\'static\', new RegExp(\'[dynamic]+\'));'),
 		testCase(false, 't.regex(dynamic, /[static]/);'),
@@ -447,6 +451,22 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, (actual));',
 			outOfOrderError(1, 13, 1, 25),
 			{output: 't.deepEqual((actual), {});'}
+		),
+		testCase(false, 't.true(\'static\' <= dynamic);',
+			outOfOrderError(1, 8, 1, 27),
+			{output: 't.true(dynamic >= \'static\');'}
+		),
+		testCase(false, 't.false(\'static\' < dynamic);',
+			outOfOrderError(1, 9, 1, 27),
+			{output: 't.false(dynamic > \'static\');'}
+		),
+		testCase(false, 't.truthy(\'static\' > dynamic);',
+			outOfOrderError(1, 10, 1, 28),
+			{output: 't.truthy(dynamic < \'static\');'}
+		),
+		testCase(false, 't.falsy(\'static\' >= dynamic);',
+			outOfOrderError(1, 9, 1, 28),
+			{output: 't.falsy(dynamic <= \'static\');'}
 		),
 		...statics.map(expression =>
 			testCase(false, `t.deepEqual(${expression}, dynamic);`,
