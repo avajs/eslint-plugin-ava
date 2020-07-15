@@ -444,6 +444,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, actual, extra, \'message\');',
 			tooManyError(3)
 		),
+		testCase(false, 't.deepEqual({}, (actual));',
+			outOfOrderError(1, 13, 1, 25),
+			{output: 't.deepEqual((actual), {});'}
+		),
 		...statics.map(expression =>
 			testCase(false, `t.deepEqual(${expression}, dynamic);`,
 				outOfOrderError(1, 13, 1, 22 + expression.length),
