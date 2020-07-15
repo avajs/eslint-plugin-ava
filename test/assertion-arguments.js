@@ -29,6 +29,28 @@ function testCode(content, useHeader) {
 	return code;
 }
 
+function offsetError(error, line, column) {
+	const offset = {...error};
+
+	if (error.line !== undefined) {
+		offset.line += line;
+	}
+
+	if (error.column !== undefined && error.line === 1) {
+		offset.column += column;
+	}
+
+	if (error.endLine !== undefined) {
+		offset.endLine += line;
+	}
+
+	if (error.endColumn !== undefined && error.endLine === 1) {
+		offset.endColumn += column;
+	}
+
+	return offset;
+}
+
 function testCase(message, content, errors = [], {
 	useHeader, output = null
 } = {}) {
@@ -36,9 +58,12 @@ function testCase(message, content, errors = [], {
 		errors = [errors];
 	}
 
+	const offset = useHeader === false ? [1, 3] : [2, 3];
+
 	errors = errors
 		.map(error => typeof error === 'string' ? {message: error} : error)
-		.map(error => ({ruleId: 'assertion-arguments', ...error}));
+		.map(error => ({ruleId: 'assertion-arguments', ...error}))
+		.map(error => offsetError(error, ...offset));
 
 	return {
 		errors,
