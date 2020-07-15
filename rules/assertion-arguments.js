@@ -146,8 +146,14 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 				callExpression.arguments[index],
 				{filter: token => isCommaToken(token)}
 			);
-		const firstToken = sourceCode.getTokenAfter(previousToken);
-		const lastToken = sourceCode.getTokenBefore(nextToken);
+		const firstToken = sourceCode.getTokenAfter(
+			previousToken,
+			{includeComments: true}
+		);
+		const lastToken = sourceCode.getTokenBefore(
+			nextToken,
+			{includeComments: true}
+		);
 		yield [firstToken.start, lastToken.end];
 	}
 }
@@ -170,6 +176,13 @@ function sourceOfBinaryExpressionComponents(sourceCode, node) {
 		sourceCode.getTokenBefore(nextToken, {includeComments: true}).end
 	];
 	return [leftRange, operatorToken, rightRange];
+}
+
+function noComments(sourceCode, ...nodes) {
+	return nodes.every(node => {
+		const {leading, trailing} = sourceCode.getComments(node);
+		return leading.length === 0 && trailing.length === 0;
+	});
 }
 
 const create = context => {
@@ -240,32 +253,36 @@ const create = context => {
 
 				if (actualExpectedAssertions.has(members[0]) && gottenArgs >= 2) {
 					const [leftNode, rightNode] = node.arguments;
+					const sourceCode = context.getSourceCode();
 					if (isStatic(leftNode) && !isStatic(rightNode)) {
-						const sourceCode = context.getSourceCode();
 						const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
-						context.report({
+						const report = {
 							message: 'Expected values should come after actual values.',
 							loc: {
 								start: sourceCode.getLocFromIndex(leftRange[0]),
 								end: sourceCode.getLocFromIndex(rightRange[1])
-							},
-							fix(fixer) {
+							}
+						};
+						if (noComments(sourceCode, leftNode, rightNode)) {
+							report.fix = fixer => {
 								const leftText = sourceCode.getText().slice(...leftRange);
 								const rightText = sourceCode.getText().slice(...rightRange);
 								return [
 									fixer.replaceTextRange(leftRange, rightText),
 									fixer.replaceTextRange(rightRange, leftText)
 								];
-							}
-						});
+							};
+						}
+
+						context.report(report);
 					}
 				} else if (relationalActualExpectedAssertions.has(members[0]) && gottenArgs >= 1) {
 					const argument = node.arguments[0];
 					if (argument.type === 'BinaryExpression' && comparisonOperators.has(argument.operator)) {
 						const leftNode = argument.left;
 						const rightNode = argument.right;
+						const sourceCode = context.getSourceCode();
 						if (isStatic(leftNode) && !isStatic(rightNode)) {
-							const sourceCode = context.getSourceCode();
 							const [
 								leftRange,
 								operatorToken,
@@ -273,20 +290,24 @@ const create = context => {
 							] = sourceOfBinaryExpressionComponents(sourceCode, argument);
 							const rightText = sourceCode.getText().slice(...rightRange);
 							const leftText = sourceCode.getText().slice(...leftRange);
-							context.report({
+							const report = {
 								message: 'Expected values should come after actual values.',
 								loc: {
 									start: sourceCode.getLocFromIndex(leftRange[0]),
 									end: sourceCode.getLocFromIndex(rightRange[1])
-								},
-								fix(fixer) {
+								}
+							};
+							if (noComments(sourceCode, leftNode, rightNode, argument)) {
+								report.fix = fixer => {
 									return [
 										fixer.replaceTextRange(leftRange, rightText),
 										fixer.replaceText(operatorToken, flipOperator(argument.operator)),
 										fixer.replaceTextRange(rightRange, leftText)
 									];
-								}
-							});
+								};
+							}
+
+							context.report(report);
 						}
 					}
 				}
