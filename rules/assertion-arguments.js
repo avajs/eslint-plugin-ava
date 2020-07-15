@@ -1,5 +1,6 @@
 'use strict';
 const {visitIf} = require('enhance-visitors');
+const {getStaticValue, isOpeningParenToken, isCommaToken} = require('eslint-utils');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -86,6 +87,40 @@ const expectedNbArguments = {
 	}
 };
 
+const actualExpectedAssertions = new Set([
+	'deepEqual', 'is', 'like', 'not', 'notDeepEqual', 'throws', 'throwsAsync'
+]);
+
+function isStatic(node) {
+	const staticValue = getStaticValue(node);
+	return staticValue !== null && typeof staticValue.value !== 'function';
+}
+
+function * sourceRangesOfArguments(sourceCode, callExpression) {
+	const openingParen = sourceCode.getTokenAfter(
+		callExpression.callee,
+		{filter: token => isOpeningParenToken(token)}
+	);
+	const closingParen = sourceCode.getLastToken(callExpression);
+	for (let index = 0; index < callExpression.arguments.length; index++) {
+		const previousToken = index === 0 ?
+			openingParen :
+			sourceCode.getTokenBefore(
+				callExpression.arguments[index],
+				{filter: token => isCommaToken(token)}
+			);
+		const nextToken = index === callExpression.arguments.length - 1 ?
+			closingParen :
+			sourceCode.getTokenAfter(
+				callExpression.arguments[index],
+				{filter: token => isCommaToken(token)}
+			);
+		const firstToken = sourceCode.getTokenAfter(previousToken);
+		const lastToken = sourceCode.getTokenBefore(nextToken);
+		yield [firstToken.start, lastToken.end];
+	}
+}
+
 const create = context => {
 	const ava = createAvaRule();
 	const options = context.options[0] || {};
@@ -141,13 +176,38 @@ const create = context => {
 				report(node, `Not enough arguments. Expected at least ${nArgs.min}.`);
 			} else if (node.arguments.length > nArgs.max) {
 				report(node, `Too many arguments. Expected at most ${nArgs.max}.`);
-			} else if (enforcesMessage && nArgs.min !== nArgs.max) {
-				const hasMessage = gottenArgs === nArgs.max;
+			} else {
+				if (enforcesMessage && nArgs.min !== nArgs.max) {
+					const hasMessage = gottenArgs === nArgs.max;
 
-				if (!hasMessage && shouldHaveMessage) {
-					report(node, 'Expected an assertion message, but found none.');
-				} else if (hasMessage && !shouldHaveMessage) {
-					report(node, 'Expected no assertion message, but found one.');
+					if (!hasMessage && shouldHaveMessage) {
+						report(node, 'Expected an assertion message, but found none.');
+					} else if (hasMessage && !shouldHaveMessage) {
+						report(node, 'Expected no assertion message, but found one.');
+					}
+				}
+
+				if (actualExpectedAssertions.has(members[0]) && gottenArgs >= 2) {
+					const [leftNode, rightNode] = node.arguments;
+					if (isStatic(leftNode) && !isStatic(rightNode)) {
+						const sourceCode = context.getSourceCode();
+						const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
+						context.report({
+							message: 'Expected values should come after actual values.',
+							loc: {
+								start: sourceCode.getLocFromIndex(leftRange[0]),
+								end: sourceCode.getLocFromIndex(rightRange[1])
+							},
+							fix(fixer) {
+								const leftText = sourceCode.getText().slice(...leftRange);
+								const rightText = sourceCode.getText().slice(...rightRange);
+								return [
+									fixer.replaceTextRange(leftRange, rightText),
+									fixer.replaceTextRange(rightRange, leftText)
+								];
+							}
+						});
+					}
 				}
 			}
 		})
@@ -170,6 +230,7 @@ const schema = [{
 module.exports = {
 	create,
 	meta: {
+		fixable: 'code',
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
