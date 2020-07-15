@@ -19,12 +19,18 @@ const outOfOrderError = 'Expected values should come after actual values.';
 
 const header = 'const test = require(\'ava\');';
 
-function testCase(message, content, errorMessage, useHeader) {
-	const testFn = `
-		test(t => {
-			${content}
-		});
-	`;
+function testCase(message, content, errorMessage, {
+	useHeader, output = null
+} = {}) {
+	function testCode(content, useHeader) {
+		const testFn = `
+			test(t => {
+				${content}
+			});
+		`;
+		const code = (useHeader === false ? '' : header) + testFn;
+		return code;
+	}
 
 	return {
 		errors: errorMessage && [{
@@ -32,7 +38,8 @@ function testCase(message, content, errorMessage, useHeader) {
 			message: errorMessage
 		}],
 		options: message ? [{message}] : [],
-		code: (useHeader === false ? '' : header) + testFn
+		code: testCode(content, useHeader),
+		output: output === null ? null : testCode(output, useHeader)
 	};
 }
 
@@ -141,7 +148,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.timeout(100, \'message\');'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true);', false, false),
+		testCase(false, 't.true(true);', false, {useHeader: false}),
 
 		testCase(false, 't.deepEqual({}, {});'),
 		testCase(false, 't.fail();'),
@@ -164,7 +171,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.truthy(\'unicorn\');'),
 		testCase(false, 't.snapshot(value);'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true, \'message\');', [], false),
+		testCase(false, 't.true(true, \'message\');', [], {useHeader: false}),
 
 		testCase(false, 't.context.a(1, 2, 3, 4);'),
 		testCase(false, 't.context.is(1, 2, 3, 4);'),
@@ -197,7 +204,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('always', 't.true(true);', [], false),
+		testCase('always', 't.true(true);', [], {useHeader: false}),
 
 		testCase('always', 't.context.a(1, 2, 3, 4);'),
 		testCase('always', 't.context.is(1, 2, 3, 4);'),
@@ -231,7 +238,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('never', 't.true(true, \'message\');', [], false),
+		testCase('never', 't.true(true, \'message\');', [], {useHeader: false}),
 
 		testCase('never', 't.context.a(1, 2, 3, 4);'),
 		testCase('never', 't.context.is(1, 2, 3, 4);'),
