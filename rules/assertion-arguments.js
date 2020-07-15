@@ -5,6 +5,10 @@ const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
 const expectedNbArguments = {
+	assert: {
+		min: 1,
+		max: 2
+	},
 	deepEqual: {
 		min: 2,
 		max: 3

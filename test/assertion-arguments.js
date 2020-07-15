@@ -157,6 +157,7 @@ const dynamics = [
 ruleTester.run('assertion-arguments', rule, {
 	valid: [
 		testCase(false, 't.plan(1);'),
+		testCase(false, 't.assert(true, \'message\');'),
 		testCase(false, 't.deepEqual({}, {}, \'message\');'),
 		testCase(false, 't.fail(\'message\');'),
 		testCase(false, 't.false(false, \'message\');'),
@@ -185,6 +186,7 @@ ruleTester.run('assertion-arguments', rule, {
 		// Shouldn't be triggered since it's not a test file
 		testCase(false, 't.true(true);', false, {useHeader: false}),
 
+		testCase(false, 't.assert(true);'),
 		testCase(false, 't.deepEqual({}, {});'),
 		testCase(false, 't.fail();'),
 		testCase(false, 't.false(false);'),
@@ -216,6 +218,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.foo(1, 2, 3, 4);'),
 
 		testCase('always', 't.plan(1);'),
+		testCase('always', 't.assert(true, \'message\');'),
 		testCase('always', 't.pass(\'message\');'),
 		testCase('always', 't.fail(\'message\');'),
 		testCase('always', 't.truthy(\'unicorn\', \'message\');'),
@@ -251,6 +254,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.foo(1, 2, 3, 4);'),
 
 		testCase('never', 't.plan(1);'),
+		testCase('never', 't.assert(true);'),
 		testCase('never', 't.pass();'),
 		testCase('never', 't.fail();'),
 		testCase('never', 't.truthy(\'unicorn\');'),
@@ -318,6 +322,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.throws(() => {}, null, "message");'),
 		testCase(false, 't.throwsAsync(async () => {}, {name: \'TypeError\'});'),
 		testCase(false, 't.throwsAsync(async () => {}, null, "message");'),
+		testCase(false, 't.assert(dynamic === \'static\');'),
 		testCase(false, 't.true(dynamic === \'static\');'),
 		testCase(false, 't.false(dynamic === \'static\');'),
 		testCase(false, 't.truthy(dynamic === \'static\');'),
@@ -331,6 +336,7 @@ ruleTester.run('assertion-arguments', rule, {
 	invalid: [
 		// Not enough arguments
 		testCase(false, 't.plan();', tooFewError(1)),
+		testCase(false, 't.assert();', tooFewError(1)),
 		testCase(false, 't.truthy();', tooFewError(1)),
 		testCase(false, 't.falsy();', tooFewError(1)),
 		testCase(false, 't.true();', tooFewError(1)),
@@ -356,6 +362,7 @@ ruleTester.run('assertion-arguments', rule, {
 
 		// Too many arguments
 		testCase(false, 't.plan(1, \'extra argument\');', tooManyError(1)),
+		testCase(false, 't.assert(true, \'message\', \'extra argument\');', tooManyError(2)),
 		testCase(false, 't.pass(\'message\', \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.fail(\'message\', \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.truthy(\'unicorn\', \'message\', \'extra argument\');', tooManyError(2)),
@@ -380,6 +387,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError(2)),
 
+		testCase('always', 't.assert(true);', missingError),
 		testCase('always', 't.pass();', missingError),
 		testCase('always', 't.fail();', missingError),
 		testCase('always', 't.truthy(\'unicorn\');', missingError),
@@ -403,6 +411,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.skip.is(\'same\', \'same\');', missingError),
 		testCase('always', 't.is.skip(\'same\', \'same\');', missingError),
 		testCase('always', 't.snapshot(value);', missingError),
+
+		testCase('never', 't.assert(true, \'message\');', foundError),
 		testCase('never', 't.pass(\'message\');', foundError),
 		testCase('never', 't.fail(\'message\');', foundError),
 		testCase('never', 't.truthy(\'unicorn\', \'message\');', foundError),
@@ -476,6 +486,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, (actual));',
 			outOfOrderError(1, 13, 1, 25),
 			{output: 't.deepEqual((actual), {});'}
+		),
+		testCase(false, 't.assert(\'static\' !== dynamic);',
+			outOfOrderError(1, 10, 1, 30),
+			{output: 't.assert(dynamic !== \'static\');'}
 		),
 		testCase(false, 't.true(\'static\' <= dynamic);',
 			outOfOrderError(1, 8, 1, 27),
