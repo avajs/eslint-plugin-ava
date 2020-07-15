@@ -91,6 +91,25 @@ const actualExpectedAssertions = new Set([
 	'deepEqual', 'is', 'like', 'not', 'notDeepEqual', 'throws', 'throwsAsync'
 ]);
 
+const relationalActualExpectedAssertions = new Set([
+	'assert', 'truthy', 'falsy', 'true', 'false'
+]);
+
+const comparisonOperators = new Map([
+	['>', '<'],
+	['>=', '<='],
+	['==', '=='],
+	['===', '==='],
+	['!=', '!='],
+	['!==', '!=='],
+	['<=', '>='],
+	['<', '>']
+]);
+
+const flipOperator = operator => {
+	return comparisonOperators.get(operator);
+};
+
 function isStatic(node) {
 	const staticValue = getStaticValue(node);
 	return staticValue !== null && typeof staticValue.value !== 'function';
@@ -119,6 +138,26 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 		const lastToken = sourceCode.getTokenBefore(nextToken);
 		yield [firstToken.start, lastToken.end];
 	}
+}
+
+function sourceOfBinaryExpressionComponents(sourceCode, node) {
+	const {operator, left, right} = node;
+	const operatorToken = sourceCode.getFirstTokenBetween(
+		left,
+		right,
+		{filter: token => token.value === operator}
+	);
+	const previousToken = sourceCode.getTokenBefore(node);
+	const nextToken = sourceCode.getTokenAfter(node);
+	const leftRange = [
+		sourceCode.getTokenAfter(previousToken, {includeComments: true}).start,
+		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).end
+	];
+	const rightRange = [
+		sourceCode.getTokenAfter(operatorToken, {includeComments: true}).start,
+		sourceCode.getTokenBefore(nextToken, {includeComments: true}).end
+	];
+	return [leftRange, operatorToken, rightRange];
 }
 
 const create = context => {
@@ -207,6 +246,36 @@ const create = context => {
 								];
 							}
 						});
+					}
+				} else if (relationalActualExpectedAssertions.has(members[0]) && gottenArgs >= 1) {
+					const argument = node.arguments[0];
+					if (argument.type === 'BinaryExpression' && comparisonOperators.has(argument.operator)) {
+						const leftNode = argument.left;
+						const rightNode = argument.right;
+						if (isStatic(leftNode) && !isStatic(rightNode)) {
+							const sourceCode = context.getSourceCode();
+							const [
+								leftRange,
+								operatorToken,
+								rightRange
+							] = sourceOfBinaryExpressionComponents(sourceCode, argument);
+							const rightText = sourceCode.getText().slice(...rightRange);
+							const leftText = sourceCode.getText().slice(...leftRange);
+							context.report({
+								message: 'Expected values should come after actual values.',
+								loc: {
+									start: sourceCode.getLocFromIndex(leftRange[0]),
+									end: sourceCode.getLocFromIndex(rightRange[1])
+								},
+								fix(fixer) {
+									return [
+										fixer.replaceTextRange(leftRange, rightText),
+										fixer.replaceText(operatorToken, flipOperator(argument.operator)),
+										fixer.replaceTextRange(rightRange, leftText)
+									];
+								}
+							});
+						}
 					}
 				}
 			}
