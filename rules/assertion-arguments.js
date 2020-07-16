@@ -251,70 +251,90 @@ const create = context => {
 					}
 				}
 
-				if (actualExpectedAssertions.has(members[0]) && gottenArgs >= 2) {
-					const [leftNode, rightNode] = node.arguments;
-					const sourceCode = context.getSourceCode();
-					if (isStatic(leftNode) && !isStatic(rightNode)) {
-						const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
-						const report = {
-							message: 'Expected values should come after actual values.',
-							loc: {
-								start: sourceCode.getLocFromIndex(leftRange[0]),
-								end: sourceCode.getLocFromIndex(rightRange[1])
-							}
-						};
-						if (noComments(sourceCode, leftNode, rightNode)) {
-							report.fix = fixer => {
-								const leftText = sourceCode.getText().slice(...leftRange);
-								const rightText = sourceCode.getText().slice(...rightRange);
-								return [
-									fixer.replaceTextRange(leftRange, rightText),
-									fixer.replaceTextRange(rightRange, leftText)
-								];
-							};
-						}
-
-						context.report(report);
-					}
-				} else if (relationalActualExpectedAssertions.has(members[0]) && gottenArgs >= 1) {
-					const argument = node.arguments[0];
-					if (argument.type === 'BinaryExpression' && comparisonOperators.has(argument.operator)) {
-						const leftNode = argument.left;
-						const rightNode = argument.right;
-						const sourceCode = context.getSourceCode();
-						if (isStatic(leftNode) && !isStatic(rightNode)) {
-							const [
-								leftRange,
-								operatorToken,
-								rightRange
-							] = sourceOfBinaryExpressionComponents(sourceCode, argument);
-							const rightText = sourceCode.getText().slice(...rightRange);
-							const leftText = sourceCode.getText().slice(...leftRange);
-							const report = {
-								message: 'Expected values should come after actual values.',
-								loc: {
-									start: sourceCode.getLocFromIndex(leftRange[0]),
-									end: sourceCode.getLocFromIndex(rightRange[1])
-								}
-							};
-							if (noComments(sourceCode, leftNode, rightNode, argument)) {
-								report.fix = fixer => {
-									return [
-										fixer.replaceTextRange(leftRange, rightText),
-										fixer.replaceText(operatorToken, flipOperator(argument.operator)),
-										fixer.replaceTextRange(rightRange, leftText)
-									];
-								};
-							}
-
-							context.report(report);
-						}
-					}
-				}
+				checkArgumentOrder({node, assertion: members[0], context});
 			}
 		})
 	});
 };
+
+function checkArgumentOrder({node, assertion, context}) {
+	const [first, second] = node.arguments;
+	if (actualExpectedAssertions.has(assertion) && second) {
+		const [leftNode, rightNode] = [first, second];
+		if (isStatic(leftNode) && !isStatic(rightNode)) {
+			context.report(
+				makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context})
+			);
+		}
+	} else if (
+		relationalActualExpectedAssertions.has(assertion) &&
+		first &&
+		first.type === 'BinaryExpression' &&
+		comparisonOperators.has(first.operator)
+	) {
+		const [leftNode, rightNode] = [first.left, first.right];
+		if (isStatic(leftNode) && !isStatic(rightNode)) {
+			context.report(
+				makeOutOfOrder1ArgumentReport({node: first, leftNode, rightNode, context})
+			);
+		}
+	}
+}
+
+function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
+	const sourceCode = context.getSourceCode();
+	const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
+	const report = {
+		message: 'Expected values should come after actual values.',
+		loc: {
+			start: sourceCode.getLocFromIndex(leftRange[0]),
+			end: sourceCode.getLocFromIndex(rightRange[1])
+		}
+	};
+
+	if (noComments(sourceCode, leftNode, rightNode)) {
+		report.fix = fixer => {
+			const leftText = sourceCode.getText().slice(...leftRange);
+			const rightText = sourceCode.getText().slice(...rightRange);
+			return [
+				fixer.replaceTextRange(leftRange, rightText),
+				fixer.replaceTextRange(rightRange, leftText)
+			];
+		};
+	}
+
+	return report;
+}
+
+function makeOutOfOrder1ArgumentReport({node, leftNode, rightNode, context}) {
+	const sourceCode = context.getSourceCode();
+	const [
+		leftRange,
+		operatorToken,
+		rightRange
+	] = sourceOfBinaryExpressionComponents(sourceCode, node);
+	const report = {
+		message: 'Expected values should come after actual values.',
+		loc: {
+			start: sourceCode.getLocFromIndex(leftRange[0]),
+			end: sourceCode.getLocFromIndex(rightRange[1])
+		}
+	};
+
+	if (noComments(sourceCode, leftNode, rightNode, node)) {
+		report.fix = fixer => {
+			const leftText = sourceCode.getText().slice(...leftRange);
+			const rightText = sourceCode.getText().slice(...rightRange);
+			return [
+				fixer.replaceTextRange(leftRange, rightText),
+				fixer.replaceText(operatorToken, flipOperator(node.operator)),
+				fixer.replaceTextRange(rightRange, leftText)
+			];
+		};
+	}
+
+	return report;
+}
 
 const schema = [{
 	type: 'object',
