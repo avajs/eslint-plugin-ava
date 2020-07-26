@@ -65,6 +65,7 @@ const allowedMethods = [
 	'assert(foo)',
 	'deepEqual(foo, bar)',
 	'notDeepEqual(foo, bar)',
+	'like(foo, bar)',
 	'throws(block)',
 	'notThrows(block)',
 	'pass(foo)',

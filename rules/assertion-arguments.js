@@ -28,6 +28,10 @@ const expectedNbArguments = {
 		min: 2,
 		max: 3
 	},
+	like: {
+		min: 2,
+		max: 3
+	},
 	not: {
 		min: 2,
 		max: 3
