@@ -3,8 +3,7 @@ const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
-const TestInterface = {};
-{
+const TestInterface = (() => {
 	const CbOnlyInterface = null;
 	const CbSkipInterface = null;
 	const OnlyInterface = null;
@@ -52,13 +51,15 @@ const TestInterface = {};
 		...AlwaysInterface
 	};
 
-	Object.assign(TestInterface, SerialInterface);
-	/* eslint-disable no-multi-assign */
-	TestInterface.after = TestInterface.afterEach = AfterInterface;
-	TestInterface.before = TestInterface.beforeEach = BeforeInterface;
-	/* eslint-enable no-multi-assign */
-	TestInterface.serial = SerialInterface;
-}
+	return {
+		...SerialInterface,
+		after: AfterInterface,
+		afterEach: AfterInterface,
+		before: BeforeInterface,
+		beforeEach: BeforeInterface,
+		serial: SerialInterface
+	}
+})();
 
 const create = context => {
 	const ava = createAvaRule();
