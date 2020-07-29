@@ -2,19 +2,7 @@
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
-const validModifiers = new Set([
-	'after',
-	'afterEach',
-	'always',
-	'before',
-	'beforeEach',
-	'cb',
-	'only',
-	'serial',
-	'skip',
-	'todo',
-	'failing'
-]);
+
 const TestInterface = {};
 {
 	const CbOnlyInterface = null;
@@ -93,7 +81,7 @@ const create = context => {
 					});
 				}
 
-				if (!validModifiers.has(modifier.name)) {
+				if (!util.testModifierNames.has(modifier.name)) {
 					return context.report({
 						node: modifier,
 						messageId: 'unknown',
