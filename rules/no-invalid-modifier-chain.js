@@ -2,13 +2,33 @@
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
-
+const InterfaceData = Symbol('Data for the Mock Interfaces');
 const TestInterface = (() => {
-	const CbOnlyInterface = null;
-	const CbSkipInterface = null;
-	const OnlyInterface = null;
-	const SkipInterface = null;
-	const TodoDeclaration = null;
+	const CbOnlyInterface = {
+		[InterfaceData]: {
+			isNull: true
+		}
+	};
+	const CbSkipInterface = {
+		[InterfaceData]: {
+			isNull: true
+		}
+	};
+	const OnlyInterface = {
+		[InterfaceData]: {
+			isNull: true
+		}
+	};
+	const SkipInterface = {
+		[InterfaceData]: {
+			isNull: true
+		}
+	};
+	const TodoDeclaration = {
+		[InterfaceData]: {
+			isNull: true
+		}
+	};
 
 	const FailingInterface = {
 		only: OnlyInterface,
@@ -58,7 +78,7 @@ const TestInterface = (() => {
 		before: BeforeInterface,
 		beforeEach: BeforeInterface,
 		serial: SerialInterface
-	}
+	};
 })();
 
 const create = context => {
