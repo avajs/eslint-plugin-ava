@@ -8,7 +8,6 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-invalid-modifier-chain'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-invalid-modifier-chain', rule, {
@@ -23,43 +22,73 @@ ruleTester.run('no-invalid-modifier-chain', rule, {
 	invalid: [
 		{
 			code: header + 'test.skap(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'unknown'
+			}]
 		},
 		{
 			code: header + 'test.serial.skap(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'unknown'
+			}]
 		},
 		{
 			code: header + 'test.failing.failing(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'invalid'
+			}]
 		},
 		{
 			code: header + 'test.todo.only(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'last'
+			}]
 		},
 		{
 			code: header + 'test.failing.serial(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'invalid'
+			}]
 		},
 		{
 			code: header + 'test.only.skip(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'last'
+			}]
 		},
 		{
 			code: header + 'test.skip.only(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'last'
+			}]
 		},
 		{
 			code: header + 'test.before.always(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'invalid'
+			}]
 		},
 		{
 			code: header + 'test.always.after(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'invalid'
+			}]
 		},
 		{
 			code: header + 'test.before.only(t => {})',
-			errors
+			errors: [{
+				ruleId: 'no-invalid-modifier-chain',
+				messageId: 'invalid'
+			}]
 		}
 	]
 });
