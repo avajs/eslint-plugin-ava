@@ -100,11 +100,21 @@ const expectedNbArguments = {
 };
 
 const actualExpectedAssertions = new Set([
-	'deepEqual', 'is', 'like', 'not', 'notDeepEqual', 'throws', 'throwsAsync'
+	'deepEqual',
+	'is',
+	'like',
+	'not',
+	'notDeepEqual',
+	'throws',
+	'throwsAsync'
 ]);
 
 const relationalActualExpectedAssertions = new Set([
-	'assert', 'truthy', 'falsy', 'true', 'false'
+	'assert',
+	'truthy',
+	'falsy',
+	'true',
+	'false'
 ]);
 
 const comparisonOperators = new Map([
@@ -118,9 +128,7 @@ const comparisonOperators = new Map([
 	['<', '>']
 ]);
 
-const flipOperator = operator => {
-	return comparisonOperators.get(operator);
-};
+const flipOperator = operator => comparisonOperators.get(operator);
 
 function isStatic(node) {
 	const staticValue = getStaticValue(node);
@@ -132,7 +140,9 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 		callExpression.callee,
 		{filter: token => isOpeningParenToken(token)}
 	);
+
 	const closingParen = sourceCode.getLastToken(callExpression);
+
 	for (let index = 0; index < callExpression.arguments.length; index++) {
 		const previousToken = index === 0 ?
 			openingParen :
@@ -140,41 +150,50 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 				callExpression.arguments[index],
 				{filter: token => isCommaToken(token)}
 			);
+
 		const nextToken = index === callExpression.arguments.length - 1 ?
 			closingParen :
 			sourceCode.getTokenAfter(
 				callExpression.arguments[index],
 				{filter: token => isCommaToken(token)}
 			);
+
 		const firstToken = sourceCode.getTokenAfter(
 			previousToken,
 			{includeComments: true}
 		);
+
 		const lastToken = sourceCode.getTokenBefore(
 			nextToken,
 			{includeComments: true}
 		);
+
 		yield [firstToken.start, lastToken.end];
 	}
 }
 
 function sourceOfBinaryExpressionComponents(sourceCode, node) {
 	const {operator, left, right} = node;
+
 	const operatorToken = sourceCode.getFirstTokenBetween(
 		left,
 		right,
 		{filter: token => token.value === operator}
 	);
+
 	const previousToken = sourceCode.getTokenBefore(node);
 	const nextToken = sourceCode.getTokenAfter(node);
+
 	const leftRange = [
 		sourceCode.getTokenAfter(previousToken, {includeComments: true}).start,
 		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).end
 	];
+
 	const rightRange = [
 		sourceCode.getTokenAfter(operatorToken, {includeComments: true}).start,
 		sourceCode.getTokenBefore(nextToken, {includeComments: true}).end
 	];
+
 	return [leftRange, operatorToken, rightRange];
 }
 
