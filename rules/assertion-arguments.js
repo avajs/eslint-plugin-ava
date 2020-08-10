@@ -143,18 +143,20 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 
 	const closingParen = sourceCode.getLastToken(callExpression);
 
-	for (let index = 0; index < callExpression.arguments.length; index++) {
+	for (const [index, argument] of callExpression.arguments.map(
+		(argument, index) => [index, argument])
+	) {
 		const previousToken = index === 0 ?
 			openingParen :
 			sourceCode.getTokenBefore(
-				callExpression.arguments[index],
+				argument,
 				{filter: token => isCommaToken(token)}
 			);
 
 		const nextToken = index === callExpression.arguments.length - 1 ?
 			closingParen :
 			sourceCode.getTokenAfter(
-				callExpression.arguments[index],
+				argument,
 				{filter: token => isCommaToken(token)}
 			);
 
