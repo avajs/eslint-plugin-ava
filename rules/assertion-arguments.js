@@ -168,7 +168,7 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 			{includeComments: true}
 		);
 
-		yield [firstToken.start, lastToken.end];
+		yield [firstToken.range[0], lastToken.range[1]];
 	}
 }
 
@@ -185,13 +185,13 @@ function sourceOfBinaryExpressionComponents(sourceCode, node) {
 	const nextToken = sourceCode.getTokenAfter(node);
 
 	const leftRange = [
-		sourceCode.getTokenAfter(previousToken, {includeComments: true}).start,
-		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).end
+		sourceCode.getTokenAfter(previousToken, {includeComments: true}).range[0],
+		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).range[1]
 	];
 
 	const rightRange = [
-		sourceCode.getTokenAfter(operatorToken, {includeComments: true}).start,
-		sourceCode.getTokenBefore(nextToken, {includeComments: true}).end
+		sourceCode.getTokenAfter(operatorToken, {includeComments: true}).range[0],
+		sourceCode.getTokenBefore(nextToken, {includeComments: true}).range[1]
 	];
 
 	return [leftRange, operatorToken, rightRange];
