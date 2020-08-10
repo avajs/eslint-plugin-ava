@@ -143,9 +143,7 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 
 	const closingParen = sourceCode.getLastToken(callExpression);
 
-	for (const [index, argument] of callExpression.arguments.map(
-		(argument, index) => [index, argument])
-	) {
+	for (const [index, argument] of callExpression.arguments.entries()) {
 		const previousToken = index === 0 ?
 			openingParen :
 			sourceCode.getTokenBefore(
