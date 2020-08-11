@@ -6,6 +6,8 @@ Enforces passing the right number of arguments to assertion methods like `t.is()
 
 Assertion messages are optional arguments that can be given to any assertion call to improve the error message, should the assertion fail.
 
+This rule also attempts to enforce passing actual values before expected values. If exactly one of the first two arguments to a two-argument assertion is a static expression such as `{a: 1}`, then the static expression must come second. (`t.regex()` and `t.notRegex()` are excluded from this check, because either their `contents` argument or their `regex` argument could plausibly be the actual or expected value.) If the argument to a one-argument assertion is a binary relation such as `'static' === dynamic`, a similar check is performed on its left- and right-hand sides. Errors of these kinds are usually fixable.
+
 ## Fail
 
 ```js

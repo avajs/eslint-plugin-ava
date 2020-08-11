@@ -5,6 +5,9 @@ const rule = require('../rules/assertion-arguments');
 const ruleTester = avaRuleTester(test, {
 	env: {
 		es6: true
+	},
+	parserOptions: {
+		ecmaVersion: 2020
 	}
 });
 
@@ -12,29 +15,149 @@ const missingError = 'Expected an assertion message, but found none.';
 const foundError = 'Expected no assertion message, but found one.';
 const tooFewError = n => `Not enough arguments. Expected at least ${n}.`;
 const tooManyError = n => `Too many arguments. Expected at most ${n}.`;
+const outOfOrderError = (line, column, endLine, endColumn) => ({
+	message: 'Expected values should come after actual values.',
+	line, column, endLine, endColumn
+});
 
 const header = 'const test = require(\'ava\');';
 
-function testCase(message, content, errorMessage, useHeader) {
+function testCode(content, useHeader) {
 	const testFn = `
 		test(t => {
 			${content}
 		});
 	`;
+	const code = (useHeader === false ? '' : header) + testFn;
+	return code;
+}
+
+function offsetError(error, line, column) {
+	const offset = {...error};
+
+	if (error.line !== undefined) {
+		offset.line += line;
+	}
+
+	if (error.column !== undefined && error.line === 1) {
+		offset.column += column;
+	}
+
+	if (error.endLine !== undefined) {
+		offset.endLine += line;
+	}
+
+	if (error.endColumn !== undefined && error.endLine === 1) {
+		offset.endColumn += column;
+	}
+
+	return offset;
+}
+
+function testCase(message, content, errors = [], {
+	useHeader, output = null
+} = {}) {
+	if (!Array.isArray(errors)) {
+		errors = [errors];
+	}
+
+	const offset = useHeader === false ? [1, 3] : [2, 3];
+
+	errors = errors
+		.map(error => typeof error === 'string' ? {message: error} : error)
+		.map(error => ({ruleId: 'assertion-arguments', ...error}))
+		.map(error => offsetError(error, ...offset));
 
 	return {
-		errors: errorMessage && [{
-			ruleId: 'assertion-arguments',
-			message: errorMessage
-		}],
+		errors,
 		options: message ? [{message}] : [],
-		code: (useHeader === false ? '' : header) + testFn
+		code: testCode(content, useHeader),
+		output: output === null ? null : testCode(output, useHeader)
 	};
 }
+
+const statics = [
+	'null',
+	'true',
+	'false',
+	'1.0',
+	'1n',
+	'"string"',
+	/* eslint-disable no-template-curly-in-string */
+	'`template ${"string"}`',
+	/* eslint-enable no-template-curly-in-string */
+	'/.*regex.*\\.js/ig',
+	'{}',
+	'{a: 1}',
+	'{a: {b: 1}}',
+	'{"c": 1}',
+	'{3: 1}',
+	'{["a" + "b"]: {c: 1}}',
+	'{...{a: 1}}',
+	'[]',
+	'[1, 2, {a: 3}]',
+	'[...[1, 2, 3]]',
+	'void 0',
+	'void a',
+	'~1',
+	'!""',
+	'+[]',
+	'-"a"',
+	'1 + "a"',
+	'1 && 0',
+	'null ?? false',
+	'true ? [] : [1]',
+	'true ? [] : a',
+	'{a: 1}.a',
+	'{a: 1}["a"]',
+	'{a: 1}.a["a"]',
+	'[1][0]',
+	'[[1]][0][0]',
+	'{a: 1}?.a?.["b"]',
+	'[{a: 1}]?.a?.[0]',
+	'a = 1'
+];
+
+const dynamics = [
+	'NaN',
+	'undefined',
+	'Infinity',
+	'-Infinity',
+	'a',
+	'a.b',
+	'a["b"]',
+	'{}[a]',
+	'{}.a[a]',
+	'[][a]',
+	'[[1]][0][a]',
+	'(() => {}).a',
+	'a()',
+	'new A()',
+	'class A {}',
+	'function a() {}',
+	'() => {}',
+	'tagged`template string`',
+	'new RegExp(\'[dynamic]\')',
+	'~a',
+	'++a',
+	'delete a.b',
+	'[delete a.b]',
+	'{...a}',
+	'{[a]: 1}',
+	'{ a() {} }',
+	'{ get a() {}}',
+	'{ set a(value) {} }',
+	'[...a]',
+	'a ? [] : [1]',
+	'true ? a : [1]',
+	'"a"?.()',
+	'{a: 1}?.[b]'
+];
 
 ruleTester.run('assertion-arguments', rule, {
 	valid: [
 		testCase(false, 't.plan(1);'),
+		testCase(false, 't.assert(true, \'message\');'),
 		testCase(false, 't.deepEqual({}, {}, \'message\');'),
 		testCase(false, 't.fail(\'message\');'),
 		testCase(false, 't.false(false, \'message\');'),
@@ -46,11 +169,13 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.not(\'not\', \'same\', \'message\');'),
 		testCase(false, 't.notDeepEqual({}, {a: true}, \'message\');'),
 		testCase(false, 't.notThrows(Promise.resolve(), \'message\');'),
+		testCase(false, 't.notThrowsAsync(Promise.resolve(), \'message\');'),
 		testCase(false, 't.pass(\'message\');'),
 		testCase(false, 't.regex(a, /a/, \'message\');'),
 		testCase(false, 't.notRegex(a, /a/, \'message\');'),
 		testCase(false, 't.skip.is(\'same\', \'same\', \'message\');'),
 		testCase(false, 't.throws(Promise.reject(), Error, \'message\');'),
+		testCase(false, 't.throwsAsync(Promise.reject(), Error, \'message\');'),
 		testCase(false, 't.true(true, \'message\');'),
 		testCase(false, 't.truthy(\'unicorn\', \'message\');'),
 		testCase(false, 't.snapshot(value, \'message\');'),
@@ -59,8 +184,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.timeout(100, \'message\');'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true);', false, false),
+		testCase(false, 't.true(true);', false, {useHeader: false}),
 
+		testCase(false, 't.assert(true);'),
 		testCase(false, 't.deepEqual({}, {});'),
 		testCase(false, 't.fail();'),
 		testCase(false, 't.false(false);'),
@@ -72,23 +198,27 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.not(\'not\', \'same\');'),
 		testCase(false, 't.notDeepEqual({}, {a: true});'),
 		testCase(false, 't.notThrows(Promise.resolve());'),
+		testCase(false, 't.notThrowsAsync(Promise.resolve());'),
 		testCase(false, 't.pass();'),
 		testCase(false, 't.regex(a, /a/);'),
 		testCase(false, 't.notRegex(a, /a/);'),
 		testCase(false, 't.skip.is(\'same\', \'same\');'),
 		testCase(false, 't.throws(Promise.reject());'),
 		testCase(false, 't.throws(Promise.reject(), Error);'),
+		testCase(false, 't.throwsAsync(Promise.reject());'),
+		testCase(false, 't.throwsAsync(Promise.reject(), Error);'),
 		testCase(false, 't.true(true);'),
 		testCase(false, 't.truthy(\'unicorn\');'),
 		testCase(false, 't.snapshot(value);'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true, \'message\');', [], false),
+		testCase(false, 't.true(true, \'message\');', [], {useHeader: false}),
 
 		testCase(false, 't.context.a(1, 2, 3, 4);'),
 		testCase(false, 't.context.is(1, 2, 3, 4);'),
 		testCase(false, 't.foo(1, 2, 3, 4);'),
 
 		testCase('always', 't.plan(1);'),
+		testCase('always', 't.assert(true, \'message\');'),
 		testCase('always', 't.pass(\'message\');'),
 		testCase('always', 't.fail(\'message\');'),
 		testCase('always', 't.truthy(\'unicorn\', \'message\');'),
@@ -102,6 +232,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.like({}, {}, \'message\');'),
 		testCase('always', 't.throws(Promise.reject(), Error, \'message\');'),
 		testCase('always', 't.notThrows(Promise.resolve(), \'message\');'),
+		testCase('always', 't.throwsAsync(Promise.reject(), Error, \'message\');'),
+		testCase('always', 't.notThrowsAsync(Promise.resolve(), \'message\');'),
 		testCase('always', 't.regex(a, /a/, \'message\');'),
 		testCase('always', 't.notRegex(a, /a/, \'message\');'),
 		testCase('always', 't.ifError(new Error(), \'message\');'),
@@ -115,13 +247,14 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('always', 't.true(true);', [], false),
+		testCase('always', 't.true(true);', [], {useHeader: false}),
 
 		testCase('always', 't.context.a(1, 2, 3, 4);'),
 		testCase('always', 't.context.is(1, 2, 3, 4);'),
 		testCase('always', 't.foo(1, 2, 3, 4);'),
 
 		testCase('never', 't.plan(1);'),
+		testCase('never', 't.assert(true);'),
 		testCase('never', 't.pass();'),
 		testCase('never', 't.fail();'),
 		testCase('never', 't.truthy(\'unicorn\');'),
@@ -136,6 +269,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.throws(Promise.reject());'),
 		testCase('never', 't.throws(Promise.reject(), Error);'),
 		testCase('never', 't.notThrows(Promise.resolve());'),
+		testCase('never', 't.throwsAsync(Promise.reject());'),
+		testCase('never', 't.throwsAsync(Promise.reject(), Error);'),
+		testCase('never', 't.notThrowsAsync(Promise.resolve());'),
 		testCase('never', 't.regex(a, /a/);'),
 		testCase('never', 't.notRegex(a, /a/);'),
 		testCase('never', 't.ifError(new Error());'),
@@ -149,7 +285,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('never', 't.true(true, \'message\');', [], false),
+		testCase('never', 't.true(true, \'message\');', [], {useHeader: false}),
 
 		testCase('never', 't.context.a(1, 2, 3, 4);'),
 		testCase('never', 't.context.is(1, 2, 3, 4);'),
@@ -173,11 +309,35 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.end.skip();'),
 		testCase('never', 't.end.skip(error);'),
 		testCase('never', 't.skip.end();'),
-		testCase('never', 't.skip.end(error);')
+		testCase('never', 't.skip.end(error);'),
+
+		// Assertion argument order
+		testCase(false, 't.deepEqual(\'static\', \'static\');'),
+		testCase(false, 't.deepEqual(dynamic, \'static\');'),
+		testCase(false, 't.deepEqual(dynamic, dynamic);'),
+		testCase(false, 't.is(dynamic, \'static\');'),
+		testCase(false, 't.like(dynamic, \'static\');'),
+		testCase(false, 't.not(dynamic, \'static\');'),
+		testCase(false, 't.notDeepEqual(dynamic, \'static\');'),
+		testCase(false, 't.throws(() => {}, expected);'),
+		testCase(false, 't.throws(() => {}, null, "message");'),
+		testCase(false, 't.throwsAsync(async () => {}, {name: \'TypeError\'});'),
+		testCase(false, 't.throwsAsync(async () => {}, null, "message");'),
+		testCase(false, 't.assert(dynamic === \'static\');'),
+		testCase(false, 't.true(dynamic === \'static\');'),
+		testCase(false, 't.false(dynamic === \'static\');'),
+		testCase(false, 't.truthy(dynamic === \'static\');'),
+		testCase(false, 't.falsy(dynamic === \'static\');'),
+		// No documented actual/expected distinction for t.regex()
+		testCase(false, 't.regex(\'static\', new RegExp(\'[dynamic]+\'));'),
+		testCase(false, 't.regex(dynamic, /[static]/);'),
+		testCase(false, 't.notRegex(\'static\', new RegExp(\'[dynamic]+\'));'),
+		testCase(false, 't.notRegex(dynamic, /[static]/);')
 	],
 	invalid: [
 		// Not enough arguments
 		testCase(false, 't.plan();', tooFewError(1)),
+		testCase(false, 't.assert();', tooFewError(1)),
 		testCase(false, 't.truthy();', tooFewError(1)),
 		testCase(false, 't.falsy();', tooFewError(1)),
 		testCase(false, 't.true();', tooFewError(1)),
@@ -189,6 +349,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.like({});', tooFewError(2)),
 		testCase(false, 't.throws();', tooFewError(1)),
 		testCase(false, 't.notThrows();', tooFewError(1)),
+		testCase(false, 't.throwsAsync();', tooFewError(1)),
+		testCase(false, 't.notThrowsAsync();', tooFewError(1)),
 		testCase(false, 't.regex(a);', tooFewError(2)),
 		testCase(false, 't.notRegex(a);', tooFewError(2)),
 		testCase(false, 't.ifError();', tooFewError(1)),
@@ -201,6 +363,7 @@ ruleTester.run('assertion-arguments', rule, {
 
 		// Too many arguments
 		testCase(false, 't.plan(1, \'extra argument\');', tooManyError(1)),
+		testCase(false, 't.assert(true, \'message\', \'extra argument\');', tooManyError(2)),
 		testCase(false, 't.pass(\'message\', \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.fail(\'message\', \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.truthy(\'unicorn\', \'message\', \'extra argument\');', tooManyError(2)),
@@ -214,6 +377,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.like({}, {}, \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.throws(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.notThrows(Promise.resolve(), \'message\', \'extra argument\');', tooManyError(2)),
+		testCase(false, 't.throwsAsync(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError(3)),
+		testCase(false, 't.notThrowsAsync(Promise.resolve(), \'message\', \'extra argument\');', tooManyError(2)),
 		testCase(false, 't.regex(a, /a/, \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.notRegex(a, /a/, \'message\', \'extra argument\');', tooManyError(3)),
 		testCase(false, 't.ifError(new Error(), \'message\', \'extra argument\');', tooManyError(2)),
@@ -223,6 +388,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
 		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError(2)),
 
+		testCase('always', 't.assert(true);', missingError),
 		testCase('always', 't.pass();', missingError),
 		testCase('always', 't.fail();', missingError),
 		testCase('always', 't.truthy(\'unicorn\');', missingError),
@@ -237,12 +403,17 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.throws(Promise.reject());', missingError),
 		testCase('always', 't.throws(Promise.reject(), Error);', missingError),
 		testCase('always', 't.notThrows(Promise.resolve());', missingError),
+		testCase('always', 't.throwsAsync(Promise.reject());', missingError),
+		testCase('always', 't.throwsAsync(Promise.reject(), Error);', missingError),
+		testCase('always', 't.notThrowsAsync(Promise.resolve());', missingError),
 		testCase('always', 't.regex(a, /a/);', missingError),
 		testCase('always', 't.notRegex(a, /a/);', missingError),
 		testCase('always', 't.ifError(new Error());', missingError),
 		testCase('always', 't.skip.is(\'same\', \'same\');', missingError),
 		testCase('always', 't.is.skip(\'same\', \'same\');', missingError),
 		testCase('always', 't.snapshot(value);', missingError),
+
+		testCase('never', 't.assert(true, \'message\');', foundError),
 		testCase('never', 't.pass(\'message\');', foundError),
 		testCase('never', 't.fail(\'message\');', foundError),
 		testCase('never', 't.truthy(\'unicorn\', \'message\');', foundError),
@@ -256,6 +427,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.like({}, {}, \'message\');', foundError),
 		testCase('never', 't.throws(Promise.reject(), Error, \'message\');', foundError),
 		testCase('never', 't.notThrows(Promise.resolve(), \'message\');', foundError),
+		testCase('never', 't.throwsAsync(Promise.reject(), Error, \'message\');', foundError),
+		testCase('never', 't.notThrowsAsync(Promise.resolve(), \'message\');', foundError),
 		testCase('never', 't.regex(a, /a/, \'message\');', foundError),
 		testCase('never', 't.notRegex(a, /a/, \'message\');', foundError),
 		testCase('never', 't.ifError(new Error(), \'message\');', foundError),
@@ -265,6 +438,107 @@ ruleTester.run('assertion-arguments', rule, {
 
 		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError(1)),
 		testCase(false, 't.skip.end(\'too many\', \'arguments\');', tooManyError(1)),
-		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1))
+		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1)),
+
+		// Assertion argument order
+		testCase(false, 't.deepEqual(\'static\', dynamic);',
+			outOfOrderError(1, 13, 1, 30),
+			{output: 't.deepEqual(dynamic, \'static\');'}
+		),
+		testCase(false, 't.is(\'static\', dynamic);',
+			outOfOrderError(1, 6, 1, 23),
+			{output: 't.is(dynamic, \'static\');'}
+		),
+		testCase(false, 't.like({a: {b: 1}}, dynamic);',
+			outOfOrderError(1, 8, 1, 28),
+			{output: 't.like(dynamic, {a: {b: 1}});'}
+		),
+		testCase(false, 't.not(\'static\', dynamic);',
+			outOfOrderError(1, 7, 1, 24),
+			{output: 't.not(dynamic, \'static\');'}
+		),
+		testCase(false, 't.notDeepEqual({static: true}, dynamic);',
+			outOfOrderError(1, 16, 1, 39),
+			{output: 't.notDeepEqual(dynamic, {static: true});'}
+		),
+		testCase(false, 't.throws({name: \'TypeError\'}, () => {});',
+			outOfOrderError(1, 10, 1, 39),
+			{output: 't.throws(() => {}, {name: \'TypeError\'});'}
+		),
+		testCase(false, 't.throwsAsync({name: \'TypeError\'}, async () => {});',
+			outOfOrderError(1, 15, 1, 50),
+			{output: 't.throwsAsync(async () => {}, {name: \'TypeError\'});'}
+		),
+		testCase('always', 't.deepEqual({}, actual, \'message\');',
+			outOfOrderError(1, 13, 1, 23),
+			{output: 't.deepEqual(actual, {}, \'message\');'}
+		),
+		testCase('never', 't.deepEqual({}, actual);',
+			outOfOrderError(1, 13, 1, 23),
+			{output: 't.deepEqual(actual, {});'}
+		),
+		testCase('always', 't.deepEqual({}, actual);',
+			[missingError, outOfOrderError(1, 13, 1, 23)],
+			{output: 't.deepEqual(actual, {});'}
+		),
+		testCase('never', 't.deepEqual({}, actual, \'message\');',
+			[foundError, outOfOrderError(1, 13, 1, 23)],
+			{output: 't.deepEqual(actual, {}, \'message\');'}
+		),
+		testCase(false, 't.deepEqual({}, actual, extra, \'message\');',
+			tooManyError(3)
+		),
+		testCase(false, 't.deepEqual({}, (actual));',
+			outOfOrderError(1, 13, 1, 25),
+			{output: 't.deepEqual((actual), {});'}
+		),
+		testCase(false, 't.deepEqual({}, actual/*: type */);',
+			outOfOrderError(1, 13, 1, 34)
+		),
+		testCase(
+			false,
+			`t.deepEqual(// Line comment 1
+				'static' // Line Comment 2
+				, // Line Comment 3
+				dynamic // Line Comment 4
+				// Line Comment 5
+			); // Line Comment 6`,
+			outOfOrderError(1, 13, 5, 22)
+		),
+		testCase(false, 't.assert(\'static\' !== dynamic);',
+			outOfOrderError(1, 10, 1, 30),
+			{output: 't.assert(dynamic !== \'static\');'}
+		),
+		testCase(false, 't.true(\'static\' <= dynamic);',
+			outOfOrderError(1, 8, 1, 27),
+			{output: 't.true(dynamic >= \'static\');'}
+		),
+		testCase(false, 't.false(\'static\' < dynamic);',
+			outOfOrderError(1, 9, 1, 27),
+			{output: 't.false(dynamic > \'static\');'}
+		),
+		testCase(false, 't.truthy(\'static\' > dynamic);',
+			outOfOrderError(1, 10, 1, 28),
+			{output: 't.truthy(dynamic < \'static\');'}
+		),
+		testCase(false, 't.falsy(\'static\' >= dynamic);',
+			outOfOrderError(1, 9, 1, 28),
+			{output: 't.falsy(dynamic <= \'static\');'}
+		),
+		testCase(false, 't.true(\'static\' === actual/*: type */);',
+			outOfOrderError(1, 8, 1, 38)
+		),
+		...statics.map(expression =>
+			testCase(false, `t.deepEqual(${expression}, dynamic);`,
+				outOfOrderError(1, 13, 1, 22 + expression.length),
+				{output: `t.deepEqual(dynamic, ${expression});`}
+			)
+		),
+		...dynamics.map(expression =>
+			testCase(false, `t.deepEqual('static', ${expression});`,
+				outOfOrderError(1, 13, 1, 23 + expression.length),
+				{output: `t.deepEqual(${expression}, 'static');`}
+			)
+		)
 	]
 });
