@@ -50,7 +50,6 @@
 		"eslint-ava-rule-tester": "^4.0.0",
 		"eslint-plugin-eslint-plugin": "^2.3.0",
 		"execa": "^4.0.2",
-		"js-combinatorics": "^0.6.1",
 		"listr": "^0.14.3",
 		"outdent": "^0.7.1",
 		"pify": "^5.0.0",

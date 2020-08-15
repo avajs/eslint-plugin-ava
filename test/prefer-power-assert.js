@@ -1,6 +1,5 @@
 const test = require('ava');
 const avaRuleTester = require('eslint-ava-rule-tester');
-const {permutationCombination} = require('js-combinatorics');
 const rule = require('../rules/prefer-power-assert');
 
 const ruleTester = avaRuleTester(test, {
@@ -92,8 +91,8 @@ function testWithModifier(modifier) {
 	});
 }
 
-for (const modifiers of permutationCombination(['skip', 'only', 'cb', 'serial']).toArray()) {
-	testWithModifier(modifiers.join('.'));
+for (const modifiers of ['skip', 'only', 'cb', 'serial']) {
+	testWithModifier(modifiers);
 }
 
 function testDeclaration(declaration) {
