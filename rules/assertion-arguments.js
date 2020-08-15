@@ -231,9 +231,9 @@ const create = context => {
 			}
 
 			const gottenArgs = node.arguments.length;
-			const members = util.getMembers(callee).filter(name => name !== 'skip');
+			const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
 
-			if (members[0] === 'end') {
+			if (firstNonSkipMember === 'end') {
 				if (gottenArgs > 1) {
 					report(node, 'Too many arguments. Expected at most 1.');
 				}
@@ -241,7 +241,7 @@ const create = context => {
 				return;
 			}
 
-			if (members[0] === 'try') {
+			if (firstNonSkipMember === 'try') {
 				if (gottenArgs < 1) {
 					report(node, 'Not enough arguments. Expected at least 1.');
 				}
@@ -249,7 +249,7 @@ const create = context => {
 				return;
 			}
 
-			const nArgs = expectedNbArguments[members[0]];
+			const nArgs = expectedNbArguments[firstNonSkipMember];
 
 			if (!nArgs) {
 				return;
@@ -270,7 +270,7 @@ const create = context => {
 					}
 				}
 
-				checkArgumentOrder({node, assertion: members[0], context});
+				checkArgumentOrder({node, assertion: firstNonSkipMember, context});
 			}
 		})
 	});

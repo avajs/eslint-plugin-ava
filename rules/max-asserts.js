@@ -31,9 +31,9 @@ const create = context => {
 				!notAssertionMethods.has(callee.property.name) &&
 				util.getNameOfRootNodeObject(callee) === 't'
 			) {
-				const members = util.getMembers(callee).filter(name => name !== 'skip');
+				const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
 
-				if (!util.assertionMethods.has(members[0])) {
+				if (!util.assertionMethods.has(firstNonSkipMember)) {
 					return;
 				}
 
