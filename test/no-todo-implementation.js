@@ -9,7 +9,6 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const errors = [{
-	ruleId: 'no-todo-implementation',
 	message: '`test.todo()` should not be passed an implementation function.'
 }];
 const header = 'const test = require(\'ava\');\n';

@@ -199,8 +199,7 @@ function sourceOfBinaryExpressionComponents(sourceCode, node) {
 
 function noComments(sourceCode, ...nodes) {
 	return nodes.every(node => {
-		const {leading, trailing} = sourceCode.getComments(node);
-		return leading.length === 0 && trailing.length === 0;
+		return sourceCode.getCommentsBefore(node).length === 0 && sourceCode.getCommentsAfter(node).length === 0;
 	});
 }
 

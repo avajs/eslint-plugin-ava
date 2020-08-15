@@ -8,7 +8,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'max-asserts'}];
+const errors = [{}];
 const header = 'const test = require(\'ava\');\n';
 
 function nbAssertions(n) {

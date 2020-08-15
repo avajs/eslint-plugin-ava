@@ -12,12 +12,10 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const parameterNotNamedTErrors = [{
-	ruleId: 'use-t',
 	message: 'Test parameter should be named `t`.'
 }];
 
 const tooManyParametersErrors = [{
-	ruleId: 'use-t',
 	message: 'Test should only have one parameter named `t`.'
 }];
 

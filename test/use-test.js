@@ -11,7 +11,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'use-test'}];
+const errors = [{}];
 
 ruleTester.run('use-test', rule, {
 	valid: [

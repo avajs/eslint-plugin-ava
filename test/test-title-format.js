@@ -8,7 +8,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'test-title-format'}];
+const errors = [{}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('test-title-format', rule, {

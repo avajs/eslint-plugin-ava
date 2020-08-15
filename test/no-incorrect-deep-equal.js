@@ -9,7 +9,6 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const error = {
-	ruleId: 'no-incorrect-deep-equal',
 	messageId: 'no-deep-equal-with-primative'
 };
 

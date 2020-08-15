@@ -8,7 +8,6 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const ruleId = 'no-duplicate-modifiers';
 const header = 'const test = require(\'ava\');\n';
 
 const modifiers = [
@@ -30,7 +29,6 @@ const invalid = modifiers.map(modifier => ({
 	code: `${header}test.${modifier}.${modifier}(t => {});`,
 	errors: [
 		{
-			ruleId,
 			message: `Duplicate test modifier \`.${modifier}\`.`,
 			type: 'Identifier',
 			line: 2,
@@ -54,7 +52,6 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 			code: `${header}test.serial.cb.only.serial(t => {});`,
 			errors: [
 				{
-					ruleId,
 					message: 'Duplicate test modifier `.serial`.',
 					type: 'Identifier',
 					line: 2,

@@ -8,7 +8,6 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const ruleId = 'no-identical-title';
 const message = 'Test title is used multiple times in the same file.';
 
 const header = 'const test = require(\'ava\');\n';
@@ -51,7 +50,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("a", t => {}); test("a", t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Literal',
 				line: 2,
@@ -61,7 +59,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test(`a`, t => {}); test(`a`, t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'TemplateLiteral',
 				line: 2,
@@ -71,7 +68,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("a", t => {}); test.cb("a", t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Literal',
 				line: 2,
@@ -81,7 +77,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test(`a`, t => {}); test.cb(`a`, t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'TemplateLiteral',
 				line: 2,
@@ -91,7 +86,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("a", t => {}); test.cb.skip("a", t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Literal',
 				line: 2,
@@ -101,7 +95,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("foo" + 1, t => {}); test("foo" + 1, t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'BinaryExpression',
 				line: 2,
@@ -112,7 +105,6 @@ ruleTester.run('no-identical-title', rule, {
 			// eslint-disable-next-line no-template-curly-in-string
 			code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
 			errors: [{
-				ruleId,
 				message,
 				type: 'TemplateLiteral',
 				line: 2,
@@ -122,7 +114,6 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test.todo("a"); test.todo("a");',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Literal',
 				line: 2,
