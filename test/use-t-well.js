@@ -8,11 +8,10 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const ruleError = {ruleId: 'use-t-well'};
 const header = 'const test = require(\'ava\');\n';
 
 function error(message) {
-	return {...ruleError, message};
+	return {message};
 }
 
 function testCase(contents, prependHeader) {

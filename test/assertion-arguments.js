@@ -65,7 +65,6 @@ function testCase(message, content, errors = [], {
 
 	errors = errors
 		.map(error => typeof error === 'string' ? {message: error} : error)
-		.map(error => ({ruleId: 'assertion-arguments', ...error}))
 		.map(error => offsetError(error, ...offset));
 
 	return {

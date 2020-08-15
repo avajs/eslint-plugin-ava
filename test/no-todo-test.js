@@ -8,7 +8,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-todo-test'}];
+const errors = [{}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {

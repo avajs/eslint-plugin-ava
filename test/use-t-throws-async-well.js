@@ -46,14 +46,12 @@ ruleTester.run('use-t-throws-async-well', rule, {
 		{
 			code: syncTestCase('t.throwsAsync(f)'),
 			errors: [{
-				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.throwsAsync()`.'
 			}]
 		},
 		{
 			code: syncTestCase('t.notThrowsAsync(f)'),
 			errors: [{
-				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.notThrowsAsync()`.'
 			}]
 		},
@@ -61,7 +59,6 @@ ruleTester.run('use-t-throws-async-well', rule, {
 			code: asyncTestCase('t.throwsAsync(f)'),
 			output: asyncTestCase('await t.throwsAsync(f)'),
 			errors: [{
-				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.throwsAsync()`.'
 			}]
 		},
@@ -69,7 +66,6 @@ ruleTester.run('use-t-throws-async-well', rule, {
 			code: asyncTestCase('t.notThrowsAsync(f)'),
 			output: asyncTestCase('await t.notThrowsAsync(f)'),
 			errors: [{
-				ruleId: 'use-t-throws-async-well',
 				message: 'Use `await` with `t.notThrowsAsync()`.'
 			}]
 		}

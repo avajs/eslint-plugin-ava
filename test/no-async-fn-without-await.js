@@ -2,7 +2,6 @@ const test = require('ava');
 const avaRuleTester = require('eslint-ava-rule-tester');
 const rule = require('../rules/no-async-fn-without-await');
 
-const ruleId = 'no-async-fn-without-await';
 const message = 'Function was declared as `async` but doesn\'t use `await`.';
 const header = 'const test = require(\'ava\');\n';
 
@@ -46,7 +45,6 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async t => {});`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
@@ -56,7 +54,6 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async function(t) {});`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'FunctionExpression',
 					line: 2,
@@ -66,13 +63,11 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async t => {}); test(async t => {});`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 6
 				}, {
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
@@ -82,7 +77,6 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async t => {}); test(async t => { await foo(); });`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
@@ -92,7 +86,6 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async t => { await foo(); }); test(async t => {});`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
@@ -102,7 +95,6 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test('title', async t => {});`,
 				errors: [{
-					ruleId,
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,

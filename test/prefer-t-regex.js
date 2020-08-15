@@ -9,7 +9,6 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const errors = assertion => [{
-	ruleId: 'prefer-t-regex',
 	message: `Prefer using the \`t.${assertion}()\` assertion.`
 }];
 const header = 'const test = require(\'ava\');\n';

@@ -12,7 +12,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'prefer-power-assert'}];
+const errors = [{}];
 
 function testNotAllowedMethod(methodName) {
 	ruleTester.run('prefer-power-assert', rule, {

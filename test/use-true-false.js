@@ -9,12 +9,10 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const trueErrors = [{
-	ruleId: 'use-true-false',
 	message: '`t.true()` should be used instead of `t.truthy()`.'
 }];
 
 const falseErrors = [{
-	ruleId: 'use-true-false',
 	message: '`t.false()` should be used instead of `t.falsy()`.'
 }];
 

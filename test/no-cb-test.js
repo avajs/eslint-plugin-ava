@@ -8,7 +8,6 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const ruleId = 'no-cb-test';
 const message = '`test.cb()` should not be used.';
 const header = 'const test = require(\'ava\');\n';
 
@@ -24,7 +23,6 @@ ruleTester.run('no-cb-test', rule, {
 		{
 			code: header + 'test.cb(t => { t.pass(); });',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Identifier',
 				line: 2,
@@ -34,7 +32,6 @@ ruleTester.run('no-cb-test', rule, {
 		{
 			code: header + 'test.cb.skip(t => { t.pass(); t.end(); });',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Identifier',
 				line: 2,
@@ -44,7 +41,6 @@ ruleTester.run('no-cb-test', rule, {
 		{
 			code: header + 'test.skip.cb(t => { t.pass(); t.end(); });',
 			errors: [{
-				ruleId,
 				message,
 				type: 'Identifier',
 				line: 2,
