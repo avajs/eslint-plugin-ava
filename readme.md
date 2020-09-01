@@ -1,4 +1,4 @@
-# eslint-plugin-ava [![Build Status](https://travis-ci.org/avajs/eslint-plugin-ava.svg?branch=master)](https://travis-ci.org/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=master)
+# eslint-plugin-ava [![Build Status](https://travis-ci.com/avajs/eslint-plugin-ava.svg?branch=master)](https://travis-ci.com/github/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=master)
 
 > ESLint rules for [AVA](https://ava.li)
 
@@ -8,13 +8,11 @@ This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anythi
 
 [**Propose or contribute a new rule ➡**](.github/contributing.md)
 
-
 ## Install
 
 ```
 $ npm install --save-dev eslint eslint-plugin-ava
 ```
-
 
 ## Usage
 
@@ -28,7 +26,7 @@ Configure it in `package.json`.
 			"es6": true
 		},
 		"parserOptions": {
-			"ecmaVersion": 2020,
+			"ecmaVersion": 2021,
 			"sourceType": "module"
 		},
 		"plugins": [
@@ -74,7 +72,6 @@ Configure it in `package.json`.
 }
 ```
 
-
 ## Rules
 
 The rules will only activate in test files.
@@ -110,7 +107,6 @@ The rules will only activate in test files.
 - [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
 - [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
 - [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
-
 
 ## Recommended config
 
