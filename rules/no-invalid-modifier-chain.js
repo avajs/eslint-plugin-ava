@@ -377,18 +377,20 @@ const create = context => {
 						// Skip checking compatibility with 'test' since it's always true
 						for (let k = 1; k < knownTypedefs.length; k++) {
 							const typedef = knownTypedefs[k];
-							if (!typedefsAreCompatible(inference, typedef.typedef)) {
-								inferences.splice(j, 1);
+							if (typedefsAreCompatible(inference, typedef.typedef)) {
+								continue;
+							}
 
-								if (inferences.length === 0) {
-									return context.report({
-										node: modifier,
-										messageId: 'conflict',
-										data: {
-											nameB: typedef.modifier.name
-										}
-									});
-								}
+							inferences.splice(j, 1);
+
+							if (inferences.length === 0) {
+								return context.report({
+									node: modifier,
+									messageId: 'conflict',
+									data: {
+										nameB: typedef.modifier.name
+									}
+								});
 							}
 						}
 					}
