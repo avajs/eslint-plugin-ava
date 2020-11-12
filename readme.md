@@ -1,6 +1,6 @@
 # eslint-plugin-ava [![Build Status](https://travis-ci.com/avajs/eslint-plugin-ava.svg?branch=master)](https://travis-ci.com/github/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=master)
 
-> ESLint rules for [AVA](https://ava.li)
+> ESLint rules for [AVA](https://avajs.dev)
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
 
