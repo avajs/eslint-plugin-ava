@@ -21,10 +21,19 @@ const create = context => {
 
 	let currentSegmentInfo;
 
+	function pathStart() {
+		if (currentSegmentInfo !== undefined) {
+			segmentInfoStack.push(currentSegmentInfo);
+			currentSegmentInfo = undefined;
+		}
+	}
+
+	function pathEnd() {
+		currentSegmentInfo = segmentInfoStack.pop();
+	}
+
 	function segmentStart(segment) {
 		// A new CodePathSegment has started, create an "info" object to track this segments state.
-		segmentInfoStack.push(currentSegmentInfo);
-
 		currentSegmentInfo = {
 			ended: false,
 			prev: segment.prevSegments.map(previousSegment => segmentInfoMap.get(previousSegment.id))
@@ -34,17 +43,25 @@ const create = context => {
 	}
 
 	function segmentEnd() {
-		currentSegmentInfo = segmentInfoStack.pop();
+		currentSegmentInfo = undefined;
 	}
 
 	function checkForEndExpression(node) {
 		if (isEndExpression(node)) {
-			currentSegmentInfo.ended = true;
+			if (currentSegmentInfo !== undefined) {
+				currentSegmentInfo.ended = true;
+			}
 		}
 	}
 
 	function checkStatement(node) {
 		if (!ava.isInTestFile()) {
+			return;
+		}
+
+		// If there is no current segment (this occurs in unreachable code), then we
+		// can't check whether `t.end()` was called
+		if (currentSegmentInfo === undefined) {
 			return;
 		}
 
@@ -85,6 +102,8 @@ const create = context => {
 				checkStatement(node);
 			}
 		},
+		onCodePathStart: pathStart,
+		onCodePathEnd: pathEnd,
 		onCodePathSegmentStart: segmentStart,
 		onCodePathSegmentEnd: segmentEnd,
 		CallExpression: checkForEndExpression
