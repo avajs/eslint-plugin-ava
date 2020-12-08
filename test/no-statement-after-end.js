@@ -63,6 +63,20 @@ ruleTester.run('no-statement-after-end', rule, {
 		{
 			code: cbTest('if (t.context.a === 1) { t.end(); }\nt.is(1, 1); t.end();'),
 			errors
+		},
+		{
+			code: cbTest(`
+				function newCodePath() {
+					// ...
+				}
+				t.end();
+				1;
+			`),
+			errors
+		},
+		{
+			code: cbTest('t.end(); function newCodePath() {} 1;'),
+			errors
 		}
 	]
 });
