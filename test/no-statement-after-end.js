@@ -37,7 +37,15 @@ ruleTester.run('no-statement-after-end', rule, {
 		throw new Error();
 
 		1;
-		`
+		`,
+		cbTest(`
+			function newCodePath() {
+				throw new Error('make some unreachable code');
+				t.end();
+			}
+
+			1;
+		`)
 	],
 	invalid: [
 		{
