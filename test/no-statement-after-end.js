@@ -30,7 +30,14 @@ ruleTester.run('no-statement-after-end', rule, {
 		cbTest('return t.end();'),
 		cbTest('t.end(); return;'),
 		// Valid because it is not a test file (no header)
-		cbTest('t.end(); t.is(1, 1);', false)
+		cbTest('t.end(); t.is(1, 1);', false),
+		`
+		const test = require('ava');
+
+		throw new Error();
+
+		1;
+		`
 	],
 	invalid: [
 		{
