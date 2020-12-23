@@ -30,7 +30,22 @@ ruleTester.run('no-statement-after-end', rule, {
 		cbTest('return t.end();'),
 		cbTest('t.end(); return;'),
 		// Valid because it is not a test file (no header)
-		cbTest('t.end(); t.is(1, 1);', false)
+		cbTest('t.end(); t.is(1, 1);', false),
+		`
+		const test = require('ava');
+
+		throw new Error();
+
+		1;
+		`,
+		cbTest(`
+			function newCodePath() {
+				throw new Error('make some unreachable code');
+				t.end();
+			}
+
+			1;
+		`)
 	],
 	invalid: [
 		{
@@ -47,6 +62,20 @@ ruleTester.run('no-statement-after-end', rule, {
 		},
 		{
 			code: cbTest('if (t.context.a === 1) { t.end(); }\nt.is(1, 1); t.end();'),
+			errors
+		},
+		{
+			code: cbTest(`
+				function newCodePath() {
+					// ...
+				}
+				t.end();
+				1;
+			`),
+			errors
+		},
+		{
+			code: cbTest('t.end(); function newCodePath() {} 1;'),
 			errors
 		}
 	]
