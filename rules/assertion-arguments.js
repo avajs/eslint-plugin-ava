@@ -284,10 +284,11 @@ const create = context => {
 
 				if (lastArg.type === 'Identifier') {
 					const variable = findVariable(context.getScope(), lastArg);
-					let value = null;
-					variable.references.forEach(ref => {
+					let value;
+					for (const ref of variable.references) {
 						value = ref.writeExpr || value;
-					});
+					}
+
 					lastArg = value;
 				}
 
