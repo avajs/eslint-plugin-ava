@@ -16,6 +16,7 @@ const test = require('ava');
 test(t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
+	t.is(value, expected, false); // Assertion message is not a string
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
