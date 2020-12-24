@@ -14,6 +14,7 @@ const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-identical-title', rule, {
 	valid: [
+		header + 'test(t => {});',
 		header + 'test("my test name", t => {});',
 		header + 'test("a", t => {}); test("b", t => {});',
 		header + 'test("a", t => {}); test.cb("b", t => {});',

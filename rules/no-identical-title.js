@@ -31,8 +31,8 @@ const create = context => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
-			// Don't flag computed titles
-			if (!isStatic(titleNode)) {
+			// Don't flag anonymous tests or computed titles
+			if (titleNode === undefined || !isStatic(titleNode)) {
 				return;
 			}
 
