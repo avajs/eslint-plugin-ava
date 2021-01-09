@@ -22,17 +22,15 @@ const create = context => {
 	const findReference = name => {
 		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
 
-		if (reference === undefined) {
-			return null;
+		if (reference && reference.resolved) {
+			const definitions = reference.resolved.defs;
+
+			if (definitions.length === 0) {
+				return null;
+			}
+
+			return definitions[definitions.length - 1].node;
 		}
-
-		const definitions = reference.resolved.defs;
-
-		if (definitions.length === 0) {
-			return null;
-		}
-
-		return definitions[definitions.length - 1].node;
 	};
 
 	// Recursively find the "origin" node of the given node.
@@ -50,7 +48,7 @@ const create = context => {
 		if (node.type === 'Identifier') {
 			const reference = findReference(node.name);
 
-			if (reference) {
+			if (reference && reference.init) {
 				return findRootReference(reference.init);
 			}
 
