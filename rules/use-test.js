@@ -31,7 +31,10 @@ const create = context => {
 
 	return {
 		ImportDeclaration: node => {
-			if (node.source.value === 'ava') {
+			if (
+				node.specifiers[0].type === 'ImportDefaultSpecifier' &&
+				node.source.value === 'ava'
+			) {
 				const {name} = node.specifiers[0].local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);
@@ -39,7 +42,11 @@ const create = context => {
 			}
 		},
 		VariableDeclarator: node => {
-			if (node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
+			if (
+				node.id.type === 'Identifier' &&
+				node.init &&
+				deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)
+			) {
 				const {name} = node.id;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);
