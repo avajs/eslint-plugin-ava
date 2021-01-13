@@ -59,6 +59,10 @@ const create = context => {
 			return findRootReference(node.callee);
 		}
 
+		if (node.type === 'MemberExpression') {
+			return findRootReference(node.object);
+		}
+
 		// I'm aware that there are other type of Node as well but the scope of the lint shouldn't need those.
 		return node;
 	};
@@ -78,8 +82,6 @@ const create = context => {
 		if (reference) {
 			return reference.regex || reference.name === 'RegExp';
 		}
-
-		return false;
 	};
 
 	const booleanHandler = node => {
@@ -140,22 +142,33 @@ const create = context => {
 		const matchee = secondArgumentIsRegex ? firstArg : secondArg;
 		const regex = secondArgumentIsRegex ? secondArg : firstArg;
 
-		const assertion = 'regex';
-
-		const fix = fixer => {
+		const booleanFixer = assertion => fixer => {
 			const source = context.getSourceCode();
 			return [
 				fixer.replaceText(node.callee.property, assertion),
-				fixer.replaceText(firstArg, `${source.getText(matchee)}`),
-				fixer.replaceText(secondArg, `${source.getText(regex)}`)
+				fixer.replaceText(firstArg, `${source.getText(regex.arguments[0])}`),
+				fixer.replaceText(secondArg, `${source.getText(regex.callee.object)}`)
 			];
 		};
 
-		context.report({
-			node,
-			message: `Prefer using the \`t.${assertion}()\` assertion.`,
-			fix
-		});
+		// Only fix a statically verifiable equality
+		if (regex && matchee.type === 'Literal') {
+			let assertion;
+
+			if (matchee.raw === 'true') {
+				assertion = 'regex';
+			} else if (matchee.raw === 'false') {
+				assertion = 'notRegex';
+			} else {
+				return;
+			}
+
+			context.report({
+				node,
+				message: `Prefer using the \`t.${assertion}()\` assertion.`,
+				fix: booleanFixer(assertion)
+			});
+		}
 	};
 
 	return ava.merge({
