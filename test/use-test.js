@@ -25,6 +25,7 @@ ruleTester.run('use-test', rule, {
 		{code: 'import test, {} from \'ava\';', filename: 'file.js'},
 		{code: 'import test from \'foo\';', filename: 'file.js'},
 		{code: 'import {TestInterface} from \'ava\';', filename: 'file.js'},
+		{code: 'import \'ava\';', filename: 'file.js'},
 		{code: 'var anyTest = require(\'ava\');', filename: 'file.ts'},
 		{code: 'let anyTest = require(\'ava\');', filename: 'file.ts'},
 		{code: 'const anyTest = require(\'ava\');', filename: 'file.ts'},
@@ -35,6 +36,7 @@ ruleTester.run('use-test', rule, {
 		{code: 'import anyTest, {} from \'ava\';', filename: 'file.ts'},
 		{code: 'import anyTest from \'foo\';', filename: 'file.ts'},
 		{code: 'import {TestInterface} from \'ava\';', filename: 'file.ts'},
+		{code: 'import \'ava\';', filename: 'file.ts'},
 		{code: 'var anyTest = require(\'ava\');', filename: 'file.tsx'},
 		{code: 'let anyTest = require(\'ava\');', filename: 'file.tsx'},
 		{code: 'const anyTest = require(\'ava\');', filename: 'file.tsx'},
@@ -44,7 +46,8 @@ ruleTester.run('use-test', rule, {
 		{code: 'import anyTest from \'ava\';', filename: 'file.tsx'},
 		{code: 'import anyTest, {} from \'ava\';', filename: 'file.tsx'},
 		{code: 'import anyTest from \'foo\';', filename: 'file.tsx'},
-		{code: 'import {TestInterface} from \'ava\';', filename: 'file.tsx'}
+		{code: 'import {TestInterface} from \'ava\';', filename: 'file.tsx'},
+		{code: 'import \'ava\';', filename: 'file.tsx'}
 	],
 	invalid: [
 		{
