@@ -31,11 +31,13 @@ const create = context => {
 
 	return {
 		ImportDeclaration: node => {
+			const firstSpecifier = node.specifiers[0];
 			if (
-				node.specifiers[0].type === 'ImportDefaultSpecifier' &&
+				firstSpecifier &&
+				firstSpecifier.type === 'ImportDefaultSpecifier' &&
 				node.source.value === 'ava'
 			) {
-				const {name} = node.specifiers[0].local;
+				const {name} = firstSpecifier.local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);
 				}
