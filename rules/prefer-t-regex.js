@@ -81,10 +81,7 @@ const create = context => {
 
 		// Look up references in case it's a variable or RegExp declaration.
 		const reference = findRootReference(lookup);
-
-		if (reference) {
-			return reference.regex || reference.name === 'RegExp';
-		}
+		return reference.regex || reference.name === 'RegExp';
 	};
 
 	const booleanHandler = node => {
