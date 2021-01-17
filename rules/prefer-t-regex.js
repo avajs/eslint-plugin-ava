@@ -26,7 +26,7 @@ const create = context => {
 			const definitions = reference.resolved.defs;
 
 			if (definitions.length === 0) {
-				return null;
+				return;
 			}
 
 			return definitions[definitions.length - 1].node;
