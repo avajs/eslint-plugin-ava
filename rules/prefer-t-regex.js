@@ -33,21 +33,22 @@ const create = context => {
 		}
 	};
 
-	// Recursively find the "origin" node of the given node.
-	// Note:
-	//    context.getScope() doesn't contain information about
-	// the outer scope so in most case this function will only
-	// find the reference directly above the current scope.
-	//
-	// So the following code will only find the reference in this order: y -> x
-	// and it will have no knowledge of the number '0'.
-	// (assuming we run this function on the identifier y)
-	// ```
-	// const test = require('ava');
-	// let x = 0;
-	// let y = x;
-	// test(t => t.is(y, 0));
-	// ```
+	/*
+	Recursively find the "origin" node of the given node.
+
+	Note: `context.getScope()` doesn't contain information about the outer scope so in most cases this function will only find the reference directly above the current scope. So the following code will only find the reference in this order: y -> x, and it will have no knowledge of the number `0`. (assuming we run this function on the identifier `y`)
+
+	```
+	const test = require('ava');
+
+	let x = 0;
+	let y = x;
+
+	test(t => {
+		t.is(y, 0);
+	});
+	```
+	*/
 	const findRootReference = node => {
 		if (node.type === 'Identifier') {
 			const reference = findReference(node.name);
@@ -70,10 +71,13 @@ const create = context => {
 		return node;
 	};
 
-	// Determine if the given node is a regex expression.
-	// There are two ways to create regex expressions in JavaScript: Regex Literal and RegExp class.
-	//  1. Regex Literal can be easily lookup using .regex field in the node.
-	//  2. RegExp class can't be lookup so the function just checks for the name 'RegExp'.
+	/*
+	Determine if the given node is a regex expression.
+
+	There are two ways to create regex expressions in JavaScript: Regex literal and `RegExp` class.
+	1. Regex literal can be easily looked up using the `.regex` property on the node.
+	2. `RegExp` class can't be looked up so the function just checks for the name `RegExp`.
+	*/
 	const isRegExp = lookup => {
 		if (lookup.regex) {
 			return true;
@@ -133,7 +137,7 @@ const create = context => {
 		const firstArgumentIsRegex = isRegExp(firstArg);
 		const secondArgumentIsRegex = isRegExp(secondArg);
 
-		// If both are regex, or neither are, the expression is ok
+		// If both are regex, or neither are, the expression is ok.
 		if (firstArgumentIsRegex === secondArgumentIsRegex) {
 			return;
 		}
@@ -150,7 +154,7 @@ const create = context => {
 			];
 		};
 
-		// Only fix a statically verifiable equality
+		// Only fix a statically verifiable equality.
 		if (regex && matchee.type === 'Literal') {
 			let assertion;
 
