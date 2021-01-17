@@ -34,15 +34,19 @@ const create = context => {
 	};
 
 	// Recursively find the "origin" node of the given node.
-	// Note: Due to some limitation, this function will only find the reference up to two layer.
+	// Note:
+	//    context.getScope() doesn't contain information about
+	// the outer scope so in most case this function will only
+	// find the reference directly above the current scope.
 	//
-	// So the following code will only find the reference in this order: c → b → a
+	// So the following code will only find the reference in this order: y -> x
 	// and it will have no knowledge of the number '0'.
-	// (assuming we run this function on the identifier c)
+	// (assuming we run this function on the identifier y)
 	// ```
-	// let a = 0;
-	// let b = a;
-	// let c = b;
+	// const test = require('ava');
+	// let x = 0;
+	// let y = x;
+	// test(t => t.is(y, 0));
 	// ```
 	const findRootReference = node => {
 		if (node.type === 'Identifier') {
@@ -63,14 +67,13 @@ const create = context => {
 			return findRootReference(node.object);
 		}
 
-		// I'm aware that there are other type of Node as well but the scope of the lint shouldn't need those.
 		return node;
 	};
 
 	// Determine if the given node is a regex expression.
-	// There are two ways to create regex expressions in JavaScript, the first being Regex Literal and the second being RegExp class.
-	// - The first way can be easily lookup using .regex field in the node.
-	// - The second way can't really be lookup so I just check the name of a class constructor/function and check if it's matches.
+	// There are two ways to create regex expressions in JavaScript: Regex Literal and RegExp class.
+	//  1. Regex Literal can be easily lookup using .regex field in the node.
+	//  2. RegExp class can't be lookup so the function just checks for the name 'RegExp'.
 	const isRegExp = lookup => {
 		if (lookup.regex) {
 			return true;
@@ -87,7 +90,6 @@ const create = context => {
 	const booleanHandler = node => {
 		const firstArg = node.arguments[0];
 
-		// First argument is a call expression
 		const isFunctionCall = firstArg.type === 'CallExpression';
 		if (!isFunctionCall || !firstArg.callee.property) {
 			return;
@@ -98,11 +100,11 @@ const create = context => {
 		let variable = {};
 
 		if (name === 'test') {
-			// `lookup.test(variable)`
+			// Represent: `lookup.test(variable)`
 			lookup = firstArg.callee.object;
 			variable = firstArg.arguments[0];
 		} else if (['search', 'match'].includes(name)) {
-			// `variable.match(lookup)`
+			// Represent: `variable.match(lookup)`
 			lookup = firstArg.arguments[0];
 			variable = firstArg.callee.object;
 		}
