@@ -1,8 +1,8 @@
-# eslint-plugin-ava [![Build Status](https://travis-ci.com/avajs/eslint-plugin-ava.svg?branch=master)](https://travis-ci.com/github/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=master)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=master)
+# eslint-plugin-ava [![Build Status](https://travis-ci.com/avajs/eslint-plugin-ava.svg?branch=main)](https://travis-ci.com/github/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=main)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=main)
 
 > ESLint rules for [AVA](https://avajs.dev)
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/readme.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/readme.md)
 
 This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anything if you're using it.
 

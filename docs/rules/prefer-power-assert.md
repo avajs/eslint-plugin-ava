@@ -1,15 +1,15 @@
 # Allow only use of the asserts that have no power-assert alternative.
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-power-assert.md)
 
-- [`t.assert()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#assertvalue-message)
-- [`t.deepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#deepequalvalue-expected-message)
-- [`t.notDeepEqual()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notdeepequalvalue-expected-message)
-- [`t.like()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#likevalue-selector-message)
-- [`t.throws()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#throwsfn-expected-message)
-- [`t.notThrows()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#notthrowsfn-message)
-- [`t.pass()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#passmessage)
-- [`t.fail()`](https://github.com/avajs/ava/blob/master/docs/03-assertions.md#failmessage)
+- [`t.assert()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#assertvalue-message)
+- [`t.deepEqual()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#deepequalvalue-expected-message)
+- [`t.notDeepEqual()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#notdeepequalvalue-expected-message)
+- [`t.like()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#likevalue-selector-message)
+- [`t.throws()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#throwsfn-expected-message)
+- [`t.notThrows()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#notthrowsfn-message)
+- [`t.pass()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#passmessage)
+- [`t.fail()`](https://github.com/avajs/ava/blob/main/docs/03-assertions.md#failmessage)
 
 Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 

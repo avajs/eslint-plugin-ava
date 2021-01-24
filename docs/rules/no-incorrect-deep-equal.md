@@ -1,6 +1,6 @@
 # Avoid using `deepEqual` with primitives
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-incorrect-deep-equal.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/no-incorrect-deep-equal.md)
 
 The `deepEqual` and `notDeepEqual` assertions are unnecessary when comparing primitives. Use `is` or `not` instead.
 

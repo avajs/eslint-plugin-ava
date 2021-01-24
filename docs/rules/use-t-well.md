@@ -1,6 +1,6 @@
 # Prevent the incorrect use of `t`
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/use-t-well.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/use-t-well.md)
 
 Prevent the use of unknown assertion methods and the access to members other than the assertion methods and `.context`, as well as some known misuses of `t`.
 

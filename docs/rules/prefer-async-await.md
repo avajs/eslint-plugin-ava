@@ -1,6 +1,6 @@
 # Prefer using async/await instead of returning a Promise
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-async-await.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/prefer-async-await.md)
 
 AVA comes with built-in support for async functions (async/await). This allows you to write shorter and clearer tests.
 
