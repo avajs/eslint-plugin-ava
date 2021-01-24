@@ -1,4 +1,4 @@
-# eslint-plugin-ava [![Build Status](https://travis-ci.com/avajs/eslint-plugin-ava.svg?branch=main)](https://travis-ci.com/github/avajs/eslint-plugin-ava) [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=main)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=main)
+# eslint-plugin-ava [![Coverage Status](https://coveralls.io/repos/github/avajs/eslint-plugin-ava/badge.svg?branch=main)](https://coveralls.io/github/avajs/eslint-plugin-ava?branch=main)
 
 > ESLint rules for [AVA](https://avajs.dev)
 
