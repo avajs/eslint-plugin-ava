@@ -14,7 +14,7 @@ const create = context => {
 			if (ava.hasTestModifier('todo')) {
 				context.report({
 					node,
-					message: '`test.todo()` should be not be used.'
+					message: '`test.todo()` should not be used.'
 				});
 			}
 		})
