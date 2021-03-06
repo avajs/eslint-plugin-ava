@@ -1,6 +1,6 @@
 # Enforce passing correct arguments to assertions
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/assertion-arguments.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/assertion-arguments.md)
 
 Enforces passing the right number of arguments to assertion methods like `t.is()`. This rule can optionally also enforce or forbid the use of assertion messages.
 
@@ -16,6 +16,7 @@ const test = require('ava');
 test(t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
+	t.is(value, expected, false); // Assertion message is not a string
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */

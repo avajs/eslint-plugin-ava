@@ -1,6 +1,6 @@
 # Ensure no tests have the same title
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-identical-title.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/no-identical-title.md)
 
 Disallow tests with identical titles as it makes it hard to differentiate them.
 

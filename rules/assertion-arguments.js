@@ -1,6 +1,6 @@
 'use strict';
 const {visitIf} = require('enhance-visitors');
-const {getStaticValue, isOpeningParenToken, isCommaToken} = require('eslint-utils');
+const {getStaticValue, isOpeningParenToken, isCommaToken, findVariable} = require('eslint-utils');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -203,6 +203,13 @@ function noComments(sourceCode, ...nodes) {
 	});
 }
 
+function isString(node) {
+	const {type} = node;
+	return type === 'TemplateLiteral' ||
+		type === 'TaggedTemplateExpression' ||
+		(type === 'Literal' && typeof node.value === 'string');
+}
+
 const create = context => {
 	const ava = createAvaRule();
 	const options = context.options[0] || {};
@@ -270,6 +277,24 @@ const create = context => {
 				}
 
 				checkArgumentOrder({node, assertion: firstNonSkipMember, context});
+			}
+
+			if (gottenArgs === nArgs.max && nArgs.min !== nArgs.max) {
+				let lastArg = node.arguments[node.arguments.length - 1];
+
+				if (lastArg.type === 'Identifier') {
+					const variable = findVariable(context.getScope(), lastArg);
+					let value;
+					for (const ref of variable.references) {
+						value = ref.writeExpr || value;
+					}
+
+					lastArg = value;
+				}
+
+				if (!isString(lastArg)) {
+					report(node, 'Assertion message should be a string.');
+				}
 			}
 		})
 	});

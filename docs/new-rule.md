@@ -1,6 +1,6 @@
 # Creating a new rule
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/new-rule.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/new-rule.md)
 
 ## Prerequisite
 

@@ -19,6 +19,7 @@ const outOfOrderError = (line, column, endLine, endColumn) => ({
 	message: 'Expected values should come after actual values.',
 	line, column, endLine, endColumn
 });
+const messageIsNotStringError = 'Assertion message should be a string.';
 
 const header = 'const test = require(\'ava\');';
 
@@ -334,7 +335,11 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.regex(\'static\', new RegExp(\'[dynamic]+\'));'),
 		testCase(false, 't.regex(dynamic, /[static]/);'),
 		testCase(false, 't.notRegex(\'static\', new RegExp(\'[dynamic]+\'));'),
-		testCase(false, 't.notRegex(dynamic, /[static]/);')
+		testCase(false, 't.notRegex(dynamic, /[static]/);'),
+
+		// Lookup message type
+		testCase(false, 'const message = \'ok\'; t.assert(true, message);'),
+		testCase(false, 'const message = \'ok\'; t.is(42, 42, message);')
 	],
 	invalid: [
 		// Not enough arguments
@@ -542,6 +547,12 @@ ruleTester.run('assertion-arguments', rule, {
 				outOfOrderError(1, 13, 1, 23 + expression.length),
 				{output: `t.deepEqual(${expression}, 'static');`}
 			)
-		)
+		),
+
+		// Message is not string
+		testCase(false, 't.assert(true, true);', messageIsNotStringError),
+		testCase(false, 't.deepEqual({}, {}, 42);', messageIsNotStringError),
+		testCase(false, 't.fail({});', messageIsNotStringError),
+		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError)
 	]
 });

@@ -1,6 +1,6 @@
 # Ensure no test files are imported anywhere
 
-Translations: [Français](https://github.com/avajs/ava-docs/blob/master/fr_FR/related/eslint-plugin-ava/docs/rules/no-import-test-files.md)
+Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/no-import-test-files.md)
 
 This rule will verify that you don't import any test files. It will consider the root of the project to be the closest folder containing a `package.json` file, and will not do anything if it can't find one. Test files in `node_modules` will not be linted as they are ignored by ESLint.
 
@@ -44,7 +44,7 @@ This rule supports the following options:
 * `extensions`: an array of extensions of the files that AVA recognizes as test files or helpers. Overrides *both* the `babel.extensions` *and* `extensions` configuration otherwise used by AVA itself.
 * `files`: an array of glob patterns to select test files. Overrides the `files` configuration otherwise used by AVA itself.
 
-See also [AVA's configuration](https://github.com/avajs/ava/blob/master/docs/06-configuration.md#options).
+See also [AVA's configuration](https://github.com/avajs/ava/blob/main/docs/06-configuration.md#options).
 
 You can set the options like this:
 
