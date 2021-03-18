@@ -4,6 +4,8 @@ const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
 const create = context => {
+	const [options] = context.options;
+	const {fix = true} = (options || {});
 	const ava = createAvaRule();
 
 	return ava.merge({
@@ -16,18 +18,30 @@ const create = context => {
 				context.report({
 					node: propertyNode,
 					message: 'No tests should be skipped.',
-					fix: fixer => {
-						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
-							modifier: 'skip',
-							node,
-							context
-						}));
-					}
+					...(fix && {
+						fix: fixer => {
+							return fixer.replaceTextRange.apply(null, util.removeTestModifier({
+								modifier: 'skip',
+								node,
+								context
+							}));
+						}
+					})
 				});
 			}
 		})
 	});
 };
+
+const schema = [{
+	type: 'object',
+	properties: {
+		fix: {
+			type: 'boolean',
+			default: true
+		}
+	}
+}];
 
 module.exports = {
 	create,
@@ -36,6 +50,7 @@ module.exports = {
 			url: util.getDocsUrl(__filename)
 		},
 		fixable: 'code',
-		type: 'suggestion'
+		type: 'suggestion',
+		schema
 	}
 };

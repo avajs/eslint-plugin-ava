@@ -35,3 +35,15 @@ test('bar', t => {
 	t.pass();
 });
 ```
+
+## Options
+
+The rule takes the following options:
+
+* `fix`: whether to fix violations (default true)
+
+You can set the option in configuration like this:
+
+```js
+"ava/no-skip-test": ["error", { fix: false }]
+```
