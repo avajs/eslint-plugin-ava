@@ -24,52 +24,67 @@ ruleTester.run('no-skip-test', rule, {
 	invalid: [
 		{
 			code: header + 'test.skip(t => { t.pass(); });',
-			output: header + 'test(t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 6
+				column: 6,
+				suggestions: [{
+					desc: 'Remove the `.skip`',
+					output: header + 'test(t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.cb.skip(t => { t.pass(); t.end(); });',
-			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 9
+				column: 9,
+				suggestions: [{
+					desc: 'Remove the `.skip`',
+					output: header + 'test.cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.skip.cb(t => { t.pass(); t.end(); });',
-			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 6
+				column: 6,
+				suggestions: [{
+					desc: 'Remove the `.skip`',
+					output: header + 'test.cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.\n\tskip.cb(t => { t.pass(); t.end(); });',
-			output: header + 'test\n\t.cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 3,
-				column: 2
+				column: 2,
+				suggestions: [{
+					desc: 'Remove the `.skip`',
+					output: header + 'test\n\t.cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test  .skip  .cb(t => { t.pass(); t.end(); });',
-			output: header + 'test    .cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 8
+				column: 8,
+				suggestions: [{
+					desc: 'Remove the `.skip`',
+					output: header + 'test    .cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		}
 	]

@@ -16,13 +16,16 @@ const create = context => {
 				context.report({
 					node: propertyNode,
 					message: '`test.only()` should not be used.',
-					fix: fixer => {
-						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
-							modifier: 'only',
-							node,
-							context
-						}));
-					}
+					suggest: [{
+						desc: 'Remove the `.only`',
+						fix: fixer => {
+							return fixer.replaceTextRange.apply(null, util.removeTestModifier({
+								modifier: 'only',
+								node,
+								context
+							}));
+						}
+					}]
 				});
 			}
 		})

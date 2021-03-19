@@ -16,13 +16,16 @@ const create = context => {
 				context.report({
 					node: propertyNode,
 					message: 'No tests should be skipped.',
-					fix: fixer => {
-						return fixer.replaceTextRange.apply(null, util.removeTestModifier({
-							modifier: 'skip',
-							node,
-							context
-						}));
-					}
+					suggest: [{
+						desc: 'Remove the `.skip`',
+						fix: fixer => {
+							return fixer.replaceTextRange.apply(null, util.removeTestModifier({
+								modifier: 'skip',
+								node,
+								context
+							}));
+						}
+					}]
 				});
 			}
 		})
