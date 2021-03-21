@@ -39,8 +39,9 @@ const packages = new Map([
 	['p-queue', 'https://github.com/sindresorhus/p-queue'],
 	['pretty-bytes', 'https://github.com/sindresorhus/pretty-bytes'],
 	['normalize-url', 'https://github.com/sindresorhus/normalize-url'],
-	['pageres', 'https://github.com/sindresorhus/pageres'],
-	['got', 'https://github.com/sindresorhus/got']
+	['pageres', 'https://github.com/sindresorhus/pageres']
+	// Disabled for now: https://github.com/avajs/eslint-plugin-ava/runs/2044891483?check_suite_focus=true
+	// ['got', 'https://github.com/sindresorhus/got']
 ]);
 
 const typescriptPackages = new Set([
