@@ -4,9 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 It's easy to make a test skipped with `test.skip()` and then forget about it. It's visible in the results, but still easily missed.
 
-This rule is fixable. It will remove the `.skip` test modifier.
-
-
 ## Fail
 
 ```js
