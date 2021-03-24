@@ -13,12 +13,12 @@ const ruleTester = avaRuleTester(test, {
 
 const errors = [{ruleId: 'no-error-ctor-with-notthrows'}];
 
-const header = `const test = require('ava');\n`; // eslint-disable-line quotes
+const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-error-ctor-with-notthrows', rule, {
 	valid: [
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrows(() => {
 				t.pass();
 			});
@@ -39,32 +39,31 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		});`,
 
 		`${header}
-		test(t => {
-			t.end(); })`,
+		test(t => { t.end(); })`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrows(() => {
 				t.pass();
 			}, true);
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrows(() => {
 				t.pass();
 			}, 'some string');
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrows(() => {
 				t.pass();
 			}, {firstName:'some', lastName: 'object'});
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrowsAsync(() => {
 				t.pass();
 			});
@@ -78,19 +77,19 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			t.notThrowsAsync(() => {
 				t.pass();
 			}, {firstName:'some', lastName: 'object'});
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			notThrows(foo);
 		});`,
 
 		`${header}
-		test('some test',t => {
+		test('some test', t => {
 			myCustomNotThrows.notThrows(foo);
 		});`,
 
@@ -100,7 +99,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		}, void 0);`,
 
 		// Shouldn't be triggered since it's not a test file
-		`test('some test',t => {
+		`test('some test', t => {
 			t.notThrowsAsync(() => {
 				t.pass();
 			}, TypeError);
@@ -118,7 +117,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrows(() => {
 					t.pass();
 				}, TypeError);
@@ -136,7 +135,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, TypeError);
@@ -145,7 +144,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, Error);
@@ -154,7 +153,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, SyntaxError);
@@ -163,7 +162,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, AssertionError);
@@ -172,7 +171,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, ReferenceError);
@@ -181,7 +180,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, RangeError);
@@ -190,7 +189,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, SystemError);
@@ -199,7 +198,7 @@ ruleTester.run('no-error-ctor-with-notthrows', rule, {
 		},
 		{
 			code: `${header}
-			test('some test',t => {
+			test('some test', t => {
 				t.notThrowsAsync(() => {
 					t.pass();
 				}, $DOMError);
