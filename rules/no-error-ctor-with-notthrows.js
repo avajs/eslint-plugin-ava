@@ -19,13 +19,11 @@ const create = context => {
 
 			const calleeProperty = node.callee.property.name;
 			const functionArgName = node.arguments[1].name;
-			if (calleeProperty === 'notThrows' || calleeProperty === 'notThrowsAsync') {
-				if (functionArgName.endsWith('Error')) {
-					context.report({
-						node,
-						message: `Do not specify an error constructor in the second argument of \`t.${calleeProperty}()\``
-					});
-				}
+			if ((calleeProperty === 'notThrows' || calleeProperty === 'notThrowsAsync') && functionArgName.endsWith('Error')) {
+				context.report({
+					node,
+					message: `Do not specify an error constructor in the second argument of \`t.${calleeProperty}()\``
+				});
 			}
 		})
 	});

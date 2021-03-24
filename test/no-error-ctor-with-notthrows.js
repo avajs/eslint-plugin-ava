@@ -1,6 +1,6 @@
-import test from 'ava';
-import avaRuleTester from 'eslint-ava-rule-tester';
-import rule from '../rules/no-error-ctor-with-notthrows';
+const test = require('ava');
+const avaRuleTester = require('eslint-ava-rule-tester');
+const rule = require('../rules/no-error-ctor-with-notthrows');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
@@ -11,7 +11,7 @@ const ruleTester = avaRuleTester(test, {
 	}
 });
 
-const errors = [{ruleId: 'no-error-ctor-with-notthrows'}];
+const errors = [{}];
 
 const header = 'const test = require(\'ava\');\n';
 
