@@ -30,7 +30,7 @@ const create = context => {
 			}
 
 			// TODO: Remove `.reduce()` usage.
-			// eslint-disable-next-line unicorn/no-reduce
+			// eslint-disable-next-line unicorn/no-array-reduce
 			testModifiers.reduce((previous, current) => {
 				if (previous.name === current.name) {
 					context.report({

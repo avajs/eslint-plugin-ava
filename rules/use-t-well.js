@@ -20,7 +20,7 @@ const isCallExpression = node =>
 
 const getMemberNodes = node => {
 	if (node.object.type === 'MemberExpression') {
-		return getMemberNodes(node.object).concat(node.property);
+		return [...getMemberNodes(node.object), node.property];
 	}
 
 	return [node.property];

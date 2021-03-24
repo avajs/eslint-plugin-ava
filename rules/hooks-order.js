@@ -89,7 +89,7 @@ const create = context => {
 	const sourceCode = context.getSourceCode();
 
 	// TODO: Remove `.reduce()` usage.
-	// eslint-disable-next-line unicorn/no-reduce
+	// eslint-disable-next-line unicorn/no-array-reduce
 	const selectors = checks.reduce((result, check) => {
 		result[check.selector] = visitIf([
 			ava.isInTestFile,

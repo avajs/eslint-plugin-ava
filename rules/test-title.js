@@ -12,7 +12,7 @@ const create = context => {
 			ava.isTestNode,
 			ava.hasNoHookModifier
 		])(node => {
-			const firstArgumentIsFunction = node.arguments.length < 1 || util.isFunctionExpression(node.arguments[0]);
+			const firstArgumentIsFunction = node.arguments.length === 0 || util.isFunctionExpression(node.arguments[0]);
 
 			if (firstArgumentIsFunction) {
 				context.report({

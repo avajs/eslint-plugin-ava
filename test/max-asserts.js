@@ -74,7 +74,7 @@ ruleTester.run('max-asserts', rule, {
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
-			errors: errors.concat(errors) // Should have two errors, one per test
+			errors: [...errors, ...errors] // Should have two errors, one per test
 		}
 	]
 });

@@ -33,31 +33,31 @@
 		"deep-strict-equal": "^0.2.0",
 		"enhance-visitors": "^1.0.0",
 		"eslint-utils": "^2.1.0",
-		"espree": "^7.3.0",
+		"espree": "^7.3.1",
 		"espurify": "^2.0.1",
-		"import-modules": "^2.0.0",
+		"import-modules": "^2.1.0",
 		"micro-spelling-correcter": "^1.1.1",
-		"pkg-dir": "^4.2.0",
+		"pkg-dir": "^5.0.0",
 		"resolve-from": "^5.0.0"
 	},
 	"devDependencies": {
-		"ava": "^3.11.1",
+		"ava": "^3.15.0",
 		"babel-eslint": "^10.1.0",
-		"c8": "^7.3.0",
+		"c8": "^7.6.0",
 		"chalk": "^4.1.0",
-		"del": "^5.1.0",
+		"del": "^6.0.0",
 		"eslint": "^7.8.1",
 		"eslint-ava-rule-tester": "^4.0.0",
 		"eslint-plugin-eslint-plugin": "^2.3.0",
-		"execa": "^4.0.3",
+		"execa": "^5.0.0",
 		"listr": "^0.14.3",
-		"outdent": "^0.7.1",
+		"outdent": "^0.8.0",
 		"pify": "^5.0.0",
-		"tempy": "^0.6.0",
-		"xo": "^0.33.0"
+		"tempy": "^1.0.1",
+		"xo": "^0.38.2"
 	},
 	"peerDependencies": {
-		"eslint": ">=7.7.0"
+		"eslint": ">=7.22.0"
 	},
 	"ava": {
 		"files": [

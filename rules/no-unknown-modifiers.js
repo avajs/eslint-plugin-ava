@@ -30,7 +30,7 @@ const create = context => {
 		])(node => {
 			const unknown = unknownModifiers(node);
 
-			if (unknown.length !== 0) {
+			if (unknown.length > 0) {
 				context.report({
 					node: unknown[0],
 					message: `Unknown test modifier \`.${unknown[0].name}\`.`

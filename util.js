@@ -48,7 +48,7 @@ function getTestModifiers(node) {
 	}
 
 	if (node.type === 'MemberExpression') {
-		return getTestModifiers(node.object).concat(node.property);
+		return [...getTestModifiers(node.object), node.property];
 	}
 
 	return [];
@@ -79,7 +79,7 @@ const getMembers = node => {
 	const {name} = node.property;
 
 	if (node.object.type === 'MemberExpression') {
-		return getMembers(node.object).concat(name);
+		return [...getMembers(node.object), name];
 	}
 
 	return [name];
@@ -125,4 +125,4 @@ const assertionMethodNames = [...assertionMethodsNumberArguments.keys()];
 
 exports.assertionMethodsNumArguments = assertionMethodsNumberArguments;
 exports.assertionMethods = new Set(assertionMethodNames);
-exports.executionMethods = new Set(assertionMethodNames.concat(['end', 'plan', 'log', 'teardown', 'timeout']));
+exports.executionMethods = new Set([...assertionMethodNames, 'end', 'plan', 'log', 'teardown', 'timeout']);

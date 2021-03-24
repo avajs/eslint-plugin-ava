@@ -47,10 +47,8 @@ const create = context => {
 	}
 
 	function checkForEndExpression(node) {
-		if (isEndExpression(node)) {
-			if (currentSegmentInfo !== undefined) {
-				currentSegmentInfo.ended = true;
-			}
+		if (isEndExpression(node) && currentSegmentInfo !== undefined) {
+			currentSegmentInfo.ended = true;
 		}
 	}
 
@@ -65,9 +63,7 @@ const create = context => {
 			return;
 		}
 
-		const ended = [currentSegmentInfo]
-			.concat(currentSegmentInfo.prev)
-			.filter(info => info.ended);
+		const ended = [currentSegmentInfo, ...currentSegmentInfo.prev].filter(info => info.ended);
 
 		// If this segment or any previous segment is already ended, further statements are not allowed, report as an error.
 		if (ended.length > 0) {
