@@ -26,92 +26,119 @@ ruleTester.run('no-only-test', rule, {
 	invalid: [
 		{
 			code: header + 'test\n\t.only(t => { t.pass(); });',
-			output: header + 'test\n\t(t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 3,
-				column: 3
+				column: 3,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test\n\t(t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test\n  .only(t => { t.pass(); });',
-			output: header + 'test\n  (t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 3,
-				column: 4
+				column: 4,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test\n  (t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test\t.only(t => { t.pass(); });',
-			output: header + 'test\t(t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 7
+				column: 7,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test\t(t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test  .only(t => { t.pass(); });',
-			output: header + 'test  (t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 8
+				column: 8,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test  (t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.\n\tonly(t => { t.pass(); });',
-			output: header + 'test\n\t(t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 3,
-				column: 2
+				column: 2,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test\n\t(t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.\n  only(t => { t.pass(); });',
-			output: header + 'test\n  (t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 3,
-				column: 3
+				column: 3,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test\n  (t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.only(t => { t.pass(); });',
-			output: header + 'test(t => { t.pass(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 6
+				column: 6,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test(t => { t.pass(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.cb.only(t => { t.pass(); t.end(); });',
-			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 9
+				column: 9,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test.cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		},
 		{
 			code: header + 'test.only.cb(t => { t.pass(); t.end(); });',
-			output: header + 'test.cb(t => { t.pass(); t.end(); });',
 			errors: [{
 				message,
 				type: 'Identifier',
 				line: 2,
-				column: 6
+				column: 6,
+				suggestions: [{
+					desc: 'Remove the `.only`',
+					output: header + 'test.cb(t => { t.pass(); t.end(); });'
+				}]
 			}]
 		}
 	]

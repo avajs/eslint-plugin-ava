@@ -89,9 +89,9 @@ The rules will only activate in test files.
 - [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline arrow functions. *(fixable)*
 - [no-invalid-end](docs/rules/no-invalid-end.md) - Ensure `t.end()` is only called inside `test.cb()`.
 - [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
-- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present. *(fixable)*
+- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
 - [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
-- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped. *(fixable)*
+- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
 - [no-statement-after-end](docs/rules/no-statement-after-end.md) - Ensure `t.end()` is the last statement executed.
 - [no-todo-implementation](docs/rules/no-todo-implementation.md) - Ensure `test.todo()` is not given an implementation function.
 - [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
