@@ -11,7 +11,7 @@ This rule enforces the use of the former when the tested expression is known to 
 ```js
 const ava = require('ava');
 
-test(t => {
+test('foo', t => {
 	t.truthy(value < 2);
 	t.truthy(value === 1);
 	t.truthy([1, 2, 3].includes(value));
@@ -26,7 +26,7 @@ test(t => {
 ```js
 const ava = require('ava');
 
-test(t => {
+test('foo', t => {
 	t.true(value < 2);
 	t.true(value === 1);
 	t.true([1, 2, 3].includes(value));

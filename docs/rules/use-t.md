@@ -9,15 +9,15 @@ The convention is to have the parameter in AVA's test function be named `t`. Mos
 ```js
 const test = require('ava');
 
-test(foo => { // Incorrect name
+test('foo', foo => { // Incorrect name
 	t.pass();
 });
 
-test((t, bar) => { // too many arguments
+test('bar', (t, bar) => { // too many arguments
 	t.pass();
 });
 
-test((bar, t) => { // too many arguments
+test('baz', (bar, t) => { // too many arguments
 	t.pass();
 });
 ```
@@ -27,11 +27,11 @@ test((bar, t) => { // too many arguments
 ```js
 const test = require('ava');
 
-test(() => {
+test('foo', () => {
 	// ...
 });
 
-test(t => {
+test('bar', t => {
 	t.pass();
 });
 ```

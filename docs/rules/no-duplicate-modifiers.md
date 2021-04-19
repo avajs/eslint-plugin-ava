@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Prevent the use of duplicate [test modifiers](https://github.com/avajs/ava/blob/main/docs/01-writing-tests.md).
 
-
 ## Fail
 
 ```js
@@ -16,7 +15,6 @@ test.cb.cb(t => {});
 test.beforeEach.beforeEach(t => {});
 test.only.only.cb(t => {});
 ```
-
 
 ## Pass
 

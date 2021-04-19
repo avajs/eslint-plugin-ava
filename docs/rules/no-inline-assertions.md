@@ -6,7 +6,6 @@ The test implementation should not purely consist of an inline assertion as asse
 
 This rule is fixable. It will wrap the assertion in braces `{}`. It will not do any whitespace or style changes.
 
-
 ## Fail
 
 ```js
@@ -14,7 +13,6 @@ const test = require('ava');
 
 test('foo', t => t.true(fn()));
 ```
-
 
 ## Pass
 

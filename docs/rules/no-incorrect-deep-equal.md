@@ -6,7 +6,6 @@ The `deepEqual` and `notDeepEqual` assertions are unnecessary when comparing pri
 
 This rule is fixable.
 
-
 ## Fail
 
 ```js
@@ -17,7 +16,6 @@ t.deepEqual(expression, null);
 t.deepEqual(expression, undefined);
 t.notDeepEqual(expression, undefined);
 ```
-
 
 ## Pass
 

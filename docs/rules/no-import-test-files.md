@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 This rule will verify that you don't import any test files. It will consider the root of the project to be the closest folder containing a `package.json` file, and will not do anything if it can't find one. Test files in `node_modules` will not be linted as they are ignored by ESLint.
 
-
 ## Fail
 
 ```js
@@ -22,7 +21,6 @@ test('foo', t => {
 	t.pass();
 });
 ```
-
 
 ## Pass
 

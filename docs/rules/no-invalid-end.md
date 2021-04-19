@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 AVA will fail if `t.end()` is called in a non-`.cb` test function.
 
-
 ## Fail
 
 ```js
@@ -15,7 +14,6 @@ test('some test', t => {
 	t.end();
 });
 ```
-
 
 ## Pass
 

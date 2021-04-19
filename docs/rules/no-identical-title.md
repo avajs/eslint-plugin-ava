@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Disallow tests with identical titles as it makes it hard to differentiate them.
 
-
 ## Fail
 
 ```js
@@ -19,15 +18,10 @@ test('foo', t => {
 });
 ```
 
-
 ## Pass
 
 ```js
 const test = require('ava');
-
-test(t => {
-	t.pass();
-});
 
 test('foo', t => {
 	t.pass();

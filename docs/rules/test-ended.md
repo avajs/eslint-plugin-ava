@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 If you forget a `t.end();` in `test.cb()` the test will hang indefinitely.
 
-
 ## Fail
 
 ```js
@@ -14,7 +13,6 @@ test.cb(t => {
 	t.pass();
 });
 ```
-
 
 ## Pass
 

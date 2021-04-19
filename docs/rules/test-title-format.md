@@ -6,7 +6,6 @@ This rule is useful when you want to make sure all test titles match a common pa
 
 For example, titles like `'Should throw when invalid.'`, `'Should fail when called.'` or `'Should pass when using any number.'` could be enforced with the following pattern `'^Should (pass|fail|throw) when [\\w ]+\\.$'` (Note the escaped `\`).
 
-
 ## Fail
 
 ```js
@@ -26,7 +25,6 @@ test('Doesn\'t end with a dot', t => {
 	t.pass();
 });
 ```
-
 
 ## Pass
 
@@ -51,7 +49,6 @@ test('End with a dot.', t => {
 	t.pass();
 });
 ```
-
 
 ## Options
 

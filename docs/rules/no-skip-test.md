@@ -18,7 +18,6 @@ test.skip('bar', t => {
 });
 ```
 
-
 ## Pass
 
 ```js

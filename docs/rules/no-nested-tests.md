@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 In AVA, you cannot nest tests, for example, create tests inside of other tests. Doing so will lead to odd behavior.
 
-
 ## Fail
 
 ```js
@@ -19,7 +18,6 @@ test('foo', t => {
 	});
 });
 ```
-
 
 ## Pass
 

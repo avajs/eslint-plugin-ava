@@ -6,7 +6,6 @@ Limit the amount of assertions in a test to enforce splitting up large tests int
 
 Skipped assertions are counted.
 
-
 ## Fail
 
 ```js
@@ -25,7 +24,6 @@ test('getSomeObject should define the players\' names', t => {
 	t.is(object.opponent.lastName, 'Vader');
 });
 ```
-
 
 ## Pass
 

@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Disallow the use of `test.cb()`. We instead recommend using `test()` with an async function or a function returning a promise.
 
-
 ## Fail
 
 ```js
@@ -15,7 +14,6 @@ test.cb('some test', t => {
 	t.end();
 });
 ```
-
 
 ## Pass
 

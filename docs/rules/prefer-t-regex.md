@@ -8,7 +8,6 @@ This rule will enforce the use of `t.regex()` instead of manually using `RegExp#
 
 This rule is fixable. It will replace the use of `RegExp#test()`, `String#match()`, or `String#search()` with `t.regex()`.
 
-
 ## Fail
 
 ```js
@@ -26,7 +25,6 @@ test('main', t => {
 	t.truthy('foo'.match(/\w+/));
 });
 ```
-
 
 ## Pass
 

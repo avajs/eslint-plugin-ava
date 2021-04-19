@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Tests should have a title. AVA [v1.0.1](https://github.com/avajs/ava/releases/tag/v1.0.1) and later enforces this at runtime.
 
-
 ## Fail
 
 ```js
@@ -14,7 +13,6 @@ test(t => {
 	t.pass();
 });
 ```
-
 
 ## Pass
 

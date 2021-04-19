@@ -6,7 +6,6 @@ Prevent the use of unknown assertion methods and the access to members other tha
 
 This rule is partly fixable. It can fix most misspelled assertion method names and incorrect usages of `.skip`.
 
-
 ## Fail
 
 ```js
@@ -23,7 +22,6 @@ test('main', t => {
 	t.skip(); // Missing assertion method
 });
 ```
-
 
 ## Pass
 

@@ -4,7 +4,6 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Disallow the use of `test.todo()`. You might want to do this to only ship features with specs fully written and passing.
 
-
 ## Fail
 
 ```js
@@ -12,7 +11,6 @@ const test = require('ava');
 
 test.todo('some test');
 ```
-
 
 ## Pass
 

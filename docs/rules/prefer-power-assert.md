@@ -13,13 +13,12 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 
-
 ## Fail
 
 ```js
 const test = require('ava');
 
-test(t => {
+test('foo', t => {
 	t.truthy(foo);
 	t.falsy(foo);
 	t.true(foo === bar);
@@ -31,13 +30,12 @@ test(t => {
 });
 ```
 
-
 ## Pass
 
 ```js
 const test = require('ava');
 
-test(t => {
+test('foo', t => {
 	t.assert(foo === bar);
 	t.deepEqual(foo, bar);
 	t.notDeepEqual(foo, bar);

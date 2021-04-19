@@ -13,45 +13,43 @@ This rule also attempts to enforce passing actual values before expected values.
 ```js
 const test = require('ava');
 
-test(t => {
+test('1', t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
 	t.is(value, expected, false); // Assertion message is not a string
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
-test(t => {
+test('2', t => {
 	t.true(array.includes(value));
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
-test(t => {
+test('3', t => {
 	t.true(array.includes(value), 'value is not in array');
 });
 ```
-
 
 ## Pass
 
 ```js
 const test = require('ava');
 
-test(t => {
+test('1', t => {
 	t.is(value, expected);
 	t.is(value, expected, message);
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
-test(t => {
+test('2', t => {
 	t.true(array.includes(value), 'value is not in array');
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
-test(t => {
+test('3', t => {
 	t.true(array.includes(value));
 });
 ```
-
 
 ## Options
 
