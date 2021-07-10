@@ -1,7 +1,7 @@
 'use strict';
+const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
-const deepStrictEqual = require('deep-strict-equal');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -15,7 +15,7 @@ const isStatic = node => node.type === 'Literal' ||
 
 function isTitleUsed(usedTitleNodes, titleNode) {
 	const purifiedNode = purify(titleNode);
-	return usedTitleNodes.some(usedTitle => deepStrictEqual(purifiedNode, usedTitle));
+	return usedTitleNodes.some(usedTitle => isDeepStrictEqual(purifiedNode, usedTitle));
 }
 
 const create = context => {

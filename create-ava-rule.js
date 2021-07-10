@@ -1,7 +1,7 @@
 'use strict';
+const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const enhance = require('enhance-visitors');
-const deepStrictEqual = require('deep-strict-equal');
 const util = require('./util');
 
 const avaImportDeclarationAsts = [{
@@ -188,12 +188,12 @@ module.exports = () => { // eslint-disable-line eslint-plugin/prefer-object-rule
 	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
 		ImportDeclaration: node => {
-			if (!isTestFile && avaImportDeclarationAsts.some(ast => deepStrictEqual(espurify(node), ast))) {
+			if (!isTestFile && avaImportDeclarationAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
 		VariableDeclarator: node => {
-			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => deepStrictEqual(espurify(node), ast))) {
+			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},

@@ -1,8 +1,8 @@
 'use strict';
+const {isDeepStrictEqual} = require('util');
 const espree = require('espree');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
-const deepStrictEqual = require('deep-strict-equal');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 
@@ -43,7 +43,7 @@ function matchesKnownBooleanExpression(argument) {
 
 	const callee = espurify(argument.callee);
 
-	return knownBooleanSignatures.some(signature => deepStrictEqual(callee, signature));
+	return knownBooleanSignatures.some(signature => isDeepStrictEqual(callee, signature));
 }
 
 const create = context => {
