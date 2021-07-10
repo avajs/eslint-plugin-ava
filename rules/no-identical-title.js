@@ -32,7 +32,7 @@ const create = context => {
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
 
 			// Don't flag computed titles
-			if (!isStatic(titleNode)) {
+			if (!titleNode || !isStatic(titleNode)) {
 				return;
 			}
 

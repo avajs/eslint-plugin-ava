@@ -33,6 +33,7 @@ ruleTester.run('no-identical-title', rule, {
 		` ${header}
 			const macro = (t, value) => { t.true(value); };
 
+			test(macro, true);
 			test('should work', macro, true);
 			test('should fail', macro, false);
 		`,
