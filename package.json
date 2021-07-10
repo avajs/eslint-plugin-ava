@@ -81,7 +81,8 @@
 			}
 		],
 		"rules": {
-			"ava/no-ignored-test-files": "off"
+			"ava/no-ignored-test-files": "off",
+			"import/extensions": "off"
 		}
 	},
 	"c8": {
