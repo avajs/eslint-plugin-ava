@@ -15,10 +15,6 @@ const parameterNotNamedTErrors = [{
 	message: 'Test parameter should be named `t`.'
 }];
 
-const tooManyParametersErrors = [{
-	message: 'Test should only have one parameter named `t`.'
-}];
-
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('use-t', rule, {
@@ -27,7 +23,8 @@ ruleTester.run('use-t', rule, {
 		header + 'test(() => {});',
 		header + 'test(t => {});',
 		header + 'test.cb(t => {});',
-		// Header + 'test("test name", t => {});',
+		header + 'test("test name", t => {});',
+		header + 'test((t, foo) => {});',
 		header + 'test(function (t) {});',
 		header + 'test(testFunction);',
 		header + 'test.todo("test name");',
@@ -53,18 +50,6 @@ ruleTester.run('use-t', rule, {
 		{
 			code: header + 'test(function (foo) {});',
 			errors: parameterNotNamedTErrors
-		},
-		{
-			code: header + 'test((t, foo) => {});',
-			errors: tooManyParametersErrors
-		},
-		{
-			code: header + 'test((foo, t) => {});',
-			errors: tooManyParametersErrors
-		},
-		{
-			code: header + 'test("test name", (t, foo) => {});',
-			errors: tooManyParametersErrors
 		}
 	]
 });

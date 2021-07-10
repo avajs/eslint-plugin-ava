@@ -18,16 +18,11 @@ const create = context => {
 
 			const functionArg = node.arguments[functionArgIndex];
 
-			if (!(functionArg && functionArg.params && functionArg.params.length > 0)) {
+			if (!functionArg || !functionArg.params || functionArg.params.length === 0) {
 				return;
 			}
 
-			if (functionArg.params.length > 1) {
-				context.report({
-					node,
-					message: 'Test should only have one parameter named `t`.'
-				});
-			} else if (functionArg.params[0].name !== 't') {
+			if (functionArg.params[0].name !== 't') {
 				context.report({
 					node,
 					message: 'Test parameter should be named `t`.'
