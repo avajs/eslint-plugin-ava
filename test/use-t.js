@@ -27,6 +27,9 @@ ruleTester.run('use-t', rule, {
 		header + 'test((t, foo) => {});',
 		header + 'test(function (t) {});',
 		header + 'test(testFunction);',
+		header + 'test.macro(testFunction);',
+		header + 'test.macro(t => {});',
+		header + 'test.macro({exec: t => {}, title: () => "title"});',
 		header + 'test.todo("test name");',
 		// Shouldn't be triggered since it's not a test file
 		'test(foo => {});',
@@ -49,6 +52,14 @@ ruleTester.run('use-t', rule, {
 		},
 		{
 			code: header + 'test(function (foo) {});',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test.macro(function (foo) {});',
+			errors: parameterNotNamedTErrors
+		},
+		{
+			code: header + 'test.macro({ exec(foo) {} });',
 			errors: parameterNotNamedTErrors
 		}
 	]

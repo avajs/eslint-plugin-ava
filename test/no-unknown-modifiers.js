@@ -26,6 +26,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		`${header}test.after.always(t => {});`,
 		`${header}test.afterEach.always(t => {});`,
 		`${header}test.failing(t => {});`,
+		`${header}test.macro(t => {});`,
 		// Shouldn't be triggered since it's not a test file
 		'test.foo(t => {});'
 	],

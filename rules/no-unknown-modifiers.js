@@ -14,7 +14,8 @@ const modifiers = new Set([
 	'serial',
 	'skip',
 	'todo',
-	'failing'
+	'failing',
+	'macro'
 ]);
 
 const unknownModifiers = node => util.getTestModifiers(node)

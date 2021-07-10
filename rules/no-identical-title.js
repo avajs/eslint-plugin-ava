@@ -26,7 +26,7 @@ const create = context => {
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
-			ava.hasNoHookModifier
+			ava.hasNoUtilityModifier
 		])(node => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
