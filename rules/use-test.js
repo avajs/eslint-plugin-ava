@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
+const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
-const deepStrictEqual = require('deep-strict-equal');
 const util = require('../util');
 
 const avaVariableDeclaratorInitAst = {
@@ -39,7 +39,7 @@ const create = context => {
 			}
 		},
 		VariableDeclarator: node => {
-			if (node.init && deepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
+			if (node.init && isDeepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
 				const {name} = node.id;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);

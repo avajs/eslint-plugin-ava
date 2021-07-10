@@ -1,7 +1,7 @@
 'use strict';
+const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
-const deepStrictEqual = require('deep-strict-equal');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
@@ -52,8 +52,8 @@ const skippedAssertionCalleeAst = methodName => ({
 });
 
 const isCalleeMatched = (callee, methodName) =>
-	deepStrictEqual(callee, assertionCalleeAst(methodName)) ||
-	deepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
+	isDeepStrictEqual(callee, assertionCalleeAst(methodName)) ||
+	isDeepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
 
 const create = context => {
 	const ava = createAvaRule();
