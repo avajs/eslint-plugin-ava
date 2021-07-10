@@ -22,6 +22,7 @@ ruleTester.run('test-title', rule, {
 		header + 'test.after(t => {});',
 		header + 'test.beforeEach(t => {});',
 		header + 'test.afterEach(t => {});',
+		header + 'test.macro(t => {});',
 		header + 'test.cb.before(t => {}); test.before.cb(t => {});',
 		header + 'notTest(t => { t.pass(); t.end(); });',
 		header + 'test([], arg1, arg2);',

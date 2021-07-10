@@ -11,18 +11,24 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode
 		])(node => {
-			const functionArgIndex = node.arguments.length - 1;
-			if (functionArgIndex > 1) {
+			const index = node.arguments.length - 1;
+			if (index > 1) {
 				return;
 			}
 
-			const functionArg = node.arguments[functionArgIndex];
+			let implementationArg = node.arguments[index];
+			if (ava.hasTestModifier('macro') && implementationArg.type === 'ObjectExpression') {
+				const execProperty = implementationArg.properties.find(p => {
+					return p.key.name === 'exec';
+				});
+				implementationArg = execProperty && execProperty.value;
+			}
 
-			if (!functionArg || !functionArg.params || functionArg.params.length === 0) {
+			if (!implementationArg || !implementationArg.params || implementationArg.params.length === 0) {
 				return;
 			}
 
-			if (functionArg.params[0].name !== 't') {
+			if (implementationArg.params[0].name !== 't') {
 				context.report({
 					node,
 					message: 'Test parameter should be named `t`.'
