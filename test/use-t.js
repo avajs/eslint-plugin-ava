@@ -22,7 +22,6 @@ ruleTester.run('use-t', rule, {
 		header + 'test();',
 		header + 'test(() => {});',
 		header + 'test(t => {});',
-		header + 'test.cb(t => {});',
 		header + 'test("test name", t => {});',
 		header + 'test((t, foo) => {});',
 		header + 'test(function (t) {});',
@@ -44,10 +43,6 @@ ruleTester.run('use-t', rule, {
 		},
 		{
 			code: header + 'test("test name", foo => {});',
-			errors: parameterNotNamedTErrors
-		},
-		{
-			code: header + 'test.cb(foo => { foo.end(); });',
 			errors: parameterNotNamedTErrors
 		},
 		{
