@@ -9,7 +9,6 @@ const modifiers = new Set([
 	'always',
 	'before',
 	'beforeEach',
-	'cb',
 	'only',
 	'serial',
 	'skip',
