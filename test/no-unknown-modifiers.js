@@ -17,6 +17,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		`${header}test.afterEach(t => {});`,
 		`${header}test.before(t => {});`,
 		`${header}test.beforeEach(t => {});`,
+		`${header}test.default(t => {});`,
+		`${header}test.default.serial(t => {});`,
 		`${header}test.only(t => {});`,
 		`${header}test.serial(t => {});`,
 		`${header}test.skip(t => {});`,
@@ -78,15 +80,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo.bar.baz(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.foo`.',
-				type: 'Identifier',
-				line: 2,
-				column: 6
-			}]
-		},
-		{
-			code: `${header}test.default(t => {});`,
-			errors: [{
-				message: 'Unknown test modifier `.default`.',
 				type: 'Identifier',
 				line: 2,
 				column: 6
