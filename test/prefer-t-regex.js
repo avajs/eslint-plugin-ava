@@ -34,6 +34,8 @@ ruleTester.run('prefer-t-regex', rule, {
 		header + 'test(t => t.regex(foo, RegExp(/\\d+/)));',
 		// Shouldn't be triggered since it's not a test file
 		'test(t => t.true(/\\d+/.test("foo")));',
+		// Not valid, but it shouldn't cause errors
+		'test(t => t.true());',
 	],
 	invalid: [
 		{
