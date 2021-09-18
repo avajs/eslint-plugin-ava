@@ -84,7 +84,7 @@ module.exports = {
 		docs: {
 			url: util.getDocsUrl(__filename)
 		},
-		fixable: true,
+		fixable: 'code',
 		messages: {
 			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives'
 		},
