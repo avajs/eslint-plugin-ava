@@ -1,4 +1,3 @@
-'use strict';
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const enhance = require('enhance-visitors');
@@ -11,14 +10,14 @@ const avaImportDeclarationAsts = [{
 			type: 'ImportDefaultSpecifier',
 			local: {
 				type: 'Identifier',
-				name: 'test'
-			}
-		}
+				name: 'test',
+			},
+		},
 	],
 	source: {
 		type: 'Literal',
-		value: 'ava'
-	}
+		value: 'ava',
+	},
 }, {
 	type: 'ImportDeclaration',
 	specifiers: [
@@ -26,18 +25,18 @@ const avaImportDeclarationAsts = [{
 			type: 'ImportSpecifier',
 			imported: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			local: {
 				type: 'Identifier',
-				name: 'test'
-			}
-		}
+				name: 'test',
+			},
+		},
 	],
 	source: {
 		type: 'Literal',
-		value: 'ava'
-	}
+		value: 'ava',
+	},
 }, {
 	type: 'ImportDeclaration',
 	specifiers: [
@@ -45,18 +44,18 @@ const avaImportDeclarationAsts = [{
 			type: 'ImportSpecifier',
 			imported: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			local: {
 				type: 'Identifier',
-				name: 'test'
-			}
-		}
+				name: 'test',
+			},
+		},
 	],
 	source: {
 		type: 'Literal',
-		value: 'ava'
-	}
+		value: 'ava',
+	},
 }, {
 	type: 'ImportDeclaration',
 	specifiers: [
@@ -64,39 +63,39 @@ const avaImportDeclarationAsts = [{
 			type: 'ImportSpecifier',
 			imported: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			local: {
 				type: 'Identifier',
-				name: 'serial'
-			}
-		}
+				name: 'serial',
+			},
+		},
 	],
 	source: {
 		type: 'Literal',
-		value: 'ava'
-	}
+		value: 'ava',
+	},
 }];
 
 const avaVariableDeclaratorAsts = [{
 	type: 'VariableDeclarator',
 	id: {
 		type: 'Identifier',
-		name: 'test'
+		name: 'test',
 	},
 	init: {
 		type: 'CallExpression',
 		callee: {
 			type: 'Identifier',
-			name: 'require'
+			name: 'require',
 		},
 		arguments: [
 			{
 				type: 'Literal',
-				value: 'ava'
-			}
-		]
-	}
+				value: 'ava',
+			},
+		],
+	},
 }, {
 	type: 'VariableDeclarator',
 	id: {
@@ -105,31 +104,31 @@ const avaVariableDeclaratorAsts = [{
 			type: 'Property',
 			key: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			value: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			kind: 'init',
 			method: false,
 			shorthand: true,
-			computed: false
-		}]
+			computed: false,
+		}],
 	},
 	init: {
 		type: 'CallExpression',
 		callee: {
 			type: 'Identifier',
-			name: 'require'
+			name: 'require',
 		},
 		arguments: [
 			{
 				type: 'Literal',
-				value: 'ava'
-			}
-		]
-	}
+				value: 'ava',
+			},
+		],
+	},
 }, {
 	type: 'VariableDeclarator',
 	id: {
@@ -138,31 +137,31 @@ const avaVariableDeclaratorAsts = [{
 			type: 'Property',
 			key: {
 				type: 'Identifier',
-				name: 'serial'
+				name: 'serial',
 			},
 			value: {
 				type: 'Identifier',
-				name: 'test'
+				name: 'test',
 			},
 			kind: 'init',
 			method: false,
 			shorthand: false,
-			computed: false
-		}]
+			computed: false,
+		}],
 	},
 	init: {
 		type: 'CallExpression',
 		callee: {
 			type: 'Identifier',
-			name: 'require'
+			name: 'require',
 		},
 		arguments: [
 			{
 				type: 'Literal',
-				value: 'ava'
-			}
-		]
-	}
+				value: 'ava',
+			},
+		],
+	},
 }];
 
 function isTestFunctionCall(node) {
@@ -211,22 +210,22 @@ module.exports = () => { // eslint-disable-line eslint-plugin/prefer-object-rule
 		},
 		'Program:exit': () => {
 			isTestFile = false;
-		}
+		},
 	};
 
 	return {
 		hasTestModifier: mod => getTestModifierNames(currentTestNode).includes(mod),
 		hasNoUtilityModifier: () => {
 			const modifiers = getTestModifierNames(currentTestNode);
-			return !modifiers.includes('before') &&
-				!modifiers.includes('beforeEach') &&
-				!modifiers.includes('after') &&
-				!modifiers.includes('afterEach') &&
-				!modifiers.includes('macro');
+			return !modifiers.includes('before')
+				&& !modifiers.includes('beforeEach')
+				&& !modifiers.includes('after')
+				&& !modifiers.includes('afterEach')
+				&& !modifiers.includes('macro');
 		},
 		isInTestFile: () => isTestFile,
 		isInTestNode: () => currentTestNode,
 		isTestNode: node => currentTestNode === node,
-		merge: customHandlers => enhance.mergeVisitors([predefinedRules, customHandlers])
+		merge: customHandlers => enhance.mergeVisitors([predefinedRules, customHandlers]),
 	};
 };

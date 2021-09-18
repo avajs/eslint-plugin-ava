@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const MicroSpellingCorrecter = require('micro-spelling-correcter');
 
@@ -9,14 +8,14 @@ const properties = new Set([
 	...util.executionMethods,
 	'context',
 	'title',
-	'skip'
+	'skip',
 ]);
 
 const correcter = new MicroSpellingCorrecter([...properties]);
 
 const isCallExpression = node =>
-	node.parent.type === 'CallExpression' &&
-	node.parent.callee === node;
+	node.parent.type === 'CallExpression'
+	&& node.parent.callee === node;
 
 const getMemberNodes = node => {
 	if (node.object.type === 'MemberExpression') {
@@ -32,22 +31,22 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
-			if (node.callee.type !== 'MemberExpression' &&
-					node.callee.name === 't') {
+			if (node.callee.type !== 'MemberExpression'
+					&& node.callee.name === 't') {
 				context.report({
 					node,
-					message: '`t` is not a function.'
+					message: '`t` is not a function.',
 				});
 			}
 		}),
 		MemberExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
-			if (node.parent.type === 'MemberExpression' ||
-					util.getNameOfRootNodeObject(node) !== 't') {
+			if (node.parent.type === 'MemberExpression'
+					|| util.getNameOfRootNodeObject(node) !== 't') {
 				return;
 			}
 
@@ -69,19 +68,19 @@ const create = context => {
 						if (isCallExpression(node)) {
 							context.report({
 								node,
-								message: `Unknown assertion method \`.${name}\`.`
+								message: `Unknown assertion method \`.${name}\`.`,
 							});
 						} else {
 							context.report({
 								node,
-								message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`
+								message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`,
 							});
 						}
 					} else {
 						context.report({
 							node,
 							message: `Misspelled \`.${corrected}\` as \`.${name}\`.`,
-							fix: fixer => fixer.replaceText(member, corrected)
+							fix: fixer => fixer.replaceText(member, corrected),
 						});
 					}
 
@@ -92,7 +91,7 @@ const create = context => {
 					if (members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
-							message: `Unknown assertion method \`.${name}\`.`
+							message: `Unknown assertion method \`.${name}\`.`,
 						});
 					}
 
@@ -105,7 +104,7 @@ const create = context => {
 					if (hadCall) {
 						context.report({
 							node,
-							message: 'Can\'t chain assertion methods.'
+							message: 'Can\'t chain assertion methods.',
 						});
 					}
 
@@ -116,7 +115,7 @@ const create = context => {
 			if (!hadCall) {
 				context.report({
 					node,
-					message: 'Missing assertion method.'
+					message: 'Missing assertion method.',
 				});
 			}
 
@@ -127,7 +126,7 @@ const create = context => {
 					fix: fixer => {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
-					}
+					},
 				});
 			}
 
@@ -138,20 +137,21 @@ const create = context => {
 					fix: fixer => {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
-					}
+					},
 				});
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',
-		type: 'problem'
-	}
+		schema: [],
+	},
 };

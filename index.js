@@ -1,4 +1,3 @@
-'use strict';
 const path = require('path');
 const importModules = require('import-modules');
 
@@ -7,21 +6,21 @@ module.exports = {
 	configs: {
 		recommended: {
 			env: {
-				es6: true
+				es6: true,
 			},
 			parserOptions: {
 				ecmaVersion: 2021,
-				sourceType: 'module'
+				sourceType: 'module',
 			},
 			plugins: [
-				'ava'
+				'ava',
 			],
 			rules: {
 				'ava/assertion-arguments': 'error',
 				'ava/hooks-order': 'error',
 				'ava/max-asserts': [
 					'off',
-					5
+					5,
 				],
 				'ava/no-async-fn-without-await': 'error',
 				'ava/no-duplicate-modifiers': 'error',
@@ -46,8 +45,8 @@ module.exports = {
 				'ava/use-t': 'error',
 				'ava/use-t-throws-async-well': 'error',
 				'ava/use-test': 'error',
-				'ava/use-true-false': 'error'
-			}
-		}
-	}
+				'ava/use-true-false': 'error',
+			},
+		},
+	},
 };

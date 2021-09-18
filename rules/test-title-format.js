@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -17,7 +16,7 @@ const create = context => {
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
-			ava.hasNoUtilityModifier
+			ava.hasNoUtilityModifier,
 		])(node => {
 			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
 			const hasTitle = node.arguments.length >= requiredLength;
@@ -27,11 +26,11 @@ const create = context => {
 				if (title.type === 'Literal' && !titleRegExp.test(title.value)) {
 					context.report({
 						node,
-						message: `The test title doesn't match the required format: \`${titleRegExp}\`.`
+						message: `The test title doesn't match the required format: \`${titleRegExp}\`.`,
 					});
 				}
 			}
-		})
+		}),
 	});
 };
 
@@ -41,10 +40,10 @@ const schema = [
 		properties: {
 			format: {
 				type: 'string',
-				default: undefined
-			}
-		}
-	}
+				default: undefined,
+			},
+		},
+	},
 ];
 
 module.exports = {
@@ -52,8 +51,8 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		schema
-	}
+		schema,
+	},
 };

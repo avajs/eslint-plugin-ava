@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const {getStaticValue, isOpeningParenToken, isCommaToken, findVariable} = require('eslint-utils');
 const util = require('../util');
@@ -7,96 +6,96 @@ const createAvaRule = require('../create-ava-rule');
 const expectedNbArguments = {
 	assert: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	deepEqual: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	fail: {
 		min: 0,
-		max: 1
+		max: 1,
 	},
 	false: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	falsy: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	ifError: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	is: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	like: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	not: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	notDeepEqual: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	notThrows: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	notThrowsAsync: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	pass: {
 		min: 0,
-		max: 1
+		max: 1,
 	},
 	plan: {
 		min: 1,
-		max: 1
+		max: 1,
 	},
 	regex: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	notRegex: {
 		min: 2,
-		max: 3
+		max: 3,
 	},
 	snapshot: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	teardown: {
 		min: 1,
-		max: 1
+		max: 1,
 	},
 	throws: {
 		min: 1,
-		max: 3
+		max: 3,
 	},
 	throwsAsync: {
 		min: 1,
-		max: 3
+		max: 3,
 	},
 	true: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	truthy: {
 		min: 1,
-		max: 2
+		max: 2,
 	},
 	timeout: {
 		min: 1,
-		max: 2
-	}
+		max: 2,
+	},
 };
 
 const actualExpectedAssertions = new Set([
@@ -106,7 +105,7 @@ const actualExpectedAssertions = new Set([
 	'not',
 	'notDeepEqual',
 	'throws',
-	'throwsAsync'
+	'throwsAsync',
 ]);
 
 const relationalActualExpectedAssertions = new Set([
@@ -114,7 +113,7 @@ const relationalActualExpectedAssertions = new Set([
 	'truthy',
 	'falsy',
 	'true',
-	'false'
+	'false',
 ]);
 
 const comparisonOperators = new Map([
@@ -125,7 +124,7 @@ const comparisonOperators = new Map([
 	['!=', '!='],
 	['!==', '!=='],
 	['<=', '>='],
-	['<', '>']
+	['<', '>'],
 ]);
 
 const flipOperator = operator => comparisonOperators.get(operator);
@@ -138,34 +137,34 @@ function isStatic(node) {
 function * sourceRangesOfArguments(sourceCode, callExpression) {
 	const openingParen = sourceCode.getTokenAfter(
 		callExpression.callee,
-		{filter: token => isOpeningParenToken(token)}
+		{filter: token => isOpeningParenToken(token)},
 	);
 
 	const closingParen = sourceCode.getLastToken(callExpression);
 
 	for (const [index, argument] of callExpression.arguments.entries()) {
-		const previousToken = index === 0 ?
-			openingParen :
-			sourceCode.getTokenBefore(
+		const previousToken = index === 0
+			? openingParen
+			: sourceCode.getTokenBefore(
 				argument,
-				{filter: token => isCommaToken(token)}
+				{filter: token => isCommaToken(token)},
 			);
 
-		const nextToken = index === callExpression.arguments.length - 1 ?
-			closingParen :
-			sourceCode.getTokenAfter(
+		const nextToken = index === callExpression.arguments.length - 1
+			? closingParen
+			: sourceCode.getTokenAfter(
 				argument,
-				{filter: token => isCommaToken(token)}
+				{filter: token => isCommaToken(token)},
 			);
 
 		const firstToken = sourceCode.getTokenAfter(
 			previousToken,
-			{includeComments: true}
+			{includeComments: true},
 		);
 
 		const lastToken = sourceCode.getTokenBefore(
 			nextToken,
-			{includeComments: true}
+			{includeComments: true},
 		);
 
 		yield [firstToken.range[0], lastToken.range[1]];
@@ -178,7 +177,7 @@ function sourceOfBinaryExpressionComponents(sourceCode, node) {
 	const operatorToken = sourceCode.getFirstTokenBetween(
 		left,
 		right,
-		{filter: token => token.value === operator}
+		{filter: token => token.value === operator},
 	);
 
 	const previousToken = sourceCode.getTokenBefore(node);
@@ -186,28 +185,26 @@ function sourceOfBinaryExpressionComponents(sourceCode, node) {
 
 	const leftRange = [
 		sourceCode.getTokenAfter(previousToken, {includeComments: true}).range[0],
-		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).range[1]
+		sourceCode.getTokenBefore(operatorToken, {includeComments: true}).range[1],
 	];
 
 	const rightRange = [
 		sourceCode.getTokenAfter(operatorToken, {includeComments: true}).range[0],
-		sourceCode.getTokenBefore(nextToken, {includeComments: true}).range[1]
+		sourceCode.getTokenBefore(nextToken, {includeComments: true}).range[1],
 	];
 
 	return [leftRange, operatorToken, rightRange];
 }
 
 function noComments(sourceCode, ...nodes) {
-	return nodes.every(node => {
-		return sourceCode.getCommentsBefore(node).length === 0 && sourceCode.getCommentsAfter(node).length === 0;
-	});
+	return nodes.every(node => sourceCode.getCommentsBefore(node).length === 0 && sourceCode.getCommentsAfter(node).length === 0);
 }
 
 function isString(node) {
 	const {type} = node;
-	return type === 'TemplateLiteral' ||
-		type === 'TaggedTemplateExpression' ||
-		(type === 'Literal' && typeof node.value === 'string');
+	return type === 'TemplateLiteral'
+		|| type === 'TaggedTemplateExpression'
+		|| (type === 'Literal' && typeof node.value === 'string');
 }
 
 const create = context => {
@@ -223,15 +220,15 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			const {callee} = node;
 
 			if (
-				callee.type !== 'MemberExpression' ||
-				!callee.property ||
-				util.getNameOfRootNodeObject(callee) !== 't' ||
-				util.isPropertyUnderContext(callee)
+				callee.type !== 'MemberExpression'
+				|| !callee.property
+				|| util.getNameOfRootNodeObject(callee) !== 't'
+				|| util.isPropertyUnderContext(callee)
 			) {
 				return;
 			}
@@ -296,7 +293,7 @@ const create = context => {
 					report(node, 'Assertion message should be a string.');
 				}
 			}
-		})
+		}),
 	});
 };
 
@@ -306,19 +303,19 @@ function checkArgumentOrder({node, assertion, context}) {
 		const [leftNode, rightNode] = [first, second];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
 			context.report(
-				makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context})
+				makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}),
 			);
 		}
 	} else if (
-		relationalActualExpectedAssertions.has(assertion) &&
-		first &&
-		first.type === 'BinaryExpression' &&
-		comparisonOperators.has(first.operator)
+		relationalActualExpectedAssertions.has(assertion)
+		&& first
+		&& first.type === 'BinaryExpression'
+		&& comparisonOperators.has(first.operator)
 	) {
 		const [leftNode, rightNode] = [first.left, first.right];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
 			context.report(
-				makeOutOfOrder1ArgumentReport({node: first, leftNode, rightNode, context})
+				makeOutOfOrder1ArgumentReport({node: first, leftNode, rightNode, context}),
 			);
 		}
 	}
@@ -331,8 +328,8 @@ function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
 		message: 'Expected values should come after actual values.',
 		loc: {
 			start: sourceCode.getLocFromIndex(leftRange[0]),
-			end: sourceCode.getLocFromIndex(rightRange[1])
-		}
+			end: sourceCode.getLocFromIndex(rightRange[1]),
+		},
 	};
 
 	if (noComments(sourceCode, leftNode, rightNode)) {
@@ -341,7 +338,7 @@ function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
 			const rightText = sourceCode.getText().slice(...rightRange);
 			return [
 				fixer.replaceTextRange(leftRange, rightText),
-				fixer.replaceTextRange(rightRange, leftText)
+				fixer.replaceTextRange(rightRange, leftText),
 			];
 		};
 	}
@@ -354,14 +351,14 @@ function makeOutOfOrder1ArgumentReport({node, leftNode, rightNode, context}) {
 	const [
 		leftRange,
 		operatorToken,
-		rightRange
+		rightRange,
 	] = sourceOfBinaryExpressionComponents(sourceCode, node);
 	const report = {
 		message: 'Expected values should come after actual values.',
 		loc: {
 			start: sourceCode.getLocFromIndex(leftRange[0]),
-			end: sourceCode.getLocFromIndex(rightRange[1])
-		}
+			end: sourceCode.getLocFromIndex(rightRange[1]),
+		},
 	};
 
 	if (noComments(sourceCode, leftNode, rightNode, node)) {
@@ -371,7 +368,7 @@ function makeOutOfOrder1ArgumentReport({node, leftNode, rightNode, context}) {
 			return [
 				fixer.replaceTextRange(leftRange, rightText),
 				fixer.replaceText(operatorToken, flipOperator(node.operator)),
-				fixer.replaceTextRange(rightRange, leftText)
+				fixer.replaceTextRange(rightRange, leftText),
 			];
 		};
 	}
@@ -385,21 +382,21 @@ const schema = [{
 		message: {
 			enum: [
 				'always',
-				'never'
+				'never',
 			],
-			default: undefined
-		}
-	}
+			default: undefined,
+		},
+	},
 }];
 
 module.exports = {
 	create,
 	meta: {
-		fixable: 'code',
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
+		fixable: 'code',
 		schema,
-		type: 'problem'
-	}
+	},
 };

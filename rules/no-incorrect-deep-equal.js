@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -10,9 +9,9 @@ const buildDeepEqualMessage = (context, node) => {
 		node,
 		messageId: MESSAGE_ID,
 		data: {
-			callee: node.callee.property.name
+			callee: node.callee.property.name,
 		},
-		fix: fixer => fixer.replaceText(node.callee.property, 'is')
+		fix: fixer => fixer.replaceText(node.callee.property, 'is'),
 	});
 };
 
@@ -21,9 +20,9 @@ const buildNotDeepEqualMessage = (context, node) => {
 		node,
 		messageId: MESSAGE_ID,
 		data: {
-			callee: node.callee.property.name
+			callee: node.callee.property.name,
 		},
-		fix: fixer => fixer.replaceText(node.callee.property, 'not')
+		fix: fixer => fixer.replaceText(node.callee.property, 'not'),
 	});
 };
 
@@ -41,53 +40,54 @@ const create = context => {
 	return ava.merge({
 		[`${callExpression}${deepEqual}${argumentsLiteral}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${deepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${deepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsLiteral}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildNotDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsUndefined}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildNotDeepEqualMessage(context, node);
 		}),
 		[`${callExpression}${notDeepEqual}${argumentsTemplate}`]: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			buildNotDeepEqualMessage(context, node);
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',
+		schema: [],
 		messages: {
-			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives'
+			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives',
 		},
-		type: 'suggestion'
-	}
+	},
 };

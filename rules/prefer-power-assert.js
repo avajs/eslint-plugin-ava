@@ -1,4 +1,3 @@
-'use strict';
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
@@ -14,20 +13,20 @@ const notAllowed = [
 	'not',
 	'regex',
 	'notRegex',
-	'ifError'
+	'ifError',
 ];
 
 const assertionCalleeAst = methodName => ({
 	type: 'MemberExpression',
 	object: {
 		type: 'Identifier',
-		name: 't'
+		name: 't',
 	},
 	property: {
 		type: 'Identifier',
-		name: methodName
+		name: methodName,
 	},
-	computed: false
+	computed: false,
 });
 
 const skippedAssertionCalleeAst = methodName => ({
@@ -36,24 +35,24 @@ const skippedAssertionCalleeAst = methodName => ({
 		type: 'MemberExpression',
 		object: {
 			type: 'Identifier',
-			name: 't'
+			name: 't',
 		},
 		property: {
 			type: 'Identifier',
-			name: 'skip'
+			name: 'skip',
 		},
-		computed: false
+		computed: false,
 	},
 	property: {
 		type: 'Identifier',
-		name: methodName
+		name: methodName,
 	},
-	computed: false
+	computed: false,
 });
 
 const isCalleeMatched = (callee, methodName) =>
-	isDeepStrictEqual(callee, assertionCalleeAst(methodName)) ||
-	isDeepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
+	isDeepStrictEqual(callee, assertionCalleeAst(methodName))
+	|| isDeepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
 
 const create = context => {
 	const ava = createAvaRule();
@@ -61,7 +60,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			const callee = espurify(node.callee);
 
@@ -70,21 +69,22 @@ const create = context => {
 					if (isCalleeMatched(callee, methodName)) {
 						context.report({
 							node,
-							message: 'Only asserts with no power-assert alternative are allowed.'
+							message: 'Only asserts with no power-assert alternative are allowed.',
 						});
 					}
 				}
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

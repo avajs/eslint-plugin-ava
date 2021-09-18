@@ -6,11 +6,11 @@ const rule = require('../rules/no-import-test-files');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
-		sourceType: 'module'
-	}
+		sourceType: 'module',
+	},
 });
 
 const rootDir = path.dirname(__dirname);
@@ -28,13 +28,13 @@ util.loadAvaHelper = () => ({
 			default:
 				return {isHelper: false, isTest: false};
 		}
-	}
+	},
 });
 
 const errors = [
 	{
-		message: 'Test files should not be imported.'
-	}
+		message: 'Test files should not be imported.',
+	},
 ];
 
 ruleTester.run('no-import-test-files', rule, {
@@ -48,21 +48,21 @@ ruleTester.run('no-import-test-files', rule, {
 		'const highlight = require(\'highlight.js\')',
 		{
 			code: 'const highlight = require(\'highlight.js\')',
-			filename: toPath('test/index.js')
+			filename: toPath('test/index.js'),
 		},
 		'const value = require(true);',
-		'const value = require();'
+		'const value = require();',
 	],
 	invalid: [
 		{
 			code: 'const test = require(\'./foo.test.js\');',
 			filename: toPath('lib/foo.js'),
-			errors
+			errors,
 		},
 		{
 			code: 'const test = require(\'../foo.test.js\');',
 			filename: toPath('foo.js'),
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

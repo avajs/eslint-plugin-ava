@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -10,12 +9,12 @@ const create = context => {
 		'true',
 		'false',
 		'truthy',
-		'falsy'
+		'falsy',
 	]);
 
 	const equalityTests = new Set([
 		'is',
-		'deepEqual'
+		'deepEqual',
 	]);
 
 	// Find the latest reference to the given identifier's name.
@@ -120,14 +119,14 @@ const create = context => {
 			const source = context.getSourceCode();
 			return [
 				fixer.replaceText(node.callee.property, assertion),
-				fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`)
+				fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`),
 			];
 		};
 
 		context.report({
 			node,
 			message: `Prefer using the \`t.${assertion}()\` assertion.`,
-			fix
+			fix,
 		});
 	};
 
@@ -150,7 +149,7 @@ const create = context => {
 			return [
 				fixer.replaceText(node.callee.property, assertion),
 				fixer.replaceText(firstArg, `${source.getText(regex.arguments[0])}`),
-				fixer.replaceText(secondArg, `${source.getText(regex.callee.object)}`)
+				fixer.replaceText(secondArg, `${source.getText(regex.callee.object)}`),
 			];
 		};
 
@@ -169,7 +168,7 @@ const create = context => {
 			context.report({
 				node,
 				message: `Prefer using the \`t.${assertion}()\` assertion.`,
-				fix: booleanFixer(assertion)
+				fix: booleanFixer(assertion),
 			});
 		}
 	};
@@ -177,33 +176,34 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
-			const isAssertion = node.callee.type === 'MemberExpression' &&
-				util.getNameOfRootNodeObject(node.callee) === 't';
+			const isAssertion = node.callee.type === 'MemberExpression'
+				&& util.getNameOfRootNodeObject(node.callee) === 't';
 
-			const isBooleanAssertion = isAssertion &&
-				booleanTests.has(node.callee.property.name);
+			const isBooleanAssertion = isAssertion
+				&& booleanTests.has(node.callee.property.name);
 
-			const isEqualityAssertion = isAssertion &&
-				equalityTests.has(node.callee.property.name);
+			const isEqualityAssertion = isAssertion
+				&& equalityTests.has(node.callee.property.name);
 
 			if (isBooleanAssertion) {
 				booleanHandler(node);
 			} else if (isEqualityAssertion) {
 				equalityHandler(node);
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

@@ -1,4 +1,3 @@
-'use strict';
 const path = require('path');
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
@@ -8,20 +7,20 @@ const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
 	callee: {
 		type: 'Identifier',
-		name: 'require'
+		name: 'require',
 	},
 	arguments: [
 		{
 			type: 'Literal',
-			value: 'ava'
-		}
-	]
+			value: 'ava',
+		},
+	],
 };
 
 function report(context, node) {
 	context.report({
 		node,
-		message: 'AVA should be imported as `test`.'
+		message: 'AVA should be imported as `test`.',
 	});
 }
 
@@ -45,16 +44,17 @@ const create = context => {
 					report(context, node);
 				}
 			}
-		}
+		},
 	};
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

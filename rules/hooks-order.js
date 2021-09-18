@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -30,9 +29,9 @@ const buildMessage = (name, orders, visited) => {
 				messageId: MESSAGE_ID,
 				data: {
 					current: name,
-					invalid: check
+					invalid: check,
 				},
-				node: nodeEarlier
+				node: nodeEarlier,
 			};
 		}
 	}
@@ -50,7 +49,7 @@ const create = context => {
 		'beforeEach',
 		'afterEach',
 		'afterEach.always',
-		'test'
+		'test',
 	]);
 
 	const visited = {};
@@ -58,42 +57,42 @@ const create = context => {
 	const checks = [
 		{
 			selector: 'CallExpression[callee.object.name="test"][callee.property.name="before"]',
-			name: 'before'
+			name: 'before',
 		},
 		{
 			selector: 'CallExpression[callee.object.name="test"][callee.property.name="after"]',
-			name: 'after'
+			name: 'after',
 		},
 		{
 			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="after"][callee.property.name="always"]',
-			name: 'after.always'
+			name: 'after.always',
 		},
 		{
 			selector: 'CallExpression[callee.object.name="test"][callee.property.name="beforeEach"]',
-			name: 'beforeEach'
+			name: 'beforeEach',
 		},
 		{
 			selector: 'CallExpression[callee.object.name="test"][callee.property.name="afterEach"]',
-			name: 'afterEach'
+			name: 'afterEach',
 		},
 		{
 			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="afterEach"][callee.property.name="always"]',
-			name: 'afterEach.always'
+			name: 'afterEach.always',
 		},
 		{
 			selector: 'CallExpression[callee.name="test"]',
-			name: 'test'
-		}
+			name: 'test',
+		},
 	];
 
 	const sourceCode = context.getSourceCode();
 
 	// TODO: Remove `.reduce()` usage.
-	// eslint-disable-next-line unicorn/no-array-reduce
+	// eslint-disable-next-line unicorn/no-array-reduce, unicorn/prefer-object-from-entries
 	const selectors = checks.reduce((result, check) => {
 		result[check.selector] = visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(node => {
 			visited[check.name] = node;
 
@@ -133,9 +132,9 @@ const create = context => {
 
 						return [
 							fixer.insertTextBeforeRange([insertStart, insertEnd], text),
-							fixer.removeRange([start, end])
+							fixer.removeRange([start, end]),
 						];
-					}
+					},
 				});
 			}
 		});
@@ -148,13 +147,14 @@ const create = context => {
 module.exports = {
 	create,
 	meta: {
-		docs: {
-			url: util.getDocsUrl(__filename)
-		},
-		messages: {
-			[MESSAGE_ID]: '`{{current}}` hook must come before `{{invalid}}`'
-		},
 		type: 'suggestion',
-		fixable: 'code'
-	}
+		docs: {
+			url: util.getDocsUrl(__filename),
+		},
+		fixable: 'code',
+		schema: [],
+		messages: {
+			[MESSAGE_ID]: '`{{current}}` hook must come before `{{invalid}}`',
+		},
+	},
 };

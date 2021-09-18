@@ -4,8 +4,8 @@ const rule = require('../rules/use-t-throws-async-well');
 
 const ruleTester = avaRuleTester(test, {
 	parserOptions: {
-		ecmaVersion: 2021
-	}
+		ecmaVersion: 2021,
+	},
 });
 
 const header = 'const test = require(\'ava\');\n';
@@ -40,34 +40,34 @@ ruleTester.run('use-t-throws-async-well', rule, {
 		asyncTestCase('let p = t.throwsAsync(f)'),
 		asyncTestCase('p = t.throwsAsync(f)'),
 		asyncTestCase('t.throwsAsync(f)', false), // Shouldn't be triggered since it's not a test file
-		syncTestCase('t.throwsAsync(f)', false) // Shouldn't be triggered since it's not a test file
+		syncTestCase('t.throwsAsync(f)', false), // Shouldn't be triggered since it's not a test file
 	],
 	invalid: [
 		{
 			code: syncTestCase('t.throwsAsync(f)'),
 			errors: [{
-				message: 'Use `await` with `t.throwsAsync()`.'
-			}]
+				message: 'Use `await` with `t.throwsAsync()`.',
+			}],
 		},
 		{
 			code: syncTestCase('t.notThrowsAsync(f)'),
 			errors: [{
-				message: 'Use `await` with `t.notThrowsAsync()`.'
-			}]
+				message: 'Use `await` with `t.notThrowsAsync()`.',
+			}],
 		},
 		{
 			code: asyncTestCase('t.throwsAsync(f)'),
 			output: asyncTestCase('await t.throwsAsync(f)'),
 			errors: [{
-				message: 'Use `await` with `t.throwsAsync()`.'
-			}]
+				message: 'Use `await` with `t.throwsAsync()`.',
+			}],
 		},
 		{
 			code: asyncTestCase('t.notThrowsAsync(f)'),
 			output: asyncTestCase('await t.notThrowsAsync(f)'),
 			errors: [{
-				message: 'Use `await` with `t.notThrowsAsync()`.'
-			}]
-		}
-	]
+				message: 'Use `await` with `t.notThrowsAsync()`.',
+			}],
+		},
+	],
 });

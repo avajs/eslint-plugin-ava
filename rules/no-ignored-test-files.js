@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -17,7 +16,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(() => {
 			hasTestCall = true;
 		}),
@@ -42,7 +41,7 @@ const create = context => {
 			}
 
 			hasTestCall = false;
-		}
+		},
 	});
 };
 
@@ -50,24 +49,24 @@ const schema = [{
 	type: 'object',
 	properties: {
 		extensions: {
-			type: 'array'
+			type: 'array',
 		},
 		files: {
-			type: 'array'
+			type: 'array',
 		},
 		helpers: {
-			type: 'array'
-		}
-	}
+			type: 'array',
+		},
+	},
 }];
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		schema,
-		type: 'suggestion'
-	}
+	},
 };

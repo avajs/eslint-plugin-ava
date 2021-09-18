@@ -12,7 +12,7 @@ test.before(async () => {
 });
 
 const testSorted = (t, actualOrder, sourceName) => {
-	const sortedOrder = actualOrder.slice(0).sort();
+	const sortedOrder = [...actualOrder].sort();
 
 	for (const [wantedIndex, name] of sortedOrder.entries()) {
 		const actualIndex = actualOrder.indexOf(name);

@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -9,39 +8,40 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			if (
-				node.parent.type === 'ExpressionStatement' &&
-				node.callee.type === 'MemberExpression' &&
-				(node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync') &&
-				node.callee.object.name === 't'
+				node.parent.type === 'ExpressionStatement'
+				&& node.callee.type === 'MemberExpression'
+				&& (node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync')
+				&& node.callee.object.name === 't'
 			) {
 				const message = `Use \`await\` with \`t.${node.callee.property.name}()\`.`;
 				if (ava.isInTestNode().arguments[0].async) {
 					context.report({
 						node,
 						message,
-						fix: fixer => fixer.replaceText(node.callee, `await ${context.getSourceCode().getText(node.callee)}`)
+						fix: fixer => fixer.replaceText(node.callee, `await ${context.getSourceCode().getText(node.callee)}`),
 					});
 				} else {
 					context.report({
 						node,
-						message
+						message,
 					});
 				}
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',
-		type: 'problem'
-	}
+		schema: [],
+	},
 };

@@ -4,11 +4,11 @@ const rule = require('../rules/use-test');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
-		sourceType: 'module'
-	}
+		sourceType: 'module',
+	},
 });
 
 const errors = [{}];
@@ -38,88 +38,88 @@ ruleTester.run('use-test', rule, {
 		{code: 'const anyTest = require(\'foo\');', filename: 'file.tsx'},
 		{code: 'import anyTest from \'ava\';', filename: 'file.tsx'},
 		{code: 'import anyTest, {} from \'ava\';', filename: 'file.tsx'},
-		{code: 'import anyTest from \'foo\';', filename: 'file.tsx'}
+		{code: 'import anyTest from \'foo\';', filename: 'file.tsx'},
 	],
 	invalid: [
 		{
 			code: 'var ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'let ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'const ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'const a = 1, ava = require(\'ava\'), b = 2;',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'import ava from \'ava\';',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'var anyTest = require(\'ava\');',
 			errors,
-			filename: 'file.js'
+			filename: 'file.js',
 		},
 		{
 			code: 'var ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'let ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'const ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'const a = 1, ava = require(\'ava\'), b = 2;',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'import ava from \'ava\';',
 			errors,
-			filename: 'file.ts'
+			filename: 'file.ts',
 		},
 		{
 			code: 'var ava = require(\'ava\');',
 			errors,
-			filename: 'file.tsx'
+			filename: 'file.tsx',
 		},
 		{
 			code: 'let ava = require(\'ava\');',
 			errors,
-			filename: 'file.tsx'
+			filename: 'file.tsx',
 		},
 		{
 			code: 'const ava = require(\'ava\');',
 			errors,
-			filename: 'file.tsx'
+			filename: 'file.tsx',
 		},
 		{
 			code: 'const a = 1, ava = require(\'ava\'), b = 2;',
 			errors,
-			filename: 'file.tsx'
+			filename: 'file.tsx',
 		},
 		{
 			code: 'import ava from \'ava\';',
 			errors,
-			filename: 'file.tsx'
-		}
-	]
+			filename: 'file.tsx',
+		},
+	],
 });

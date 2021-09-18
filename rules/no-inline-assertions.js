@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -9,7 +8,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(node => {
 			const functionArgIndex = node.arguments.length - 1;
 			if (functionArgIndex > 1) {
@@ -27,20 +26,21 @@ const create = context => {
 				context.report({
 					node,
 					message: 'The test implementation should not be an inline arrow function.',
-					fix: fixer => [fixer.insertTextBefore(body, '{'), fixer.insertTextAfter(body, '}')]
+					fix: fixer => [fixer.insertTextBefore(body, '{'), fixer.insertTextAfter(body, '}')],
 				});
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
-		docs: {
-			url: util.getDocsUrl(__filename)
-		},
 		type: 'suggestion',
-		fixable: 'code'
-	}
+		docs: {
+			url: util.getDocsUrl(__filename),
+		},
+		fixable: 'code',
+		schema: [],
+	},
 };
