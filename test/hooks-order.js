@@ -5,8 +5,8 @@ const rule = require('../rules/hooks-order');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = [{}];
@@ -123,7 +123,7 @@ ruleTester.run('no-todo-test', rule, {
 			test('foo', t => {
 				t.true(true);
 			});
-		`
+		`,
 	],
 	invalid: [
 		{
@@ -149,7 +149,7 @@ ruleTester.run('no-todo-test', rule, {
 					doFoo();
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -182,7 +182,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -215,7 +215,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -240,7 +240,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -273,7 +273,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -306,7 +306,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -339,7 +339,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -364,7 +364,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 
 		{
@@ -398,7 +398,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -431,7 +431,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -464,7 +464,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -497,7 +497,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -522,7 +522,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 
 		{
@@ -556,7 +556,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -581,7 +581,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 
 		{
@@ -607,7 +607,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 
 		{
@@ -633,7 +633,7 @@ ruleTester.run('no-todo-test', rule, {
 					t.true(true);
 				});
 			`,
-			errors
+			errors,
 		},
 
 		{
@@ -663,7 +663,7 @@ ruleTester.run('no-todo-test', rule, {
 					doFoo();
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -690,7 +690,7 @@ ruleTester.run('no-todo-test', rule, {
 					doFoo();
 				});
 			`,
-			errors
+			errors,
 		},
 		{
 			code: outdent`
@@ -717,7 +717,7 @@ ruleTester.run('no-todo-test', rule, {
 					doFoo();
 				});
 			`,
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

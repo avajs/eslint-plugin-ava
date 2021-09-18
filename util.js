@@ -1,4 +1,3 @@
-'use strict';
 const path = require('path');
 const pkgDir = require('pkg-dir');
 const resolveFrom = require('resolve-from');
@@ -21,7 +20,7 @@ exports.loadAvaHelper = (filename, overrides) => {
 
 const functionExpressions = new Set([
 	'FunctionExpression',
-	'ArrowFunctionExpression'
+	'ArrowFunctionExpression',
 ]);
 
 exports.getRootNode = node => {
@@ -32,13 +31,9 @@ exports.getRootNode = node => {
 	return node;
 };
 
-exports.getNameOfRootNodeObject = node => {
-	return exports.getRootNode(node).object.name;
-};
+exports.getNameOfRootNodeObject = node => exports.getRootNode(node).object.name;
 
-exports.isPropertyUnderContext = node => {
-	return exports.getRootNode(node).property.name === 'context';
-};
+exports.isPropertyUnderContext = node => exports.getRootNode(node).property.name === 'context';
 
 exports.isFunctionExpression = node => node && functionExpressions.has(node.type);
 
@@ -56,13 +51,11 @@ function getTestModifiers(node) {
 
 exports.getTestModifiers = getTestModifiers;
 
-exports.getTestModifier = (node, mod) => {
-	return getTestModifiers(node).find(property => property.name === mod);
-};
+exports.getTestModifier = (node, mod) => getTestModifiers(node).find(property => property.name === mod);
 
 exports.removeTestModifier = parameters => {
 	const modifier = parameters.modifier.trim();
-	const range = exports.getTestModifier(parameters.node, modifier).range.slice();
+	const range = [...exports.getTestModifier(parameters.node, modifier).range];
 	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
 	const source = parameters.context.getSourceCode().getText();
 	let dotPosition = range[0] - 1;
@@ -118,7 +111,7 @@ const assertionMethodsNumberArguments = new Map([
 	['throwsAsync', 1],
 	['true', 1],
 	['truthy', 1],
-	['try', 1]
+	['try', 1],
 ]);
 
 const assertionMethodNames = [...assertionMethodsNumberArguments.keys()];

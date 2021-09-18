@@ -4,12 +4,12 @@ const rule = require('../rules/no-todo-implementation');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = [{
-	message: '`test.todo()` should not be passed an implementation function.'
+	message: '`test.todo()` should not be passed an implementation function.',
 }];
 const header = 'const test = require(\'ava\');\n';
 
@@ -20,32 +20,32 @@ ruleTester.run('no-todo-implementation', rule, {
 		header + 'test.todo("title");',
 		header + 'notTest.todo(t => {});',
 		// Shouldn't be triggered since it's not a test file
-		'test.todo("title", t => {});'
+		'test.todo("title", t => {});',
 	],
 	invalid: [
 		{
 			code: header + 'test.todo("title", t => {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo(t => {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo("title", function (t) {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo(function (t) {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo("title", function foo(t) {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo(function foo(t) {});',
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

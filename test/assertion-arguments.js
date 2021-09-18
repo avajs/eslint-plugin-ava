@@ -4,11 +4,11 @@ const rule = require('../rules/assertion-arguments');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
-		ecmaVersion: 2021
-	}
+		ecmaVersion: 2021,
+	},
 });
 
 const missingError = 'Expected an assertion message, but found none.';
@@ -17,7 +17,7 @@ const tooFewError = n => `Not enough arguments. Expected at least ${n}.`;
 const tooManyError = n => `Too many arguments. Expected at most ${n}.`;
 const outOfOrderError = (line, column, endLine, endColumn) => ({
 	message: 'Expected values should come after actual values.',
-	line, column, endLine, endColumn
+	line, column, endLine, endColumn,
 });
 const messageIsNotStringError = 'Assertion message should be a string.';
 
@@ -56,7 +56,7 @@ function offsetError(error, line, column) {
 }
 
 function testCase(message, content, errors = [], {
-	useHeader, output = null
+	useHeader, output = null,
 } = {}) {
 	if (!Array.isArray(errors)) {
 		errors = [errors];
@@ -72,7 +72,7 @@ function testCase(message, content, errors = [], {
 		errors,
 		options: message ? [{message}] : [],
 		code: testCode(content, useHeader),
-		output: output === null ? null : testCode(output, useHeader)
+		output: output === null ? null : testCode(output, useHeader),
 	};
 }
 
@@ -115,7 +115,7 @@ const statics = [
 	'[[1]][0][0]',
 	'{a: 1}?.a?.["b"]',
 	'[{a: 1}]?.a?.[0]',
-	'a = 1'
+	'a = 1',
 ];
 
 const dynamics = [
@@ -151,7 +151,7 @@ const dynamics = [
 	'a ? [] : [1]',
 	'true ? a : [1]',
 	'"a"?.()',
-	'{a: 1}?.[b]'
+	'{a: 1}?.[b]',
 ];
 
 ruleTester.run('assertion-arguments', rule, {
@@ -336,7 +336,7 @@ ruleTester.run('assertion-arguments', rule, {
 
 		// Lookup message type
 		testCase(false, 'const message = \'ok\'; t.assert(true, message);'),
-		testCase(false, 'const message = \'ok\'; t.is(42, 42, message);')
+		testCase(false, 'const message = \'ok\'; t.is(42, 42, message);'),
 	],
 	invalid: [
 		// Not enough arguments
@@ -447,57 +447,57 @@ ruleTester.run('assertion-arguments', rule, {
 		// Assertion argument order
 		testCase(false, 't.deepEqual(\'static\', dynamic);',
 			outOfOrderError(1, 13, 1, 30),
-			{output: 't.deepEqual(dynamic, \'static\');'}
+			{output: 't.deepEqual(dynamic, \'static\');'},
 		),
 		testCase(false, 't.is(\'static\', dynamic);',
 			outOfOrderError(1, 6, 1, 23),
-			{output: 't.is(dynamic, \'static\');'}
+			{output: 't.is(dynamic, \'static\');'},
 		),
 		testCase(false, 't.like({a: {b: 1}}, dynamic);',
 			outOfOrderError(1, 8, 1, 28),
-			{output: 't.like(dynamic, {a: {b: 1}});'}
+			{output: 't.like(dynamic, {a: {b: 1}});'},
 		),
 		testCase(false, 't.not(\'static\', dynamic);',
 			outOfOrderError(1, 7, 1, 24),
-			{output: 't.not(dynamic, \'static\');'}
+			{output: 't.not(dynamic, \'static\');'},
 		),
 		testCase(false, 't.notDeepEqual({static: true}, dynamic);',
 			outOfOrderError(1, 16, 1, 39),
-			{output: 't.notDeepEqual(dynamic, {static: true});'}
+			{output: 't.notDeepEqual(dynamic, {static: true});'},
 		),
 		testCase(false, 't.throws({name: \'TypeError\'}, () => {});',
 			outOfOrderError(1, 10, 1, 39),
-			{output: 't.throws(() => {}, {name: \'TypeError\'});'}
+			{output: 't.throws(() => {}, {name: \'TypeError\'});'},
 		),
 		testCase(false, 't.throwsAsync({name: \'TypeError\'}, async () => {});',
 			outOfOrderError(1, 15, 1, 50),
-			{output: 't.throwsAsync(async () => {}, {name: \'TypeError\'});'}
+			{output: 't.throwsAsync(async () => {}, {name: \'TypeError\'});'},
 		),
 		testCase('always', 't.deepEqual({}, actual, \'message\');',
 			outOfOrderError(1, 13, 1, 23),
-			{output: 't.deepEqual(actual, {}, \'message\');'}
+			{output: 't.deepEqual(actual, {}, \'message\');'},
 		),
 		testCase('never', 't.deepEqual({}, actual);',
 			outOfOrderError(1, 13, 1, 23),
-			{output: 't.deepEqual(actual, {});'}
+			{output: 't.deepEqual(actual, {});'},
 		),
 		testCase('always', 't.deepEqual({}, actual);',
 			[missingError, outOfOrderError(1, 13, 1, 23)],
-			{output: 't.deepEqual(actual, {});'}
+			{output: 't.deepEqual(actual, {});'},
 		),
 		testCase('never', 't.deepEqual({}, actual, \'message\');',
 			[foundError, outOfOrderError(1, 13, 1, 23)],
-			{output: 't.deepEqual(actual, {}, \'message\');'}
+			{output: 't.deepEqual(actual, {}, \'message\');'},
 		),
 		testCase(false, 't.deepEqual({}, actual, extra, \'message\');',
-			tooManyError(3)
+			tooManyError(3),
 		),
 		testCase(false, 't.deepEqual({}, (actual));',
 			outOfOrderError(1, 13, 1, 25),
-			{output: 't.deepEqual((actual), {});'}
+			{output: 't.deepEqual((actual), {});'},
 		),
 		testCase(false, 't.deepEqual({}, actual/*: type */);',
-			outOfOrderError(1, 13, 1, 34)
+			outOfOrderError(1, 13, 1, 34),
 		),
 		testCase(
 			false,
@@ -507,48 +507,48 @@ ruleTester.run('assertion-arguments', rule, {
 				dynamic // Line Comment 4
 				// Line Comment 5
 			); // Line Comment 6`,
-			outOfOrderError(1, 13, 5, 22)
+			outOfOrderError(1, 13, 5, 22),
 		),
 		testCase(false, 't.assert(\'static\' !== dynamic);',
 			outOfOrderError(1, 10, 1, 30),
-			{output: 't.assert(dynamic !== \'static\');'}
+			{output: 't.assert(dynamic !== \'static\');'},
 		),
 		testCase(false, 't.true(\'static\' <= dynamic);',
 			outOfOrderError(1, 8, 1, 27),
-			{output: 't.true(dynamic >= \'static\');'}
+			{output: 't.true(dynamic >= \'static\');'},
 		),
 		testCase(false, 't.false(\'static\' < dynamic);',
 			outOfOrderError(1, 9, 1, 27),
-			{output: 't.false(dynamic > \'static\');'}
+			{output: 't.false(dynamic > \'static\');'},
 		),
 		testCase(false, 't.truthy(\'static\' > dynamic);',
 			outOfOrderError(1, 10, 1, 28),
-			{output: 't.truthy(dynamic < \'static\');'}
+			{output: 't.truthy(dynamic < \'static\');'},
 		),
 		testCase(false, 't.falsy(\'static\' >= dynamic);',
 			outOfOrderError(1, 9, 1, 28),
-			{output: 't.falsy(dynamic <= \'static\');'}
+			{output: 't.falsy(dynamic <= \'static\');'},
 		),
 		testCase(false, 't.true(\'static\' === actual/*: type */);',
-			outOfOrderError(1, 8, 1, 38)
+			outOfOrderError(1, 8, 1, 38),
 		),
 		...statics.map(expression =>
 			testCase(false, `t.deepEqual(${expression}, dynamic);`,
 				outOfOrderError(1, 13, 1, 22 + expression.length),
-				{output: `t.deepEqual(dynamic, ${expression});`}
-			)
+				{output: `t.deepEqual(dynamic, ${expression});`},
+			),
 		),
 		...dynamics.map(expression =>
 			testCase(false, `t.deepEqual('static', ${expression});`,
 				outOfOrderError(1, 13, 1, 23 + expression.length),
-				{output: `t.deepEqual(${expression}, 'static');`}
-			)
+				{output: `t.deepEqual(${expression}, 'static');`},
+			),
 		),
 
 		// Message is not string
 		testCase(false, 't.assert(true, true);', messageIsNotStringError),
 		testCase(false, 't.deepEqual({}, {}, 42);', messageIsNotStringError),
 		testCase(false, 't.fail({});', messageIsNotStringError),
-		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError)
-	]
+		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError),
+	],
 });

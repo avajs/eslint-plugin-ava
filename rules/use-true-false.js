@@ -1,4 +1,3 @@
-'use strict';
 const {isDeepStrictEqual} = require('util');
 const espree = require('espree');
 const espurify = require('espurify');
@@ -14,7 +13,7 @@ const booleanBinaryOperators = new Set([
 	'<',
 	'<=',
 	'>',
-	'>='
+	'>=',
 ]);
 
 const knownBooleanSignatures = [
@@ -33,7 +32,7 @@ const knownBooleanSignatures = [
 	'ArrayBuffer.isView()',
 	'SharedArrayBuffer.isView()',
 	'Reflect.has()',
-	'Reflect.isExtensible()'
+	'Reflect.isExtensible()',
 ].map(signature => espurify(espree.parse(signature).body[0].expression.callee));
 
 function matchesKnownBooleanExpression(argument) {
@@ -52,44 +51,45 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			if (
-				node.callee.type === 'MemberExpression' &&
-				(node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy') &&
-				node.callee.object.name === 't'
+				node.callee.type === 'MemberExpression'
+				&& (node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy')
+				&& node.callee.object.name === 't'
 			) {
 				const argument = node.arguments[0];
 
-				if (argument &&
-					((argument.type === 'BinaryExpression' && booleanBinaryOperators.has(argument.operator)) ||
-					(argument.type === 'UnaryExpression' && argument.operator === '!') ||
-					(argument.type === 'Literal' && argument.value === Boolean(argument.value)) ||
-					(matchesKnownBooleanExpression(argument)))
+				if (argument
+					&& ((argument.type === 'BinaryExpression' && booleanBinaryOperators.has(argument.operator))
+					|| (argument.type === 'UnaryExpression' && argument.operator === '!')
+					|| (argument.type === 'Literal' && argument.value === Boolean(argument.value))
+					|| (matchesKnownBooleanExpression(argument)))
 				) {
 					if (node.callee.property.name === 'falsy') {
 						context.report({
 							node,
-							message: '`t.false()` should be used instead of `t.falsy()`.'
+							message: '`t.false()` should be used instead of `t.falsy()`.',
 						});
 					} else {
 						context.report({
 							node,
-							message: '`t.true()` should be used instead of `t.truthy()`.'
+							message: '`t.true()` should be used instead of `t.truthy()`.',
 						});
 					}
 				}
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

@@ -4,11 +4,11 @@ const rule = require('../rules/no-only-test');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
-		sourceType: 'module'
-	}
+		sourceType: 'module',
+	},
 });
 
 const message = '`test.only()` should not be used.';
@@ -20,7 +20,7 @@ ruleTester.run('no-only-test', rule, {
 		header + 'test(t => { t.pass(); }); test(t => { t.pass(); });',
 		header + 'notTest.only();',
 		// Shouldn't be triggered since it's not a test file
-		'test.only(t => {});'
+		'test.only(t => {});',
 	],
 	invalid: [
 		{
@@ -32,9 +32,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 3,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test\n\t(t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test\n\t(t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test\n  .only(t => { t.pass(); });',
@@ -45,9 +45,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 4,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test\n  (t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test\n  (t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test\t.only(t => { t.pass(); });',
@@ -58,9 +58,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 7,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test\t(t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test\t(t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test  .only(t => { t.pass(); });',
@@ -71,9 +71,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 8,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test  (t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test  (t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test.\n\tonly(t => { t.pass(); });',
@@ -84,9 +84,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 2,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test\n\t(t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test\n\t(t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test.\n  only(t => { t.pass(); });',
@@ -97,9 +97,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 3,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test\n  (t => { t.pass(); });'
-				}]
-			}]
+					output: header + 'test\n  (t => { t.pass(); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test.only(t => { t.pass(); });',
@@ -110,9 +110,9 @@ ruleTester.run('no-only-test', rule, {
 				column: 6,
 				suggestions: [{
 					desc: 'Remove the `.only`',
-					output: header + 'test(t => { t.pass(); });'
-				}]
-			}]
-		}
-	]
+					output: header + 'test(t => { t.pass(); });',
+				}],
+			}],
+		},
+	],
 });

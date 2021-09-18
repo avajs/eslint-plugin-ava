@@ -4,8 +4,8 @@ const rule = require('../rules/no-skip-test');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const message = 'No tests should be skipped.';
@@ -18,7 +18,7 @@ ruleTester.run('no-skip-test', rule, {
 		header + 'test(t => { t.skip.is(1, 2); });',
 		header + 'notTest.skip();',
 		// Shouldn't be triggered since it's not a test file
-		'test.skip(t => {});'
+		'test.skip(t => {});',
 	],
 	invalid: [
 		{
@@ -30,9 +30,9 @@ ruleTester.run('no-skip-test', rule, {
 				column: 6,
 				suggestions: [{
 					desc: 'Remove the `.skip`',
-					output: header + 'test(t => { t.pass(); });'
-				}]
-			}]
-		}
-	]
+					output: header + 'test(t => { t.pass(); });',
+				}],
+			}],
+		},
+	],
 });

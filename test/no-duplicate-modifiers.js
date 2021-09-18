@@ -4,8 +4,8 @@ const rule = require('../rules/no-duplicate-modifiers');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const header = 'const test = require(\'ava\');\n';
@@ -20,7 +20,7 @@ const modifiers = [
 	'only',
 	'serial',
 	'skip',
-	'todo'
+	'todo',
 ];
 
 const valid = modifiers.map(modifier => `${header}test.${modifier}(t => {});`);
@@ -31,9 +31,9 @@ const invalid = modifiers.map(modifier => ({
 			message: `Duplicate test modifier \`.${modifier}\`.`,
 			type: 'Identifier',
 			line: 2,
-			column: 7 + modifier.length
-		}
-	]
+			column: 7 + modifier.length,
+		},
+	],
 }));
 
 ruleTester.run('no-duplicate-modifiers', rule, {
@@ -43,5 +43,5 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		`${header}test.afterEach.always(t => {});`,
 		// Shouldn't be triggered since it's not a test file
 		'test.serial.serial(t => {});'],
-	invalid
+	invalid,
 });

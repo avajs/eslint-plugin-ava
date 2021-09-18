@@ -4,8 +4,8 @@ const rule = require('../rules/no-identical-title');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const message = 'Test title is used multiple times in the same file.';
@@ -43,7 +43,7 @@ ruleTester.run('no-identical-title', rule, {
 		`,
 		// Shouldn't be triggered since it's not a test file
 		'test(t => {}); test(t => {});',
-		'test("a", t => {}); test("a", t => {});'
+		'test("a", t => {}); test("a", t => {});',
 	],
 	invalid: [
 		{
@@ -52,8 +52,8 @@ ruleTester.run('no-identical-title', rule, {
 				message,
 				type: 'Literal',
 				line: 2,
-				column: 26
-			}]
+				column: 26,
+			}],
 		},
 		{
 			code: header + 'test(`a`, t => {}); test(`a`, t => {});',
@@ -61,8 +61,8 @@ ruleTester.run('no-identical-title', rule, {
 				message,
 				type: 'TemplateLiteral',
 				line: 2,
-				column: 26
-			}]
+				column: 26,
+			}],
 		},
 		{
 			code: header + 'test("foo" + 1, t => {}); test("foo" + 1, t => {});',
@@ -70,8 +70,8 @@ ruleTester.run('no-identical-title', rule, {
 				message,
 				type: 'BinaryExpression',
 				line: 2,
-				column: 32
-			}]
+				column: 32,
+			}],
 		},
 		{
 			// eslint-disable-next-line no-template-curly-in-string
@@ -80,8 +80,8 @@ ruleTester.run('no-identical-title', rule, {
 				message,
 				type: 'TemplateLiteral',
 				line: 2,
-				column: 37
-			}]
+				column: 37,
+			}],
 		},
 		{
 			code: header + 'test.todo("a"); test.todo("a");',
@@ -89,8 +89,8 @@ ruleTester.run('no-identical-title', rule, {
 				message,
 				type: 'Literal',
 				line: 2,
-				column: 27
-			}]
-		}
-	]
+				column: 27,
+			}],
+		},
+	],
 });

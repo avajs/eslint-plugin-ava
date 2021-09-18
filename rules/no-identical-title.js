@@ -1,4 +1,3 @@
-'use strict';
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
@@ -9,9 +8,9 @@ const purify = node => node && espurify(node);
 
 const isStaticTemplateLiteral = node => node.expressions.every(expression => isStatic(expression));
 
-const isStatic = node => node.type === 'Literal' ||
-	(node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node)) ||
-	(node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
+const isStatic = node => node.type === 'Literal'
+	|| (node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node))
+	|| (node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
 
 function isTitleUsed(usedTitleNodes, titleNode) {
 	const purifiedNode = purify(titleNode);
@@ -26,7 +25,7 @@ const create = context => {
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
-			ava.hasNoUtilityModifier
+			ava.hasNoUtilityModifier,
 		])(node => {
 			const args = node.arguments;
 			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
@@ -44,7 +43,7 @@ const create = context => {
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report({
 					node: titleNode,
-					message: 'Test title is used multiple times in the same file.'
+					message: 'Test title is used multiple times in the same file.',
 				});
 				return;
 			}
@@ -53,16 +52,17 @@ const create = context => {
 		}),
 		'Program:exit': () => {
 			usedTitleNodes = [];
-		}
+		},
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'problem'
-	}
+		schema: [],
+	},
 };

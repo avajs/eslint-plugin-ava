@@ -4,15 +4,15 @@ const rule = require('../rules/use-t');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
-		sourceType: 'module'
-	}
+		sourceType: 'module',
+	},
 });
 
 const parameterNotNamedTErrors = [{
-	message: 'Test parameter should be named `t`.'
+	message: 'Test parameter should be named `t`.',
 }];
 
 const header = 'const test = require(\'ava\');\n';
@@ -34,28 +34,28 @@ ruleTester.run('use-t', rule, {
 		'test(foo => {});',
 		header + 'test(macro, arg1, (p1) => {})',
 		header + 'test("name", macro, arg1, (p1) => {})',
-		header + 'test("name", macro, (p1) => {})'
+		header + 'test("name", macro, (p1) => {})',
 	],
 	invalid: [
 		{
 			code: header + 'test(foo => {});',
-			errors: parameterNotNamedTErrors
+			errors: parameterNotNamedTErrors,
 		},
 		{
 			code: header + 'test("test name", foo => {});',
-			errors: parameterNotNamedTErrors
+			errors: parameterNotNamedTErrors,
 		},
 		{
 			code: header + 'test(function (foo) {});',
-			errors: parameterNotNamedTErrors
+			errors: parameterNotNamedTErrors,
 		},
 		{
 			code: header + 'test.macro(function (foo) {});',
-			errors: parameterNotNamedTErrors
+			errors: parameterNotNamedTErrors,
 		},
 		{
 			code: header + 'test.macro({ exec(foo) {} });',
-			errors: parameterNotNamedTErrors
-		}
-	]
+			errors: parameterNotNamedTErrors,
+		},
+	],
 });

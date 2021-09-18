@@ -4,8 +4,8 @@ const rule = require('../rules/test-title');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = [{}];
@@ -26,28 +26,28 @@ ruleTester.run('test-title', rule, {
 		header + 'test([], arg1, arg2);',
 		header + 'test({}, arg1, arg2);',
 		// Shouldn't be triggered since it's not a test file
-		'test(t => {});'
+		'test(t => {});',
 	],
 	invalid: [
 		{
 			code: header + 'test(t => {});',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test(t => {}, "my test name");',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test(t => { t.pass(); t.end(); });',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test(t => { t.pass(); t.end(); });',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.todo();',
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

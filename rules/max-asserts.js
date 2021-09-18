@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -18,7 +17,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isInTestNode
+			ava.isInTestNode,
 		])(node => {
 			const {callee} = node;
 
@@ -27,9 +26,9 @@ const create = context => {
 			}
 
 			if (
-				callee.property &&
-				!notAssertionMethods.has(callee.property.name) &&
-				util.getNameOfRootNodeObject(callee) === 't'
+				callee.property
+				&& !notAssertionMethods.has(callee.property.name)
+				&& util.getNameOfRootNodeObject(callee) === 't'
 			) {
 				const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
 
@@ -49,30 +48,30 @@ const create = context => {
 			if (assertionCount > maxAssertions) {
 				context.report({
 					node: nodeToReport,
-					message: `Expected at most ${maxAssertions} assertions, but found ${assertionCount}.`
+					message: `Expected at most ${maxAssertions} assertions, but found ${assertionCount}.`,
 				});
 			}
 
 			assertionCount = 0;
 			nodeToReport = undefined;
-		})
+		}),
 	});
 };
 
 const schema = [
 	{
 		type: 'integer',
-		default: MAX_ASSERTIONS_DEFAULT
-	}
+		default: MAX_ASSERTIONS_DEFAULT,
+	},
 ];
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		schema,
-		type: 'suggestion'
-	}
+	},
 };

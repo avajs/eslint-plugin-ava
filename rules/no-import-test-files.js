@@ -1,4 +1,3 @@
-'use strict';
 const path = require('path');
 const util = require('../util');
 
@@ -40,7 +39,7 @@ const create = context => {
 		if (isTest) {
 			context.report({
 				node,
-				message: 'Test files should not be imported.'
+				message: 'Test files should not be imported.',
 			});
 		}
 	};
@@ -57,7 +56,7 @@ const create = context => {
 			if (node.arguments[0]) {
 				validateImportPath(node, node.arguments[0].value);
 			}
-		}
+		},
 	};
 };
 
@@ -65,21 +64,21 @@ const schema = [{
 	type: 'object',
 	properties: {
 		extensions: {
-			type: 'array'
+			type: 'array',
 		},
 		files: {
-			type: 'array'
-		}
-	}
+			type: 'array',
+		},
+	},
 }];
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
 		schema,
-		type: 'suggestion'
-	}
+	},
 };

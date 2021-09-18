@@ -4,12 +4,12 @@ const rule = require('../rules/prefer-power-assert');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
+		es6: true,
 	},
 	parserOptions: {
 		ecmaVersion: 2021,
-		sourceType: 'module'
-	}
+		sourceType: 'module',
+	},
 });
 
 const errors = [{}];
@@ -20,13 +20,13 @@ function testNotAllowedMethod(methodName) {
 		invalid: [
 			{
 				code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
-				errors
+				errors,
 			},
 			{
 				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
-				errors
-			}
-		]
+				errors,
+			},
+		],
 	});
 }
 
@@ -39,7 +39,7 @@ const notAllowedMethods = [
 	'not(foo, bar)',
 	'regex(str, re)',
 	'notRegex(str, re)',
-	'ifError(err)'
+	'ifError(err)',
 ];
 
 for (const methodName of notAllowedMethods) {
@@ -50,13 +50,13 @@ function testAllowedMethod(methodName) {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
 			{
-				code: `import test from 'ava';\n test(t => { t.${methodName}; });`
+				code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
 			},
 			{
-				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`
-			}
+				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
+			},
 		],
-		invalid: []
+		invalid: [],
 	});
 }
 
@@ -68,7 +68,7 @@ const allowedMethods = [
 	'throws(block)',
 	'notThrows(block)',
 	'pass(foo)',
-	'fail(foo)'
+	'fail(foo)',
 ];
 
 for (const methodName of allowedMethods) {
@@ -79,15 +79,15 @@ function testWithModifier(modifier) {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
 			{
-				code: `import test from 'ava';\n test.${modifier}(t => { t.assert(foo); });`
-			}
+				code: `import test from 'ava';\n test.${modifier}(t => { t.assert(foo); });`,
+			},
 		],
 		invalid: [
 			{
 				code: `import test from 'ava';\n test.${modifier}(t => { t.is(foo); });`,
-				errors
-			}
-		]
+				errors,
+			},
+		],
 	});
 }
 
@@ -99,15 +99,15 @@ function testDeclaration(declaration) {
 	ruleTester.run('prefer-power-assert', rule, {
 		valid: [
 			{
-				code: `${declaration}\n test(t => { t.assert(foo); });`
-			}
+				code: `${declaration}\n test(t => { t.assert(foo); });`,
+			},
 		],
 		invalid: [
 			{
 				code: `${declaration}\n test(t => { t.is(foo); });`,
-				errors
-			}
-		]
+				errors,
+			},
+		],
 	});
 }
 
@@ -115,7 +115,7 @@ for (const declaration of [
 	'var test = require(\'ava\');',
 	'let test = require(\'ava\');',
 	'const test = require(\'ava\');',
-	'import test from \'ava\';'
+	'import test from \'ava\';',
 ]) {
 	testDeclaration(declaration);
 }
@@ -134,17 +134,17 @@ test(t => {
 ruleTester.run('prefer-power-assert', rule, {
 	valid: [
 		{
-			code: 'import test from \'ava\';\n test(function (t) { t.assert(foo); });'
+			code: 'import test from \'ava\';\n test(function (t) { t.assert(foo); });',
 		},
 		// Shouldn't be triggered since it's not a test file
 		{
-			code: 'test(t => {});'
-		}
+			code: 'test(t => {});',
+		},
 	],
 	invalid: [
 		{
 			code: assertionInNestedCode,
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

@@ -4,8 +4,8 @@ const rule = require('../rules/no-inline-assertions');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = [{}];
@@ -25,23 +25,23 @@ ruleTester.run('no-todo-test', rule, {
 		'test.todo("my test name");',
 		// Shouldn't be triggered since the signature is incorrect
 		header + 'test.todo("my test name", "bar");',
-		header + 'test.todo("my test name", undefined, t => {})'
+		header + 'test.todo("my test name", undefined, t => {})',
 	],
 	invalid: [
 		{
 			code: header + 'test("my test name", t => t.skip());',
 			errors,
-			output: header + 'test("my test name", t => {t.skip()});'
+			output: header + 'test("my test name", t => {t.skip()});',
 		},
 		{
 			code: header + 'test("my test name", t => t.true(fn()));',
 			errors,
-			output: header + 'test("my test name", t => {t.true(fn())});'
+			output: header + 'test("my test name", t => {t.true(fn())});',
 		},
 		{
 			code: header + 'test("my test name", t => \n t.true(fn()));',
 			errors,
-			output: header + 'test("my test name", t => \n {t.true(fn())});'
-		}
-	]
+			output: header + 'test("my test name", t => \n {t.true(fn())});',
+		},
+	],
 });

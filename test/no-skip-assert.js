@@ -4,8 +4,8 @@ const rule = require('../rules/no-skip-assert');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = [{}];
@@ -21,20 +21,20 @@ ruleTester.run('no-skip-assert', rule, {
 		header + 'test(t => { foo.t.is.skip(1, 1); });',
 		header + 'test(t => { t.skip(); });',
 		// Shouldn't be triggered since it's not a test file
-		'test(t => { t.is.skip(1, 1); });'
+		'test(t => { t.is.skip(1, 1); });',
 	],
 	invalid: [
 		{
 			code: header + 'test(t => { t.is.skip(1, 1); });',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test(t => { t.true.skip(1); });',
-			errors
+			errors,
 		},
 		{
 			code: header + 'test.skip(t => { t.is.skip(1, 1); });',
-			errors
-		}
-	]
+			errors,
+		},
+	],
 });

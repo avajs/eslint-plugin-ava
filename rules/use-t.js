@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
@@ -9,7 +8,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(node => {
 			const index = node.arguments.length - 1;
 			if (index > 1) {
@@ -18,9 +17,7 @@ const create = context => {
 
 			let implementationArg = node.arguments[index];
 			if (ava.hasTestModifier('macro') && implementationArg.type === 'ObjectExpression') {
-				const execProperty = implementationArg.properties.find(p => {
-					return p.key.name === 'exec';
-				});
+				const execProperty = implementationArg.properties.find(p => p.key.name === 'exec');
 				implementationArg = execProperty && execProperty.value;
 			}
 
@@ -31,19 +28,20 @@ const create = context => {
 			if (implementationArg.params[0].name !== 't') {
 				context.report({
 					node,
-					message: 'Test parameter should be named `t`.'
+					message: 'Test parameter should be named `t`.',
 				});
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

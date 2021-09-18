@@ -1,19 +1,18 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');
 
 function containsThen(node) {
-	if (!node ||
-		node.type !== 'CallExpression' ||
-		node.callee.type !== 'MemberExpression'
+	if (!node
+		|| node.type !== 'CallExpression'
+		|| node.callee.type !== 'MemberExpression'
 	) {
 		return false;
 	}
 
 	const {callee} = node;
-	if (callee.property.type === 'Identifier' &&
-		callee.property.name === 'then'
+	if (callee.property.type === 'Identifier'
+		&& callee.property.name === 'then'
 	) {
 		return true;
 	}
@@ -26,7 +25,7 @@ const create = context => {
 
 	const check = visitIf([
 		ava.isInTestFile,
-		ava.isInTestNode
+		ava.isInTestNode,
 	])(node => {
 		if (node.body.type !== 'BlockStatement') {
 			return;
@@ -37,23 +36,24 @@ const create = context => {
 		if (returnStatement && containsThen(returnStatement.argument)) {
 			context.report({
 				node,
-				message: 'Prefer using async/await instead of returning a Promise.'
+				message: 'Prefer using async/await instead of returning a Promise.',
 			});
 		}
 	});
 
 	return ava.merge({
 		ArrowFunctionExpression: check,
-		FunctionExpression: check
+		FunctionExpression: check,
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'suggestion',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'suggestion'
-	}
+		schema: [],
+	},
 };

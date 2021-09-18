@@ -4,12 +4,12 @@ const rule = require('../rules/no-incorrect-deep-equal');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const error = {
-	messageId: 'no-deep-equal-with-primative'
+	messageId: 'no-deep-equal-with-primative',
 };
 
 const header = 'const test = require(\'ava\');\n';
@@ -51,7 +51,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			test('x', t => {
 				t.deepEqual(/regex/, expression);
 			});
-		`
+		`,
 	],
 	invalid: [
 		{
@@ -67,7 +67,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(expression, 'foo');
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -82,7 +82,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is('foo', expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -97,7 +97,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(expression, 'foo');
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -112,7 +112,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not('foo', expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -127,7 +127,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(expression, 1);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -142,7 +142,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(expression, \`foo\${bar}\`);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -157,7 +157,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(\`foo\${bar}\`, expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -172,7 +172,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(expression, \`foo\${bar}\`);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -187,7 +187,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(\`foo\${bar}\`, expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -202,7 +202,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(expression, null);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -217,7 +217,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(null, expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -232,7 +232,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(expression, null);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -247,7 +247,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(null, expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -262,7 +262,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(expression, undefined);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -277,7 +277,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.is(undefined, expression);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -292,7 +292,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(expression, undefined);
 				});
 			`,
-			errors: [error]
+			errors: [error],
 		},
 		{
 			code: `
@@ -307,7 +307,7 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 					t.not(undefined, expression);
 				});
 			`,
-			errors: [error]
-		}
-	]
+			errors: [error],
+		},
+	],
 });

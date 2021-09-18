@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -21,7 +20,7 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(node => {
 			const testModifiers = util.getTestModifiers(node).sort(sortByName);
 
@@ -35,22 +34,23 @@ const create = context => {
 				if (previous.name === current.name) {
 					context.report({
 						node: current,
-						message: `Duplicate test modifier \`.${current.name}\`.`
+						message: `Duplicate test modifier \`.${current.name}\`.`,
 					});
 				}
 
 				return current;
 			});
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'problem'
-	}
+		schema: [],
+	},
 };

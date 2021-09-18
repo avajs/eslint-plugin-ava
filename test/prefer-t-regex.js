@@ -4,12 +4,12 @@ const rule = require('../rules/prefer-t-regex');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const errors = assertion => [{
-	message: `Prefer using the \`t.${assertion}()\` assertion.`
+	message: `Prefer using the \`t.${assertion}()\` assertion.`,
 }];
 const header = 'const test = require(\'ava\');\n';
 
@@ -33,145 +33,145 @@ ruleTester.run('prefer-t-regex', rule, {
 		header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
 		header + 'test(t => t.regex(foo, RegExp(/\\d+/)));',
 		// Shouldn't be triggered since it's not a test file
-		'test(t => t.true(/\\d+/.test("foo")));'
+		'test(t => t.true(/\\d+/.test("foo")));',
 	],
 	invalid: [
 		{
 			code: header + 'test(t => t.true(/\\d+/.test("foo")));',
 			output: header + 'test(t => t.regex("foo", /\\d+/));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(foo.search(/\\d+/)));',
 			output: header + 'test(t => t.notRegex(foo, /\\d+/));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const regexp = /\\d+/;\ntest(t => t.true(foo.search(regexp)));',
 			output: header + 'const regexp = /\\d+/;\ntest(t => t.regex(foo, regexp));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.truthy(foo.match(/\\d+/)));',
 			output: header + 'test(t => t.regex(foo, /\\d+/));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(/\\d+/.test("foo")));',
 			output: header + 'test(t => t.notRegex("foo", /\\d+/));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'test(t => t.true(/\\d+/.test(foo())));',
 			output: header + 'test(t => t.regex(foo(), /\\d+/));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(/\\d+/.test(foo), true));',
 			output: header + 'test(t => t.regex(foo, /\\d+/));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(/\\d+/.test(foo), false));',
 			output: header + 'test(t => t.notRegex(foo, /\\d+/));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const reg = /\\d+/;\ntest(t => t.true(reg.test(foo.bar())));',
 			output: header + 'const reg = /\\d+/;\ntest(t => t.regex(foo.bar(), reg));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		// The same as the above tests but with `RegExp()` object instead of a regex literal
 		{
 			code: header + 'test(t => t.true(new RegExp("\\d+").test("foo")));',
 			output: header + 'test(t => t.regex("foo", new RegExp("\\d+")));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(foo.search(new RegExp("\\d+"))));',
 			output: header + 'test(t => t.notRegex(foo, new RegExp("\\d+")));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const regexp = RegExp("\\d+");\ntest(t => t.true(foo.search(regexp)));',
 			output: header + 'const regexp = RegExp("\\d+");\ntest(t => t.regex(foo, regexp));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.truthy(foo.match(new RegExp("\\d+"))));',
 			output: header + 'test(t => t.regex(foo, new RegExp("\\d+")));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(RegExp("\\d+").test("foo")));',
 			output: header + 'test(t => t.notRegex("foo", RegExp("\\d+")));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'test(t => t.true(new RegExp("\\d+").test(foo())));',
 			output: header + 'test(t => t.regex(foo(), new RegExp("\\d+")));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(new RegExp("\\d+").test(foo), true));',
 			output: header + 'test(t => t.regex(foo, new RegExp("\\d+")));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(new RegExp("\\d+").test(foo), false));',
 			output: header + 'test(t => t.notRegex(foo, new RegExp("\\d+")));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const reg = RegExp("\\d+");\ntest(t => t.true(reg.test(foo.bar())));',
 			output: header + 'const reg = RegExp("\\d+");\ntest(t => t.regex(foo.bar(), reg));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		// The same as the above tests but with regex literal instead of string regex
 		{
 			code: header + 'test(t => t.true(new RegExp(/\\d+/).test("foo")));',
 			output: header + 'test(t => t.regex("foo", new RegExp(/\\d+/)));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(foo.search(new RegExp(/\\d+/))));',
 			output: header + 'test(t => t.notRegex(foo, new RegExp(/\\d+/)));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const regexp = RegExp(/\\d+/);\ntest(t => t.true(foo.search(regexp)));',
 			output: header + 'const regexp = RegExp(/\\d+/);\ntest(t => t.regex(foo, regexp));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.truthy(foo.match(new RegExp(/\\d+/))));',
 			output: header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.false(RegExp(/\\d+/).test("foo")));',
 			output: header + 'test(t => t.notRegex("foo", RegExp(/\\d+/)));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'test(t => t.true(new RegExp(/\\d+/).test(foo())));',
 			output: header + 'test(t => t.regex(foo(), new RegExp(/\\d+/)));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(new RegExp(/\\d+/).test(foo), true));',
 			output: header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
-			errors: errors('regex')
+			errors: errors('regex'),
 		},
 		{
 			code: header + 'test(t => t.is(new RegExp(/\\d+/).test(foo), false));',
 			output: header + 'test(t => t.notRegex(foo, new RegExp(/\\d+/)));',
-			errors: errors('notRegex')
+			errors: errors('notRegex'),
 		},
 		{
 			code: header + 'const reg = RegExp(/\\d+/);\ntest(t => t.true(reg.test(foo.bar())));',
 			output: header + 'const reg = RegExp(/\\d+/);\ntest(t => t.regex(foo.bar(), reg));',
-			errors: errors('regex')
-		}
-	]
+			errors: errors('regex'),
+		},
+	],
 });

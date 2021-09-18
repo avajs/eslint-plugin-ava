@@ -8,9 +8,9 @@ const header = 'const test = require(\'ava\');\n';
 const ruleTesterOptions = [
 	{
 		parserOptions: {
-			ecmaVersion: 2021
-		}
-	}
+			ecmaVersion: 2021,
+		},
+	},
 	// Disabled for now because of `eslint-ava-rule-tester` problem
 	// {
 	// 	parser: require.resolve('babel-eslint'),
@@ -39,7 +39,7 @@ for (const options of ruleTesterOptions) {
 			`${header}test('title', function(t) {});`,
 			`${header}test('title', async t => { await foo(); });`,
 			// Shouldn't be triggered since it's not a test file
-			'test(async t => {});'
+			'test(async t => {});',
 		],
 		invalid: [
 			{
@@ -48,8 +48,8 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 6
-				}]
+					column: 6,
+				}],
 			},
 			{
 				code: `${header}test(async function(t) {});`,
@@ -57,8 +57,8 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'FunctionExpression',
 					line: 2,
-					column: 6
-				}]
+					column: 6,
+				}],
 			},
 			{
 				code: `${header}test(async t => {}); test(async t => {});`,
@@ -66,13 +66,13 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 6
+					column: 6,
 				}, {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 27
-				}]
+					column: 27,
+				}],
 			},
 			{
 				code: `${header}test(async t => {}); test(async t => { await foo(); });`,
@@ -80,8 +80,8 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 6
-				}]
+					column: 6,
+				}],
 			},
 			{
 				code: `${header}test(async t => { await foo(); }); test(async t => {});`,
@@ -89,8 +89,8 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 41
-				}]
+					column: 41,
+				}],
 			},
 			{
 				code: `${header}test('title', async t => {});`,
@@ -98,9 +98,9 @@ for (const options of ruleTesterOptions) {
 					message,
 					type: 'ArrowFunctionExpression',
 					line: 2,
-					column: 15
-				}]
-			}
-		]
+					column: 15,
+				}],
+			},
+		],
 	});
 }

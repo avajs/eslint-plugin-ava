@@ -52,7 +52,7 @@
 		"outdent": "^0.8.0",
 		"pify": "^5.0.0",
 		"tempy": "^1.0.1",
-		"xo": "^0.38.2"
+		"xo": "^0.44.0"
 	},
 	"peerDependencies": {
 		"eslint": ">=7.22.0"
@@ -80,7 +80,10 @@
 		],
 		"rules": {
 			"ava/no-ignored-test-files": "off",
-			"import/extensions": "off"
+			"eslint-plugin/prefer-message-ids": "off",
+			"eslint-plugin/require-meta-docs-description": "off",
+			"import/extensions": "off",
+			"unicorn/prefer-module": "off"
 		}
 	},
 	"c8": {

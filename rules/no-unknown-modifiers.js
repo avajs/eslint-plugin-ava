@@ -1,4 +1,3 @@
-'use strict';
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
@@ -15,7 +14,7 @@ const modifiers = new Set([
 	'skip',
 	'todo',
 	'failing',
-	'macro'
+	'macro',
 ]);
 
 const unknownModifiers = node => util.getTestModifiers(node)
@@ -27,26 +26,27 @@ const create = context => {
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
-			ava.isTestNode
+			ava.isTestNode,
 		])(node => {
 			const unknown = unknownModifiers(node);
 
 			if (unknown.length > 0) {
 				context.report({
 					node: unknown[0],
-					message: `Unknown test modifier \`.${unknown[0].name}\`.`
+					message: `Unknown test modifier \`.${unknown[0].name}\`.`,
 				});
 			}
-		})
+		}),
 	});
 };
 
 module.exports = {
 	create,
 	meta: {
+		type: 'problem',
 		docs: {
-			url: util.getDocsUrl(__filename)
+			url: util.getDocsUrl(__filename),
 		},
-		type: 'problem'
-	}
+		schema: [],
+	},
 };

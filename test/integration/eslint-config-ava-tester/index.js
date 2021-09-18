@@ -1,13 +1,12 @@
-'use strict';
 module.exports = {
 	parser: '@babel/eslint-parser',
 	parserOptions: {
 		ecmaFeatures: {
-			jsx: true
-		}
+			jsx: true,
+		},
 	},
 	plugins: [
-		'ava'
+		'ava',
 	],
-	extends: 'plugin:ava/recommended'
+	extends: 'plugin:ava/recommended',
 };

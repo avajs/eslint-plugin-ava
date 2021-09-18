@@ -4,16 +4,16 @@ const rule = require('../rules/use-true-false');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const trueErrors = [{
-	message: '`t.true()` should be used instead of `t.truthy()`.'
+	message: '`t.true()` should be used instead of `t.truthy()`.',
 }];
 
 const falseErrors = [{
-	message: '`t.false()` should be used instead of `t.falsy()`.'
+	message: '`t.false()` should be used instead of `t.falsy()`.',
 }];
 
 const header = 'const test = require(\'ava\');\n';
@@ -56,68 +56,68 @@ ruleTester.run('use-true-false', rule, {
 		testCase('foo.t.truthy(true)'),
 		testCase('foo.t.falsy(false)'),
 		// Shouldn't be triggered since it's not a test file
-		testCase('t.truthy(value === 1)', false)
+		testCase('t.truthy(value === 1)', false),
 	],
 	invalid: [
 		{
 			code: testCase('t.truthy(true)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(false)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value == 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value === 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value != 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value !== 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value < 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value <= 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value > 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value >= 1)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(!value)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(!!value)'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(Array.isArray(value))'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(isFinite(3))'),
-			errors: trueErrors
+			errors: trueErrors,
 		},
 		{
 			code: testCase('t.falsy(value === 1)'),
-			errors: falseErrors
-		}
-	]
+			errors: falseErrors,
+		},
+	],
 });

@@ -4,8 +4,8 @@ const rule = require('../rules/no-unknown-modifiers');
 
 const ruleTester = avaRuleTester(test, {
 	env: {
-		es6: true
-	}
+		es6: true,
+	},
 });
 
 const header = 'const test = require(\'ava\');\n';
@@ -28,7 +28,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		`${header}test.failing(t => {});`,
 		`${header}test.macro(t => {});`,
 		// Shouldn't be triggered since it's not a test file
-		'test.foo(t => {});'
+		'test.foo(t => {});',
 	],
 	invalid: [
 		{
@@ -37,8 +37,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.foo`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.onlu(t => {});`,
@@ -46,8 +46,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.onlu`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.beforeeach(t => {});`,
@@ -55,8 +55,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.beforeeach`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.c.only(t => {});`,
@@ -64,8 +64,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.c`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.cb(t => {});`,
@@ -73,8 +73,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.cb`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.foo.bar.baz(t => {});`,
@@ -82,8 +82,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.foo`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
+				column: 6,
+			}],
 		},
 		{
 			code: `${header}test.test(t => {});`,
@@ -91,8 +91,8 @@ ruleTester.run('no-unknown-modifiers', rule, {
 				message: 'Unknown test modifier `.test`.',
 				type: 'Identifier',
 				line: 2,
-				column: 6
-			}]
-		}
-	]
+				column: 6,
+			}],
+		},
+	],
 });

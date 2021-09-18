@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-'use strict';
 const path = require('path');
+const process = require('process');
 const Listr = require('listr');
 const tempy = require('tempy');
 const execa = require('execa');
@@ -39,7 +39,7 @@ const packages = new Map([
 	['p-queue', 'https://github.com/sindresorhus/p-queue'],
 	['pretty-bytes', 'https://github.com/sindresorhus/pretty-bytes'],
 	['normalize-url', 'https://github.com/sindresorhus/normalize-url'],
-	['pageres', 'https://github.com/sindresorhus/pageres']
+	['pageres', 'https://github.com/sindresorhus/pageres'],
 	// Disabled for now: https://github.com/avajs/eslint-plugin-ava/runs/2044891483?check_suite_focus=true
 	// ['got', 'https://github.com/sindresorhus/got']
 ]);
@@ -47,7 +47,7 @@ const packages = new Map([
 const typescriptPackages = new Set([
 	'pageres',
 	'got',
-	'p-queue'
+	'p-queue',
 ]);
 
 const cwd = path.join(__dirname, 'eslint-config-ava-tester');
@@ -114,32 +114,32 @@ const execute = name => {
 	return new Listr([
 		{
 			title: 'Cloning',
-			task: () => execa('git', ['clone', packages.get(name), '--single-branch', dest])
+			task: () => execa('git', ['clone', packages.get(name), '--single-branch', dest]),
 		},
 		{
 			title: 'Running eslint',
-			task: makeEslintTask(name, dest)
+			task: makeEslintTask(name, dest),
 		},
 		{
 			title: 'Running eslint --fix',
-			task: makeEslintTask(name, dest, ['--fix-dry-run'])
+			task: makeEslintTask(name, dest, ['--fix-dry-run']),
 		},
 		{
 			title: 'Clean up',
-			task: () => del(dest, {force: true})
-		}
+			task: () => del(dest, {force: true}),
+		},
 	].map(({title, task}) => ({
 		title: `${name} / ${title}`,
-		task
+		task,
 	})), {
-		exitOnError: false
+		exitOnError: false,
 	});
 };
 
 const list = new Listr([
 	{
 		title: 'Setup',
-		task: () => execa('npm', ['install', '../../..', 'eslint', 'babel-eslint', 'typescript', '@typescript-eslint/parser'], {cwd})
+		task: () => execa('npm', ['install', '../../..', 'eslint', 'babel-eslint', 'typescript', '@typescript-eslint/parser'], {cwd}),
 	},
 	{
 		title: 'Integration tests',
@@ -150,16 +150,16 @@ const list = new Listr([
 				tests.add([
 					{
 						title: name,
-						task: () => execute(name)
-					}
+						task: () => execute(name),
+					},
 				]);
 			}
 
 			return tests;
-		}
-	}
+		},
+	},
 ], {
-	renderer: process.env.INTEGRATION ? 'verbose' : 'default'
+	renderer: process.env.INTEGRATION ? 'verbose' : 'default',
 });
 
 list.run()
