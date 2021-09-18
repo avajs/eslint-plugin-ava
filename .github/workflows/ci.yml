@@ -25,16 +25,17 @@ jobs:
       - run: npm test
       - uses: codecov/codecov-action@v1
 
-  integration:
-    name: Integration tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ^14
-      - run: npm install --no-audit
-      - run: npm run integration
-      - uses: codecov/codecov-action@v1
+  # FIXME: https://github.com/avajs/eslint-plugin-ava/issues/333
+  # integration:
+  #   name: Integration tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #       with:
+  #         fetch-depth: 1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: ^14
+  #     - run: npm install --no-audit
+  #     - run: npm run integration
+  #     - uses: codecov/codecov-action@v1
