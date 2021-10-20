@@ -15,15 +15,13 @@ jobs:
       matrix:
         node-version: [^12.22, ^14.17, ^16.4]
     steps:
-      - uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-      - uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install --no-audit
       - run: npx c8 ava
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v2
       # `xo` can't work on ESLint 8 and Node.js 16 yet
       - if: ${{ matrix.node-version == '^14.17' }}
         run: npm install eslint@7 && npx xo
@@ -33,12 +31,8 @@ jobs:
   #   name: Integration tests
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@v1
-  #       with:
-  #         fetch-depth: 1
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ^14
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
   #     - run: npm install --no-audit
   #     - run: npm run integration
-  #     - uses: codecov/codecov-action@v1
+  #     - uses: codecov/codecov-action@v2
