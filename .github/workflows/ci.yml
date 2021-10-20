@@ -22,10 +22,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install --no-audit
+      # `xo` can't work on ESLint 8 yet
+      # - run: npm test
       - run: npx c8 ava
       - uses: codecov/codecov-action@v1
-      # `xo` can't work on ESLint 8 yet
-      - run: npm install eslint@7 && npx xo
 
   # FIXME: https://github.com/avajs/eslint-plugin-ava/issues/333
   # integration:
