@@ -4,7 +4,7 @@ const rule = require('../rules/use-t-throws-async-well');
 
 const ruleTester = avaRuleTester(test, {
 	parserOptions: {
-		ecmaVersion: 2021,
+		ecmaVersion: 'latest',
 	},
 });
 
