@@ -180,7 +180,7 @@ function getTestModifierNames(node) {
 	return util.getTestModifiers(node).map(property => property.name);
 }
 
-module.exports = () => { // eslint-disable-line eslint-plugin/prefer-object-rule
+module.exports = () => {
 	let isTestFile = false;
 	let currentTestNode;
 
