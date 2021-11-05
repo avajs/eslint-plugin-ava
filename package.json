@@ -52,7 +52,7 @@
 		"outdent": "^0.8.0",
 		"pify": "^5.0.0",
 		"tempy": "^1.0.1",
-		"xo": "^0.44.0"
+		"xo": "^0.46.4"
 	},
 	"peerDependencies": {
 		"eslint": ">=7.22.0"
