@@ -87,6 +87,7 @@
 			"eslint-plugin/prefer-message-ids": "off",
 			"eslint-plugin/require-meta-docs-description": "off",
 			"eslint-plugin/require-meta-has-suggestions": "off",
+			"eslint-plugin/prefer-placeholders": "off",
 			"import/extensions": "off",
 			"unicorn/prefer-module": "off"
 		}
