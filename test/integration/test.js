@@ -43,12 +43,6 @@ const packages = new Map([
 	['got', 'https://github.com/sindresorhus/got'],
 ]);
 
-const typescriptPackages = new Set([
-	'pageres',
-	'got',
-	'p-queue',
-]);
-
 const cwd = path.join(__dirname, 'eslint-config-ava-tester');
 
 const enrichErrors = (packageName, cliArgs, f) => async (...args) => {
@@ -62,10 +56,18 @@ const enrichErrors = (packageName, cliArgs, f) => async (...args) => {
 };
 
 const makeEslintTask = (packageName, dest, extraArgs = []) => {
-	const isTypescriptPackage = typescriptPackages.has(packageName);
-	const typescriptArgs = isTypescriptPackage ? ['--parser', '@typescript-eslint/parser', '--ext', '.ts'] : [];
-
-	const args = ['eslint', '--format', 'json', '--config', path.join(cwd, 'index.js'), dest, ...typescriptArgs, ...extraArgs];
+	const args = [
+		'eslint',
+		'--config',
+		path.join(cwd, 'index.js'),
+		'--no-eslintrc',
+		'--ext',
+		'.js,.ts',
+		dest,
+		'--format',
+		'json',
+		...extraArgs,
+	];
 
 	return enrichErrors(packageName, args, async () => {
 		let stdout;
