@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+'use strict';
+
 const path = require('path');
 const process = require('process');
 const Listr = require('listr');

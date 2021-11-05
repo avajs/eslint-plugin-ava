@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	parser: '@babel/eslint-parser',
 	parserOptions: {

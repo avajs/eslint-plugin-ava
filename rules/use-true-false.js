@@ -1,3 +1,5 @@
+'use strict';
+
 const {isDeepStrictEqual} = require('util');
 const espree = require('espree');
 const espurify = require('espurify');

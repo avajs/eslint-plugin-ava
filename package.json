@@ -67,6 +67,9 @@
 		"plugins": [
 			"eslint-plugin"
 		],
+		"parserOptions": {
+			"sourceType": "script"
+		},
 		"extends": [
 			"plugin:eslint-plugin/all"
 		],
@@ -79,6 +82,7 @@
 			}
 		],
 		"rules": {
+			"strict": "error",
 			"ava/no-ignored-test-files": "off",
 			"eslint-plugin/prefer-message-ids": "off",
 			"eslint-plugin/require-meta-docs-description": "off",
