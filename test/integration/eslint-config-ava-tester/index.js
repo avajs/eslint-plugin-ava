@@ -14,4 +14,10 @@ module.exports = {
 		'ava',
 	],
 	extends: 'plugin:ava/recommended',
+	overrides: [
+		{
+			files: ['*.ts'],
+			parser: '@typescript-eslint/parser',
+		},
+	],
 };
