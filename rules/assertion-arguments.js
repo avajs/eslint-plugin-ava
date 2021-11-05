@@ -1,3 +1,5 @@
+'use strict';
+
 const {visitIf} = require('enhance-visitors');
 const {getStaticValue, isOpeningParenToken, isCommaToken, findVariable} = require('eslint-utils');
 const util = require('../util');

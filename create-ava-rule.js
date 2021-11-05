@@ -1,3 +1,5 @@
+'use strict';
+
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');
 const enhance = require('enhance-visitors');

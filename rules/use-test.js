@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const {isDeepStrictEqual} = require('util');
 const espurify = require('espurify');

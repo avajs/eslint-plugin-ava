@@ -1,3 +1,5 @@
+'use strict';
+
 const {visitIf} = require('enhance-visitors');
 const MicroSpellingCorrecter = require('micro-spelling-correcter');
 

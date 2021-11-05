@@ -1,3 +1,5 @@
+'use strict';
+
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
 const util = require('../util');

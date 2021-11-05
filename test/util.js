@@ -1,3 +1,5 @@
+'use strict';
+
 const test = require('ava');
 const util = require('../util');
 const packageJson = require('../package');

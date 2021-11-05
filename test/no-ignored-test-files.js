@@ -1,3 +1,5 @@
+'use strict';
+
 const path = require('path');
 const test = require('ava');
 const avaRuleTester = require('eslint-ava-rule-tester');
