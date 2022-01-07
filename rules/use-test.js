@@ -31,7 +31,7 @@ const create = context => {
 	const isTypeScript = ext === '.ts' || ext === '.tsx';
 
 	return {
-		ImportDeclaration: node => {
+		'ImportDeclaration[importKind!="type"]': node => {
 			if (node.source.value === 'ava') {
 				const {name} = node.specifiers[0].local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
