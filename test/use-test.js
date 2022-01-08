@@ -132,8 +132,8 @@ const commonTestCases = {
 
 const typescriptTestCases = {
 	valid: [
-		{code: 'import type { Macro } from \'ava\';', filename: 'file.ts'},
-		{code: 'import type { Macro } from \'ava\';', filename: 'file.tsx'},
+		{code: 'import type {Macro} from \'ava\';', filename: 'file.ts'},
+		{code: 'import type {Macro} from \'ava\';', filename: 'file.tsx'},
 	],
 	invalid: [],
 };
