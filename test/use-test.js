@@ -13,9 +13,13 @@ const ruleTester = avaRuleTester(test, {
 	},
 });
 
+const typescriptRuleTester = avaRuleTester(test, {
+	parser: require.resolve('@typescript-eslint/parser'),
+});
+
 const errors = [{}];
 
-ruleTester.run('use-test', rule, {
+const commonTestCases = {
 	valid: [
 		{code: 'var test = require(\'ava\');', filename: 'file.js'},
 		{code: 'let test = require(\'ava\');', filename: 'file.js'},
@@ -124,4 +128,16 @@ ruleTester.run('use-test', rule, {
 			filename: 'file.tsx',
 		},
 	],
-});
+};
+
+const typescriptTestCases = {
+	valid: [
+		{code: 'import type {Macro} from \'ava\';', filename: 'file.ts'},
+		{code: 'import type {Macro} from \'ava\';', filename: 'file.tsx'},
+	],
+	invalid: [],
+};
+
+ruleTester.run('use-test', rule, commonTestCases);
+typescriptRuleTester.run('use-test', rule, commonTestCases);
+typescriptRuleTester.run('use-test', rule, typescriptTestCases);
