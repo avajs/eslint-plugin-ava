@@ -28,7 +28,7 @@ const test = require('foo');
 
 ```ts
 import anyTest from 'ava';
-import type { TestInterface } from 'ava';
+import type {TestInterface} from 'ava';
 
 const test = anyTest as TestInterface<{foo: string}>;
 ```
