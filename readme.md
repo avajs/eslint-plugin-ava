@@ -56,6 +56,7 @@ Configure it in `package.json`.
 			"ava/prefer-async-await": "error",
 			"ava/prefer-power-assert": "off",
 			"ava/prefer-t-regex": "error",
+			"ava/prefer-t-throws": "error",
 			"ava/test-title": "error",
 			"ava/test-title-format": "off",
 			"ava/use-t": "error",
@@ -92,6 +93,7 @@ The rules will only activate in test files.
 - [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
 - [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 - [prefer-t-regex](docs/rules/prefer-t-regex.md) - Prefer using `t.regex()` to test regular expressions. *(fixable)*
+- [prefer-t-throws](docs/rules/prefer-t-throws.md) - Prefer using `t.throws()` or `t.throwsAsync()` over try/catch.
 - [test-title](docs/rules/test-title.md) - Ensure tests have a title.
 - [test-title-format](docs/rules/test-title-format.md) - Ensure test titles have a certain format.
 - [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
