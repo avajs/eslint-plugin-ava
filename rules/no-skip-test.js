@@ -36,6 +36,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure no tests are skipped.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

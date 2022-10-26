@@ -47,6 +47,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Disallow the use of unknown test modifiers.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

@@ -1,4 +1,10 @@
-# Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited
+# Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited (`ava/use-t-throws-async-well`)
+
+✅ This rule is enabled in the `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
+
+<!-- end auto-generated rule header -->
 
 When you use the `t.throwsAsync()` and `t.notThrowsAsync()` assertions, you must await the promise they return. If the test function completes before the assertions do, the test will fail.
 

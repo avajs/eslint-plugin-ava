@@ -53,6 +53,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure test titles have a certain format.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema,

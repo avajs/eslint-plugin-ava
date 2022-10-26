@@ -30,6 +30,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Ensure tests have a title.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

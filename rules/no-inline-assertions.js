@@ -40,6 +40,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure assertions are not called from inline arrow functions.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

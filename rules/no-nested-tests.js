@@ -36,6 +36,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Ensure no tests are nested.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

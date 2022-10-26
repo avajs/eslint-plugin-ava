@@ -67,6 +67,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure no tests are written in ignored files.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema,

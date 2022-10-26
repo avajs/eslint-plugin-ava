@@ -42,6 +42,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure test functions use `t` as their parameter.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

@@ -18,11 +18,11 @@ Use the [`astexplorer` site](https://astexplorer.net) with the `espree` parser a
 - Add the correct [`meta.type`](https://eslint.org/docs/developer-guide/working-with-rules#rule-basics) to the rule.
 - Go to the `docs/rules` directory and duplicate the `no-todo-test.md` file and rename it to the name of your rule. Then write some documentation.
 - Add the rule in alphabetically sorted order to:
-	- [The recommended config](https://github.com/avajs/eslint-plugin-ava/blob/0ded4b5c3cd09504e846309760566c9499a24196/index.js#L19)
-	- [The recommended config in the readme](https://github.com/avajs/eslint-plugin-ava/blame/0ded4b5c3cd09504e846309760566c9499a24196/readme.md#L35)
-	- [The rule listing in the readme](https://github.com/avajs/eslint-plugin-ava/blame/0ded4b5c3cd09504e846309760566c9499a24196/readme.md#L73)\
+  - [The recommended config](https://github.com/avajs/eslint-plugin-ava/blob/0ded4b5c3cd09504e846309760566c9499a24196/index.js#L19)
+  - [The recommended config in the readme](https://github.com/avajs/eslint-plugin-ava/blame/0ded4b5c3cd09504e846309760566c9499a24196/readme.md#L35)
 	*(The description should be the same as the heading of the documentation file).*
 - Run `$ npm test` to ensure the tests pass.
 - Run `$ npm run integration` to run the rules against real projects to ensure your rule does not fail on real-world code.
+- Run `$ npm run update:eslint-docs` to update the readme rules list and standardized rule doc title/notices.
 - Open a pull request with a title in exactly the format `` Add `rule-name` rule ``, for example, `` Add `no-unused-properties` rule ``.
 - The pull request description should include the issue it fixes, for example, `Fixes #123`.

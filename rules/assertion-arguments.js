@@ -396,6 +396,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Enforce passing correct arguments to assertions.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

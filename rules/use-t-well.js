@@ -151,6 +151,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Disallow the incorrect use of `t`.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',
