@@ -19,7 +19,7 @@ const rootDir = path.dirname(__dirname);
 const toPath = subPath => path.join(rootDir, subPath);
 
 util.loadAvaHelper = () => ({
-	classifyImport: importPath => {
+	classifyImport(importPath) {
 		switch (importPath) {
 			case toPath('lib/foo.test.js'):
 				return {isHelper: false, isTest: true};

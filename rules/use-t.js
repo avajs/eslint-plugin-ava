@@ -20,7 +20,7 @@ const create = context => {
 			let implementationArg = node.arguments[index];
 			if (ava.hasTestModifier('macro') && implementationArg.type === 'ObjectExpression') {
 				const execProperty = implementationArg.properties.find(p => p.key.name === 'exec');
-				implementationArg = execProperty && execProperty.value;
+				implementationArg = execProperty?.value;
 			}
 
 			if (!implementationArg || !implementationArg.params || implementationArg.params.length === 0) {

@@ -146,7 +146,7 @@ const list = new Listr([
 	},
 	{
 		title: 'Integration tests',
-		task: () => {
+		task() {
 			const tests = new Listr({concurrent: true});
 
 			for (const [name] of packages) {

@@ -84,9 +84,8 @@ exports.getMembers = getMembers;
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
-const getDocsUrl = (filename, commitHash) => {
+const getDocsUrl = (filename, commitHash = `v${pkg.version}`) => {
 	const ruleName = path.basename(filename, '.js');
-	commitHash = commitHash || `v${pkg.version}`;
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
 

@@ -12,7 +12,7 @@ const create = context => {
 	const ava = createAvaRule();
 	// TODO: Convert options to object JSON Schema default works properly
 	// https://github.com/avajs/eslint-plugin-ava/issues/260
-	const maxAssertions = context.options[0] || MAX_ASSERTIONS_DEFAULT;
+	const maxAssertions = context.options[0] ?? MAX_ASSERTIONS_DEFAULT;
 	let assertionCount = 0;
 	let nodeToReport;
 

@@ -31,7 +31,7 @@ const create = context => {
 	const isTypeScript = ext === '.ts' || ext === '.tsx';
 
 	return {
-		'ImportDeclaration[importKind!="type"]': node => {
+		'ImportDeclaration[importKind!="type"]'(node) {
 			if (node.source.value === 'ava') {
 				const {name} = node.specifiers[0].local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
@@ -39,7 +39,7 @@ const create = context => {
 				}
 			}
 		},
-		VariableDeclarator: node => {
+		VariableDeclarator(node) {
 			if (node.init && isDeepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
 				const {name} = node.id;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {

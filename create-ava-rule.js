@@ -188,36 +188,36 @@ module.exports = () => {
 
 	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
-		ImportDeclaration: node => {
+		ImportDeclaration(node) {
 			if (!isTestFile && avaImportDeclarationAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
-		VariableDeclarator: node => {
+		VariableDeclarator(node) {
 			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
 				isTestFile = true;
 			}
 		},
-		CallExpression: node => {
+		CallExpression(node) {
 			if (isTestFunctionCall(node.callee)) {
 				// Entering test function
 				currentTestNode = node;
 			}
 		},
-		'CallExpression:exit': node => {
+		'CallExpression:exit'(node) {
 			if (currentTestNode === node) {
 				// Leaving test function
 				currentTestNode = undefined;
 			}
 		},
-		'Program:exit': () => {
+		'Program:exit'() {
 			isTestFile = false;
 		},
 	};
 
 	return {
 		hasTestModifier: mod => getTestModifierNames(currentTestNode).includes(mod),
-		hasNoUtilityModifier: () => {
+		hasNoUtilityModifier() {
 			const modifiers = getTestModifierNames(currentTestNode);
 			return !modifiers.includes('before')
 				&& !modifiers.includes('beforeEach')

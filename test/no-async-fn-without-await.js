@@ -25,7 +25,7 @@ const ruleTesterOptions = [
 for (const options of ruleTesterOptions) {
 	const ruleTester = avaRuleTester(test, options);
 
-	ruleTester.run(`no-async-fn-without-await - parser:${options.parser || 'default'}`, rule, {
+	ruleTester.run(`no-async-fn-without-await - parser:${options.parser ?? 'default'}`, rule, {
 		valid: [
 			`${header}test(fn);`,
 			`${header}test(t => {});`,

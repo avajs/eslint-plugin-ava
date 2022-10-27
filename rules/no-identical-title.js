@@ -52,7 +52,7 @@ const create = context => {
 
 			usedTitleNodes.push(purify(titleNode));
 		}),
-		'Program:exit': () => {
+		'Program:exit'() {
 			usedTitleNodes = [];
 		},
 	});

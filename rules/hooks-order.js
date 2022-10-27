@@ -22,7 +22,7 @@ const buildOrders = names => {
 };
 
 const buildMessage = (name, orders, visited) => {
-	const checks = orders[name] || [];
+	const checks = orders[name] ?? [];
 
 	for (const check of checks) {
 		const nodeEarlier = visited[check];
@@ -90,7 +90,7 @@ const create = context => {
 	const sourceCode = context.getSourceCode();
 
 	// TODO: Remove `.reduce()` usage.
-	// eslint-disable-next-line unicorn/no-array-reduce, unicorn/prefer-object-from-entries
+	// eslint-disable-next-line unicorn/no-array-reduce
 	const selectors = checks.reduce((result, check) => {
 		result[check.selector] = visitIf([
 			ava.isInTestFile,
@@ -106,10 +106,10 @@ const create = context => {
 					node,
 					messageId: message.messageId,
 					data: message.data,
-					fix: fixer => {
+					fix(fixer) {
 						const tokensBetween = sourceCode.getTokensBetween(nodeEarlier.parent, node.parent);
 
-						if (tokensBetween && tokensBetween.length > 0) {
+						if (tokensBetween?.length > 0) {
 							return;
 						}
 

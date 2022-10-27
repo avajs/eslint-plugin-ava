@@ -15,7 +15,7 @@ const create = context => {
 		}
 	};
 
-	const isAsync = node => Boolean(node && node.async);
+	const isAsync = node => Boolean(node?.async);
 
 	return ava.merge({
 		CallExpression: visitIf([

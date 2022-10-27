@@ -47,10 +47,10 @@ const create = context => {
 	};
 
 	return {
-		ImportDeclaration: node => {
+		ImportDeclaration(node) {
 			validateImportPath(node, node.source.value);
 		},
-		CallExpression: node => {
+		CallExpression(node) {
 			if (!(node.callee.type === 'Identifier' && node.callee.name === 'require')) {
 				return;
 			}

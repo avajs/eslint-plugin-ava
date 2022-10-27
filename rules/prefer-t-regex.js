@@ -23,7 +23,7 @@ const create = context => {
 	const findReference = name => {
 		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
 
-		if (reference && reference.resolved) {
+		if (reference?.resolved) {
 			const definitions = reference.resolved.defs;
 
 			if (definitions.length === 0) {
@@ -54,7 +54,7 @@ const create = context => {
 		if (node.type === 'Identifier') {
 			const reference = findReference(node.name);
 
-			if (reference && reference.init) {
+			if (reference?.init) {
 				return findRootReference(reference.init);
 			}
 
@@ -86,7 +86,7 @@ const create = context => {
 
 		// Look up references in case it's a variable or RegExp declaration.
 		const reference = findRootReference(lookup);
-		return reference.regex || reference.name === 'RegExp';
+		return reference.regex ?? reference.name === 'RegExp';
 	};
 
 	const booleanHandler = node => {

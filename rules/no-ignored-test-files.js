@@ -22,7 +22,7 @@ const create = context => {
 		])(() => {
 			hasTestCall = true;
 		}),
-		'Program:exit': node => {
+		'Program:exit'(node) {
 			if (!hasTestCall) {
 				return;
 			}

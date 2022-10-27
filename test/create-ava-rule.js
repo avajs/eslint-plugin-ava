@@ -5,11 +5,11 @@ const avaRuleTester = require('eslint-ava-rule-tester');
 const createAvaRule = require('../create-ava-rule');
 
 const rule = {
-	create: context => {
+	create(context) {
 		const ava = createAvaRule();
 
 		return ava.merge({
-			'Program:exit': node => {
+			'Program:exit'(node) {
 				if (!ava.isInTestFile()) {
 					context.report({node, message: 'not a test file'});
 				}

@@ -125,7 +125,7 @@ const create = context => {
 				context.report({
 					node,
 					message: 'Too many chained uses of `.skip`.',
-					fix: fixer => {
+					fix(fixer) {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
 					},
@@ -136,7 +136,7 @@ const create = context => {
 				context.report({
 					node,
 					message: '`.skip` modifier should be the last in chain.',
-					fix: fixer => {
+					fix(fixer) {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
 					},

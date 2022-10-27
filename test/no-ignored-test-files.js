@@ -19,7 +19,7 @@ const toPath = subPath => path.join(rootDir, subPath);
 const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
 
 util.loadAvaHelper = () => ({
-	classifyFile: file => {
+	classifyFile(file) {
 		switch (file) {
 			case toPath('lib/foo.test.js'):
 				return {isHelper: false, isTest: true};

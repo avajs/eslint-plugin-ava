@@ -211,7 +211,7 @@ function isString(node) {
 
 const create = context => {
 	const ava = createAvaRule();
-	const options = context.options[0] || {};
+	const options = context.options[0] ?? {};
 	const enforcesMessage = Boolean(options.message);
 	const shouldHaveMessage = options.message !== 'never';
 
@@ -285,7 +285,7 @@ const create = context => {
 					const variable = findVariable(context.getScope(), lastArg);
 					let value;
 					for (const ref of variable.references) {
-						value = ref.writeExpr || value;
+						value = ref.writeExpr ?? value;
 					}
 
 					lastArg = value;
