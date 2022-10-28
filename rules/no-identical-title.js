@@ -63,6 +63,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Ensure no tests have the same title.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

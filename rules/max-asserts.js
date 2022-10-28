@@ -72,6 +72,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Enforce a limit on the number of assertions in a test.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema,

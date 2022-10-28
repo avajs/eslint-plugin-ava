@@ -85,6 +85,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

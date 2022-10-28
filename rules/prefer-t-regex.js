@@ -203,6 +203,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Prefer using `t.regex()` to test regular expressions.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

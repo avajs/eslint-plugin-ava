@@ -151,6 +151,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Enforce test hook ordering.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

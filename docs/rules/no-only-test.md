@@ -1,4 +1,10 @@
-# Ensure no `test.only()` are present
+# Ensure no `test.only()` are present (`ava/no-only-test`)
+
+✅ This rule is enabled in the `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+🔧💡 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix) and manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+<!-- end auto-generated rule header -->
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/no-only-test.md)
 

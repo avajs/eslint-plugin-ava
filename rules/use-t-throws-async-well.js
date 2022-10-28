@@ -41,6 +41,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

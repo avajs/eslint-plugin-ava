@@ -55,6 +55,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure that AVA is imported with `test` as the variable name.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

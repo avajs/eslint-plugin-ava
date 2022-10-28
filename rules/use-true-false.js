@@ -90,6 +90,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

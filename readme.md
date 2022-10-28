@@ -10,8 +10,8 @@ This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anythi
 
 ## Install
 
-```
-$ npm install --save-dev eslint eslint-plugin-ava
+```sh
+npm install --save-dev eslint eslint-plugin-ava
 ```
 
 ## Usage
@@ -34,37 +34,9 @@ Configure it in `package.json`.
 		],
 		"rules": {
 			"ava/assertion-arguments": "error",
-			"ava/hooks-order": "error",
-			"ava/max-asserts": [
-				"off",
-				5
-			],
-			"ava/no-async-fn-without-await": "error",
-			"ava/no-duplicate-modifiers": "error",
-			"ava/no-identical-title": "error",
-			"ava/no-ignored-test-files": "error",
-			"ava/no-import-test-files": "error",
-			"ava/no-incorrect-deep-equal": "error",
-			"ava/no-inline-assertions": "error",
-			"ava/no-nested-tests": "error",
-			"ava/no-only-test": "error",
-			"ava/no-skip-assert": "error",
-			"ava/no-skip-test": "error",
-			"ava/no-todo-implementation": "error",
-			"ava/no-todo-test": "warn",
-			"ava/no-unknown-modifiers": "error",
-			"ava/prefer-async-await": "error",
-			"ava/prefer-power-assert": "off",
-			"ava/prefer-t-regex": "error",
-			"ava/test-title": "error",
-			"ava/test-title-format": "off",
-			"ava/use-t": "error",
-			"ava/use-t-throws-async-well": "error",
-			"ava/use-t-well": "error",
-			"ava/use-test": "error",
-			"ava/use-true-false": "error"
-		}
-	}
+			"ava/...": "error"
+        }
+    }
 }
 ```
 
@@ -72,33 +44,43 @@ Configure it in `package.json`.
 
 The rules will only activate in test files.
 
-- [assertion-arguments](docs/rules/assertion-arguments.md) - Enforce passing correct arguments to assertions.
-- [hooks-order](docs/rules/hooks-order.md) - Enforce test hook ordering. *(fixable)*
-- [max-asserts](docs/rules/max-asserts.md) - Limit the number of assertions in a test.
-- [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) - Ensure that async tests use `await`.
-- [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md) - Ensure tests do not have duplicate modifiers.
-- [no-identical-title](docs/rules/no-identical-title.md) - Ensure no tests have the same title.
-- [no-ignored-test-files](docs/rules/no-ignored-test-files.md) - Ensure no tests are written in ignored files.
-- [no-import-test-files](docs/rules/no-import-test-files.md) - Ensure no test files are imported anywhere.
-- [no-incorrect-deep-equal](docs/rules/no-incorrect-deep-equal.md) - Avoid using `deepEqual` with primitives. *(fixable)*
-- [no-inline-assertions](docs/rules/no-inline-assertions.md) - Ensure assertions are not called from inline arrow functions. *(fixable)*
-- [no-nested-tests](docs/rules/no-nested-tests.md) - Ensure no tests are nested.
-- [no-only-test](docs/rules/no-only-test.md) - Ensure no `test.only()` are present.
-- [no-skip-assert](docs/rules/no-skip-assert.md) - Ensure no assertions are skipped.
-- [no-skip-test](docs/rules/no-skip-test.md) - Ensure no tests are skipped.
-- [no-todo-implementation](docs/rules/no-todo-implementation.md) - Ensure `test.todo()` is not given an implementation function.
-- [no-todo-test](docs/rules/no-todo-test.md) - Ensure no `test.todo()` is used.
-- [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md) - Prevent the use of unknown test modifiers.
-- [prefer-async-await](docs/rules/prefer-async-await.md) - Prefer using async/await instead of returning a Promise.
-- [prefer-power-assert](docs/rules/prefer-power-assert.md) - Allow only use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
-- [prefer-t-regex](docs/rules/prefer-t-regex.md) - Prefer using `t.regex()` to test regular expressions. *(fixable)*
-- [test-title](docs/rules/test-title.md) - Ensure tests have a title.
-- [test-title-format](docs/rules/test-title-format.md) - Ensure test titles have a certain format.
-- [use-t](docs/rules/use-t.md) - Ensure test functions use `t` as their parameter.
-- [use-t-throws-async-well](docs/rules/use-t-throws-async-well.md) - Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited. *(partly fixable)*
-- [use-t-well](docs/rules/use-t-well.md) - Prevent the incorrect use of `t`. *(partly fixable)*
-- [use-test](docs/rules/use-test.md) - Ensure that AVA is imported with `test` as the variable name.
-- [use-true-false](docs/rules/use-true-false.md) - Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
+<!-- begin auto-generated rules list -->
+
+✅ Enabled in the `recommended` [configuration](https://github.com/avajs/eslint-plugin-ava#recommended-config).\
+🔧 Automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/user-guide/command-line-interface#--fix).\
+💡 Manually fixable by [editor suggestions](https://eslint.org/docs/developer-guide/working-with-rules#providing-suggestions).
+
+| Name                                                                 | Description                                                                                                              | ✅  | 🔧  | 💡  |
+| :------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------- | :-- | :-- | :-- |
+| [assertion-arguments](docs/rules/assertion-arguments.md)             | Enforce passing correct arguments to assertions.                                                                         | ✅  | 🔧  |     |
+| [hooks-order](docs/rules/hooks-order.md)                             | Enforce test hook ordering.                                                                                              | ✅  | 🔧  |     |
+| [max-asserts](docs/rules/max-asserts.md)                             | Enforce a limit on the number of assertions in a test.                                                                   |     |     |     |
+| [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) | Ensure that async tests use `await`.                                                                                     | ✅  |     |     |
+| [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md)       | Ensure tests do not have duplicate modifiers.                                                                            | ✅  |     |     |
+| [no-identical-title](docs/rules/no-identical-title.md)               | Ensure no tests have the same title.                                                                                     | ✅  |     |     |
+| [no-ignored-test-files](docs/rules/no-ignored-test-files.md)         | Ensure no tests are written in ignored files.                                                                            | ✅  |     |     |
+| [no-import-test-files](docs/rules/no-import-test-files.md)           | Ensure no test files are imported anywhere.                                                                              | ✅  |     |     |
+| [no-incorrect-deep-equal](docs/rules/no-incorrect-deep-equal.md)     | Disallow using `deepEqual` with primitives.                                                                              | ✅  | 🔧  |     |
+| [no-inline-assertions](docs/rules/no-inline-assertions.md)           | Ensure assertions are not called from inline arrow functions.                                                            | ✅  | 🔧  |     |
+| [no-nested-tests](docs/rules/no-nested-tests.md)                     | Ensure no tests are nested.                                                                                              | ✅  |     |     |
+| [no-only-test](docs/rules/no-only-test.md)                           | Ensure no `test.only()` are present.                                                                                     | ✅  | 🔧  | 💡  |
+| [no-skip-assert](docs/rules/no-skip-assert.md)                       | Ensure no assertions are skipped.                                                                                        | ✅  |     |     |
+| [no-skip-test](docs/rules/no-skip-test.md)                           | Ensure no tests are skipped.                                                                                             | ✅  | 🔧  | 💡  |
+| [no-todo-implementation](docs/rules/no-todo-implementation.md)       | Ensure `test.todo()` is not given an implementation function.                                                            | ✅  |     |     |
+| [no-todo-test](docs/rules/no-todo-test.md)                           | Ensure no `test.todo()` is used.                                                                                         |     |     |     |
+| [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md)           | Disallow the use of unknown test modifiers.                                                                              | ✅  |     |     |
+| [prefer-async-await](docs/rules/prefer-async-await.md)               | Prefer using async/await instead of returning a Promise.                                                                 | ✅  |     |     |
+| [prefer-power-assert](docs/rules/prefer-power-assert.md)             | Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative. |     |     |     |
+| [prefer-t-regex](docs/rules/prefer-t-regex.md)                       | Prefer using `t.regex()` to test regular expressions.                                                                    | ✅  | 🔧  |     |
+| [test-title](docs/rules/test-title.md)                               | Ensure tests have a title.                                                                                               | ✅  |     |     |
+| [test-title-format](docs/rules/test-title-format.md)                 | Ensure test titles have a certain format.                                                                                |     |     |     |
+| [use-t](docs/rules/use-t.md)                                         | Ensure test functions use `t` as their parameter.                                                                        | ✅  |     |     |
+| [use-t-throws-async-well](docs/rules/use-t-throws-async-well.md)     | Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.                                                      | ✅  | 🔧  |     |
+| [use-t-well](docs/rules/use-t-well.md)                               | Disallow the incorrect use of `t`.                                                                                       | ✅  | 🔧  |     |
+| [use-test](docs/rules/use-test.md)                                   | Ensure that AVA is imported with `test` as the variable name.                                                            | ✅  |     |     |
+| [use-true-false](docs/rules/use-true-false.md)                       | Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.                                         | ✅  |     |     |
+
+<!-- end auto-generated rules list -->
 
 ## Recommended config
 

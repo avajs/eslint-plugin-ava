@@ -54,6 +54,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure that async tests use `await`.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

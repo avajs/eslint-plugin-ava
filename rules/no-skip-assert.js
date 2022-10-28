@@ -30,6 +30,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure no assertions are skipped.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

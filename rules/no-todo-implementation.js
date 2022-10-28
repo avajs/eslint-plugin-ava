@@ -27,6 +27,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure `test.todo()` is not given an implementation function.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

@@ -79,6 +79,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure no test files are imported anywhere.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema,

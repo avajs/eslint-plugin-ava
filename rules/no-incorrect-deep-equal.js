@@ -84,6 +84,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Disallow using `deepEqual` with primitives.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

@@ -36,6 +36,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Ensure no `test.only()` are present.',
 			url: util.getDocsUrl(__filename),
 		},
 		fixable: 'code',

@@ -54,6 +54,7 @@ module.exports = {
 	meta: {
 		type: 'suggestion',
 		docs: {
+			description: 'Prefer using async/await instead of returning a Promise.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],

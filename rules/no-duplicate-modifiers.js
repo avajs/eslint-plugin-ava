@@ -51,6 +51,7 @@ module.exports = {
 	meta: {
 		type: 'problem',
 		docs: {
+			description: 'Ensure tests do not have duplicate modifiers.',
 			url: util.getDocsUrl(__filename),
 		},
 		schema: [],
