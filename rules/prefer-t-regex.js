@@ -51,6 +51,10 @@ const create = context => {
 	```
 	*/
 	const findRootReference = node => {
+		if (!node) {
+			return;
+		}
+
 		if (node.type === 'Identifier') {
 			const reference = findReference(node.name);
 
@@ -80,17 +84,26 @@ const create = context => {
 	2. `RegExp` class can't be looked up so the function just checks for the name `RegExp`.
 	*/
 	const isRegExp = lookup => {
-		if (lookup.regex) {
+		if (lookup?.regex) {
 			return true;
 		}
 
 		// Look up references in case it's a variable or RegExp declaration.
 		const reference = findRootReference(lookup);
+
+		if (!reference) {
+			return false;
+		}
+
 		return reference.regex ?? reference.name === 'RegExp';
 	};
 
 	const booleanHandler = node => {
 		const firstArg = node.arguments[0];
+
+		if (!firstArg) {
+			return;
+		}
 
 		const isFunctionCall = firstArg.type === 'CallExpression';
 		if (!isFunctionCall || !firstArg.callee.property) {
@@ -144,6 +157,11 @@ const create = context => {
 		}
 
 		const matchee = secondArgumentIsRegex ? firstArg : secondArg;
+
+		if (!matchee) {
+			return;
+		}
+
 		const regex = secondArgumentIsRegex ? secondArg : firstArg;
 
 		const booleanFixer = assertion => fixer => {
@@ -179,7 +197,12 @@ const create = context => {
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isInTestNode,
-		])(node => {
+		],
+		)(node => {
+			if (!node?.callee?.property) {
+				return;
+			}
+
 			const isAssertion = node.callee.type === 'MemberExpression'
 				&& util.getNameOfRootNodeObject(node.callee) === 't';
 
