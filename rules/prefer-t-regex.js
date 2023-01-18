@@ -84,7 +84,11 @@ const create = context => {
 	2. `RegExp` class can't be looked up so the function just checks for the name `RegExp`.
 	*/
 	const isRegExp = lookup => {
-		if (lookup?.regex) {
+		if (!lookup) {
+			return false;
+		}
+
+		if (lookup.regex) {
 			return true;
 		}
 
