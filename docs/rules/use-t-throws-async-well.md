@@ -26,7 +26,7 @@ test('main', t => {
 ```js
 import test from 'ava';
 
-test('main', t => {
+test('main', async t => {
 	await t.throwsAsync(somePromise);
 	await t.notThrowsAsync(somePromise);
 	const p = t.throwsAsync(somePromise);
