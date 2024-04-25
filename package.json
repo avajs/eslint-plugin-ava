@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"repository": "avajs/eslint-plugin-ava",
 	"engines": {
-		"node": ">=14.17 <15 || >=16.4"
+		"node": ">=18.18"
 	},
 	"scripts": {
 		"integration": "node ./test/integration/test.js",
@@ -63,7 +63,7 @@
 		"xo": "^0.52.4"
 	},
 	"peerDependencies": {
-		"eslint": ">=8.26.0"
+		"eslint": ">=9.1.1"
 	},
 	"ava": {
 		"files": [

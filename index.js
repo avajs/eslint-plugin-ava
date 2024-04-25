@@ -7,8 +7,8 @@ module.exports = {
 	rules: importModules(path.resolve(__dirname, 'rules'), {camelize: false}),
 	configs: {
 		recommended: {
-			env: {
-				es6: true,
+			languageOptions: {
+				ecmaVersion: 2015,
 			},
 			parserOptions: {
 				ecmaVersion: 'latest',

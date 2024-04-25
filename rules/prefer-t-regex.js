@@ -20,8 +20,9 @@ const create = context => {
 	]);
 
 	// Find the latest reference to the given identifier's name.
-	const findReference = name => {
-		const reference = context.getScope().references.find(reference => reference.identifier.name === name);
+	const findReference = node => {
+		const sourceCode = context.sourceCode;
+		const reference = sourceCode.getScope(node).references.find(reference => reference.identifier.name === node.name);
 
 		if (reference?.resolved) {
 			const definitions = reference.resolved.defs;
@@ -37,7 +38,7 @@ const create = context => {
 	/*
 	Recursively find the "origin" node of the given node.
 
-	Note: `context.getScope()` doesn't contain information about the outer scope so in most cases this function will only find the reference directly above the current scope. So the following code will only find the reference in this order: y -> x, and it will have no knowledge of the number `0`. (assuming we run this function on the identifier `y`)
+	Note: `sourceCode.getScope()` doesn't contain information about the outer scope so in most cases this function will only find the reference directly above the current scope. So the following code will only find the reference in this order: y -> x, and it will have no knowledge of the number `0`. (assuming we run this function on the identifier `y`)
 
 	```
 	const test = require('ava');
@@ -56,7 +57,7 @@ const create = context => {
 		}
 
 		if (node.type === 'Identifier') {
-			const reference = findReference(node.name);
+			const reference = findReference(node);
 
 			if (reference?.init) {
 				return findRootReference(reference.init);
