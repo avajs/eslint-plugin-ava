@@ -7,13 +7,6 @@ module.exports = {
 	rules: importModules(path.resolve(__dirname, 'rules'), {camelize: false}),
 	configs: {
 		recommended: {
-			languageOptions: {
-				ecmaVersion: 2015,
-			},
-			parserOptions: {
-				ecmaVersion: 'latest',
-				sourceType: 'module',
-			},
 			plugins: [
 				'ava',
 			],
