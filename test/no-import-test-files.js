@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const test = require('ava');
 const avaRuleTester = require('eslint-ava-rule-tester');
 const util = require('../util');
@@ -15,20 +15,27 @@ const ruleTester = avaRuleTester(test, {
 	},
 });
 
-const rootDir = path.dirname(__dirname);
-const toPath = subPath => path.join(rootDir, subPath);
+const rootDirectory = path.dirname(__dirname);
+const toPath = subPath => path.join(rootDirectory, subPath);
 
 util.loadAvaHelper = () => ({
 	classifyImport(importPath) {
 		switch (importPath) {
-			case toPath('lib/foo.test.js'):
+			case toPath('lib/foo.test.js'): {
 				return {isHelper: false, isTest: true};
-			case toPath('../foo.test.js'):
+			}
+
+			case toPath('../foo.test.js'): {
 				return {isHelper: false, isTest: true};
-			case toPath('@foo/bar'): // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
+			}
+
+			case toPath('@foo/bar'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
 				return {isHelper: false, isTest: true};
-			default:
+			}
+
+			default: {
 				return {isHelper: false, isTest: false};
+			}
 		}
 	},
 });

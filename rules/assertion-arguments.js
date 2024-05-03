@@ -235,11 +235,11 @@ const create = context => {
 				return;
 			}
 
-			const gottenArgs = node.arguments.length;
+			const gottenArguments = node.arguments.length;
 			const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
 
 			if (firstNonSkipMember === 'end') {
-				if (gottenArgs > 1) {
+				if (gottenArguments > 1) {
 					report(node, 'Too many arguments. Expected at most 1.');
 				}
 
@@ -247,26 +247,26 @@ const create = context => {
 			}
 
 			if (firstNonSkipMember === 'try') {
-				if (gottenArgs < 1) {
+				if (gottenArguments < 1) {
 					report(node, 'Not enough arguments. Expected at least 1.');
 				}
 
 				return;
 			}
 
-			const nArgs = expectedNbArguments[firstNonSkipMember];
+			const nArguments = expectedNbArguments[firstNonSkipMember];
 
-			if (!nArgs) {
+			if (!nArguments) {
 				return;
 			}
 
-			if (gottenArgs < nArgs.min) {
-				report(node, `Not enough arguments. Expected at least ${nArgs.min}.`);
-			} else if (node.arguments.length > nArgs.max) {
-				report(node, `Too many arguments. Expected at most ${nArgs.max}.`);
+			if (gottenArguments < nArguments.min) {
+				report(node, `Not enough arguments. Expected at least ${nArguments.min}.`);
+			} else if (node.arguments.length > nArguments.max) {
+				report(node, `Too many arguments. Expected at most ${nArguments.max}.`);
 			} else {
-				if (enforcesMessage && nArgs.min !== nArgs.max) {
-					const hasMessage = gottenArgs === nArgs.max;
+				if (enforcesMessage && nArguments.min !== nArguments.max) {
+					const hasMessage = gottenArguments === nArguments.max;
 
 					if (!hasMessage && shouldHaveMessage) {
 						report(node, 'Expected an assertion message, but found none.');
@@ -278,20 +278,20 @@ const create = context => {
 				checkArgumentOrder({node, assertion: firstNonSkipMember, context});
 			}
 
-			if (gottenArgs === nArgs.max && nArgs.min !== nArgs.max) {
-				let lastArg = node.arguments[node.arguments.length - 1];
+			if (gottenArguments === nArguments.max && nArguments.min !== nArguments.max) {
+				let lastArgument = node.arguments.at(-1);
 
-				if (lastArg.type === 'Identifier') {
-					const variable = findVariable(context.sourceCode.getScope(node), lastArg);
+				if (lastArgument.type === 'Identifier') {
+					const variable = findVariable(context.sourceCode.getScope(node), lastArgument);
 					let value;
-					for (const ref of variable.references) {
-						value = ref.writeExpr ?? value;
+					for (const reference of variable.references) {
+						value = reference.writeExpr ?? value;
 					}
 
-					lastArg = value;
+					lastArgument = value;
 				}
 
-				if (!isString(lastArg)) {
+				if (!isString(lastArgument)) {
 					report(node, 'Assertion message should be a string.');
 				}
 			}
@@ -305,7 +305,12 @@ function checkArgumentOrder({node, assertion, context}) {
 		const [leftNode, rightNode] = [first, second];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
 			context.report(
-				makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}),
+				makeOutOfOrder2ArgumentReport({
+					node,
+					leftNode,
+					rightNode,
+					context,
+				}),
 			);
 		}
 	} else if (
@@ -317,7 +322,12 @@ function checkArgumentOrder({node, assertion, context}) {
 		const [leftNode, rightNode] = [first.left, first.right];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
 			context.report(
-				makeOutOfOrder1ArgumentReport({node: first, leftNode, rightNode, context}),
+				makeOutOfOrder1ArgumentReport({
+					node: first,
+					leftNode,
+					rightNode,
+					context,
+				}),
 			);
 		}
 	}

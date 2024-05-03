@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const util = require('../util');
 
 // Assume absolute paths can be classified by AVA.

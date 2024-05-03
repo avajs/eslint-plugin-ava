@@ -4,6 +4,7 @@
 	"description": "ESLint rules for AVA",
 	"license": "MIT",
 	"repository": "avajs/eslint-plugin-ava",
+	"sideEffects": false,
 	"engines": {
 		"node": "^18.18 || >=20"
 	},
@@ -14,7 +15,7 @@
 		"lint:js": "xo",
 		"test": "npm-run-all lint test:unit",
 		"test:unit": "c8 ava",
-		"update:eslint-docs": "eslint-doc-generator --rule-doc-section-include Pass --rule-doc-section-include Fail --url-configs \"https://github.com/avajs/eslint-plugin-ava#recommended-config\""
+		"update:eslint-docs": "eslint-doc-generator --rule-doc-section-include Pass --rule-doc-section-include Fail --url-configs \"https://github.com/avajs/eslint-plugin-ava#recommended-config\" --ignore-config=flat/recommended"
 	},
 	"files": [
 		"index.js",
@@ -53,14 +54,14 @@
 		"eslint": "^8.26.0",
 		"eslint-ava-rule-tester": "^4.0.0",
 		"eslint-doc-generator": "^1.0.0",
-		"eslint-plugin-eslint-plugin": "^5.0.6",
+		"eslint-plugin-eslint-plugin": "^6.1.0",
 		"execa": "^5.1.1",
 		"listr": "^0.14.3",
 		"npm-run-all": "^4.1.5",
 		"outdent": "^0.8.0",
 		"pify": "^5.0.0",
 		"tempy": "^1.0.1",
-		"xo": "^0.52.4"
+		"xo": "^0.58.0"
 	},
 	"peerDependencies": {
 		"eslint": ">=9"
@@ -102,7 +103,9 @@
 			"eslint-plugin/require-meta-has-suggestions": "off",
 			"eslint-plugin/prefer-placeholders": "off",
 			"import/extensions": "off",
-			"unicorn/prefer-module": "off"
+			"unicorn/prefer-module": "off",
+			"unicorn/prefer-top-level-await": "off",
+			"eslint-plugin/require-meta-docs-recommended": "off"
 		}
 	},
 	"c8": {

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
 
-const path = require('path');
-const process = require('process');
+const path = require('node:path');
+const process = require('node:process');
 const Listr = require('listr');
 const tempy = require('tempy');
 const execa = require('execa');
@@ -47,35 +47,35 @@ const packages = new Map([
 
 const cwd = path.join(__dirname, 'eslint-config-ava-tester');
 
-const enrichErrors = (packageName, cliArgs, f) => async (...args) => {
+const enrichErrors = (packageName, cliArguments, f) => async (...arguments_) => {
 	try {
-		return await f(...args);
+		return await f(...arguments_);
 	} catch (error) {
 		error.packageName = packageName;
-		error.cliArgs = cliArgs;
+		error.cliArgs = cliArguments;
 		throw error;
 	}
 };
 
-const makeEslintTask = (packageName, dest, extraArgs = []) => {
-	const args = [
+const makeEslintTask = (packageName, destination, extraArguments = []) => {
+	const arguments_ = [
 		'eslint',
 		'--config',
 		path.join(cwd, 'index.js'),
 		'--no-eslintrc',
 		'--ext',
 		'.js,.ts',
-		dest,
+		destination,
 		'--format',
 		'json',
-		...extraArgs,
+		...extraArguments,
 	];
 
-	return enrichErrors(packageName, args, async () => {
+	return enrichErrors(packageName, arguments_, async () => {
 		let stdout;
 		let processError;
 		try {
-			({stdout} = await execa('npx', args, {cwd, localDir: __dirname}));
+			({stdout} = await execa('npx', arguments_, {cwd, localDir: __dirname}));
 		} catch (error) {
 			({stdout} = error);
 			processError = error;
@@ -112,24 +112,24 @@ const makeEslintTask = (packageName, dest, extraArgs = []) => {
 };
 
 const execute = name => {
-	const dest = tempy.directory();
+	const destination = tempy.directory();
 
 	return new Listr([
 		{
 			title: 'Cloning',
-			task: () => execa('git', ['clone', packages.get(name), '--single-branch', dest]),
+			task: () => execa('git', ['clone', packages.get(name), '--single-branch', destination]),
 		},
 		{
 			title: 'Running eslint',
-			task: makeEslintTask(name, dest),
+			task: makeEslintTask(name, destination),
 		},
 		{
 			title: 'Running eslint --fix',
-			task: makeEslintTask(name, dest, ['--fix-dry-run']),
+			task: makeEslintTask(name, destination, ['--fix-dry-run']),
 		},
 		{
 			title: 'Clean up',
-			task: () => del(dest, {force: true}),
+			task: () => del(destination, {force: true}),
 		},
 	].map(({title, task}) => ({
 		title: `${name} / ${title}`,

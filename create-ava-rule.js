@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDeepStrictEqual} = require('util');
+const {isDeepStrictEqual} = require('node:util');
 const espurify = require('espurify');
 const enhance = require('enhance-visitors');
 const util = require('./util');
@@ -216,7 +216,7 @@ module.exports = () => {
 	};
 
 	return {
-		hasTestModifier: mod => getTestModifierNames(currentTestNode).includes(mod),
+		hasTestModifier: module_ => getTestModifierNames(currentTestNode).includes(module_),
 		hasNoUtilityModifier() {
 			const modifiers = getTestModifierNames(currentTestNode);
 			return !modifiers.includes('before')

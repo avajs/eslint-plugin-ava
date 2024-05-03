@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const test = require('ava');
 const avaRuleTester = require('eslint-ava-rule-tester');
 const util = require('../util');
@@ -13,22 +13,29 @@ const ruleTester = avaRuleTester(test, {
 });
 
 const header = 'const test = require(\'ava\');\n';
-const rootDir = path.dirname(__dirname);
+const rootDirectory = path.dirname(__dirname);
 
-const toPath = subPath => path.join(rootDir, subPath);
+const toPath = subPath => path.join(rootDirectory, subPath);
 const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
 
 util.loadAvaHelper = () => ({
 	classifyFile(file) {
 		switch (file) {
-			case toPath('lib/foo.test.js'):
+			case toPath('lib/foo.test.js'): {
 				return {isHelper: false, isTest: true};
-			case toPath('lib/foo/fixtures/bar.test.js'):
+			}
+
+			case toPath('lib/foo/fixtures/bar.test.js'): {
 				return {isHelper: false, isTest: false};
-			case toPath('lib/foo/helpers/bar.test.js'):
+			}
+
+			case toPath('lib/foo/helpers/bar.test.js'): {
 				return {isHelper: true, isTest: false};
-			default:
+			}
+
+			default: {
 				return {isHelper: false, isTest: false};
+			}
 		}
 	},
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const importModules = require('import-modules');
 
 const rules = {
@@ -54,13 +54,13 @@ module.exports = {
 				...rules,
 			},
 		},
-		"flat/recommended": {
+		'flat/recommended': {
 			plugins: {
-				'ava': 'ava'
+				ava: 'ava',
 			},
 			rules: {
-				...rules
-			}
-		}
+				...rules,
+			},
+		},
 	},
 };

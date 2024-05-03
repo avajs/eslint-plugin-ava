@@ -26,12 +26,12 @@ const messageIsNotStringError = 'Assertion message should be a string.';
 const header = 'const test = require(\'ava\');';
 
 function testCode(content, useHeader) {
-	const testFn = `
+	const testFunction = `
 		test(t => {
 			${content}
 		});
 	`;
-	const code = (useHeader === false ? '' : header) + testFn;
+	const code = (useHeader === false ? '' : header) + testFunction;
 	return code;
 }
 

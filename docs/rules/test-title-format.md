@@ -1,6 +1,6 @@
 # Ensure test titles have a certain format (`ava/test-title-format`)
 
-🚫 This rule is _disabled_ in the following [configs](https://github.com/avajs/eslint-plugin-ava#recommended-config): `flat/recommended`, ✅ `recommended`.
+🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
 <!-- end auto-generated rule header -->
 

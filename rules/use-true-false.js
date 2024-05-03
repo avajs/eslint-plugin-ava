@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDeepStrictEqual} = require('util');
+const {isDeepStrictEqual} = require('node:util');
 const espree = require('espree');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');

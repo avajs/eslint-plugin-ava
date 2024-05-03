@@ -12,18 +12,18 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			const functionArgIndex = node.arguments.length - 1;
-			if (functionArgIndex > 1) {
+			const functionArgumentIndex = node.arguments.length - 1;
+			if (functionArgumentIndex > 1) {
 				return;
 			}
 
-			const functionArg = node.arguments[functionArgIndex];
+			const functionArgument = node.arguments[functionArgumentIndex];
 
-			if (!util.isFunctionExpression(functionArg)) {
+			if (!util.isFunctionExpression(functionArgument)) {
 				return;
 			}
 
-			const {body} = functionArg;
+			const {body} = functionArgument;
 			if (body.type === 'CallExpression') {
 				context.report({
 					node,

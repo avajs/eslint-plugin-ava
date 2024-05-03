@@ -1,7 +1,7 @@
 'use strict';
 
-const path = require('path');
-const {isDeepStrictEqual} = require('util');
+const path = require('node:path');
+const {isDeepStrictEqual} = require('node:util');
 const espurify = require('espurify');
 const util = require('../util');
 
@@ -27,8 +27,8 @@ function report(context, node) {
 }
 
 const create = context => {
-	const ext = path.extname(context.getFilename());
-	const isTypeScript = ext === '.ts' || ext === '.tsx';
+	const extension = path.extname(context.getFilename());
+	const isTypeScript = extension === '.ts' || extension === '.tsx';
 
 	return {
 		'ImportDeclaration[importKind!="type"]'(node) {

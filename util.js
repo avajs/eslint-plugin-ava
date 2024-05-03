@@ -1,23 +1,23 @@
 'use strict';
 
-const path = require('path');
+const path = require('node:path');
 const pkgDir = require('pkg-dir');
 const resolveFrom = require('resolve-from');
 const pkg = require('./package');
 
 exports.loadAvaHelper = (filename, overrides) => {
-	const rootDir = pkgDir.sync(filename);
-	if (!rootDir) {
+	const rootDirectory = pkgDir.sync(filename);
+	if (!rootDirectory) {
 		return undefined;
 	}
 
-	const avaHelperPath = resolveFrom.silent(rootDir, 'ava/eslint-plugin-helper');
+	const avaHelperPath = resolveFrom.silent(rootDirectory, 'ava/eslint-plugin-helper');
 	if (!avaHelperPath) {
 		return undefined;
 	}
 
 	const avaHelper = require(avaHelperPath);
-	return avaHelper.load(rootDir, overrides);
+	return avaHelper.load(rootDirectory, overrides);
 };
 
 const functionExpressions = new Set([
@@ -53,7 +53,7 @@ function getTestModifiers(node) {
 
 exports.getTestModifiers = getTestModifiers;
 
-exports.getTestModifier = (node, mod) => getTestModifiers(node).find(property => property.name === mod);
+exports.getTestModifier = (node, module_) => getTestModifiers(node).find(property => property.name === module_);
 
 exports.removeTestModifier = parameters => {
 	const modifier = parameters.modifier.trim();
@@ -84,12 +84,12 @@ exports.getMembers = getMembers;
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
-const getDocsUrl = (filename, commitHash = `v${pkg.version}`) => {
+const getDocumentationUrl = (filename, commitHash = `v${pkg.version}`) => {
 	const ruleName = path.basename(filename, '.js');
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
 
-exports.getDocsUrl = getDocsUrl;
+exports.getDocsUrl = getDocumentationUrl;
 
 const assertionMethodsNumberArguments = new Map([
 	['assert', 1],

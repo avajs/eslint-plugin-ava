@@ -17,17 +17,17 @@ const create = context => {
 				return;
 			}
 
-			let implementationArg = node.arguments[index];
-			if (ava.hasTestModifier('macro') && implementationArg.type === 'ObjectExpression') {
-				const execProperty = implementationArg.properties.find(p => p.key.name === 'exec');
-				implementationArg = execProperty?.value;
+			let implementationArgument = node.arguments[index];
+			if (ava.hasTestModifier('macro') && implementationArgument.type === 'ObjectExpression') {
+				const execProperty = implementationArgument.properties.find(p => p.key.name === 'exec');
+				implementationArgument = execProperty?.value;
 			}
 
-			if (!implementationArg || !implementationArg.params || implementationArg.params.length === 0) {
+			if (!implementationArgument || !implementationArgument.params || implementationArgument.params.length === 0) {
 				return;
 			}
 
-			if (implementationArg.params[0].name !== 't') {
+			if (implementationArgument.params[0].name !== 't') {
 				context.report({
 					node,
 					message: 'Test parameter should be named `t`.',

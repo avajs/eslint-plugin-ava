@@ -2,7 +2,6 @@
 
 const {visitIf} = require('enhance-visitors');
 const MicroSpellingCorrecter = require('micro-spelling-correcter');
-
 const util = require('../util');
 const createAvaRule = require('../create-ava-rule');
 

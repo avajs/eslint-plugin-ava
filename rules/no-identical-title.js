@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDeepStrictEqual} = require('util');
+const {isDeepStrictEqual} = require('node:util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
 const util = require('../util');
@@ -29,8 +29,8 @@ const create = context => {
 			ava.isTestNode,
 			ava.hasNoUtilityModifier,
 		])(node => {
-			const args = node.arguments;
-			const titleNode = args.length > 1 || ava.hasTestModifier('todo') ? args[0] : undefined;
+			const arguments_ = node.arguments;
+			const titleNode = arguments_.length > 1 || ava.hasTestModifier('todo') ? arguments_[0] : undefined;
 
 			// Don't flag computed titles
 			if (!titleNode || !isStatic(titleNode)) {
@@ -38,7 +38,7 @@ const create = context => {
 			}
 
 			// Don't flag what look to be macros
-			if (args.length > 2 && !util.isFunctionExpression(args[1])) {
+			if (arguments_.length > 2 && !util.isFunctionExpression(arguments_[1])) {
 				return;
 			}
 

@@ -1,6 +1,6 @@
 # Ensure no test files are imported anywhere (`ava/no-import-test-files`)
 
-💼 This rule is enabled in the following [configs](https://github.com/avajs/eslint-plugin-ava#recommended-config): `flat/recommended`, ✅ `recommended`.
+💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
 <!-- end auto-generated rule header -->
 

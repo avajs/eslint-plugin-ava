@@ -21,7 +21,7 @@ const create = context => {
 
 	// Find the latest reference to the given identifier's name.
 	const findReference = node => {
-		const sourceCode = context.sourceCode;
+		const {sourceCode} = context;
 		const reference = sourceCode.getScope(node).references.find(reference => reference.identifier.name === node.name);
 
 		if (reference?.resolved) {
@@ -31,7 +31,7 @@ const create = context => {
 				return;
 			}
 
-			return definitions[definitions.length - 1].node;
+			return definitions.at(-1).node;
 		}
 	};
 
@@ -104,29 +104,29 @@ const create = context => {
 	};
 
 	const booleanHandler = node => {
-		const firstArg = node.arguments[0];
+		const firstArgument = node.arguments[0];
 
-		if (!firstArg) {
+		if (!firstArgument) {
 			return;
 		}
 
-		const isFunctionCall = firstArg.type === 'CallExpression';
-		if (!isFunctionCall || !firstArg.callee.property) {
+		const isFunctionCall = firstArgument.type === 'CallExpression';
+		if (!isFunctionCall || !firstArgument.callee.property) {
 			return;
 		}
 
-		const {name} = firstArg.callee.property;
+		const {name} = firstArgument.callee.property;
 		let lookup = {};
 		let variable = {};
 
 		if (name === 'test') {
 			// Represent: `lookup.test(variable)`
-			lookup = firstArg.callee.object;
-			variable = firstArg.arguments[0];
+			lookup = firstArgument.callee.object;
+			variable = firstArgument.arguments[0];
 		} else if (['search', 'match'].includes(name)) {
 			// Represent: `variable.match(lookup)`
-			lookup = firstArg.arguments[0];
-			variable = firstArg.callee.object;
+			lookup = firstArgument.arguments[0];
+			variable = firstArgument.callee.object;
 		}
 
 		if (!isRegExp(lookup)) {
@@ -139,7 +139,7 @@ const create = context => {
 			const source = context.getSourceCode();
 			return [
 				fixer.replaceText(node.callee.property, assertion),
-				fixer.replaceText(firstArg, `${source.getText(variable)}, ${source.getText(lookup)}`),
+				fixer.replaceText(firstArgument, `${source.getText(variable)}, ${source.getText(lookup)}`),
 			];
 		};
 
@@ -151,30 +151,30 @@ const create = context => {
 	};
 
 	const equalityHandler = node => {
-		const [firstArg, secondArg] = node.arguments;
+		const [firstArgument, secondArgument] = node.arguments;
 
-		const firstArgumentIsRegex = isRegExp(firstArg);
-		const secondArgumentIsRegex = isRegExp(secondArg);
+		const firstArgumentIsRegex = isRegExp(firstArgument);
+		const secondArgumentIsRegex = isRegExp(secondArgument);
 
 		// If both are regex, or neither are, the expression is ok.
 		if (firstArgumentIsRegex === secondArgumentIsRegex) {
 			return;
 		}
 
-		const matchee = secondArgumentIsRegex ? firstArg : secondArg;
+		const matchee = secondArgumentIsRegex ? firstArgument : secondArgument;
 
 		if (!matchee) {
 			return;
 		}
 
-		const regex = secondArgumentIsRegex ? secondArg : firstArg;
+		const regex = secondArgumentIsRegex ? secondArgument : firstArgument;
 
 		const booleanFixer = assertion => fixer => {
 			const source = context.getSourceCode();
 			return [
 				fixer.replaceText(node.callee.property, assertion),
-				fixer.replaceText(firstArg, `${source.getText(regex.arguments[0])}`),
-				fixer.replaceText(secondArg, `${source.getText(regex.callee.object)}`),
+				fixer.replaceText(firstArgument, `${source.getText(regex.arguments[0])}`),
+				fixer.replaceText(secondArgument, `${source.getText(regex.callee.object)}`),
 			];
 		};
 

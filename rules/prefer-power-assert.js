@@ -1,6 +1,6 @@
 'use strict';
 
-const {isDeepStrictEqual} = require('util');
+const {isDeepStrictEqual} = require('node:util');
 const espurify = require('espurify');
 const {visitIf} = require('enhance-visitors');
 const createAvaRule = require('../create-ava-rule');
