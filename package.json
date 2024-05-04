@@ -6,7 +6,7 @@
 	"repository": "avajs/eslint-plugin-ava",
 	"sideEffects": false,
 	"engines": {
-		"node": "^18.18 || >=20"
+		"node": "^18.18 || >=20.9"
 	},
 	"scripts": {
 		"integration": "node ./test/integration/test.js",

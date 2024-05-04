@@ -55,9 +55,6 @@ module.exports = {
 			},
 		},
 		'flat/recommended': {
-			plugins: {
-				ava: 'ava',
-			},
 			rules: {
 				...rules,
 			},
