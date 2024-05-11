@@ -2,8 +2,9 @@
 
 const path = require('node:path');
 const importModules = require('import-modules');
+const {name, version} = require('./package.json');
 
-const rules = {
+const recommendedRules = {
 	'ava/assertion-arguments': 'error',
 	'ava/hooks-order': 'error',
 	'ava/max-asserts': [
@@ -36,31 +37,39 @@ const rules = {
 	'ava/use-true-false': 'error',
 };
 
-module.exports = {
+const plugin = {
+	meta: {
+		name,
+		version,
+	},
 	rules: importModules(path.resolve(__dirname, 'rules'), {camelize: false}),
-	configs: {
-		recommended: {
-			env: {
-				es6: true,
-			},
-			parserOptions: {
-				ecmaVersion: 'latest',
-				sourceType: 'module',
-			},
-			plugins: [
-				'ava',
-			],
-			rules: {
-				...rules,
-			},
+	configs: {},
+};
+
+Object.assign(plugin.configs, {
+	recommended: {
+		env: {
+			es6: true,
 		},
-		'flat/recommended': {
-			plugins: {
-				ava: 'ava',
-			},
-			rules: {
-				...rules,
-			},
+		parserOptions: {
+			ecmaVersion: 'latest',
+			sourceType: 'module',
+		},
+		plugins: [
+			'ava',
+		],
+		rules: {
+			...recommendedRules,
 		},
 	},
-};
+	'flat/recommended': {
+		plugins: {
+			ava: plugin,
+		},
+		rules: {
+			...recommendedRules,
+		},
+	},
+});
+
+module.exports = plugin;
