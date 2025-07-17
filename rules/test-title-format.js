@@ -45,6 +45,7 @@ const schema = [
 				default: undefined,
 			},
 		},
+		additionalProperties: false,
 	},
 ];
 
