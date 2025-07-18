@@ -60,6 +60,7 @@ const schema = [{
 			type: 'array',
 		},
 	},
+	additionalProperties: false,
 }];
 
 module.exports = {
