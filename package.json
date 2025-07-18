@@ -105,7 +105,10 @@
 			"import/extensions": "off",
 			"unicorn/prefer-module": "off",
 			"unicorn/prefer-top-level-await": "off",
-			"eslint-plugin/require-meta-docs-recommended": "off"
+			"eslint-plugin/require-meta-docs-recommended": "off",
+			"eslint-plugin/require-meta-default-options": "off",
+			"eslint-plugin/no-meta-schema-default": "off",
+			"eslint-plugin/require-meta-schema-description": "off"
 		}
 	},
 	"c8": {
