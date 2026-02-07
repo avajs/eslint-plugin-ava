@@ -41,7 +41,7 @@ ruleTester.run('rule-fixture', rule, {
 		requireMessage: true,
 	},
 	valid: [
-		// require patterns
+		// `require` patterns
 		'const test = require(\'ava\');',
 		'let test = require(\'ava\');',
 		'var test = require(\'ava\');',
@@ -50,7 +50,7 @@ ruleTester.run('rule-fixture', rule, {
 		'const {serial: test} = require(\'ava\');',
 		{name: 'require anyTest', code: 'const anyTest = require(\'ava\');'},
 		{name: 'require destructure with rest element', code: 'const { serial, ...rest } = require(\'ava\');'},
-		// import patterns
+		// `import` patterns
 		'import test from \'ava\';',
 		'import {serial} from \'ava\';',
 		'import {serial as test} from \'ava\';',

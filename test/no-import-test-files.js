@@ -29,6 +29,14 @@ util.loadAvaHelper = () => ({
 				return {isHelper: false, isTest: true};
 			}
 
+			case toPath('test'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
+				return {isHelper: false, isTest: true};
+			}
+
+			case toPath('test/index'): { // After resolving directory to index file
+				return {isHelper: false, isTest: false};
+			}
+
 			default: {
 				return {isHelper: false, isTest: false};
 			}
@@ -60,6 +68,16 @@ ruleTester.run('no-import-test-files', rule, {
 		},
 		'const value = require(true);',
 		'const value = require();',
+		{ // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
+			code: 'const helpers = require(\'./test\');',
+			filename: toPath('foo.js'),
+			name: 'directory-import-require',
+		},
+		{ // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
+			code: 'import helpers from \'./test\';',
+			filename: toPath('foo.js'),
+			name: 'directory-import-esm',
+		},
 	],
 	invalid: [
 		{

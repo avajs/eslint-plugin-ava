@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import util from '../util.js';
 
@@ -37,7 +38,14 @@ const create = context => {
 			return {};
 		}
 
-		const {isTest} = avaHelper.classifyImport(path.resolve(resolveFrom, importPath));
+		let resolvedPath = path.resolve(resolveFrom, importPath);
+		try {
+			if (fs.statSync(resolvedPath).isDirectory()) {
+				resolvedPath = path.join(resolvedPath, 'index');
+			}
+		} catch {}
+
+		const {isTest} = avaHelper.classifyImport(resolvedPath);
 		if (isTest) {
 			context.report({
 				node,
