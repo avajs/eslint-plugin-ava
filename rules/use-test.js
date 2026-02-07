@@ -33,6 +33,11 @@ const create = context => {
 	return {
 		'ImportDeclaration[importKind!="type"]'(node) {
 			if (node.source.value === 'ava') {
+				// Skip inline type imports: `import {type Foo} from 'ava'`
+				if (node.specifiers.every(specifier => specifier.importKind === 'type')) {
+					return;
+				}
+
 				const {name} = node.specifiers[0].local;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);

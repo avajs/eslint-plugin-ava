@@ -78,10 +78,20 @@ const typescriptTestCases = {
 	assertionOptions: {
 		requireMessage: true,
 	},
-	valid: typescriptExtensions.map(extension => (
-		{code: 'import type {Macro} from \'ava\';', filename: `file${extension}`}
+	valid: typescriptExtensions.flatMap(extension => [
+		// Statement-level type import
+		{code: 'import type {Macro} from \'ava\';', filename: `file${extension}`},
+		// Inline type imports
+		{code: 'import {type Macro} from \'ava\';', filename: `file${extension}`},
+		{code: 'import {type Macro, type TestFn} from \'ava\';', filename: `file${extension}`},
+		// Default + inline type imports
+		{code: 'import test, {type Macro} from \'ava\';', filename: `file${extension}`},
+		{code: 'import anyTest, {type Macro} from \'ava\';', filename: `file${extension}`},
+	]),
+	invalid: typescriptExtensions.map(extension => (
+		// Default with wrong name + inline type import should still report
+		{code: 'import ava, {type Macro} from \'ava\';', errors, filename: `file${extension}`}
 	)),
-	invalid: [],
 };
 
 ruleTester.run('use-test', rule, commonTestCases);
