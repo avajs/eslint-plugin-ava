@@ -286,9 +286,17 @@ const create = context => {
 
 				if (lastArgument.type === 'Identifier') {
 					const variable = findVariable(context.sourceCode.getScope(node), lastArgument);
+					if (!variable) {
+						return;
+					}
+
 					let value;
 					for (const reference of variable.references) {
 						value = reference.writeExpr ?? value;
+					}
+
+					if (!value) {
+						return;
 					}
 
 					lastArgument = value;
