@@ -186,5 +186,11 @@ ruleTester.run('prefer-t-regex', rule, {
 			output: header + 'const reg = RegExp(/\\d+/);\ntest(t => t.regex(foo.bar(), reg));',
 			errors: errors(),
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: header + String.raw`test(t => tt.true(/\d+/.test("foo")));`,
+			output: header + String.raw`test(t => tt.regex("foo", /\d+/));`,
+			errors: errors(),
+		},
 	],
 });

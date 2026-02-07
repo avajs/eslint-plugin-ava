@@ -72,5 +72,13 @@ ruleTester.run('use-t-throws-async-well', rule, {
 				messageId: 'use-t-throws-async-well',
 			}],
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: asyncTestCase('tt.throwsAsync(f)'),
+			output: asyncTestCase('await tt.throwsAsync(f)'),
+			errors: [{
+				messageId: 'use-t-throws-async-well',
+			}],
+		},
 	],
 });

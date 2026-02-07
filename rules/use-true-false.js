@@ -60,7 +60,7 @@ const create = context => {
 		])(node => {
 			if (
 				node.callee.type !== 'MemberExpression'
-				|| node.callee.object.name !== 't'
+				|| !util.isTestObject(node.callee.object.name)
 			) {
 				return;
 			}

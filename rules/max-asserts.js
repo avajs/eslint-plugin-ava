@@ -26,7 +26,7 @@ const create = context => {
 			if (
 				callee.property
 				&& !notAssertionMethods.has(callee.property.name)
-				&& util.getNameOfRootNodeObject(callee) === 't'
+				&& util.isTestObject(util.getNameOfRootNodeObject(callee))
 			) {
 				const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
 

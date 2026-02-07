@@ -210,7 +210,7 @@ const create = context => {
 			}
 
 			const isAssertion = node.callee.type === 'MemberExpression'
-				&& util.getNameOfRootNodeObject(node.callee) === 't';
+				&& util.isTestObject(util.getNameOfRootNodeObject(node.callee));
 
 			const isBooleanAssertion = isAssertion
 				&& booleanTests.has(node.callee.property.name);

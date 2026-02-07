@@ -233,7 +233,7 @@ const create = context => {
 			if (
 				callee.type !== 'MemberExpression'
 				|| !callee.property
-				|| util.getNameOfRootNodeObject(callee) !== 't'
+				|| !util.isTestObject(util.getNameOfRootNodeObject(callee))
 				|| util.isPropertyUnderContext(callee)
 			) {
 				return;

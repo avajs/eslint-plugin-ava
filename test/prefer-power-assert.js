@@ -168,5 +168,11 @@ ruleTester.run('prefer-power-assert - nested', rule, {
 			code: assertionInNestedCode,
 			errors,
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			name: '[nested] alternative test object name',
+			code: 'import test from \'ava\';\n test(t => { tt.is(foo); });',
+			errors,
+		},
 	],
 });

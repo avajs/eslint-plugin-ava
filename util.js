@@ -36,6 +36,11 @@ export const getRootNode = node => {
 
 export const getNameOfRootNodeObject = node => getRootNode(node).object.name;
 
+// Match valid test execution object names: `t`, `tt`, `t_`, `t1`-`t9`
+// These are used in `t.try()` callbacks when variable shadowing is disallowed.
+const testObjectPattern = /^t[t_1-9]?$/;
+export const isTestObject = name => testObjectPattern.test(name);
+
 export const isPropertyUnderContext = node => getRootNode(node).property.name === 'context';
 
 export const isFunctionExpression = node => node && functionExpressions.has(node.type);
@@ -127,6 +132,7 @@ export default {
 	loadAvaHelper,
 	getRootNode,
 	getNameOfRootNodeObject,
+	isTestObject,
 	isPropertyUnderContext,
 	isFunctionExpression,
 	getTestModifiers,

@@ -75,5 +75,10 @@ ruleTester.run('max-asserts', rule, {
 			code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
 			errors: [...maxAssertsError(), ...maxAssertsError()],
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: `${header} test(t => { ${'tt.is(1, 1); '.repeat(6)}});`,
+			errors: maxAssertsError(),
+		},
 	],
 });

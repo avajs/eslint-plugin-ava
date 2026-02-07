@@ -56,5 +56,16 @@ ruleTester.run('no-skip-assert', rule, {
 				}],
 			}],
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: header + 'test(t => { tt.is.skip(1, 1); });',
+			errors: [{
+				messageId: 'no-skip-assert',
+				suggestions: [{
+					messageId: 'no-skip-assert-suggestion',
+					output: header + 'test(t => { tt.is(1, 1); });',
+				}],
+			}],
+		},
 	],
 });

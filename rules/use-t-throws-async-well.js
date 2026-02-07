@@ -16,7 +16,7 @@ const create = context => {
 				node.parent.type === 'ExpressionStatement'
 				&& node.callee.type === 'MemberExpression'
 				&& (node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync')
-				&& node.callee.object.name === 't'
+				&& util.isTestObject(node.callee.object.name)
 			) {
 				if (ava.isInTestNode().arguments[0].async) {
 					context.report({

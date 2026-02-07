@@ -1,12 +1,10 @@
-import {isDeepStrictEqual} from 'node:util';
-import espurify from 'espurify';
 import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'prefer-power-assert';
 
-const notAllowed = [
+const notAllowed = new Set([
 	'truthy',
 	'true',
 	'falsy',
@@ -16,45 +14,28 @@ const notAllowed = [
 	'regex',
 	'notRegex',
 	'ifError',
-];
+]);
 
-const assertionCalleeAst = methodName => ({
-	type: 'MemberExpression',
-	object: {
-		type: 'Identifier',
-		name: 't',
-	},
-	property: {
-		type: 'Identifier',
-		name: methodName,
-	},
-	computed: false,
-});
+const isNotAllowedAssertion = callee => {
+	if (callee.type !== 'MemberExpression' || callee.computed) {
+		return false;
+	}
 
-const skippedAssertionCalleeAst = methodName => ({
-	type: 'MemberExpression',
-	object: {
-		type: 'MemberExpression',
-		object: {
-			type: 'Identifier',
-			name: 't',
-		},
-		property: {
-			type: 'Identifier',
-			name: 'skip',
-		},
-		computed: false,
-	},
-	property: {
-		type: 'Identifier',
-		name: methodName,
-	},
-	computed: false,
-});
+	const {object} = callee;
 
-const isCalleeMatched = (callee, methodName) =>
-	isDeepStrictEqual(callee, assertionCalleeAst(methodName))
-	|| isDeepStrictEqual(callee, skippedAssertionCalleeAst(methodName));
+	// Match: t.method()
+	if (object.type === 'Identifier') {
+		return util.isTestObject(object.name) && notAllowed.has(callee.property.name);
+	}
+
+	// Match: t.skip.method()
+	return object.type === 'MemberExpression'
+		&& !object.computed
+		&& object.property.name === 'skip'
+		&& object.object.type === 'Identifier'
+		&& util.isTestObject(object.object.name)
+		&& notAllowed.has(callee.property.name);
+};
 
 const create = context => {
 	const ava = createAvaRule();
@@ -64,17 +45,11 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode,
 		])(node => {
-			const callee = espurify(node.callee);
-
-			if (callee.type === 'MemberExpression') {
-				for (const methodName of notAllowed) {
-					if (isCalleeMatched(callee, methodName)) {
-						context.report({
-							node,
-							messageId: MESSAGE_ID,
-						});
-					}
-				}
+			if (isNotAllowedAssertion(node.callee)) {
+				context.report({
+					node,
+					messageId: MESSAGE_ID,
+				});
 			}
 		}),
 	});

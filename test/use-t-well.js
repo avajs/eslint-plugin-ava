@@ -75,6 +75,10 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.like(v, v)'),
 		testCase('t.like(actual, {}, "")'),
 		testCase('t.like.skip(v, v)'),
+		// Alternative test object names for t.try() callbacks
+		testCase('tt.pass();'),
+		testCase('t_.is(v);'),
+		testCase('t1.deepEqual(v, v);'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.foo(a, a);', false),
 		testCase('t.foo;', false),
@@ -215,6 +219,30 @@ ruleTester.run('use-t-well', rule, {
 		{
 			code: testCase('t.lik(a, a);'),
 			output: testCase('t.like(a, a);'),
+			errors: [error('misspelled')],
+		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: testCase('tt();'),
+			errors: [error('not-function')],
+		},
+		{
+			code: testCase('tt.foo(a, a);'),
+			errors: [error('unknown-assertion')],
+		},
+		{
+			code: testCase('tt.skip.deepEqual(a, a);'),
+			output: testCase('tt.deepEqual.skip(a, a);'),
+			errors: [error('skip-position')],
+		},
+		{
+			code: testCase('tt.deepEqual.skip.skip(a, a);'),
+			output: testCase('tt.deepEqual.skip(a, a);'),
+			errors: [error('too-many-skips')],
+		},
+		{
+			code: testCase('t_.depEqual(a, a);'),
+			output: testCase('t_.deepEqual(a, a);'),
 			errors: [error('misspelled')],
 		},
 	],

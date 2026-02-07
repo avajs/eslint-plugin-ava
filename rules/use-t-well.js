@@ -42,7 +42,7 @@ const create = context => {
 			ava.isInTestNode,
 		])(node => {
 			if (node.callee.type !== 'MemberExpression'
-				&& node.callee.name === 't') {
+				&& util.isTestObject(node.callee.name)) {
 				context.report({
 					node,
 					messageId: MESSAGE_ID_NOT_FUNCTION,
@@ -54,7 +54,7 @@ const create = context => {
 			ava.isInTestNode,
 		])(node => {
 			if (node.parent.type === 'MemberExpression'
-				|| util.getNameOfRootNodeObject(node) !== 't') {
+				|| !util.isTestObject(util.getNameOfRootNodeObject(node))) {
 				return;
 			}
 
@@ -136,7 +136,7 @@ const create = context => {
 					node,
 					messageId: MESSAGE_ID_TOO_MANY_SKIPS,
 					fix(fixer) {
-						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						const chain = [util.getNameOfRootNodeObject(node), ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
 					},
 				});
@@ -147,7 +147,7 @@ const create = context => {
 					node,
 					messageId: MESSAGE_ID_SKIP_POSITION,
 					fix(fixer) {
-						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
+						const chain = [util.getNameOfRootNodeObject(node), ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
 					},
 				});

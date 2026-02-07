@@ -245,9 +245,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.snapshot(value, \'message\');'),
 		testCase('always', 't.teardown(() => {});'),
 		testCase('always', 't.timeout(100, \'message\');'),
-		testCase('always', 't.try(tt => tt.pass());'),
-		testCase('always', 't.try(tt => tt.pass(), 1, 2);'),
-		testCase('always', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
+		testCase('always', 't.try(tt => tt.pass(\'ok\'));'),
+		testCase('always', 't.try(tt => tt.pass(\'ok\'), 1, 2);'),
+		testCase('always', 't.try(\'title\', tt => tt.pass(\'ok\'), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
 		testCase('always', 't.true(true);', [], {useHeader: false}),
@@ -500,5 +500,11 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, {}, 42);', messageIsNotStringError),
 		testCase(false, 't.fail({});', messageIsNotStringError),
 		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError),
+
+		// Alternative test object names for t.try() callbacks
+		testCase(false, 'tt.is(\'same\');', tooFewError()),
+		testCase(false, 't_.deepEqual({});', tooFewError()),
+		testCase(false, 't1.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError()),
+		testCase('always', 'tt.pass();', missingError),
 	],
 });

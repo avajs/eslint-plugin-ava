@@ -190,5 +190,11 @@ ruleTester.run('use-true-false', rule, {
 			output: testCase('t.false(x, "message")'),
 			errors: isFalseErrors,
 		},
+		// Alternative test object names for t.try() callbacks
+		{
+			code: testCase('tt.truthy(true)'),
+			output: testCase('tt.true(true)'),
+			errors: trueErrors,
+		},
 	],
 });

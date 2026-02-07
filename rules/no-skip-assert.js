@@ -15,7 +15,7 @@ const create = context => {
 		])(node => {
 			if (node.property.name === 'skip') {
 				const root = util.getRootNode(node);
-				if (root.object.name === 't' && util.assertionMethods.has(root.property.name)) {
+				if (util.isTestObject(root.object.name) && util.assertionMethods.has(root.property.name)) {
 					context.report({
 						node,
 						messageId: MESSAGE_ID,
