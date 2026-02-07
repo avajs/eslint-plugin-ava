@@ -1,199 +1,91 @@
-import {isDeepStrictEqual} from 'node:util';
-import espurify from 'espurify';
 import enhance from 'enhance-visitors';
 import {getTestModifiers} from './util.js';
 
-const avaImportDeclarationAsts = [{
-	type: 'ImportDeclaration',
-	specifiers: [
-		{
-			type: 'ImportDefaultSpecifier',
-			local: {
-				type: 'Identifier',
-				name: 'test',
-			},
-		},
-	],
-	source: {
-		type: 'Literal',
-		value: 'ava',
-	},
-}, {
-	type: 'ImportDeclaration',
-	specifiers: [
-		{
-			type: 'ImportSpecifier',
-			imported: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			local: {
-				type: 'Identifier',
-				name: 'test',
-			},
-		},
-	],
-	source: {
-		type: 'Literal',
-		value: 'ava',
-	},
-}, {
-	type: 'ImportDeclaration',
-	specifiers: [
-		{
-			type: 'ImportSpecifier',
-			imported: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			local: {
-				type: 'Identifier',
-				name: 'test',
-			},
-		},
-	],
-	source: {
-		type: 'Literal',
-		value: 'ava',
-	},
-}, {
-	type: 'ImportDeclaration',
-	specifiers: [
-		{
-			type: 'ImportSpecifier',
-			imported: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			local: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-		},
-	],
-	source: {
-		type: 'Literal',
-		value: 'ava',
-	},
-}];
-
-const avaVariableDeclaratorAsts = [{
-	type: 'VariableDeclarator',
-	id: {
-		type: 'Identifier',
-		name: 'test',
-	},
-	init: {
-		type: 'CallExpression',
-		callee: {
-			type: 'Identifier',
-			name: 'require',
-		},
-		arguments: [
-			{
-				type: 'Literal',
-				value: 'ava',
-			},
-		],
-	},
-}, {
-	type: 'VariableDeclarator',
-	id: {
-		type: 'ObjectPattern',
-		properties: [{
-			type: 'Property',
-			key: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			value: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			kind: 'init',
-			method: false,
-			shorthand: true,
-			computed: false,
-		}],
-	},
-	init: {
-		type: 'CallExpression',
-		callee: {
-			type: 'Identifier',
-			name: 'require',
-		},
-		arguments: [
-			{
-				type: 'Literal',
-				value: 'ava',
-			},
-		],
-	},
-}, {
-	type: 'VariableDeclarator',
-	id: {
-		type: 'ObjectPattern',
-		properties: [{
-			type: 'Property',
-			key: {
-				type: 'Identifier',
-				name: 'serial',
-			},
-			value: {
-				type: 'Identifier',
-				name: 'test',
-			},
-			kind: 'init',
-			method: false,
-			shorthand: false,
-			computed: false,
-		}],
-	},
-	init: {
-		type: 'CallExpression',
-		callee: {
-			type: 'Identifier',
-			name: 'require',
-		},
-		arguments: [
-			{
-				type: 'Literal',
-				value: 'ava',
-			},
-		],
-	},
-}];
-
-function isTestFunctionCall(node) {
-	if (node.type === 'Identifier') {
-		return node.name === 'test';
-	}
-
-	if (node.type === 'MemberExpression') {
-		return isTestFunctionCall(node.object);
-	}
-
-	return false;
+function isRequireCall(node, moduleName) {
+	return node?.type === 'CallExpression'
+		&& node.callee?.type === 'Identifier'
+		&& node.callee.name === 'require'
+		&& node.arguments[0]?.value === moduleName;
 }
 
-function getTestModifierNames(node) {
-	return getTestModifiers(node).map(property => property.name);
+// Unwrap TypeScript type assertion expressions (e.g., `anyTest as TestFn<Context>`)
+function unwrapTypeExpression(node) {
+	if (
+		node?.type === 'TSAsExpression'
+		|| node?.type === 'TSTypeAssertion'
+		|| node?.type === 'TSSatisfiesExpression'
+		|| node?.type === 'TSNonNullExpression'
+	) {
+		return unwrapTypeExpression(node.expression);
+	}
+
+	return node;
 }
 
 export default () => {
 	let isTestFile = false;
 	let currentTestNode;
+	const testIdentifiers = new Set();
+
+	function isTestFunctionCall(node) {
+		if (node.type === 'Identifier') {
+			return testIdentifiers.has(node.name);
+		}
+
+		if (node.type === 'MemberExpression') {
+			return isTestFunctionCall(node.object);
+		}
+
+		return false;
+	}
+
+	function getTestModifierNames(node) {
+		return getTestModifiers(node).map(property => property.name);
+	}
 
 	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
 		ImportDeclaration(node) {
-			if (!isTestFile && avaImportDeclarationAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
-				isTestFile = true;
+			if (node.source.value !== 'ava' || node.importKind === 'type') {
+				return;
+			}
+
+			for (const specifier of node.specifiers) {
+				if (specifier.importKind === 'type') {
+					continue;
+				}
+
+				if (specifier.type === 'ImportDefaultSpecifier') {
+					isTestFile = true;
+					testIdentifiers.add(specifier.local.name);
+				} else if (specifier.type === 'ImportSpecifier' && specifier.imported.name === 'serial') {
+					isTestFile = true;
+					testIdentifiers.add(specifier.local.name);
+				}
 			}
 		},
 		VariableDeclarator(node) {
-			if (!isTestFile && avaVariableDeclaratorAsts.some(ast => isDeepStrictEqual(espurify(node), ast))) {
-				isTestFile = true;
+			const init = unwrapTypeExpression(node.init);
+
+			if (isRequireCall(init, 'ava')) {
+				if (node.id.type === 'Identifier') {
+					isTestFile = true;
+					testIdentifiers.add(node.id.name);
+				} else if (node.id.type === 'ObjectPattern') {
+					for (const property of node.id.properties) {
+						if (property.key?.name === 'serial') {
+							isTestFile = true;
+							testIdentifiers.add(property.value.name);
+						}
+					}
+				}
+
+				return;
+			}
+
+			// Track re-assignment from a test identifier (e.g., `const test = anyTest as TestFn<Context>`)
+			if (init?.type === 'Identifier' && testIdentifiers.has(init.name) && node.id.type === 'Identifier') {
+				testIdentifiers.add(node.id.name);
 			}
 		},
 		CallExpression(node) {
@@ -210,6 +102,7 @@ export default () => {
 		},
 		'Program:exit'() {
 			isTestFile = false;
+			testIdentifiers.clear();
 		},
 	};
 

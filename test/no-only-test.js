@@ -1,5 +1,6 @@
 import test from 'ava';
 import AvaRuleTester from 'eslint-ava-rule-tester';
+import tsParser from '@typescript-eslint/parser';
 import rule from '../rules/no-only-test.js';
 
 const ruleTester = new AvaRuleTester(test, {
@@ -9,8 +10,15 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
+const typescriptRuleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		parser: tsParser,
+	},
+});
+
 const messageId = 'no-only-test';
 const header = 'const test = require(\'ava\');\n';
+const tsHeader = 'import anyTest from \'ava\';\nconst test = anyTest as any;\n';
 
 ruleTester.run('no-only-test', rule, {
 	assertionOptions: {
@@ -105,6 +113,31 @@ ruleTester.run('no-only-test', rule, {
 				suggestions: [{
 					messageId: 'no-only-test-suggestion',
 					output: header + 'test(t => { t.pass(); });',
+				}],
+			}],
+		},
+	],
+});
+
+// TypeScript: `import anyTest from 'ava'; const test = anyTest as TestFn<Context>;`
+typescriptRuleTester.run('no-only-test-ts', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
+	valid: [
+		{name: 'ts: no only', code: tsHeader + 'test("my test name", t => { t.pass(); });'},
+	],
+	invalid: [
+		{
+			name: 'ts: test.only detected',
+			code: tsHeader + 'test.only(t => { t.pass(); });',
+			errors: [{
+				messageId,
+				line: 3,
+				column: 6,
+				suggestions: [{
+					messageId: 'no-only-test-suggestion',
+					output: tsHeader + 'test(t => { t.pass(); });',
 				}],
 			}],
 		},
