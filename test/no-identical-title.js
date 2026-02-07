@@ -43,6 +43,7 @@ ruleTester.run('no-identical-title', rule, {
 			test('same title', macro, true);
 			test('same title', macro, false);
 		`,
+		header + 'test(t => {}); test(t => {});',
 		// Shouldn't be triggered since it's not a test file
 		'test(t => {}); test(t => {});',
 		'test("a", t => {}); test("a", t => {});',

@@ -24,6 +24,11 @@ ruleTester.run('prefer-async-await', rule, {
 		header + 'test(t => { foo().then(fn); });',
 		header + 'test(t => { function foo() { return foo().then(fn); } });',
 		header + 'test(t => foo().then(fn));',
+		{
+			code: header + 'test(t => { const bar = foo(); return bar; });',
+			name: 'returned-var-not-from-then',
+		},
+		header + 'test(t => { return; });',
 		// Shouldn't be triggered since it's not a test file
 		'test(t => { return foo().then(fn); });',
 	],
@@ -75,6 +80,11 @@ ruleTester.run('prefer-async-await', rule, {
 		{
 			code: header + 'test(t => { const bar = foo?.().then(fn); return bar; });',
 			errors,
+		},
+		{
+			code: header + 'test(t => { console.log("hi"); const bar = foo().then(fn); return bar; });',
+			errors,
+			name: 'non-var-statement-before-then-var',
 		},
 	],
 });

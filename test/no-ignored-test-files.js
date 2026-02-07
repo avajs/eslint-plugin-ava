@@ -16,27 +16,33 @@ const rootDirectory = path.dirname(import.meta.dirname);
 const toPath = subPath => path.join(rootDirectory, subPath);
 const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
 
-util.loadAvaHelper = () => ({
-	classifyFile(file) {
-		switch (file) {
-			case toPath('lib/foo.test.js'): {
-				return {isHelper: false, isTest: true};
-			}
+util.loadAvaHelper = filename => {
+	if (filename === toPath('no-helper.test.js')) {
+		return undefined;
+	}
 
-			case toPath('lib/foo/fixtures/bar.test.js'): {
-				return {isHelper: false, isTest: false};
-			}
+	return {
+		classifyFile(file) {
+			switch (file) {
+				case toPath('lib/foo.test.js'): {
+					return {isHelper: false, isTest: true};
+				}
 
-			case toPath('lib/foo/helpers/bar.test.js'): {
-				return {isHelper: true, isTest: false};
-			}
+				case toPath('lib/foo/fixtures/bar.test.js'): {
+					return {isHelper: false, isTest: false};
+				}
 
-			default: {
-				return {isHelper: false, isTest: false};
+				case toPath('lib/foo/helpers/bar.test.js'): {
+					return {isHelper: true, isTest: false};
+				}
+
+				default: {
+					return {isHelper: false, isTest: false};
+				}
 			}
-		}
-	},
-});
+		},
+	};
+};
 
 ruleTester.run('no-ignored-test-files', rule, {
 	assertionOptions: {
@@ -46,6 +52,21 @@ ruleTester.run('no-ignored-test-files', rule, {
 		{
 			code: code(true),
 			filename: toPath('lib/foo.test.js'),
+		},
+		{
+			code: code(true),
+			filename: '<input>',
+			name: 'synthetic-filename',
+		},
+		{
+			code: header + 'const x = 1;',
+			filename: toPath('lib/foo.test.js'),
+			name: 'no-test-call',
+		},
+		{
+			code: code(true),
+			filename: toPath('no-helper.test.js'),
+			name: 'no-ava-helper',
 		},
 	],
 	invalid: [

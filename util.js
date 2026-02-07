@@ -6,6 +6,7 @@ import resolveFrom from 'resolve-from';
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+/* c8 ignore start -- requires a real project with AVA's eslint-plugin-helper installed */
 export const loadAvaHelper = (filename, overrides) => {
 	const rootDirectory = packageDirectorySync({cwd: filename});
 	if (!rootDirectory) {
@@ -20,6 +21,7 @@ export const loadAvaHelper = (filename, overrides) => {
 	const avaHelper = require(avaHelperPath);
 	return avaHelper.load(rootDirectory, overrides);
 };
+/* c8 ignore stop */
 
 const functionExpressions = new Set([
 	'FunctionExpression',

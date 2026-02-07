@@ -178,6 +178,7 @@ function * sourceRangesOfArguments(sourceCode, callExpression) {
 
 		yield [firstToken.range[0], lastToken.range[1]];
 	}
+/* c8 ignore next -- only called for nodes with 2+ arguments, so the loop always iterates */
 }
 
 function sourceOfBinaryExpressionComponents(sourceCode, node) {
@@ -219,7 +220,7 @@ function isString(node) {
 
 const create = context => {
 	const ava = createAvaRule();
-	const options = context.options[0] ?? {};
+	const options = context.options[0];
 	const enforcesMessage = Boolean(options.message);
 	const shouldHaveMessage = options.message !== 'never';
 

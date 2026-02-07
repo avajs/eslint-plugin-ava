@@ -52,10 +52,6 @@ const create = context => {
 	```
 	*/
 	const findRootReference = node => {
-		if (!node) {
-			return;
-		}
-
 		if (node.type === 'Identifier') {
 			const reference = findReference(node);
 
@@ -95,10 +91,6 @@ const create = context => {
 
 		// Look up references in case it's a variable or RegExp declaration.
 		const reference = findRootReference(lookup);
-
-		if (!reference) {
-			return false;
-		}
 
 		return reference.regex ?? reference.name === 'RegExp';
 	};

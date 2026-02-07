@@ -47,6 +47,7 @@ ruleTester.run('prefer-t-regex', rule, {
 		header + 'test(t => t.falsy())',
 		header + 'test(t => t.truthy())',
 		header + 'test(t => t.deepEqual(true))',
+		header + String.raw`test(t => t.is(/\d+/))`,
 	],
 	invalid: [
 		{

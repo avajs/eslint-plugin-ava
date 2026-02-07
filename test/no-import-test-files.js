@@ -14,35 +14,41 @@ const ruleTester = new AvaRuleTester(test, {
 const rootDirectory = path.dirname(import.meta.dirname);
 const toPath = subPath => path.join(rootDirectory, subPath);
 
-util.loadAvaHelper = () => ({
-	classifyImport(importPath) {
-		switch (importPath) {
-			case toPath('lib/foo.test.js'): {
-				return {isHelper: false, isTest: true};
-			}
+util.loadAvaHelper = filename => {
+	if (filename === toPath('no-helper.js')) {
+		return undefined;
+	}
 
-			case toPath('../foo.test.js'): {
-				return {isHelper: false, isTest: true};
-			}
+	return {
+		classifyImport(importPath) {
+			switch (importPath) {
+				case toPath('lib/foo.test.js'): {
+					return {isHelper: false, isTest: true};
+				}
 
-			case toPath('@foo/bar'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
-				return {isHelper: false, isTest: true};
-			}
+				case toPath('../foo.test.js'): {
+					return {isHelper: false, isTest: true};
+				}
 
-			case toPath('test'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
-				return {isHelper: false, isTest: true};
-			}
+				case toPath('@foo/bar'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/253
+					return {isHelper: false, isTest: true};
+				}
 
-			case toPath('test/index'): { // After resolving directory to index file
-				return {isHelper: false, isTest: false};
-			}
+				case toPath('test'): { // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
+					return {isHelper: false, isTest: true};
+				}
 
-			default: {
-				return {isHelper: false, isTest: false};
+				case toPath('test/index'): { // After resolving directory to index file
+					return {isHelper: false, isTest: false};
+				}
+
+				default: {
+					return {isHelper: false, isTest: false};
+				}
 			}
-		}
-	},
-});
+		},
+	};
+};
 
 const errors = [
 	{
@@ -77,6 +83,21 @@ ruleTester.run('no-import-test-files', rule, {
 			code: 'import helpers from \'./test\';',
 			filename: toPath('foo.js'),
 			name: 'directory-import-esm',
+		},
+		{
+			code: 'const value = require(true);',
+			filename: toPath('foo.js'),
+			name: 'require-non-string-arg',
+		},
+		{
+			code: 'foo(\'./bar.js\');',
+			filename: toPath('foo.js'),
+			name: 'non-require-call',
+		},
+		{
+			code: 'import foo from \'./bar.js\';',
+			filename: toPath('no-helper.js'),
+			name: 'no-ava-helper',
 		},
 	],
 	invalid: [

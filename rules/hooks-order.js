@@ -20,7 +20,7 @@ const buildOrders = names => {
 };
 
 const buildMessage = (name, orders, visited) => {
-	const checks = orders[name] ?? [];
+	const checks = orders[name];
 
 	for (const check of checks) {
 		const nodeEarlier = visited[check];
