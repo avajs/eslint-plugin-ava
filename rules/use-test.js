@@ -28,7 +28,7 @@ function report(context, node) {
 
 const create = context => {
 	const extension = path.extname(context.filename);
-	const isTypeScript = extension === '.ts' || extension === '.tsx';
+	const isTypeScript = ['.ts', '.tsx', '.mts', '.cts'].includes(extension);
 
 	return {
 		'ImportDeclaration[importKind!="type"]'(node) {
