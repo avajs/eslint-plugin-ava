@@ -1,6 +1,6 @@
 # ava/no-inline-assertions
 
-📝 Ensure assertions are not called from inline arrow functions.
+📝 Disallow inline assertions.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -17,7 +17,7 @@ This rule is fixable. It will wrap the assertion in braces `{}`. It will not do 
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => t.true(fn()));
 ```
@@ -25,7 +25,7 @@ test('foo', t => t.true(fn()));
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.true(fn());

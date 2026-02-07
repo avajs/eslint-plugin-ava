@@ -14,7 +14,7 @@ function nbAssertions(n) {
 	return Array.from({length: n}).map(() => 't.is(1, 1);').join('\n');
 }
 
-const maxAssertsError = (max, found) => [{message: `Expected at most ${max} assertions, but found ${found}.`}];
+const maxAssertsError = () => [{messageId: 'max-asserts'}];
 
 ruleTester.run('max-asserts', rule, {
 	assertionOptions: {
@@ -45,35 +45,35 @@ ruleTester.run('max-asserts', rule, {
 	invalid: [
 		{
 			code: `${header} test(t => { ${nbAssertions(6)} });`,
-			errors: maxAssertsError(5, 6),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header}
 				test(t => { ${nbAssertions(3)} });
 				test(t => { ${nbAssertions(6)} });
 			`,
-			errors: maxAssertsError(5, 6),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header} test(t => { t.plan(5); ${nbAssertions(6)} });`,
-			errors: maxAssertsError(5, 6),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header} test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`,
-			errors: maxAssertsError(5, 6),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(4)} });`,
 			options: [{max: 3}],
-			errors: maxAssertsError(3, 4),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(10)} });`,
-			errors: maxAssertsError(5, 10),
+			errors: maxAssertsError(),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
-			errors: [...maxAssertsError(5, 10), ...maxAssertsError(5, 10)], // Should have two errors, one per test
+			errors: [...maxAssertsError(), ...maxAssertsError()],
 		},
 	],
 });

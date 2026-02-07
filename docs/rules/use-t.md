@@ -1,6 +1,6 @@
 # ava/use-t
 
-📝 Ensure test functions use `t` as their parameter.
+📝 Require test functions to use `t` as their parameter.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ The convention is to have the parameter in AVA's test function be named `t`. Mos
 ### Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', foo => { // Incorrect name
 	t.pass();
@@ -23,7 +23,7 @@ test('foo', foo => { // Incorrect name
 ### Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', () => {
 	// ...

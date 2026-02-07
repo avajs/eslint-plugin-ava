@@ -52,22 +52,22 @@ ruleTester.run('no-ignored-test-files', rule, {
 		{
 			code: code(true),
 			filename: toPath('lib/foo/fixtures/bar.test.js'),
-			errors: [{message: 'AVA ignores this file.'}],
+			errors: [{messageId: 'ignored-file'}],
 		},
 		{
 			code: code(true),
 			filename: toPath('lib/foo/helpers/bar.test.js'),
-			errors: [{message: 'AVA treats this as a helper file.'}],
+			errors: [{messageId: 'helper-file'}],
 		},
 		{
 			code: code(true),
 			filename: toPath('test.js'),
-			errors: [{message: 'AVA ignores this file.'}],
+			errors: [{messageId: 'ignored-file'}],
 		},
 		{
 			code: code(true),
 			filename: toPath('bar/foo.test.js'),
-			errors: [{message: 'AVA ignores this file.'}],
+			errors: [{messageId: 'ignored-file'}],
 		},
 	],
 });

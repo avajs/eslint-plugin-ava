@@ -9,7 +9,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const message = '`test.only()` should not be used.';
+const messageId = 'no-only-test';
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-only-test', rule, {
@@ -27,11 +27,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test\n\t.only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 3,
 				column: 3,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test\n\t(t => { t.pass(); });',
 				}],
 			}],
@@ -39,11 +39,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test\n  .only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 3,
 				column: 4,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test\n  (t => { t.pass(); });',
 				}],
 			}],
@@ -51,11 +51,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test\t.only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 7,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test\t(t => { t.pass(); });',
 				}],
 			}],
@@ -63,11 +63,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test  .only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 8,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test  (t => { t.pass(); });',
 				}],
 			}],
@@ -75,11 +75,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test.\n\tonly(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 3,
 				column: 2,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test\n\t(t => { t.pass(); });',
 				}],
 			}],
@@ -87,11 +87,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test.\n  only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 3,
 				column: 3,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test\n  (t => { t.pass(); });',
 				}],
 			}],
@@ -99,11 +99,11 @@ ruleTester.run('no-only-test', rule, {
 		{
 			code: header + 'test.only(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 6,
 				suggestions: [{
-					desc: 'Remove the `.only`',
+					messageId: 'no-only-test-suggestion',
 					output: header + 'test(t => { t.pass(); });',
 				}],
 			}],

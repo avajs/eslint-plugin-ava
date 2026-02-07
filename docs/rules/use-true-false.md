@@ -1,21 +1,23 @@
 # ava/use-true-false
 
-📝 Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
+📝 Prefer `t.true()`/`t.false()` over `t.truthy()`/`t.falsy()`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+🔧 This rule is automatically fixable by the [`--fix` CLI option](https://eslint.org/docs/latest/user-guide/command-line-interface#--fix).
 
 <!-- end auto-generated rule header -->
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/use-true-false.md)
 
-`t.true()` and `t.false()` are stricter in their checks than `t.truthy()` and `t.falsy`.
+`t.true()` and `t.false()` are stricter in their checks than `t.truthy()` and `t.falsy()`.
 For example: if you have a function `foo()` which normally returns `true`, but suddenly returns `1` instead, `t.truthy(foo())` would not catch the change, but `t.true(foo())` would.
 This rule enforces the use of the former when the tested expression is known to result in a boolean value.
 
 ### Fail
 
 ```js
-const ava = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.truthy(value < 2);
@@ -30,7 +32,7 @@ test('foo', t => {
 ### Pass
 
 ```js
-const ava = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.true(value < 2);

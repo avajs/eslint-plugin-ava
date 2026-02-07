@@ -8,7 +8,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const message = 'Test title is used multiple times in the same file.';
+const messageId = 'no-identical-title';
 
 const header = 'const test = require(\'ava\');\n';
 
@@ -51,7 +51,7 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("a", t => {}); test("a", t => {});',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 26,
 			}],
@@ -59,7 +59,7 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test(`a`, t => {}); test(`a`, t => {});',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 26,
 			}],
@@ -67,7 +67,7 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test("foo" + 1, t => {}); test("foo" + 1, t => {});',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 32,
 			}],
@@ -76,7 +76,7 @@ ruleTester.run('no-identical-title', rule, {
 			// eslint-disable-next-line no-template-curly-in-string
 			code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 37,
 			}],
@@ -84,7 +84,7 @@ ruleTester.run('no-identical-title', rule, {
 		{
 			code: header + 'test.todo("a"); test.todo("a");',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 27,
 			}],

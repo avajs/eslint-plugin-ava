@@ -2,7 +2,7 @@ import test from 'ava';
 import AvaRuleTester from 'eslint-ava-rule-tester';
 import rule from '../rules/no-async-fn-without-await.js';
 
-const message = 'Function was declared as `async` but doesn\'t use `await`.';
+const messageId = 'no-async-fn-without-await';
 const header = 'const test = require(\'ava\');\n';
 
 const ruleTesterOptions = [
@@ -48,53 +48,81 @@ for (const options of ruleTesterOptions) {
 			{
 				code: `${header}test(async t => {});`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 6,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(t => {});`,
+					}],
 				}],
 			},
 			{
 				code: `${header}test(async function(t) {});`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 6,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(function(t) {});`,
+					}],
 				}],
 			},
 			{
 				code: `${header}test(async t => {}); test(async t => {});`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 6,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(t => {}); test(async t => {});`,
+					}],
 				}, {
-					message,
+					messageId,
 					line: 2,
 					column: 27,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(async t => {}); test(t => {});`,
+					}],
 				}],
 			},
 			{
 				code: `${header}test(async t => {}); test(async t => { await foo(); });`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 6,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(t => {}); test(async t => { await foo(); });`,
+					}],
 				}],
 			},
 			{
 				code: `${header}test(async t => { await foo(); }); test(async t => {});`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 41,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test(async t => { await foo(); }); test(t => {});`,
+					}],
 				}],
 			},
 			{
 				code: `${header}test('title', async t => {});`,
 				errors: [{
-					message,
+					messageId,
 					line: 2,
 					column: 15,
+					suggestions: [{
+						messageId: 'no-async-fn-without-await-suggestion',
+						output: `${header}test('title', t => {});`,
+					}],
 				}],
 			},
 		],

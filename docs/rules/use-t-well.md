@@ -1,6 +1,6 @@
 # ava/use-t-well
 
-📝 Disallow the incorrect use of `t`.
+📝 Disallow incorrect use of `t`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -17,7 +17,7 @@ This rule is partly fixable. It can fix most misspelled assertion method names a
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('main', t => {
 	t(value); // `t` is not a function
@@ -34,7 +34,7 @@ test('main', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('main', t => {
 	t.deepEqual(value, [2]);

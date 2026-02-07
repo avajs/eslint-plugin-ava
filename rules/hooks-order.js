@@ -148,6 +148,7 @@ export default {
 		type: 'suggestion',
 		docs: {
 			description: 'Enforce test hook ordering.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',

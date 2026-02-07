@@ -5,6 +5,13 @@ import {
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID_TOO_FEW = 'too-few-arguments';
+const MESSAGE_ID_TOO_MANY = 'too-many-arguments';
+const MESSAGE_ID_MISSING_MESSAGE = 'missing-message';
+const MESSAGE_ID_FOUND_MESSAGE = 'found-message';
+const MESSAGE_ID_NOT_STRING = 'not-string-message';
+const MESSAGE_ID_OUT_OF_ORDER = 'out-of-order';
+
 const expectedNbArguments = {
 	assert: {
 		min: 1,
@@ -215,10 +222,6 @@ const create = context => {
 	const enforcesMessage = Boolean(options.message);
 	const shouldHaveMessage = options.message !== 'never';
 
-	function report(node, message) {
-		context.report({node, message});
-	}
-
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
@@ -240,7 +243,7 @@ const create = context => {
 
 			if (firstNonSkipMember === 'end') {
 				if (gottenArguments > 1) {
-					report(node, 'Too many arguments. Expected at most 1.');
+					context.report({node, messageId: MESSAGE_ID_TOO_MANY, data: {max: 1}});
 				}
 
 				return;
@@ -248,7 +251,7 @@ const create = context => {
 
 			if (firstNonSkipMember === 'try') {
 				if (gottenArguments < 1) {
-					report(node, 'Not enough arguments. Expected at least 1.');
+					context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: 1}});
 				}
 
 				return;
@@ -261,17 +264,17 @@ const create = context => {
 			}
 
 			if (gottenArguments < nArguments.min) {
-				report(node, `Not enough arguments. Expected at least ${nArguments.min}.`);
+				context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: nArguments.min}});
 			} else if (node.arguments.length > nArguments.max) {
-				report(node, `Too many arguments. Expected at most ${nArguments.max}.`);
+				context.report({node, messageId: MESSAGE_ID_TOO_MANY, data: {max: nArguments.max}});
 			} else {
 				if (enforcesMessage && nArguments.min !== nArguments.max) {
 					const hasMessage = gottenArguments === nArguments.max;
 
 					if (!hasMessage && shouldHaveMessage) {
-						report(node, 'Expected an assertion message, but found none.');
+						context.report({node, messageId: MESSAGE_ID_MISSING_MESSAGE});
 					} else if (hasMessage && !shouldHaveMessage) {
-						report(node, 'Expected no assertion message, but found one.');
+						context.report({node, messageId: MESSAGE_ID_FOUND_MESSAGE});
 					}
 				}
 
@@ -292,7 +295,7 @@ const create = context => {
 				}
 
 				if (!isString(lastArgument)) {
-					report(node, 'Assertion message should be a string.');
+					context.report({node, messageId: MESSAGE_ID_NOT_STRING});
 				}
 			}
 		}),
@@ -333,7 +336,7 @@ function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
 	const {sourceCode} = context;
 	const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
 	const report = {
-		message: 'Expected values should come after actual values.',
+		messageId: MESSAGE_ID_OUT_OF_ORDER,
 		loc: {
 			start: sourceCode.getLocFromIndex(leftRange[0]),
 			end: sourceCode.getLocFromIndex(rightRange[1]),
@@ -362,7 +365,7 @@ function makeOutOfOrder1ArgumentReport({node, leftNode, rightNode, context}) {
 		rightRange,
 	] = sourceOfBinaryExpressionComponents(sourceCode, node);
 	const report = {
-		message: 'Expected values should come after actual values.',
+		messageId: MESSAGE_ID_OUT_OF_ORDER,
 		loc: {
 			start: sourceCode.getLocFromIndex(leftRange[0]),
 			end: sourceCode.getLocFromIndex(rightRange[1]),
@@ -388,11 +391,11 @@ const schema = [{
 	type: 'object',
 	properties: {
 		message: {
+			description: 'Whether to enforce or disallow assertion messages.',
 			enum: [
 				'always',
 				'never',
 			],
-			default: undefined,
 		},
 	},
 	additionalProperties: false,
@@ -404,9 +407,19 @@ export default {
 		type: 'problem',
 		docs: {
 			description: 'Enforce passing correct arguments to assertions.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema,
+		defaultOptions: [{}],
+		messages: {
+			[MESSAGE_ID_TOO_FEW]: 'Not enough arguments. Expected at least {{min}}.',
+			[MESSAGE_ID_TOO_MANY]: 'Too many arguments. Expected at most {{max}}.',
+			[MESSAGE_ID_MISSING_MESSAGE]: 'Expected an assertion message, but found none.',
+			[MESSAGE_ID_FOUND_MESSAGE]: 'Expected no assertion message, but found one.',
+			[MESSAGE_ID_NOT_STRING]: 'Assertion message should be a string.',
+			[MESSAGE_ID_OUT_OF_ORDER]: 'Expected values should come after actual values.',
+		},
 	},
 };

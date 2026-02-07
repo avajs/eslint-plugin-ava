@@ -9,11 +9,11 @@ const ruleTester = new AvaRuleTester(test, {
 });
 
 const trueErrors = [{
-	message: '`t.true()` should be used instead of `t.truthy()`.',
+	messageId: 'use-true',
 }];
 
 const falseErrors = [{
-	message: '`t.false()` should be used instead of `t.falsy()`.',
+	messageId: 'use-false',
 }];
 
 const header = 'const test = require(\'ava\');\n';
@@ -64,62 +64,77 @@ ruleTester.run('use-true-false', rule, {
 	invalid: [
 		{
 			code: testCase('t.truthy(true)'),
+			output: testCase('t.true(true)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(false)'),
+			output: testCase('t.true(false)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value == 1)'),
+			output: testCase('t.true(value == 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value === 1)'),
+			output: testCase('t.true(value === 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value != 1)'),
+			output: testCase('t.true(value != 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value !== 1)'),
+			output: testCase('t.true(value !== 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value < 1)'),
+			output: testCase('t.true(value < 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value <= 1)'),
+			output: testCase('t.true(value <= 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value > 1)'),
+			output: testCase('t.true(value > 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(value >= 1)'),
+			output: testCase('t.true(value >= 1)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(!value)'),
+			output: testCase('t.true(!value)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(!!value)'),
+			output: testCase('t.true(!!value)'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(Array.isArray(value))'),
+			output: testCase('t.true(Array.isArray(value))'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.truthy(isFinite(3))'),
+			output: testCase('t.true(isFinite(3))'),
 			errors: trueErrors,
 		},
 		{
 			code: testCase('t.falsy(value === 1)'),
+			output: testCase('t.false(value === 1)'),
 			errors: falseErrors,
 		},
 	],

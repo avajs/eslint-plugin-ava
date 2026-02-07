@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'prefer-t-regex';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -143,7 +145,8 @@ const create = context => {
 
 		context.report({
 			node,
-			message: `Prefer using the \`t.${assertion}()\` assertion.`,
+			messageId: MESSAGE_ID,
+			data: {assertion},
 			fix,
 		});
 	};
@@ -190,7 +193,8 @@ const create = context => {
 
 			context.report({
 				node,
-				message: `Prefer using the \`t.${assertion}()\` assertion.`,
+				messageId: MESSAGE_ID,
+				data: {assertion},
 				fix: booleanFixer(assertion),
 			});
 		}
@@ -228,10 +232,14 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Prefer using `t.regex()` to test regular expressions.',
+			description: 'Prefer `t.regex()` over `RegExp#test()` and `String#match()`.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Prefer using the `t.{{assertion}}()` assertion.',
+		},
 	},
 };

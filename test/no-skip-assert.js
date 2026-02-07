@@ -8,7 +8,6 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'No assertions should be skipped.'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-skip-assert', rule, {
@@ -29,15 +28,33 @@ ruleTester.run('no-skip-assert', rule, {
 	invalid: [
 		{
 			code: header + 'test(t => { t.is.skip(1, 1); });',
-			errors,
+			errors: [{
+				messageId: 'no-skip-assert',
+				suggestions: [{
+					messageId: 'no-skip-assert-suggestion',
+					output: header + 'test(t => { t.is(1, 1); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test(t => { t.true.skip(1); });',
-			errors,
+			errors: [{
+				messageId: 'no-skip-assert',
+				suggestions: [{
+					messageId: 'no-skip-assert-suggestion',
+					output: header + 'test(t => { t.true(1); });',
+				}],
+			}],
 		},
 		{
 			code: header + 'test.skip(t => { t.is.skip(1, 1); });',
-			errors,
+			errors: [{
+				messageId: 'no-skip-assert',
+				suggestions: [{
+					messageId: 'no-skip-assert-suggestion',
+					output: header + 'test.skip(t => { t.is(1, 1); });',
+				}],
+			}],
 		},
 	],
 });

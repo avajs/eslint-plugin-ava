@@ -10,7 +10,7 @@ const ruleTester = new AvaRuleTester(test, {
 });
 
 const parameterNotNamedTErrors = [{
-	message: 'Test parameter should be named `t`.',
+	messageId: 'use-t',
 }];
 
 const header = 'const test = require(\'ava\');\n';

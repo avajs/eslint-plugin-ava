@@ -37,7 +37,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.foo(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.foo`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -45,7 +45,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.onlu(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.onlu`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -53,7 +53,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.beforeeach(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.beforeeach`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -61,7 +61,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.c.only(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.c`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -69,7 +69,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.cb(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.cb`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -77,7 +77,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.foo.bar.baz(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.foo`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],
@@ -85,7 +85,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		{
 			code: `${header}test.test(t => {});`,
 			errors: [{
-				message: 'Unknown test modifier `.test`.',
+				messageId: 'no-unknown-modifiers',
 				line: 2,
 				column: 6,
 			}],

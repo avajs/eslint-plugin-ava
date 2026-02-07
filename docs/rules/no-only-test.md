@@ -1,6 +1,6 @@
 # ava/no-only-test
 
-📝 Ensure no `test.only()` are present.
+📝 Disallow `test.only()`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -15,7 +15,7 @@ It's easy to run only one test with `test.only()` and then forget about it. It's
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.only('test 1', t => {
 	t.pass();
@@ -30,7 +30,7 @@ test('test 2', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('test 1', t => {
 	t.pass();

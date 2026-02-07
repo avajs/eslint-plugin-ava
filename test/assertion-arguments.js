@@ -8,15 +8,15 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const missingError = 'Expected an assertion message, but found none.';
-const foundError = 'Expected no assertion message, but found one.';
-const tooFewError = n => `Not enough arguments. Expected at least ${n}.`;
-const tooManyError = n => `Too many arguments. Expected at most ${n}.`;
+const missingError = {messageId: 'missing-message'};
+const foundError = {messageId: 'found-message'};
+const tooFewError = () => ({messageId: 'too-few-arguments'});
+const tooManyError = () => ({messageId: 'too-many-arguments'});
 const outOfOrderError = (line, column, endLine, endColumn) => ({
-	message: 'Expected values should come after actual values.',
+	messageId: 'out-of-order',
 	line, column, endLine, endColumn,
 });
-const messageIsNotStringError = 'Assertion message should be a string.';
+const messageIsNotStringError = {messageId: 'not-string-message'};
 
 const header = 'const test = require(\'ava\');';
 
@@ -61,9 +61,7 @@ function testCase(message, content, errors = [], {
 
 	const offset = useHeader === false ? [1, 3] : [2, 3];
 
-	errors = errors
-		.map(error => typeof error === 'string' ? {message: error} : error)
-		.map(error => offsetError(error, ...offset));
+	errors = errors.map(error => offsetError(error, ...offset));
 
 	const result = {
 		options: message ? [{message}] : [],
@@ -345,57 +343,57 @@ ruleTester.run('assertion-arguments', rule, {
 	],
 	invalid: [
 		// Not enough arguments
-		testCase(false, 't.plan();', tooFewError(1)),
-		testCase(false, 't.assert();', tooFewError(1)),
-		testCase(false, 't.truthy();', tooFewError(1)),
-		testCase(false, 't.falsy();', tooFewError(1)),
-		testCase(false, 't.true();', tooFewError(1)),
-		testCase(false, 't.false();', tooFewError(1)),
-		testCase(false, 't.is(\'same\');', tooFewError(2)),
-		testCase(false, 't.not(\'not\');', tooFewError(2)),
-		testCase(false, 't.deepEqual({});', tooFewError(2)),
-		testCase(false, 't.notDeepEqual({});', tooFewError(2)),
-		testCase(false, 't.like({});', tooFewError(2)),
-		testCase(false, 't.throws();', tooFewError(1)),
-		testCase(false, 't.notThrows();', tooFewError(1)),
-		testCase(false, 't.throwsAsync();', tooFewError(1)),
-		testCase(false, 't.notThrowsAsync();', tooFewError(1)),
-		testCase(false, 't.regex(a);', tooFewError(2)),
-		testCase(false, 't.notRegex(a);', tooFewError(2)),
-		testCase(false, 't.ifError();', tooFewError(1)),
-		testCase(false, 't.skip.is(\'same\');', tooFewError(2)),
-		testCase(false, 't.is.skip(\'same\');', tooFewError(2)),
-		testCase(false, 't.snapshot();', tooFewError(1)),
-		testCase(false, 't.teardown();', tooFewError(1)),
-		testCase(false, 't.timeout();', tooFewError(1)),
-		testCase(false, 't.try();', tooFewError(1)),
+		testCase(false, 't.plan();', tooFewError()),
+		testCase(false, 't.assert();', tooFewError()),
+		testCase(false, 't.truthy();', tooFewError()),
+		testCase(false, 't.falsy();', tooFewError()),
+		testCase(false, 't.true();', tooFewError()),
+		testCase(false, 't.false();', tooFewError()),
+		testCase(false, 't.is(\'same\');', tooFewError()),
+		testCase(false, 't.not(\'not\');', tooFewError()),
+		testCase(false, 't.deepEqual({});', tooFewError()),
+		testCase(false, 't.notDeepEqual({});', tooFewError()),
+		testCase(false, 't.like({});', tooFewError()),
+		testCase(false, 't.throws();', tooFewError()),
+		testCase(false, 't.notThrows();', tooFewError()),
+		testCase(false, 't.throwsAsync();', tooFewError()),
+		testCase(false, 't.notThrowsAsync();', tooFewError()),
+		testCase(false, 't.regex(a);', tooFewError()),
+		testCase(false, 't.notRegex(a);', tooFewError()),
+		testCase(false, 't.ifError();', tooFewError()),
+		testCase(false, 't.skip.is(\'same\');', tooFewError()),
+		testCase(false, 't.is.skip(\'same\');', tooFewError()),
+		testCase(false, 't.snapshot();', tooFewError()),
+		testCase(false, 't.teardown();', tooFewError()),
+		testCase(false, 't.timeout();', tooFewError()),
+		testCase(false, 't.try();', tooFewError()),
 
 		// Too many arguments
-		testCase(false, 't.plan(1, \'extra argument\');', tooManyError(1)),
-		testCase(false, 't.assert(true, \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.pass(\'message\', \'extra argument\');', tooManyError(1)),
-		testCase(false, 't.fail(\'message\', \'extra argument\');', tooManyError(1)),
-		testCase(false, 't.truthy(\'unicorn\', \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.falsy(\'unicorn\', \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.true(true, \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.false(false, \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.not(\'not\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.deepEqual({}, {}, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.notDeepEqual({}, {a: true}, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.like({}, {}, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.throws(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.notThrows(Promise.resolve(), \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.throwsAsync(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.notThrowsAsync(Promise.resolve(), \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.regex(a, /a/, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.notRegex(a, /a/, \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.ifError(new Error(), \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.skip.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError(3)),
-		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError(2)),
-		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError(1)),
-		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError(2)),
+		testCase(false, 't.plan(1, \'extra argument\');', tooManyError()),
+		testCase(false, 't.assert(true, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.pass(\'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.fail(\'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.truthy(\'unicorn\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.falsy(\'unicorn\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.true(true, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.false(false, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.not(\'not\', \'same\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.deepEqual({}, {}, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.notDeepEqual({}, {a: true}, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.like({}, {}, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.throws(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.notThrows(Promise.resolve(), \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.throwsAsync(Promise.reject(), Error, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.notThrowsAsync(Promise.resolve(), \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.regex(a, /a/, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.notRegex(a, /a/, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.ifError(new Error(), \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.skip.is(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError()),
+		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError()),
 
 		testCase('always', 't.assert(true);', missingError),
 		testCase('always', 't.pass();', missingError),
@@ -445,9 +443,9 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.is.skip(\'same\', \'same\', \'message\');', foundError),
 		testCase('never', 't.snapshot(value, \'message\');', foundError),
 
-		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError(1)),
-		testCase(false, 't.skip.end(\'too many\', \'arguments\');', tooManyError(1)),
-		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1)),
+		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError()),
+		testCase(false, 't.skip.end(\'too many\', \'arguments\');', tooManyError()),
+		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError()),
 
 		// Assertion argument order
 		testCase(false, 't.deepEqual(\'static\', dynamic);', outOfOrderError(1, 13, 1, 30), {output: 't.deepEqual(dynamic, \'static\');'}),
@@ -461,7 +459,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.deepEqual({}, actual);', outOfOrderError(1, 13, 1, 23), {output: 't.deepEqual(actual, {});'}),
 		testCase('always', 't.deepEqual({}, actual);', [missingError, outOfOrderError(1, 13, 1, 23)], {output: 't.deepEqual(actual, {});'}),
 		testCase('never', 't.deepEqual({}, actual, \'message\');', [foundError, outOfOrderError(1, 13, 1, 23)], {output: 't.deepEqual(actual, {}, \'message\');'}),
-		testCase(false, 't.deepEqual({}, actual, extra, \'message\');', tooManyError(3)),
+		testCase(false, 't.deepEqual({}, actual, extra, \'message\');', tooManyError()),
 		testCase(false, 't.deepEqual({}, (actual));', outOfOrderError(1, 13, 1, 25), {output: 't.deepEqual((actual), {});'}),
 		testCase(false, 't.deepEqual({}, actual/*: type */);', outOfOrderError(1, 13, 1, 34)),
 		testCase(

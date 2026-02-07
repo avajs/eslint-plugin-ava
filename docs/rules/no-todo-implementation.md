@@ -1,6 +1,6 @@
 # ava/no-todo-implementation
 
-📝 Ensure `test.todo()` is not given an implementation function.
+📝 Disallow giving `test.todo()` an implementation function.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.todo('title', t => {
 	// ...
@@ -23,7 +23,7 @@ test.todo('title', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.todo('title');
 

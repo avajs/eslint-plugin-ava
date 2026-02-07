@@ -1,6 +1,6 @@
 # ava/no-nested-tests
 
-📝 Ensure no tests are nested.
+📝 Disallow nested tests.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ In AVA, you cannot nest tests, for example, create tests inside of other tests. 
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	const result = foo();
@@ -28,7 +28,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	const result = foo();

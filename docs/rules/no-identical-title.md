@@ -1,6 +1,6 @@
 # ava/no-identical-title
 
-📝 Ensure no tests have the same title.
+📝 Disallow identical test titles.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ Disallow tests with identical titles as it makes it hard to differentiate them.
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();
@@ -27,7 +27,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();

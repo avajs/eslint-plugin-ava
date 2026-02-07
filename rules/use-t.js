@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'use-t';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -28,7 +30,7 @@ const create = context => {
 			if (implementationArgument.params[0].name !== 't') {
 				context.report({
 					node,
-					message: 'Test parameter should be named `t`.',
+					messageId: MESSAGE_ID,
 				});
 			}
 		}),
@@ -40,9 +42,13 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure test functions use `t` as their parameter.',
+			description: 'Require test functions to use `t` as their parameter.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Test parameter should be named `t`.',
+		},
 	},
 };

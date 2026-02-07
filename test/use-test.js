@@ -16,7 +16,7 @@ const typescriptRuleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'AVA should be imported as `test`.'}];
+const errors = [{messageId: 'use-test'}];
 
 const prefixTestCases = (testCases, prefix) => ({
 	assertionOptions: {

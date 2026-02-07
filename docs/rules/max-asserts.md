@@ -1,6 +1,6 @@
 # ava/max-asserts
 
-📝 Enforce a limit on the number of assertions in a test.
+📝 Limit the number of assertions in a test.
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -16,7 +16,7 @@ Skipped assertions are counted.
 
 ```js
 /*eslint ava/max-asserts: ["error", {"max": 5}]*/
-const test = require('ava');
+import test from 'ava';
 
 test('getSomeObject should define the players\' names', t => {
 	const object = lib.getSomeObject();
@@ -34,7 +34,7 @@ test('getSomeObject should define the players\' names', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('getSomeObject should define the player\'s name', t => {
 	const object = lib.getSomeObject();

@@ -1,6 +1,8 @@
 import path from 'node:path';
 import util from '../util.js';
 
+const MESSAGE_ID = 'no-import-test-files';
+
 // Assume absolute paths can be classified by AVA.
 const isFileImport = name => path.isAbsolute(name) || name.startsWith('./') || name.startsWith('../');
 
@@ -39,7 +41,7 @@ const create = context => {
 		if (isTest) {
 			context.report({
 				node,
-				message: 'Test files should not be imported.',
+				messageId: MESSAGE_ID,
 			});
 		}
 	};
@@ -64,9 +66,11 @@ const schema = [{
 	type: 'object',
 	properties: {
 		extensions: {
+			description: 'File extensions recognized as test files.',
 			type: 'array',
 		},
 		files: {
+			description: 'Glob patterns to match test files.',
 			type: 'array',
 		},
 	},
@@ -78,9 +82,14 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure no test files are imported anywhere.',
+			description: 'Disallow importing test files.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema,
+		defaultOptions: [{}],
+		messages: {
+			[MESSAGE_ID]: 'Test files should not be imported.',
+		},
 	},
 };

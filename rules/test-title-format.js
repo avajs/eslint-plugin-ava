@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'test-title-format';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -26,7 +28,8 @@ const create = context => {
 				if (title.type === 'Literal' && !titleRegExp.test(title.value)) {
 					context.report({
 						node,
-						message: `The test title doesn't match the required format: \`${titleRegExp}\`.`,
+						messageId: MESSAGE_ID,
+						data: {format: String(titleRegExp)},
 					});
 				}
 			}
@@ -39,8 +42,8 @@ const schema = [
 		type: 'object',
 		properties: {
 			format: {
+				description: 'Regular expression pattern that test titles must match.',
 				type: 'string',
-				default: undefined,
 			},
 		},
 		additionalProperties: false,
@@ -52,9 +55,14 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure test titles have a certain format.',
+			description: 'Require test titles to match a pattern.',
+			recommended: false,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema,
+		defaultOptions: [{}],
+		messages: {
+			[MESSAGE_ID]: 'The test title doesn\'t match the required format: `{{format}}`.',
+		},
 	},
 };

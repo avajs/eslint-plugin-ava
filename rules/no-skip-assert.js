@@ -2,6 +2,9 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID = 'no-skip-assert';
+const MESSAGE_ID_SUGGESTION = 'no-skip-assert-suggestion';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -15,7 +18,15 @@ const create = context => {
 				if (root.object.name === 't' && util.assertionMethods.has(root.property.name)) {
 					context.report({
 						node,
-						message: 'No assertions should be skipped.',
+						messageId: MESSAGE_ID,
+						suggest: [{
+							messageId: MESSAGE_ID_SUGGESTION,
+							fix(fixer) {
+								const {sourceCode} = context;
+								const dotToken = sourceCode.getTokenBefore(node.property);
+								return fixer.removeRange([dotToken.range[0], node.property.range[1]]);
+							},
+						}],
 					});
 				}
 			}
@@ -28,9 +39,15 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure no assertions are skipped.',
+			description: 'Disallow skipping assertions.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
+		hasSuggestions: true,
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'No assertions should be skipped.',
+			[MESSAGE_ID_SUGGESTION]: 'Remove the `.skip`.',
+		},
 	},
 };

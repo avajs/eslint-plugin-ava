@@ -1,6 +1,6 @@
 # ava/test-title
 
-📝 Ensure tests have a title.
+📝 Require tests to have a title.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ Tests should have a title. AVA [v1.0.1](https://github.com/avajs/ava/releases/ta
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test(t => {
 	t.pass();
@@ -23,7 +23,7 @@ test(t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();

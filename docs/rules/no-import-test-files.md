@@ -1,6 +1,6 @@
 # ava/no-import-test-files
 
-📝 Ensure no test files are imported anywhere.
+📝 Disallow importing test files.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -15,30 +15,25 @@ This rule will verify that you don't import any test files. It will consider the
 ```js
 // File: src/index.js
 // Invalid because *.test.js is considered as a test file.
-const tests = require('./index.test.js');
+import tests from './index.test.js';
 ```
 
 ```js
 // File: src/index.js
 // Invalid because any files inside __tests__ are considered test files
-const tests = require('./__tests__/index.js');
-
-test('foo', t => {
-	t.pass();
-});
+import tests from './__tests__/index.js';
 ```
 
 ## Pass
 
 ```js
 // File: src/index.js
-const sinon = require('sinon');
-
+import sinon from 'sinon';
 ```
 
 ```js
 // File: src/index.js
-const utils = require('./utils');
+import utils from './utils';
 ```
 
 ## Options

@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'no-nested-tests';
+
 const create = context => {
 	const ava = createAvaRule();
 	let nestedCount = 0;
@@ -15,7 +17,7 @@ const create = context => {
 			if (nestedCount >= 2) {
 				context.report({
 					node,
-					message: 'Tests should not be nested.',
+					messageId: MESSAGE_ID,
 				});
 			}
 		}),
@@ -34,9 +36,13 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Ensure no tests are nested.',
+			description: 'Disallow nested tests.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Tests should not be nested.',
+		},
 	},
 };

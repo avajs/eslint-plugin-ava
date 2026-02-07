@@ -4,6 +4,8 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID = 'no-identical-title';
+
 const purify = node => node && espurify(node);
 
 const isStaticTemplateLiteral = node => node.expressions.every(expression => isStatic(expression));
@@ -43,7 +45,7 @@ const create = context => {
 			if (isTitleUsed(usedTitleNodes, titleNode)) {
 				context.report({
 					node: titleNode,
-					message: 'Test title is used multiple times in the same file.',
+					messageId: MESSAGE_ID,
 				});
 				return;
 			}
@@ -61,9 +63,13 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Ensure no tests have the same title.',
+			description: 'Disallow identical test titles.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Test title is used multiple times in the same file.',
+		},
 	},
 };

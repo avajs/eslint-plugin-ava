@@ -28,7 +28,7 @@ const invalid = modifiers.map(modifier => ({
 	code: `${header}test.${modifier}.${modifier}(t => {});`,
 	errors: [
 		{
-			message: `Duplicate test modifier \`.${modifier}\`.`,
+			messageId: 'no-duplicate-modifiers',
 			line: 2,
 			column: 7 + modifier.length,
 		},

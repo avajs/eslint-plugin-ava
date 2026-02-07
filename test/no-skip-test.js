@@ -8,7 +8,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const message = 'No tests should be skipped.';
+const messageId = 'no-skip-test';
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-skip-test', rule, {
@@ -27,11 +27,11 @@ ruleTester.run('no-skip-test', rule, {
 		{
 			code: header + 'test.skip(t => { t.pass(); });',
 			errors: [{
-				message,
+				messageId,
 				line: 2,
 				column: 6,
 				suggestions: [{
-					desc: 'Remove the `.skip`',
+					messageId: 'no-skip-test-suggestion',
 					output: header + 'test(t => { t.pass(); });',
 				}],
 			}],

@@ -1,8 +1,10 @@
 # ava/no-skip-assert
 
-📝 Ensure no assertions are skipped.
+📝 Disallow skipping assertions.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 
 <!-- end auto-generated rule header -->
 
@@ -13,7 +15,7 @@ It's easy to make an assertion skipped with `t.skip.xyz()` and then forget about
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('some title', t => {
 	t.skip.is(1, 1);
@@ -23,7 +25,7 @@ test('some title', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('some title', t => {
 	t.is(1, 1);

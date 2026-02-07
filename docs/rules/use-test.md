@@ -1,6 +1,6 @@
 # ava/use-test
 
-📝 Ensure that AVA is imported with `test` as the variable name.
+📝 Require AVA to be imported as `test`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -14,22 +14,13 @@ In a TypeScript file (`.ts` or `.tsx`) AVA can be assigned to a variable named `
 ### Fail
 
 ```js
-var ava = require('ava');
-let ava = require('ava');
-const ava = require('ava');
 import ava from 'ava';
 ```
 
 ### Pass
 
 ```js
-var test = require('ava');
-let test = require('ava');
-const test = require('ava');
 import test from 'ava';
-
-var test = require('foo');
-const test = require('foo');
 ```
 
 ```ts

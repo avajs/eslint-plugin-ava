@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID = 'no-unknown-modifiers';
+
 const modifiers = new Set([
 	'after',
 	'afterEach',
@@ -33,7 +35,8 @@ const create = context => {
 			if (unknown.length > 0) {
 				context.report({
 					node: unknown[0],
-					message: `Unknown test modifier \`.${unknown[0].name}\`.`,
+					messageId: MESSAGE_ID,
+					data: {name: unknown[0].name},
 				});
 			}
 		}),
@@ -45,9 +48,13 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Disallow the use of unknown test modifiers.',
+			description: 'Disallow unknown test modifiers.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Unknown test modifier `.{{name}}`.',
+		},
 	},
 };

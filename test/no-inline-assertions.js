@@ -8,7 +8,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'The test implementation should not be an inline arrow function.'}];
+const errors = [{messageId: 'no-inline-assertions'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {

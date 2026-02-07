@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID = 'max-asserts';
+
 const notAssertionMethods = new Set(['plan', 'end']);
 
 const create = context => {
@@ -44,7 +46,8 @@ const create = context => {
 			if (assertionCount > maxAssertions) {
 				context.report({
 					node: nodeToReport,
-					message: `Expected at most ${maxAssertions} assertions, but found ${assertionCount}.`,
+					messageId: MESSAGE_ID,
+					data: {max: maxAssertions, count: assertionCount},
 				});
 			}
 
@@ -59,7 +62,8 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Enforce a limit on the number of assertions in a test.',
+			description: 'Limit the number of assertions in a test.',
+			recommended: false,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [
@@ -67,6 +71,7 @@ export default {
 				type: 'object',
 				properties: {
 					max: {
+						description: 'The maximum number of assertions allowed per test.',
 						type: 'integer',
 						minimum: 1,
 					},
@@ -75,5 +80,8 @@ export default {
 			},
 		],
 		defaultOptions: [{max: 5}],
+		messages: {
+			[MESSAGE_ID]: 'Expected at most {{max}} assertions, but found {{count}}.',
+		},
 	},
 };

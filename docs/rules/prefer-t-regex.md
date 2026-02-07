@@ -1,6 +1,6 @@
 # ava/prefer-t-regex
 
-📝 Prefer using `t.regex()` to test regular expressions.
+📝 Prefer `t.regex()` over `RegExp#test()` and `String#match()`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -19,7 +19,7 @@ This rule is fixable. It will replace the use of `RegExp#test()`, `String#match(
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('main', t => {
 	t.true(/\w+/.test('foo'));
@@ -27,7 +27,7 @@ test('main', t => {
 ```
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('main', t => {
 	t.truthy('foo'.match(/\w+/));
@@ -37,7 +37,7 @@ test('main', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('main', async t => {
 	t.regex('foo', /\w+/);

@@ -4,6 +4,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'prefer-power-assert';
+
 const notAllowed = [
 	'truthy',
 	'true',
@@ -69,7 +71,7 @@ const create = context => {
 					if (isCalleeMatched(callee, methodName)) {
 						context.report({
 							node,
-							message: 'Only asserts with no power-assert alternative are allowed.',
+							messageId: MESSAGE_ID,
 						});
 					}
 				}
@@ -83,9 +85,13 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.',
+			description: 'Enforce using only assertions compatible with [power-assert](https://github.com/power-assert-js/power-assert).',
+			recommended: false,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Only asserts with no power-assert alternative are allowed.',
+		},
 	},
 };

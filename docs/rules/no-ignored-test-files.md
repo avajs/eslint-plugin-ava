@@ -1,6 +1,6 @@
 # ava/no-ignored-test-files
 
-📝 Ensure no tests are written in ignored files.
+📝 Disallow tests in ignored files.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -15,7 +15,7 @@ This rule will verify that files which create tests are treated as test files by
 ```js
 // File: test/_helper.js
 // Invalid because a helper.
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();
@@ -23,7 +23,7 @@ test('foo', t => {
 
 // File: lib/foo.js
 // Invalid because not a test file.
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();
@@ -34,7 +34,7 @@ test('foo', t => {
 
 ```js
 // File: test/foo.js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();

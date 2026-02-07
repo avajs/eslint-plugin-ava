@@ -1,6 +1,6 @@
 # ava/prefer-async-await
 
-📝 Prefer using async/await instead of returning a Promise.
+📝 Prefer async/await over returning a Promise.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -15,7 +15,7 @@ This rule will report an error when it finds a test that returns an expression t
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	return foo().then(res => {
@@ -27,7 +27,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', async t => {
 	t.is(await foo(), 1);

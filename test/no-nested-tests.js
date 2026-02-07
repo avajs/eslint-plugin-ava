@@ -10,7 +10,7 @@ const ruleTester = new AvaRuleTester(test, {
 
 const header = 'const test = require(\'ava\');\n';
 const error = {
-	message: 'Tests should not be nested.',
+	messageId: 'no-nested-tests',
 };
 
 ruleTester.run('no-nested-tests', rule, {

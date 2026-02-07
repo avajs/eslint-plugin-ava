@@ -8,7 +8,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'Test should have a title.'}];
+const errors = [{messageId: 'test-title'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('test-title', rule, {

@@ -9,7 +9,7 @@ const ruleTester = new AvaRuleTester(test, {
 });
 
 const error = {
-	messageId: 'no-deep-equal-with-primative',
+	messageId: 'no-deep-equal-with-primitive',
 };
 
 const header = 'const test = require(\'ava\');\n';

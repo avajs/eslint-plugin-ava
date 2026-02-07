@@ -1,6 +1,6 @@
 # ava/prefer-power-assert
 
-📝 Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
+📝 Enforce using only assertions compatible with [power-assert](https://github.com/power-assert-js/power-assert).
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -22,7 +22,7 @@ Useful for people wanting to fully embrace the power of [power-assert](https://g
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.truthy(foo);
@@ -39,7 +39,7 @@ test('foo', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.assert(foo === bar);

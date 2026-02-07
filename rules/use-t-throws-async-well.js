@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID = 'use-t-throws-async-well';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -16,17 +18,18 @@ const create = context => {
 				&& (node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync')
 				&& node.callee.object.name === 't'
 			) {
-				const message = `Use \`await\` with \`t.${node.callee.property.name}()\`.`;
 				if (ava.isInTestNode().arguments[0].async) {
 					context.report({
 						node,
-						message,
+						messageId: MESSAGE_ID,
+						data: {method: node.callee.property.name},
 						fix: fixer => fixer.replaceText(node.callee, `await ${context.sourceCode.getText(node.callee)}`),
 					});
 				} else {
 					context.report({
 						node,
-						message,
+						messageId: MESSAGE_ID,
+						data: {method: node.callee.property.name},
 					});
 				}
 			}
@@ -39,10 +42,14 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.',
+			description: 'Require `t.throwsAsync()` and `t.notThrowsAsync()` to be awaited.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Use `await` with `t.{{method}}()`.',
+		},
 	},
 };

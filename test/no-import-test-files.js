@@ -38,7 +38,7 @@ util.loadAvaHelper = () => ({
 
 const errors = [
 	{
-		message: 'Test files should not be imported.',
+		messageId: 'no-import-test-files',
 	},
 ];
 

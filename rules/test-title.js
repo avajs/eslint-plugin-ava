@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'test-title';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -16,7 +18,7 @@ const create = context => {
 			if (firstArgumentIsFunction) {
 				context.report({
 					node,
-					message: 'Test should have a title.',
+					messageId: MESSAGE_ID,
 				});
 			}
 		}),
@@ -28,9 +30,13 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Ensure tests have a title.',
+			description: 'Require tests to have a title.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Test should have a title.',
+		},
 	},
 };

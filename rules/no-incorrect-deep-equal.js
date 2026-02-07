@@ -2,7 +2,7 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
-const MESSAGE_ID = 'no-deep-equal-with-primative';
+const MESSAGE_ID = 'no-deep-equal-with-primitive';
 
 const buildDeepEqualMessage = (context, node) => {
 	context.report({
@@ -83,6 +83,7 @@ export default {
 		type: 'suggestion',
 		docs: {
 			description: 'Disallow using `deepEqual` with primitives.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',

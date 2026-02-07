@@ -3,6 +3,8 @@ import {isDeepStrictEqual} from 'node:util';
 import espurify from 'espurify';
 import util from '../util.js';
 
+const MESSAGE_ID = 'use-test';
+
 const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
 	callee: {
@@ -20,7 +22,7 @@ const avaVariableDeclaratorInitAst = {
 function report(context, node) {
 	context.report({
 		node,
-		message: 'AVA should be imported as `test`.',
+		messageId: MESSAGE_ID,
 	});
 }
 
@@ -53,9 +55,13 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure that AVA is imported with `test` as the variable name.',
+			description: 'Require AVA to be imported as `test`.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'AVA should be imported as `test`.',
+		},
 	},
 };

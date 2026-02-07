@@ -1,8 +1,10 @@
 # ava/no-async-fn-without-await
 
-📝 Ensure that async tests use `await`.
+📝 Require async tests to use `await`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 
 <!-- end auto-generated rule header -->
 
@@ -17,7 +19,7 @@ This rule will report an error when it finds an async test which does not use th
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', async t => {
 	return foo().then(res => {
@@ -29,7 +31,7 @@ test('foo', async t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', async t => {
 	t.is(await foo(), 1);

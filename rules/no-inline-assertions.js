@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'no-inline-assertions';
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -25,7 +27,7 @@ const create = context => {
 			if (body.type === 'CallExpression') {
 				context.report({
 					node,
-					message: 'The test implementation should not be an inline arrow function.',
+					messageId: MESSAGE_ID,
 					fix: fixer => [fixer.insertTextBefore(body, '{'), fixer.insertTextAfter(body, '}')],
 				});
 			}
@@ -38,10 +40,14 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure assertions are not called from inline arrow functions.',
+			description: 'Disallow inline assertions.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'The test implementation should not be an inline arrow function.',
+		},
 	},
 };

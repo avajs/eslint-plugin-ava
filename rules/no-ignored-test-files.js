@@ -2,6 +2,9 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID_HELPER = 'helper-file';
+const MESSAGE_ID_IGNORED = 'ignored-file';
+
 const create = context => {
 	const {filename} = context;
 	const [overrides] = context.options;
@@ -34,9 +37,9 @@ const create = context => {
 
 			if (!isTest) {
 				if (isHelper) {
-					context.report({node, message: 'AVA treats this as a helper file.'});
+					context.report({node, messageId: MESSAGE_ID_HELPER});
 				} else {
-					context.report({node, message: 'AVA ignores this file.'});
+					context.report({node, messageId: MESSAGE_ID_IGNORED});
 				}
 			}
 
@@ -49,12 +52,15 @@ const schema = [{
 	type: 'object',
 	properties: {
 		extensions: {
+			description: 'File extensions recognized as test files.',
 			type: 'array',
 		},
 		files: {
+			description: 'Glob patterns to match test files.',
 			type: 'array',
 		},
 		helpers: {
+			description: 'Glob patterns to match helper files.',
 			type: 'array',
 		},
 	},
@@ -66,9 +72,15 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure no tests are written in ignored files.',
+			description: 'Disallow tests in ignored files.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema,
+		defaultOptions: [{}],
+		messages: {
+			[MESSAGE_ID_HELPER]: 'AVA treats this as a helper file.',
+			[MESSAGE_ID_IGNORED]: 'AVA ignores this file.',
+		},
 	},
 };

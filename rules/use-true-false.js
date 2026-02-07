@@ -5,6 +5,9 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID_TRUE = 'use-true';
+const MESSAGE_ID_FALSE = 'use-false';
+
 const booleanBinaryOperators = new Set([
 	'==',
 	'===',
@@ -66,17 +69,14 @@ const create = context => {
 						|| (argument.type === 'Literal' && argument.value === Boolean(argument.value))
 						|| (matchesKnownBooleanExpression(argument)))
 				) {
-					if (node.callee.property.name === 'falsy') {
-						context.report({
-							node,
-							message: '`t.false()` should be used instead of `t.falsy()`.',
-						});
-					} else {
-						context.report({
-							node,
-							message: '`t.true()` should be used instead of `t.truthy()`.',
-						});
-					}
+					const isFalsy = node.callee.property.name === 'falsy';
+					context.report({
+						node,
+						messageId: isFalsy ? MESSAGE_ID_FALSE : MESSAGE_ID_TRUE,
+						fix(fixer) {
+							return fixer.replaceText(node.callee.property, isFalsy ? 'false' : 'true');
+						},
+					});
 				}
 			}
 		}),
@@ -88,9 +88,15 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.',
+			description: 'Prefer `t.true()`/`t.false()` over `t.truthy()`/`t.falsy()`.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
+		fixable: 'code',
 		schema: [],
+		messages: {
+			[MESSAGE_ID_TRUE]: '`t.true()` should be used instead of `t.truthy()`.',
+			[MESSAGE_ID_FALSE]: '`t.false()` should be used instead of `t.falsy()`.',
+		},
 	},
 };

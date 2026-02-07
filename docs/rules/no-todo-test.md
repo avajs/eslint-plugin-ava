@@ -1,8 +1,10 @@
 # ava/no-todo-test
 
-📝 Ensure no `test.todo()` is used.
+📝 Disallow `test.todo()`.
 
 ⚠️ This rule _warns_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
+
+💡 This rule is manually fixable by [editor suggestions](https://eslint.org/docs/latest/use/core-concepts#rule-suggestions).
 
 <!-- end auto-generated rule header -->
 
@@ -13,7 +15,7 @@ Disallow the use of `test.todo()`. You might want to do this to only ship featur
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.todo('some test');
 ```
@@ -21,7 +23,7 @@ test.todo('some test');
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('some test', t => {
 	// Some implementation

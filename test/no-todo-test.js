@@ -8,7 +8,6 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: '`test.todo()` should not be used.'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {
@@ -25,7 +24,13 @@ ruleTester.run('no-todo-test', rule, {
 	invalid: [
 		{
 			code: header + 'test.todo("my test name");',
-			errors,
+			errors: [{
+				messageId: 'no-todo-test',
+				suggestions: [{
+					messageId: 'no-todo-test-suggestion',
+					output: header + 'test("my test name");',
+				}],
+			}],
 		},
 	],
 });

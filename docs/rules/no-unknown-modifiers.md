@@ -1,6 +1,6 @@
 # ava/no-unknown-modifiers
 
-📝 Disallow the use of unknown test modifiers.
+📝 Disallow unknown test modifiers.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -13,7 +13,7 @@ Prevent the use of unknown [test modifiers](https://github.com/avajs/ava/blob/ma
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.onlu(t => {});
 test.seril(t => {});
@@ -24,7 +24,7 @@ test.unknown(t => {});
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test.only(t => {});
 test.serial(t => {});

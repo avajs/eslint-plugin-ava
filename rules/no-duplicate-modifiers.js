@@ -2,17 +2,9 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
-function sortByName(a, b) {
-	if (a.name < b.name) {
-		return -1;
-	}
+const MESSAGE_ID = 'no-duplicate-modifiers';
 
-	if (a.name > b.name) {
-		return 1;
-	}
-
-	return 0;
-}
+const sortByName = (a, b) => a.name.localeCompare(b.name);
 
 const create = context => {
 	const ava = createAvaRule();
@@ -32,7 +24,8 @@ const create = context => {
 				if (testModifiers[index - 1].name === testModifiers[index].name) {
 					context.report({
 						node: testModifiers[index],
-						message: `Duplicate test modifier \`.${testModifiers[index].name}\`.`,
+						messageId: MESSAGE_ID,
+						data: {name: testModifiers[index].name},
 					});
 				}
 			}
@@ -45,9 +38,13 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Ensure tests do not have duplicate modifiers.',
+			description: 'Disallow duplicate test modifiers.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Duplicate test modifier `.{{name}}`.',
+		},
 	},
 };

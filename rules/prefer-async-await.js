@@ -2,6 +2,8 @@ import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
+const MESSAGE_ID = 'prefer-async-await';
+
 function containsThen(node) {
 	if (!node
 		|| node.type !== 'CallExpression'
@@ -41,7 +43,7 @@ const create = context => {
 		if (containsThen(returnStatement.argument)) {
 			context.report({
 				node,
-				message: 'Prefer using async/await instead of returning a Promise.',
+				messageId: MESSAGE_ID,
 			});
 			return;
 		}
@@ -63,7 +65,7 @@ const create = context => {
 					) {
 						context.report({
 							node,
-							message: 'Prefer using async/await instead of returning a Promise.',
+							messageId: MESSAGE_ID,
 						});
 						return;
 					}
@@ -83,9 +85,13 @@ export default {
 	meta: {
 		type: 'suggestion',
 		docs: {
-			description: 'Prefer using async/await instead of returning a Promise.',
+			description: 'Prefer async/await over returning a Promise.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
+		messages: {
+			[MESSAGE_ID]: 'Prefer using async/await instead of returning a Promise.',
+		},
 	},
 };

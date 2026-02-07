@@ -8,7 +8,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'The test title doesn\'t match the required format: `/^Should/`.'}];
+const errors = [{messageId: 'test-title-format'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('test-title-format', rule, {

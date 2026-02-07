@@ -3,6 +3,15 @@ import MicroSpellingCorrecter from 'micro-spelling-correcter';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
+const MESSAGE_ID_NOT_FUNCTION = 'not-function';
+const MESSAGE_ID_UNKNOWN_ASSERTION = 'unknown-assertion';
+const MESSAGE_ID_UNKNOWN_MEMBER = 'unknown-member';
+const MESSAGE_ID_MISSPELLED = 'misspelled';
+const MESSAGE_ID_CHAINING = 'chaining';
+const MESSAGE_ID_MISSING_ASSERTION = 'missing-assertion';
+const MESSAGE_ID_TOO_MANY_SKIPS = 'too-many-skips';
+const MESSAGE_ID_SKIP_POSITION = 'skip-position';
+
 const properties = new Set([
 	...util.executionMethods,
 	'context',
@@ -36,7 +45,7 @@ const create = context => {
 				&& node.callee.name === 't') {
 				context.report({
 					node,
-					message: '`t` is not a function.',
+					messageId: MESSAGE_ID_NOT_FUNCTION,
 				});
 			}
 		}),
@@ -67,18 +76,21 @@ const create = context => {
 						if (isCallExpression(node)) {
 							context.report({
 								node,
-								message: `Unknown assertion method \`.${name}\`.`,
+								messageId: MESSAGE_ID_UNKNOWN_ASSERTION,
+								data: {name},
 							});
 						} else {
 							context.report({
 								node,
-								message: `Unknown member \`.${name}\`. Use \`.context.${name}\` instead.`,
+								messageId: MESSAGE_ID_UNKNOWN_MEMBER,
+								data: {name},
 							});
 						}
 					} else {
 						context.report({
 							node,
-							message: `Misspelled \`.${corrected}\` as \`.${name}\`.`,
+							messageId: MESSAGE_ID_MISSPELLED,
+							data: {corrected, name},
 							fix: fixer => fixer.replaceText(member, corrected),
 						});
 					}
@@ -90,7 +102,8 @@ const create = context => {
 					if (members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
-							message: `Unknown assertion method \`.${name}\`.`,
+							messageId: MESSAGE_ID_UNKNOWN_ASSERTION,
+							data: {name},
 						});
 					}
 
@@ -103,7 +116,7 @@ const create = context => {
 					if (hadCall) {
 						context.report({
 							node,
-							message: 'Can\'t chain assertion methods.',
+							messageId: MESSAGE_ID_CHAINING,
 						});
 					}
 
@@ -114,14 +127,14 @@ const create = context => {
 			if (!hadCall) {
 				context.report({
 					node,
-					message: 'Missing assertion method.',
+					messageId: MESSAGE_ID_MISSING_ASSERTION,
 				});
 			}
 
 			if (skipPositions.length > 1) {
 				context.report({
 					node,
-					message: 'Too many chained uses of `.skip`.',
+					messageId: MESSAGE_ID_TOO_MANY_SKIPS,
 					fix(fixer) {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
@@ -132,7 +145,7 @@ const create = context => {
 			if (skipPositions.length === 1 && skipPositions[0] !== members.length - 1) {
 				context.report({
 					node,
-					message: '`.skip` modifier should be the last in chain.',
+					messageId: MESSAGE_ID_SKIP_POSITION,
 					fix(fixer) {
 						const chain = ['t', ...members.map(member => member.name).filter(name => name !== 'skip'), 'skip'];
 						return fixer.replaceText(node, chain.join('.'));
@@ -148,10 +161,21 @@ export default {
 	meta: {
 		type: 'problem',
 		docs: {
-			description: 'Disallow the incorrect use of `t`.',
+			description: 'Disallow incorrect use of `t`.',
+			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],
+		messages: {
+			[MESSAGE_ID_NOT_FUNCTION]: '`t` is not a function.',
+			[MESSAGE_ID_UNKNOWN_ASSERTION]: 'Unknown assertion method `.{{name}}`.',
+			[MESSAGE_ID_UNKNOWN_MEMBER]: 'Unknown member `.{{name}}`. Use `.context.{{name}}` instead.',
+			[MESSAGE_ID_MISSPELLED]: 'Misspelled `.{{corrected}}` as `.{{name}}`.',
+			[MESSAGE_ID_CHAINING]: 'Can\'t chain assertion methods.',
+			[MESSAGE_ID_MISSING_ASSERTION]: 'Missing assertion method.',
+			[MESSAGE_ID_TOO_MANY_SKIPS]: 'Too many chained uses of `.skip`.',
+			[MESSAGE_ID_SKIP_POSITION]: '`.skip` modifier should be the last in chain.',
+		},
 	},
 };

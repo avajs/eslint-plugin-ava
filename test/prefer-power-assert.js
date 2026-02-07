@@ -9,7 +9,7 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const errors = [{message: 'Only asserts with no power-assert alternative are allowed.'}];
+const errors = [{messageId: 'prefer-power-assert'}];
 
 function testNotAllowedMethod(methodName) {
 	ruleTester.run(`prefer-power-assert - not allowed: ${methodName}`, rule, {

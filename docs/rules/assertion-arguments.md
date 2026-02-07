@@ -19,7 +19,7 @@ This rule also attempts to enforce passing actual values before expected values.
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('1', t => {
 	t.is(value); // Not enough arguments
@@ -41,7 +41,7 @@ test('3', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('1', t => {
 	t.is(value, expected);

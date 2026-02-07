@@ -1,6 +1,6 @@
 # ava/no-skip-test
 
-📝 Ensure no tests are skipped.
+📝 Disallow skipping tests.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
@@ -15,7 +15,7 @@ It's easy to make a test skipped with `test.skip()` and then forget about it. It
 ## Fail
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();
@@ -29,7 +29,7 @@ test.skip('bar', t => {
 ## Pass
 
 ```js
-const test = require('ava');
+import test from 'ava';
 
 test('foo', t => {
 	t.pass();
