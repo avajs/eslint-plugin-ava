@@ -5,8 +5,15 @@ import util from '../util.js';
 const MESSAGE_ID = 'prefer-async-await';
 
 function containsThen(node) {
-	if (!node
-		|| node.type !== 'CallExpression'
+	if (!node) {
+		return false;
+	}
+
+	if (node.type === 'ChainExpression') {
+		return containsThen(node.expression);
+	}
+
+	if (node.type !== 'CallExpression'
 		|| node.callee.type !== 'MemberExpression'
 	) {
 		return false;

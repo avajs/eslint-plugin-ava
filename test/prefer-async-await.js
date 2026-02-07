@@ -52,5 +52,21 @@ ruleTester.run('prefer-async-await', rule, {
 			code: header + 'test(t => { const bar = foo().then(fn); return bar; });',
 			errors,
 		},
+		{
+			code: header + 'test(t => { return foo?.().then(fn); });',
+			errors,
+		},
+		{
+			code: header + 'test(t => { return foo?.bar().then(fn); });',
+			errors,
+		},
+		{
+			code: header + 'test(t => { return foo?.bar()?.then(fn); });',
+			errors,
+		},
+		{
+			code: header + 'test(t => { const bar = foo?.().then(fn); return bar; });',
+			errors,
+		},
 	],
 });
