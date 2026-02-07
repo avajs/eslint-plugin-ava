@@ -341,6 +341,12 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 'const message = \'ok\'; t.assert(true, message);'),
 		testCase(false, 'const message = \'ok\'; t.is(42, 42, message);'),
 
+		// String concatenation in assertion message
+		testCase(false, 't.assert(true, \'abc\' + someString);'),
+		testCase(false, 't.assert(true, someString + \'abc\');'),
+		testCase(false, 't.is(1, 2, `template` + x);'),
+		testCase(false, 't.is(1, 2, (\'a\' + x) + y);'),
+
 		// Should not crash on unresolvable variables (catch params, function params, destructured params, globals)
 		testCase(false, 'try {} catch (error) { t.fail(error); }'),
 		testCase(false, 'function foo(message) { t.assert(true, message); }'),

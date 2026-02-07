@@ -213,7 +213,8 @@ function isString(node) {
 	const {type} = node;
 	return type === 'TemplateLiteral'
 		|| type === 'TaggedTemplateExpression'
-		|| (type === 'Literal' && typeof node.value === 'string');
+		|| (type === 'Literal' && typeof node.value === 'string')
+		|| (type === 'BinaryExpression' && node.operator === '+' && (isString(node.left) || isString(node.right)));
 }
 
 const create = context => {
