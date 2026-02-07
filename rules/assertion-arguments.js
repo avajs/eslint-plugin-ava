@@ -11,6 +11,7 @@ const MESSAGE_ID_MISSING_MESSAGE = 'missing-message';
 const MESSAGE_ID_FOUND_MESSAGE = 'found-message';
 const MESSAGE_ID_NOT_STRING = 'not-string-message';
 const MESSAGE_ID_OUT_OF_ORDER = 'out-of-order';
+const MESSAGE_ID_PLAN_NOT_INTEGER = 'plan-not-integer';
 
 const expectedNbArguments = {
 	assert: {
@@ -281,6 +282,17 @@ const create = context => {
 				}
 
 				checkArgumentOrder({node, assertion: firstNonSkipMember, context});
+
+				if (firstNonSkipMember === 'plan') {
+					const argument = node.arguments[0];
+					const staticValue = getStaticValue(argument);
+					if (
+						staticValue !== null
+						&& (typeof staticValue.value !== 'number' || !Number.isInteger(staticValue.value) || staticValue.value < 0)
+					) {
+						context.report({node: argument, messageId: MESSAGE_ID_PLAN_NOT_INTEGER});
+					}
+				}
 			}
 
 			if (gottenArguments === nArguments.max && nArguments.min !== nArguments.max) {
@@ -430,6 +442,7 @@ export default {
 			[MESSAGE_ID_FOUND_MESSAGE]: 'Expected no assertion message, but found one.',
 			[MESSAGE_ID_NOT_STRING]: 'Assertion message should be a string.',
 			[MESSAGE_ID_OUT_OF_ORDER]: 'Expected values should come after actual values.',
+			[MESSAGE_ID_PLAN_NOT_INTEGER]: 'Expected `t.plan()` argument to be a non-negative integer.',
 		},
 	},
 };

@@ -10,7 +10,7 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/assertion-arguments.md)
 
-Enforces passing the right number of arguments to assertion methods like `t.is()`. This rule can optionally also enforce or forbid the use of assertion messages.
+Enforces passing the right number of arguments to assertion methods like `t.is()`. Also validates that `t.plan()` is called with a non-negative integer. This rule can optionally also enforce or forbid the use of assertion messages.
 
 Assertion messages are optional arguments that can be given to any assertion call to improve the error message, should the assertion fail.
 
@@ -25,6 +25,8 @@ test('1', t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
 	t.is(value, expected, false); // Assertion message is not a string
+	t.plan('1'); // Argument is not a non-negative integer
+	t.plan(2.5); // Argument is not a non-negative integer
 });
 
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
@@ -44,6 +46,7 @@ test('3', t => {
 import test from 'ava';
 
 test('1', t => {
+	t.plan(1);
 	t.is(value, expected);
 	t.is(value, expected, message);
 });

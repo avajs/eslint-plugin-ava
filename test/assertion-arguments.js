@@ -12,6 +12,7 @@ const missingError = {messageId: 'missing-message'};
 const foundError = {messageId: 'found-message'};
 const tooFewError = () => ({messageId: 'too-few-arguments'});
 const tooManyError = () => ({messageId: 'too-many-arguments'});
+const planNotIntegerError = {messageId: 'plan-not-integer'};
 const outOfOrderError = (line, column, endLine, endColumn) => ({
 	messageId: 'out-of-order',
 	line, column, endLine, endColumn,
@@ -160,6 +161,11 @@ ruleTester.run('assertion-arguments', rule, {
 	},
 	valid: [
 		testCase(false, 't.plan(1);'),
+		testCase(false, 't.plan(0);'),
+		testCase(false, 't.plan(100);'),
+		testCase(false, 't.plan(n);'),
+		testCase(false, 't.plan(foo());'),
+		testCase(false, 't.plan(a + b);'),
 		testCase(false, 't.assert(true, \'message\');'),
 		testCase(false, 't.deepEqual({}, {}, \'message\');'),
 		testCase(false, 't.fail(\'message\');'),
@@ -379,6 +385,15 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.teardown();', tooFewError()),
 		testCase(false, 't.timeout();', tooFewError()),
 		testCase(false, 't.try();', tooFewError()),
+
+		// Invalid t.plan() argument
+		testCase(false, 't.plan(\'1\');', planNotIntegerError),
+		testCase(false, 't.plan(2.5);', planNotIntegerError),
+		testCase(false, 't.plan(-1);', planNotIntegerError),
+		testCase(false, 't.plan(true);', planNotIntegerError),
+		testCase(false, 't.plan(null);', planNotIntegerError),
+		testCase(false, 't.plan.skip(\'1\');', planNotIntegerError),
+		testCase(false, 'tt.plan(2.5);', planNotIntegerError),
 
 		// Too many arguments
 		testCase(false, 't.plan(1, \'extra argument\');', tooManyError()),
