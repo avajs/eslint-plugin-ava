@@ -1,13 +1,10 @@
 #!/usr/bin/env node
-'use strict';
-
-const path = require('node:path');
-const process = require('node:process');
-const Listr = require('listr');
-const tempy = require('tempy');
-const execa = require('execa');
-const del = require('del');
-const chalk = require('chalk');
+import process from 'node:process';
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import os from 'node:os';
+import {execa} from 'execa';
+import chalk from 'chalk';
 
 const packages = new Map([
 	['chalk', 'https://github.com/chalk/chalk'],
@@ -45,144 +42,100 @@ const packages = new Map([
 	['got', 'https://github.com/sindresorhus/got'],
 ]);
 
-const cwd = path.join(__dirname, 'eslint-config-ava-tester');
+const configDirectory = path.join(import.meta.dirname, 'eslint-config-ava-tester');
 
-const enrichErrors = (packageName, cliArguments, f) => async (...arguments_) => {
-	try {
-		return await f(...arguments_);
-	} catch (error) {
-		error.packageName = packageName;
-		error.cliArgs = cliArguments;
-		throw error;
-	}
-};
-
-const makeEslintTask = (packageName, destination, extraArguments = []) => {
-	const arguments_ = [
+const runEslint = async (packageName, destination, extraArguments = []) => {
+	const cliArguments = [
 		'eslint',
 		'--config',
-		path.join(cwd, 'index.js'),
-		'--no-eslintrc',
-		'--ext',
-		'.js,.ts',
+		path.join(configDirectory, 'eslint.config.js'),
+		'--no-config-lookup',
 		destination,
 		'--format',
 		'json',
 		...extraArguments,
 	];
 
-	return enrichErrors(packageName, arguments_, async () => {
-		let stdout;
-		let processError;
-		try {
-			({stdout} = await execa('npx', arguments_, {cwd, localDir: __dirname}));
-		} catch (error) {
-			({stdout} = error);
-			processError = error;
+	let stdout;
+	try {
+		({stdout} = await execa('npx', cliArguments, {cwd: configDirectory}));
+	} catch (error) {
+		({stdout} = error);
 
-			if (!stdout) {
+		if (!stdout) {
+			throw error;
+		}
+	}
+
+	let files;
+	try {
+		files = JSON.parse(stdout);
+	} catch (error) {
+		console.error('Error while parsing eslint output:', error);
+		throw error;
+	}
+
+	for (const file of files) {
+		for (const message of file.messages) {
+			if (message.fatal) {
+				const error = new Error(message.message);
+				error.eslintFile = file;
+				error.eslintMessage = message;
 				throw error;
 			}
 		}
-
-		let files;
-		try {
-			files = JSON.parse(stdout);
-		} catch (error) {
-			console.error('Error while parsing eslint output:', error);
-
-			if (processError) {
-				throw processError;
-			}
-
-			throw error;
-		}
-
-		for (const file of files) {
-			for (const message of file.messages) {
-				if (message.fatal) {
-					const error = new Error(message.message);
-					error.eslintFile = file;
-					error.eslintMessage = message;
-					throw error;
-				}
-			}
-		}
-	});
+	}
 };
 
-const execute = name => {
-	const destination = tempy.directory();
+const testPackage = async (name, url) => {
+	const destination = await fs.mkdtemp(path.join(os.tmpdir(), `eslint-ava-${name}-`));
 
-	return new Listr([
-		{
-			title: 'Cloning',
-			task: () => execa('git', ['clone', packages.get(name), '--single-branch', destination]),
-		},
-		{
-			title: 'Running eslint',
-			task: makeEslintTask(name, destination),
-		},
-		{
-			title: 'Running eslint --fix',
-			task: makeEslintTask(name, destination, ['--fix-dry-run']),
-		},
-		{
-			title: 'Clean up',
-			task: () => del(destination, {force: true}),
-		},
-	].map(({title, task}) => ({
-		title: `${name} / ${title}`,
-		task,
-	})), {
-		exitOnError: false,
-	});
+	try {
+		console.log(`${chalk.cyan(name)}: Cloning...`);
+		await execa('git', ['clone', url, '--single-branch', destination]);
+
+		console.log(`${chalk.cyan(name)}: Running eslint...`);
+		await runEslint(name, destination);
+
+		console.log(`${chalk.cyan(name)}: Running eslint --fix...`);
+		await runEslint(name, destination, ['--fix-dry-run']);
+
+		console.log(`${chalk.green(name)}: Passed`);
+	} catch (error) {
+		error.packageName = name;
+		throw error;
+	} finally {
+		await fs.rm(destination, {recursive: true, force: true});
+	}
 };
 
-const list = new Listr([
-	{
-		title: 'Setup',
-		task: () => execa('npm', ['install', '../../..', 'eslint', 'babel-eslint', 'typescript', '@typescript-eslint/parser'], {cwd}),
-	},
-	{
-		title: 'Integration tests',
-		task() {
-			const tests = new Listr({concurrent: true});
+// Setup
+console.log('Installing dependencies...');
+await execa('npm', ['install'], {cwd: configDirectory});
 
-			for (const [name] of packages) {
-				tests.add([
-					{
-						title: name,
-						task: () => execute(name),
-					},
-				]);
-			}
+// Run integration tests concurrently
+console.log('Running integration tests...');
+const results = await Promise.allSettled(
+	[...packages].map(([name, url]) => testPackage(name, url)),
+);
 
-			return tests;
-		},
-	},
-], {
-	renderer: process.env.INTEGRATION ? 'verbose' : 'default',
-});
+// Report failures
+const failures = results.filter(result => result.status === 'rejected');
+if (failures.length > 0) {
+	for (const {reason} of failures) {
+		console.error('\n', chalk.red.bold.underline(reason.packageName));
+		console.error(reason.message);
 
-list.run()
-	.catch(error => {
-		if (error.errors) {
-			for (const error2 of error.errors) {
-				console.error('\n', chalk.red.bold.underline(error2.packageName), chalk.gray('(' + error2.cliArgs.join(' ') + ')'));
-				console.error(error2.message);
-
-				if (error2.stderr) {
-					console.error(chalk.gray(error2.stderr));
-				}
-
-				if (error2.eslintMessage) {
-					console.error(chalk.gray(error2.eslintFile.filePath), chalk.gray(JSON.stringify(error2.eslintMessage, null, 2)));
-				}
-			}
-		} else {
-			console.error(error);
+		if (reason.stderr) {
+			console.error(chalk.gray(reason.stderr));
 		}
 
-		process.exit(1);
-	});
+		if (reason.eslintMessage) {
+			console.error(chalk.gray(reason.eslintFile.filePath), chalk.gray(JSON.stringify(reason.eslintMessage, undefined, 2)));
+		}
+	}
+
+	process.exit(1);
+}
+
+console.log(chalk.green('\nAll integration tests passed!'));
