@@ -341,10 +341,11 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 'const message = \'ok\'; t.assert(true, message);'),
 		testCase(false, 'const message = \'ok\'; t.is(42, 42, message);'),
 
-		// Should not crash on unresolvable variables (catch params, function params, globals)
+		// Should not crash on unresolvable variables (catch params, function params, destructured params, globals)
 		testCase(false, 'try {} catch (error) { t.fail(error); }'),
 		testCase(false, 'function foo(message) { t.assert(true, message); }'),
 		testCase(false, 't.fail(globalVariable);'),
+		testCase(false, '[["name", 1, 2]].forEach(([testName, a, b]) => { t.is(a, b, testName); });'),
 	],
 	invalid: [
 		// Not enough arguments
