@@ -1,4 +1,6 @@
-# Ensure no `test.todo()` is used (`ava/no-todo-test`)
+# ava/no-todo-test
+
+📝 Ensure no `test.todo()` is used.
 
 ⚠️ This rule _warns_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

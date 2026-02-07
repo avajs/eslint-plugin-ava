@@ -1,4 +1,6 @@
-# Prefer using async/await instead of returning a Promise (`ava/prefer-async-await`)
+# ava/prefer-async-await
+
+📝 Prefer using async/await instead of returning a Promise.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

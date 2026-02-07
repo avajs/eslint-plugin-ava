@@ -1,4 +1,6 @@
-# Ensure no tests are written in ignored files (`ava/no-ignored-test-files`)
+# ava/no-ignored-test-files
+
+📝 Ensure no tests are written in ignored files.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

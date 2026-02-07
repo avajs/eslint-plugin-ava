@@ -1,4 +1,6 @@
-# Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited (`ava/use-t-throws-async-well`)
+# ava/use-t-throws-async-well
+
+📝 Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

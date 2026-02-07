@@ -1,4 +1,6 @@
-# Ensure assertions are not called from inline arrow functions (`ava/no-inline-assertions`)
+# ava/no-inline-assertions
+
+📝 Ensure assertions are not called from inline arrow functions.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

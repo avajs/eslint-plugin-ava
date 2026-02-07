@@ -1,11 +1,9 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const create = context => {
-	const filename = context.getFilename();
+	const {filename} = context;
 	const [overrides] = context.options;
 
 	if (filename === '<input>' || filename === '<text>') {
@@ -63,13 +61,13 @@ const schema = [{
 	additionalProperties: false,
 }];
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure no tests are written in ignored files.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema,
 	},

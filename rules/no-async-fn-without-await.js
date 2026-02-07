@@ -1,8 +1,6 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const createAvaRule = require('../create-ava-rule');
-const util = require('../util');
+import {visitIf} from 'enhance-visitors';
+import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const create = context => {
 	const ava = createAvaRule();
@@ -49,13 +47,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure that async tests use `await`.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

@@ -1,4 +1,6 @@
-# Ensure `test.todo()` is not given an implementation function (`ava/no-todo-implementation`)
+# ava/no-todo-implementation
+
+📝 Ensure `test.todo()` is not given an implementation function.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/prefer-async-await.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/prefer-async-await');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -16,6 +14,9 @@ const errors = [{
 }];
 
 ruleTester.run('prefer-async-await', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		header + 'test(t => { t.is(1, 1); });',
 		header + 'test(t => { foo(); });',

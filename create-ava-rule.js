@@ -1,9 +1,7 @@
-'use strict';
-
-const {isDeepStrictEqual} = require('node:util');
-const espurify = require('espurify');
-const enhance = require('enhance-visitors');
-const util = require('./util');
+import {isDeepStrictEqual} from 'node:util';
+import espurify from 'espurify';
+import enhance from 'enhance-visitors';
+import {getTestModifiers} from './util.js';
 
 const avaImportDeclarationAsts = [{
 	type: 'ImportDeclaration',
@@ -179,10 +177,10 @@ function isTestFunctionCall(node) {
 }
 
 function getTestModifierNames(node) {
-	return util.getTestModifiers(node).map(property => property.name);
+	return getTestModifiers(node).map(property => property.name);
 }
 
-module.exports = () => {
+export default () => {
 	let isTestFile = false;
 	let currentTestNode;
 

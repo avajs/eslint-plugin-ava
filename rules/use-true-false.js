@@ -1,11 +1,9 @@
-'use strict';
-
-const {isDeepStrictEqual} = require('node:util');
-const espree = require('espree');
-const espurify = require('espurify');
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {isDeepStrictEqual} from 'node:util';
+import * as espree from 'espree';
+import espurify from 'espurify';
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const booleanBinaryOperators = new Set([
 	'==',
@@ -64,9 +62,9 @@ const create = context => {
 
 				if (argument
 					&& ((argument.type === 'BinaryExpression' && booleanBinaryOperators.has(argument.operator))
-					|| (argument.type === 'UnaryExpression' && argument.operator === '!')
-					|| (argument.type === 'Literal' && argument.value === Boolean(argument.value))
-					|| (matchesKnownBooleanExpression(argument)))
+						|| (argument.type === 'UnaryExpression' && argument.operator === '!')
+						|| (argument.type === 'Literal' && argument.value === Boolean(argument.value))
+						|| (matchesKnownBooleanExpression(argument)))
 				) {
 					if (node.callee.property.name === 'falsy') {
 						context.report({
@@ -85,13 +83,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

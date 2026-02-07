@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-identical-title.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-identical-title');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -15,6 +13,9 @@ const message = 'Test title is used multiple times in the same file.';
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-identical-title', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		header + 'test("my test name", t => {});',
 		header + 'test("a", t => {}); test("b", t => {});',
@@ -23,7 +24,6 @@ ruleTester.run('no-identical-title', rule, {
 		// eslint-disable-next-line no-template-curly-in-string
 		header + 'test(`foo ${name}`, t => {}); test(`foo ${name}`,  t => {});',
 		header + 'const name = "foo"; test(name + " 1", t => {}); test(name + " 1", t => {});',
-		header + 'test("a", t => {}); notTest("a", t => {});',
 		header + 'notTest("a", t => {}); notTest("a", t => {});',
 		header + 'test.before(t => {}); test.before(t => {});',
 		header + 'test.after(t => {}); test.after(t => {});',
@@ -52,7 +52,6 @@ ruleTester.run('no-identical-title', rule, {
 			code: header + 'test("a", t => {}); test("a", t => {});',
 			errors: [{
 				message,
-				type: 'Literal',
 				line: 2,
 				column: 26,
 			}],
@@ -61,7 +60,6 @@ ruleTester.run('no-identical-title', rule, {
 			code: header + 'test(`a`, t => {}); test(`a`, t => {});',
 			errors: [{
 				message,
-				type: 'TemplateLiteral',
 				line: 2,
 				column: 26,
 			}],
@@ -70,7 +68,6 @@ ruleTester.run('no-identical-title', rule, {
 			code: header + 'test("foo" + 1, t => {}); test("foo" + 1, t => {});',
 			errors: [{
 				message,
-				type: 'BinaryExpression',
 				line: 2,
 				column: 32,
 			}],
@@ -80,7 +77,6 @@ ruleTester.run('no-identical-title', rule, {
 			code: header + 'test(`${"foo" + 1}`, t => {}); test(`${"foo" + 1}`, t => {});',
 			errors: [{
 				message,
-				type: 'TemplateLiteral',
 				line: 2,
 				column: 37,
 			}],
@@ -89,7 +85,6 @@ ruleTester.run('no-identical-title', rule, {
 			code: header + 'test.todo("a"); test.todo("a");',
 			errors: [{
 				message,
-				type: 'Literal',
 				line: 2,
 				column: 27,
 			}],

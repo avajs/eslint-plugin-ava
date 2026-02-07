@@ -1,4 +1,6 @@
-# Enforce test hook ordering (`ava/hooks-order`)
+# ava/hooks-order
+
+📝 Enforce test hook ordering.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

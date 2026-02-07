@@ -1,8 +1,64 @@
-'use strict';
+import {createRequire} from 'node:module';
+import assertionArguments from './rules/assertion-arguments.js';
+import hooksOrder from './rules/hooks-order.js';
+import maxAsserts from './rules/max-asserts.js';
+import noAsyncFnWithoutAwait from './rules/no-async-fn-without-await.js';
+import noDuplicateModifiers from './rules/no-duplicate-modifiers.js';
+import noIdenticalTitle from './rules/no-identical-title.js';
+import noIgnoredTestFiles from './rules/no-ignored-test-files.js';
+import noImportTestFiles from './rules/no-import-test-files.js';
+import noIncorrectDeepEqual from './rules/no-incorrect-deep-equal.js';
+import noInlineAssertions from './rules/no-inline-assertions.js';
+import noNestedTests from './rules/no-nested-tests.js';
+import noOnlyTest from './rules/no-only-test.js';
+import noSkipAssert from './rules/no-skip-assert.js';
+import noSkipTest from './rules/no-skip-test.js';
+import noTodoImplementation from './rules/no-todo-implementation.js';
+import noTodoTest from './rules/no-todo-test.js';
+import noUnknownModifiers from './rules/no-unknown-modifiers.js';
+import preferAsyncAwait from './rules/prefer-async-await.js';
+import preferPowerAssert from './rules/prefer-power-assert.js';
+import preferTRegex from './rules/prefer-t-regex.js';
+import testTitle from './rules/test-title.js';
+import testTitleFormat from './rules/test-title-format.js';
+import useT from './rules/use-t.js';
+import useTThrowsAsyncWell from './rules/use-t-throws-async-well.js';
+import useTWell from './rules/use-t-well.js';
+import useTest from './rules/use-test.js';
+import useTrueFalse from './rules/use-true-false.js';
 
-const path = require('node:path');
-const importModules = require('import-modules');
+const require = createRequire(import.meta.url);
 const {name, version} = require('./package.json');
+
+const rules = {
+	'assertion-arguments': assertionArguments,
+	'hooks-order': hooksOrder,
+	'max-asserts': maxAsserts,
+	'no-async-fn-without-await': noAsyncFnWithoutAwait,
+	'no-duplicate-modifiers': noDuplicateModifiers,
+	'no-identical-title': noIdenticalTitle,
+	'no-ignored-test-files': noIgnoredTestFiles,
+	'no-import-test-files': noImportTestFiles,
+	'no-incorrect-deep-equal': noIncorrectDeepEqual,
+	'no-inline-assertions': noInlineAssertions,
+	'no-nested-tests': noNestedTests,
+	'no-only-test': noOnlyTest,
+	'no-skip-assert': noSkipAssert,
+	'no-skip-test': noSkipTest,
+	'no-todo-implementation': noTodoImplementation,
+	'no-todo-test': noTodoTest,
+	'no-unknown-modifiers': noUnknownModifiers,
+	'prefer-async-await': preferAsyncAwait,
+	'prefer-power-assert': preferPowerAssert,
+	'prefer-t-regex': preferTRegex,
+	'test-title': testTitle,
+	'test-title-format': testTitleFormat,
+	'use-t': useT,
+	'use-t-throws-async-well': useTThrowsAsyncWell,
+	'use-t-well': useTWell,
+	'use-test': useTest,
+	'use-true-false': useTrueFalse,
+};
 
 const recommendedRules = {
 	'ava/assertion-arguments': 'error',
@@ -42,27 +98,12 @@ const plugin = {
 		name,
 		version,
 	},
-	rules: importModules(path.resolve(__dirname, 'rules'), {camelize: false}),
+	rules,
 	configs: {},
 };
 
 Object.assign(plugin.configs, {
 	recommended: {
-		env: {
-			es6: true,
-		},
-		parserOptions: {
-			ecmaVersion: 'latest',
-			sourceType: 'module',
-		},
-		plugins: [
-			'ava',
-		],
-		rules: {
-			...recommendedRules,
-		},
-	},
-	'flat/recommended': {
 		plugins: {
 			ava: plugin,
 		},
@@ -72,4 +113,4 @@ Object.assign(plugin.configs, {
 	},
 });
 
-module.exports = plugin;
+export default plugin;

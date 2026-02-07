@@ -1,23 +1,25 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/max-asserts.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/max-asserts');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
-const errors = [{}];
 const header = 'const test = require(\'ava\');\n';
 
 function nbAssertions(n) {
 	return Array.from({length: n}).map(() => 't.is(1, 1);').join('\n');
 }
 
+const maxAssertsError = (max, found) => [{message: `Expected at most ${max} assertions, but found ${found}.`}];
+
 ruleTester.run('max-asserts', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		`${header} test(t => { ${nbAssertions(3)} });`,
 		`${header}
@@ -43,35 +45,35 @@ ruleTester.run('max-asserts', rule, {
 	invalid: [
 		{
 			code: `${header} test(t => { ${nbAssertions(6)} });`,
-			errors,
+			errors: maxAssertsError(5, 6),
 		},
 		{
 			code: `${header}
 				test(t => { ${nbAssertions(3)} });
 				test(t => { ${nbAssertions(6)} });
 			`,
-			errors,
+			errors: maxAssertsError(5, 6),
 		},
 		{
 			code: `${header} test(t => { t.plan(5); ${nbAssertions(6)} });`,
-			errors,
+			errors: maxAssertsError(5, 6),
 		},
 		{
 			code: `${header} test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`,
-			errors,
+			errors: maxAssertsError(5, 6),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(4)} });`,
 			options: [3],
-			errors,
+			errors: maxAssertsError(3, 4),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(10)} });`,
-			errors,
+			errors: maxAssertsError(5, 10),
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(10)} }); test(t => { ${nbAssertions(10)} });`,
-			errors: [...errors, ...errors], // Should have two errors, one per test
+			errors: [...maxAssertsError(5, 10), ...maxAssertsError(5, 10)], // Should have two errors, one per test
 		},
 	],
 });

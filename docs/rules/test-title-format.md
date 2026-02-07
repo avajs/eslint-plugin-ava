@@ -1,4 +1,6 @@
-# Ensure test titles have a certain format (`ava/test-title-format`)
+# ava/test-title-format
+
+📝 Ensure test titles have a certain format.
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

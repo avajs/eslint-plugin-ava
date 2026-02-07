@@ -1,4 +1,6 @@
-# Ensure tests have a title (`ava/test-title`)
+# ava/test-title
+
+📝 Ensure tests have a title.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

@@ -1,20 +1,21 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import {outdent} from 'outdent';
+import rule from '../rules/hooks-order.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const {outdent} = require('outdent');
-const rule = require('../rules/hooks-order');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
-const errors = [{}];
+const errors = [{messageId: 'hooks-order'}];
 const header = 'const test = require(\'ava\');';
 
 ruleTester.run('no-todo-test', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		outdent`
 			${header}
@@ -652,19 +653,7 @@ ruleTester.run('no-todo-test', rule, {
 					doFoo();
 				});
 			`,
-			output: outdent`
-				${header}
-
-				test.after(t => {
-					doFoo();
-				});
-
-				console.log('foo');
-
-				test.before(t => {
-					doFoo();
-				});
-			`,
+			output: null,
 			errors,
 		},
 		{

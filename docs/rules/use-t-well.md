@@ -1,4 +1,6 @@
-# Disallow the incorrect use of `t` (`ava/use-t-well`)
+# ava/use-t-well
+
+📝 Disallow the incorrect use of `t`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

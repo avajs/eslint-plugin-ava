@@ -1,19 +1,17 @@
-'use strict';
+import path from 'node:path';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import util from '../util.js';
+import rule from '../rules/no-ignored-test-files.js';
 
-const path = require('node:path');
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const util = require('../util');
-const rule = require('../rules/no-ignored-test-files');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
 const header = 'const test = require(\'ava\');\n';
-const rootDirectory = path.dirname(__dirname);
+const rootDirectory = path.dirname(import.meta.dirname);
 
 const toPath = subPath => path.join(rootDirectory, subPath);
 const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
@@ -41,6 +39,9 @@ util.loadAvaHelper = () => ({
 });
 
 ruleTester.run('no-ignored-test-files', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		{
 			code: code(true),

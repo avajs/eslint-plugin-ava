@@ -1,4 +1,6 @@
-# Enforce passing correct arguments to assertions (`ava/assertion-arguments`)
+# ava/assertion-arguments
+
+📝 Enforce passing correct arguments to assertions.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

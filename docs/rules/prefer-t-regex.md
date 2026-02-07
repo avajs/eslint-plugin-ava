@@ -1,4 +1,6 @@
-# Prefer using `t.regex()` to test regular expressions (`ava/prefer-t-regex`)
+# ava/prefer-t-regex
+
+📝 Prefer using `t.regex()` to test regular expressions.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

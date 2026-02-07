@@ -1,9 +1,9 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const {getStaticValue, isOpeningParenToken, isCommaToken, findVariable} = require('eslint-utils');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import {
+	getStaticValue, isOpeningParenToken, isCommaToken, findVariable,
+} from '@eslint-community/eslint-utils';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const expectedNbArguments = {
 	assert: {
@@ -304,14 +304,12 @@ function checkArgumentOrder({node, assertion, context}) {
 	if (actualExpectedAssertions.has(assertion) && second) {
 		const [leftNode, rightNode] = [first, second];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
-			context.report(
-				makeOutOfOrder2ArgumentReport({
-					node,
-					leftNode,
-					rightNode,
-					context,
-				}),
-			);
+			context.report(makeOutOfOrder2ArgumentReport({
+				node,
+				leftNode,
+				rightNode,
+				context,
+			}));
 		}
 	} else if (
 		relationalActualExpectedAssertions.has(assertion)
@@ -321,20 +319,18 @@ function checkArgumentOrder({node, assertion, context}) {
 	) {
 		const [leftNode, rightNode] = [first.left, first.right];
 		if (isStatic(leftNode) && !isStatic(rightNode)) {
-			context.report(
-				makeOutOfOrder1ArgumentReport({
-					node: first,
-					leftNode,
-					rightNode,
-					context,
-				}),
-			);
+			context.report(makeOutOfOrder1ArgumentReport({
+				node: first,
+				leftNode,
+				rightNode,
+				context,
+			}));
 		}
 	}
 }
 
 function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
-	const sourceCode = context.getSourceCode();
+	const {sourceCode} = context;
 	const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
 	const report = {
 		message: 'Expected values should come after actual values.',
@@ -359,7 +355,7 @@ function makeOutOfOrder2ArgumentReport({node, leftNode, rightNode, context}) {
 }
 
 function makeOutOfOrder1ArgumentReport({node, leftNode, rightNode, context}) {
-	const sourceCode = context.getSourceCode();
+	const {sourceCode} = context;
 	const [
 		leftRange,
 		operatorToken,
@@ -402,13 +398,13 @@ const schema = [{
 	additionalProperties: false,
 }];
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'problem',
 		docs: {
 			description: 'Enforce passing correct arguments to assertions.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema,

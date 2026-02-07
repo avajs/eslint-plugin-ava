@@ -1,4 +1,6 @@
-# Ensure that async tests use `await` (`ava/no-async-fn-without-await`)
+# ava/no-async-fn-without-await
+
+📝 Ensure that async tests use `await`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

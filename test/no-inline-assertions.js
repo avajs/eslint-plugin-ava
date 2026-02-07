@@ -1,19 +1,20 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-inline-assertions.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-inline-assertions');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
-const errors = [{}];
+const errors = [{message: 'The test implementation should not be an inline arrow function.'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-test', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		// Shouldn't be triggered as the test implementation is not an inline arrow function
 		header + 'test("my test name", t => {\n t.true(fn()); \n});',

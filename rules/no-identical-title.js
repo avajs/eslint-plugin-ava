@@ -1,10 +1,8 @@
-'use strict';
-
-const {isDeepStrictEqual} = require('node:util');
-const espurify = require('espurify');
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {isDeepStrictEqual} from 'node:util';
+import espurify from 'espurify';
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const purify = node => node && espurify(node);
 
@@ -58,13 +56,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'problem',
 		docs: {
 			description: 'Ensure no tests have the same title.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

@@ -1,13 +1,11 @@
-'use strict';
-
-const path = require('node:path');
-const util = require('../util');
+import path from 'node:path';
+import util from '../util.js';
 
 // Assume absolute paths can be classified by AVA.
 const isFileImport = name => path.isAbsolute(name) || name.startsWith('./') || name.startsWith('../');
 
 const create = context => {
-	const filename = context.getFilename();
+	const {filename} = context;
 	const [overrides] = context.options;
 
 	if (filename === '<input>' || filename === '<text>') {
@@ -75,13 +73,13 @@ const schema = [{
 	additionalProperties: false,
 }];
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure no test files are imported anywhere.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema,
 	},

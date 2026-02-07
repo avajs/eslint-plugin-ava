@@ -1,4 +1,6 @@
-# Ensure no assertions are skipped (`ava/no-skip-assert`)
+# ava/no-skip-assert
+
+📝 Ensure no assertions are skipped.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

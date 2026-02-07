@@ -1,15 +1,13 @@
-'use strict';
-
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-async-fn-without-await');
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-async-fn-without-await.js';
 
 const message = 'Function was declared as `async` but doesn\'t use `await`.';
 const header = 'const test = require(\'ava\');\n';
 
 const ruleTesterOptions = [
 	{
-		parserOptions: {
+		languageOptions: {
 			ecmaVersion: 'latest',
 		},
 	},
@@ -23,9 +21,12 @@ const ruleTesterOptions = [
 ];
 
 for (const options of ruleTesterOptions) {
-	const ruleTester = avaRuleTester(test, options);
+	const ruleTester = new AvaRuleTester(test, options);
 
 	ruleTester.run(`no-async-fn-without-await - parser:${options.parser ?? 'default'}`, rule, {
+		assertionOptions: {
+			requireMessage: true,
+		},
 		valid: [
 			`${header}test(fn);`,
 			`${header}test(t => {});`,
@@ -48,7 +49,6 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test(async t => {});`,
 				errors: [{
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 6,
 				}],
@@ -57,7 +57,6 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test(async function(t) {});`,
 				errors: [{
 					message,
-					type: 'FunctionExpression',
 					line: 2,
 					column: 6,
 				}],
@@ -66,12 +65,10 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test(async t => {}); test(async t => {});`,
 				errors: [{
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 6,
 				}, {
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 27,
 				}],
@@ -80,7 +77,6 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test(async t => {}); test(async t => { await foo(); });`,
 				errors: [{
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 6,
 				}],
@@ -89,7 +85,6 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test(async t => { await foo(); }); test(async t => {});`,
 				errors: [{
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 41,
 				}],
@@ -98,7 +93,6 @@ for (const options of ruleTesterOptions) {
 				code: `${header}test('title', async t => {});`,
 				errors: [{
 					message,
-					type: 'ArrowFunctionExpression',
 					line: 2,
 					column: 15,
 				}],

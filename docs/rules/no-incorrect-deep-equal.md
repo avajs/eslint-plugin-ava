@@ -1,4 +1,6 @@
-# Disallow using `deepEqual` with primitives (`ava/no-incorrect-deep-equal`)
+# ava/no-incorrect-deep-equal
+
+📝 Disallow using `deepEqual` with primitives.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

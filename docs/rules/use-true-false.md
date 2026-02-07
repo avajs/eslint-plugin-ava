@@ -1,4 +1,6 @@
-# Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()` (`ava/use-true-false`)
+# ava/use-true-false
+
+📝 Ensure that `t.true()`/`t.false()` are used instead of `t.truthy()`/`t.falsy()`.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

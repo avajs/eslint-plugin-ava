@@ -1,19 +1,20 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/test-title-format.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/test-title-format');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
-const errors = [{}];
+const errors = [{message: 'The test title doesn\'t match the required format: `/^Should/`.'}];
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('test-title-format', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		header + 'test("Foo", t => { t.pass(); });',
 		{
@@ -22,11 +23,11 @@ ruleTester.run('test-title-format', rule, {
 		},
 		{
 			code: header + 'test("Should pass tests.", t => { t.pass(); });',
-			options: [{format: '^Should .+\\.$'}],
+			options: [{format: String.raw`^Should .+\.$`}],
 		},
 		{
 			code: header + 'test.todo("Should pass tests.");',
-			options: [{format: '^Should .+\\.$'}],
+			options: [{format: String.raw`^Should .+\.$`}],
 		},
 		{
 			code: header + 'test(t => { t.pass(); });',

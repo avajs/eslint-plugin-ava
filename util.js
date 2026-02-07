@@ -1,12 +1,13 @@
-'use strict';
+import path from 'node:path';
+import {createRequire} from 'node:module';
+import {packageDirectorySync} from 'package-directory';
+import resolveFrom from 'resolve-from';
 
-const path = require('node:path');
-const pkgDir = require('pkg-dir');
-const resolveFrom = require('resolve-from');
-const pkg = require('./package');
+const require = createRequire(import.meta.url);
+const pkg = require('./package.json');
 
-exports.loadAvaHelper = (filename, overrides) => {
-	const rootDirectory = pkgDir.sync(filename);
+export const loadAvaHelper = (filename, overrides) => {
+	const rootDirectory = packageDirectorySync({cwd: filename});
 	if (!rootDirectory) {
 		return undefined;
 	}
@@ -25,19 +26,19 @@ const functionExpressions = new Set([
 	'ArrowFunctionExpression',
 ]);
 
-exports.getRootNode = node => {
+export const getRootNode = node => {
 	if (node.object.type === 'MemberExpression') {
-		return exports.getRootNode(node.object);
+		return getRootNode(node.object);
 	}
 
 	return node;
 };
 
-exports.getNameOfRootNodeObject = node => exports.getRootNode(node).object.name;
+export const getNameOfRootNodeObject = node => getRootNode(node).object.name;
 
-exports.isPropertyUnderContext = node => exports.getRootNode(node).property.name === 'context';
+export const isPropertyUnderContext = node => getRootNode(node).property.name === 'context';
 
-exports.isFunctionExpression = node => node && functionExpressions.has(node.type);
+export const isFunctionExpression = node => node && functionExpressions.has(node.type);
 
 function getTestModifiers(node) {
 	if (node.type === 'CallExpression') {
@@ -51,15 +52,15 @@ function getTestModifiers(node) {
 	return [];
 }
 
-exports.getTestModifiers = getTestModifiers;
+export {getTestModifiers};
 
-exports.getTestModifier = (node, module_) => getTestModifiers(node).find(property => property.name === module_);
+export const getTestModifier = (node, module_) => getTestModifiers(node).find(property => property.name === module_);
 
-exports.removeTestModifier = parameters => {
+export const removeTestModifier = parameters => {
 	const modifier = parameters.modifier.trim();
-	const range = [...exports.getTestModifier(parameters.node, modifier).range];
+	const range = [...getTestModifier(parameters.node, modifier).range];
 	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
-	const source = parameters.context.getSourceCode().getText();
+	const source = parameters.context.sourceCode.getText();
 	let dotPosition = range[0] - 1;
 	while (source.charAt(dotPosition) !== '.') {
 		dotPosition -= 1;
@@ -80,7 +81,7 @@ const getMembers = node => {
 	return [name];
 };
 
-exports.getMembers = getMembers;
+export {getMembers};
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
@@ -89,7 +90,7 @@ const getDocumentationUrl = (filename, commitHash = `v${pkg.version}`) => {
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
 
-exports.getDocsUrl = getDocumentationUrl;
+export const getDocsUrl = getDocumentationUrl;
 
 const assertionMethodsNumberArguments = new Map([
 	['assert', 1],
@@ -117,6 +118,23 @@ const assertionMethodsNumberArguments = new Map([
 
 const assertionMethodNames = [...assertionMethodsNumberArguments.keys()];
 
-exports.assertionMethodsNumArguments = assertionMethodsNumberArguments;
-exports.assertionMethods = new Set(assertionMethodNames);
-exports.executionMethods = new Set([...assertionMethodNames, 'end', 'plan', 'log', 'teardown', 'timeout']);
+export {assertionMethodsNumberArguments};
+export const assertionMethods = new Set(assertionMethodNames);
+export const executionMethods = new Set([...assertionMethodNames, 'end', 'plan', 'log', 'teardown', 'timeout']);
+
+// Default export as a mutable object to allow test mocking of loadAvaHelper.
+export default {
+	loadAvaHelper,
+	getRootNode,
+	getNameOfRootNodeObject,
+	isPropertyUnderContext,
+	isFunctionExpression,
+	getTestModifiers,
+	getTestModifier,
+	removeTestModifier,
+	getMembers,
+	getDocsUrl,
+	assertionMethodsNumberArguments,
+	assertionMethods,
+	executionMethods,
+};

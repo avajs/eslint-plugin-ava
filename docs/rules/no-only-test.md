@@ -1,4 +1,6 @@
-# Ensure no `test.only()` are present (`ava/no-only-test`)
+# ava/no-only-test
+
+📝 Ensure no `test.only()` are present.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

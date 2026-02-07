@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-duplicate-modifiers.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-duplicate-modifiers');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -31,7 +29,6 @@ const invalid = modifiers.map(modifier => ({
 	errors: [
 		{
 			message: `Duplicate test modifier \`.${modifier}\`.`,
-			type: 'Identifier',
 			line: 2,
 			column: 7 + modifier.length,
 		},
@@ -39,6 +36,9 @@ const invalid = modifiers.map(modifier => ({
 }));
 
 ruleTester.run('no-duplicate-modifiers', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [...valid,
 		`${header}test(t => {});`,
 		`${header}test.after.always(t => {});`,

@@ -1,8 +1,6 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const modifiers = new Set([
 	'after',
@@ -42,13 +40,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'problem',
 		docs: {
 			description: 'Disallow the use of unknown test modifiers.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

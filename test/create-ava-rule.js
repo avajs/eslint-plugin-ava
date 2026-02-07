@@ -1,8 +1,6 @@
-'use strict';
-
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const createAvaRule = require('../create-ava-rule');
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import createAvaRule from '../create-ava-rule.js';
 
 const rule = {
 	create(context) {
@@ -18,11 +16,9 @@ const rule = {
 	},
 };
 
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
-	},
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 		sourceType: 'module',
 	},
 });
@@ -34,6 +30,9 @@ const errors = [
 ];
 
 ruleTester.run('rule-fixture', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		'const test = require(\'ava\');',
 		'const {serial} = require(\'ava\');',

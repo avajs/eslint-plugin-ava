@@ -1,8 +1,6 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const createAvaRule = require('../create-ava-rule');
-const util = require('../util');
+import {visitIf} from 'enhance-visitors';
+import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'hooks-order';
 
@@ -87,7 +85,7 @@ const create = context => {
 		},
 	];
 
-	const sourceCode = context.getSourceCode();
+	const {sourceCode} = context;
 
 	// TODO: Remove `.reduce()` usage.
 	// eslint-disable-next-line unicorn/no-array-reduce
@@ -146,13 +144,13 @@ const create = context => {
 	return ava.merge(selectors);
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Enforce test hook ordering.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],

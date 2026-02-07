@@ -1,8 +1,6 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const create = context => {
 	const ava = createAvaRule();
@@ -25,13 +23,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure no assertions are skipped.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

@@ -1,18 +1,19 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-unknown-modifiers.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-unknown-modifiers');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-unknown-modifiers', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		`${header}test(t => {});`,
 		`${header}test.after(t => {});`,
@@ -37,7 +38,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.foo`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -46,7 +46,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.onlu(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.onlu`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -55,7 +54,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.beforeeach(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.beforeeach`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -64,7 +62,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.c.only(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.c`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -73,7 +70,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.cb(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.cb`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -82,7 +78,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo.bar.baz(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.foo`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],
@@ -91,7 +86,6 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.test(t => {});`,
 			errors: [{
 				message: 'Unknown test modifier `.test`.',
-				type: 'Identifier',
 				line: 2,
 				column: 6,
 			}],

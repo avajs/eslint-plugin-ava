@@ -1,14 +1,9 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/assertion-arguments.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/assertion-arguments');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
-	},
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
 		ecmaVersion: 'latest',
 	},
 });
@@ -70,12 +65,17 @@ function testCase(message, content, errors = [], {
 		.map(error => typeof error === 'string' ? {message: error} : error)
 		.map(error => offsetError(error, ...offset));
 
-	return {
-		errors,
+	const result = {
 		options: message ? [{message}] : [],
 		code: testCode(content, useHeader),
-		output: output === null ? null : testCode(output, useHeader),
 	};
+
+	if (errors.length > 0) {
+		result.errors = errors;
+		result.output = output === null ? null : testCode(output, useHeader);
+	}
+
+	return result;
 }
 
 const statics = [
@@ -88,7 +88,7 @@ const statics = [
 	/* eslint-disable no-template-curly-in-string */
 	'`template ${"string"}`',
 	/* eslint-enable no-template-curly-in-string */
-	'/.*regex.*\\.js/ig',
+	String.raw`/.*regex.*\.js/ig`,
 	'{}',
 	'{a: 1}',
 	'{a: {b: 1}}',
@@ -157,6 +157,9 @@ const dynamics = [
 ];
 
 ruleTester.run('assertion-arguments', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		testCase(false, 't.plan(1);'),
 		testCase(false, 't.assert(true, \'message\');'),
@@ -186,7 +189,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.timeout(100, \'message\');'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true);', false, {useHeader: false}),
+		testCase(false, 't.true(true);', [], {useHeader: false}),
 
 		testCase(false, 't.assert(true);'),
 		testCase(false, 't.deepEqual({}, {});'),
@@ -447,60 +450,20 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError(1)),
 
 		// Assertion argument order
-		testCase(false, 't.deepEqual(\'static\', dynamic);',
-			outOfOrderError(1, 13, 1, 30),
-			{output: 't.deepEqual(dynamic, \'static\');'},
-		),
-		testCase(false, 't.is(\'static\', dynamic);',
-			outOfOrderError(1, 6, 1, 23),
-			{output: 't.is(dynamic, \'static\');'},
-		),
-		testCase(false, 't.like({a: {b: 1}}, dynamic);',
-			outOfOrderError(1, 8, 1, 28),
-			{output: 't.like(dynamic, {a: {b: 1}});'},
-		),
-		testCase(false, 't.not(\'static\', dynamic);',
-			outOfOrderError(1, 7, 1, 24),
-			{output: 't.not(dynamic, \'static\');'},
-		),
-		testCase(false, 't.notDeepEqual({static: true}, dynamic);',
-			outOfOrderError(1, 16, 1, 39),
-			{output: 't.notDeepEqual(dynamic, {static: true});'},
-		),
-		testCase(false, 't.throws({name: \'TypeError\'}, () => {});',
-			outOfOrderError(1, 10, 1, 39),
-			{output: 't.throws(() => {}, {name: \'TypeError\'});'},
-		),
-		testCase(false, 't.throwsAsync({name: \'TypeError\'}, async () => {});',
-			outOfOrderError(1, 15, 1, 50),
-			{output: 't.throwsAsync(async () => {}, {name: \'TypeError\'});'},
-		),
-		testCase('always', 't.deepEqual({}, actual, \'message\');',
-			outOfOrderError(1, 13, 1, 23),
-			{output: 't.deepEqual(actual, {}, \'message\');'},
-		),
-		testCase('never', 't.deepEqual({}, actual);',
-			outOfOrderError(1, 13, 1, 23),
-			{output: 't.deepEqual(actual, {});'},
-		),
-		testCase('always', 't.deepEqual({}, actual);',
-			[missingError, outOfOrderError(1, 13, 1, 23)],
-			{output: 't.deepEqual(actual, {});'},
-		),
-		testCase('never', 't.deepEqual({}, actual, \'message\');',
-			[foundError, outOfOrderError(1, 13, 1, 23)],
-			{output: 't.deepEqual(actual, {}, \'message\');'},
-		),
-		testCase(false, 't.deepEqual({}, actual, extra, \'message\');',
-			tooManyError(3),
-		),
-		testCase(false, 't.deepEqual({}, (actual));',
-			outOfOrderError(1, 13, 1, 25),
-			{output: 't.deepEqual((actual), {});'},
-		),
-		testCase(false, 't.deepEqual({}, actual/*: type */);',
-			outOfOrderError(1, 13, 1, 34),
-		),
+		testCase(false, 't.deepEqual(\'static\', dynamic);', outOfOrderError(1, 13, 1, 30), {output: 't.deepEqual(dynamic, \'static\');'}),
+		testCase(false, 't.is(\'static\', dynamic);', outOfOrderError(1, 6, 1, 23), {output: 't.is(dynamic, \'static\');'}),
+		testCase(false, 't.like({a: {b: 1}}, dynamic);', outOfOrderError(1, 8, 1, 28), {output: 't.like(dynamic, {a: {b: 1}});'}),
+		testCase(false, 't.not(\'static\', dynamic);', outOfOrderError(1, 7, 1, 24), {output: 't.not(dynamic, \'static\');'}),
+		testCase(false, 't.notDeepEqual({static: true}, dynamic);', outOfOrderError(1, 16, 1, 39), {output: 't.notDeepEqual(dynamic, {static: true});'}),
+		testCase(false, 't.throws({name: \'TypeError\'}, () => {});', outOfOrderError(1, 10, 1, 39), {output: 't.throws(() => {}, {name: \'TypeError\'});'}),
+		testCase(false, 't.throwsAsync({name: \'TypeError\'}, async () => {});', outOfOrderError(1, 15, 1, 50), {output: 't.throwsAsync(async () => {}, {name: \'TypeError\'});'}),
+		testCase('always', 't.deepEqual({}, actual, \'message\');', outOfOrderError(1, 13, 1, 23), {output: 't.deepEqual(actual, {}, \'message\');'}),
+		testCase('never', 't.deepEqual({}, actual);', outOfOrderError(1, 13, 1, 23), {output: 't.deepEqual(actual, {});'}),
+		testCase('always', 't.deepEqual({}, actual);', [missingError, outOfOrderError(1, 13, 1, 23)], {output: 't.deepEqual(actual, {});'}),
+		testCase('never', 't.deepEqual({}, actual, \'message\');', [foundError, outOfOrderError(1, 13, 1, 23)], {output: 't.deepEqual(actual, {}, \'message\');'}),
+		testCase(false, 't.deepEqual({}, actual, extra, \'message\');', tooManyError(3)),
+		testCase(false, 't.deepEqual({}, (actual));', outOfOrderError(1, 13, 1, 25), {output: 't.deepEqual((actual), {});'}),
+		testCase(false, 't.deepEqual({}, actual/*: type */);', outOfOrderError(1, 13, 1, 34)),
 		testCase(
 			false,
 			`t.deepEqual(// Line comment 1
@@ -511,41 +474,16 @@ ruleTester.run('assertion-arguments', rule, {
 			); // Line Comment 6`,
 			outOfOrderError(1, 13, 5, 22),
 		),
-		testCase(false, 't.assert(\'static\' !== dynamic);',
-			outOfOrderError(1, 10, 1, 30),
-			{output: 't.assert(dynamic !== \'static\');'},
-		),
-		testCase(false, 't.true(\'static\' <= dynamic);',
-			outOfOrderError(1, 8, 1, 27),
-			{output: 't.true(dynamic >= \'static\');'},
-		),
-		testCase(false, 't.false(\'static\' < dynamic);',
-			outOfOrderError(1, 9, 1, 27),
-			{output: 't.false(dynamic > \'static\');'},
-		),
-		testCase(false, 't.truthy(\'static\' > dynamic);',
-			outOfOrderError(1, 10, 1, 28),
-			{output: 't.truthy(dynamic < \'static\');'},
-		),
-		testCase(false, 't.falsy(\'static\' >= dynamic);',
-			outOfOrderError(1, 9, 1, 28),
-			{output: 't.falsy(dynamic <= \'static\');'},
-		),
-		testCase(false, 't.true(\'static\' === actual/*: type */);',
-			outOfOrderError(1, 8, 1, 38),
-		),
+		testCase(false, 't.assert(\'static\' !== dynamic);', outOfOrderError(1, 10, 1, 30), {output: 't.assert(dynamic !== \'static\');'}),
+		testCase(false, 't.true(\'static\' <= dynamic);', outOfOrderError(1, 8, 1, 27), {output: 't.true(dynamic >= \'static\');'}),
+		testCase(false, 't.false(\'static\' < dynamic);', outOfOrderError(1, 9, 1, 27), {output: 't.false(dynamic > \'static\');'}),
+		testCase(false, 't.truthy(\'static\' > dynamic);', outOfOrderError(1, 10, 1, 28), {output: 't.truthy(dynamic < \'static\');'}),
+		testCase(false, 't.falsy(\'static\' >= dynamic);', outOfOrderError(1, 9, 1, 28), {output: 't.falsy(dynamic <= \'static\');'}),
+		testCase(false, 't.true(\'static\' === actual/*: type */);', outOfOrderError(1, 8, 1, 38)),
 		...statics.map(expression =>
-			testCase(false, `t.deepEqual(${expression}, dynamic);`,
-				outOfOrderError(1, 13, 1, 22 + expression.length),
-				{output: `t.deepEqual(dynamic, ${expression});`},
-			),
-		),
+			testCase(false, `t.deepEqual(${expression}, dynamic);`, outOfOrderError(1, 13, 1, 22 + expression.length), {output: `t.deepEqual(dynamic, ${expression});`})),
 		...dynamics.map(expression =>
-			testCase(false, `t.deepEqual('static', ${expression});`,
-				outOfOrderError(1, 13, 1, 23 + expression.length),
-				{output: `t.deepEqual(${expression}, 'static');`},
-			),
-		),
+			testCase(false, `t.deepEqual('static', ${expression});`, outOfOrderError(1, 13, 1, 23 + expression.length), {output: `t.deepEqual(${expression}, 'static');`})),
 
 		// Message is not string
 		testCase(false, 't.assert(true, true);', messageIsNotStringError),

@@ -1,4 +1,6 @@
-# Ensure no tests are skipped (`ava/no-skip-test`)
+# ava/no-skip-test
+
+📝 Ensure no tests are skipped.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

@@ -1,11 +1,9 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/use-t-throws-async-well.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/use-t-throws-async-well');
-
-const ruleTester = avaRuleTester(test, {
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
 		ecmaVersion: 'latest',
 	},
 });
@@ -33,6 +31,9 @@ function syncTestCase(contents, prependHeader) {
 }
 
 ruleTester.run('use-t-throws-async-well', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		asyncTestCase('await t.throwsAsync(f)'),
 		asyncTestCase('await t.notThrowsAsync(f)'),

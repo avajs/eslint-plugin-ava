@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/no-todo-implementation.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/no-todo-implementation');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -16,6 +14,9 @@ const errors = [{
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-todo-implementation', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		header + 'test(t => {});',
 		header + 'test("title", t => {});',

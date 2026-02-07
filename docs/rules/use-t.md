@@ -1,4 +1,6 @@
-# Ensure test functions use `t` as their parameter (`ava/use-t`)
+# ava/use-t
+
+📝 Ensure test functions use `t` as their parameter.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

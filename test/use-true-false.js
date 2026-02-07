@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/use-true-false.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/use-true-false');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -31,6 +29,9 @@ function testCase(contents, prependHeader) {
 }
 
 ruleTester.run('use-true-false', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		testCase('t.true(true)'),
 		testCase('t.true(false)'),

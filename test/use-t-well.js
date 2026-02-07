@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/use-t-well.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/use-t-well');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -27,6 +25,9 @@ function testCase(contents, prependHeader) {
 }
 
 ruleTester.run('use-t-well', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		testCase('t;'),
 		testCase('fn(t);'),

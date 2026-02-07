@@ -1,4 +1,6 @@
-# Ensure no tests have the same title (`ava/no-identical-title`)
+# ava/no-identical-title
+
+📝 Ensure no tests have the same title.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

@@ -1,10 +1,8 @@
-'use strict';
-
-const {isDeepStrictEqual} = require('node:util');
-const espurify = require('espurify');
-const {visitIf} = require('enhance-visitors');
-const createAvaRule = require('../create-ava-rule');
-const util = require('../util');
+import {isDeepStrictEqual} from 'node:util';
+import espurify from 'espurify';
+import {visitIf} from 'enhance-visitors';
+import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const notAllowed = [
 	'truthy',
@@ -80,13 +78,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

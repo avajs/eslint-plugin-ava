@@ -1,8 +1,6 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const create = context => {
 	const ava = createAvaRule();
@@ -23,7 +21,7 @@ const create = context => {
 					context.report({
 						node,
 						message,
-						fix: fixer => fixer.replaceText(node.callee, `await ${context.getSourceCode().getText(node.callee)}`),
+						fix: fixer => fixer.replaceText(node.callee, `await ${context.sourceCode.getText(node.callee)}`),
 					});
 				} else {
 					context.report({
@@ -36,13 +34,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'problem',
 		docs: {
 			description: 'Ensure that `t.throwsAsync()` and `t.notThrowsAsync()` are awaited.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],

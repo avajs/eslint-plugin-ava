@@ -1,4 +1,6 @@
-# Ensure no tests are nested (`ava/no-nested-tests`)
+# ava/no-nested-tests
+
+📝 Ensure no tests are nested.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

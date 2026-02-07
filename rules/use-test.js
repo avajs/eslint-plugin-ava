@@ -1,9 +1,7 @@
-'use strict';
-
-const path = require('node:path');
-const {isDeepStrictEqual} = require('node:util');
-const espurify = require('espurify');
-const util = require('../util');
+import path from 'node:path';
+import {isDeepStrictEqual} from 'node:util';
+import espurify from 'espurify';
+import util from '../util.js';
 
 const avaVariableDeclaratorInitAst = {
 	type: 'CallExpression',
@@ -27,7 +25,7 @@ function report(context, node) {
 }
 
 const create = context => {
-	const extension = path.extname(context.getFilename());
+	const extension = path.extname(context.filename);
 	const isTypeScript = extension === '.ts' || extension === '.tsx';
 
 	return {
@@ -50,13 +48,13 @@ const create = context => {
 	};
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'suggestion',
 		docs: {
 			description: 'Ensure that AVA is imported with `test` as the variable name.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		schema: [],
 	},

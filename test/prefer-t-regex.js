@@ -1,12 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/prefer-t-regex.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/prefer-t-regex');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 	},
 });
 
@@ -16,26 +14,29 @@ const errors = assertion => [{
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('prefer-t-regex', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
-		header + 'test(t => t.regex("foo", /\\d+/));',
-		header + 'test(t => t.regex(foo(), /\\d+/));',
-		header + 'test(t => t.is(/\\d+/.test("foo"), foo));',
-		header + 'test(t => t.is(RegExp("\\d+").test("foo"), foo));',
-		header + 'test(t => t.is(RegExp(/\\d+/).test("foo"), foo));',
-		header + 'test(t => t.is(/\\d+/, /\\w+/));',
-		header + 'test(t => t.is(123, /\\d+/));',
+		header + String.raw`test(t => t.regex("foo", /\d+/));`,
+		header + String.raw`test(t => t.regex(foo(), /\d+/));`,
+		header + String.raw`test(t => t.is(/\d+/.test("foo"), foo));`,
+		header + String.raw`test(t => t.is(RegExp("\d+").test("foo"), foo));`,
+		header + String.raw`test(t => t.is(RegExp(/\d+/).test("foo"), foo));`,
+		header + String.raw`test(t => t.is(/\d+/, /\w+/));`,
+		header + String.raw`test(t => t.is(123, /\d+/));`,
 		header + 'test(t => t.true(1 === 1));',
 		header + 'test(t => t.true(foo.bar()));',
 		header + 'test(t => t.is(foo, true));',
 		header + 'const a = /\\d+/;\ntest(t => t.truthy(a));',
 		header + 'const a = "not a regexp";\ntest(t => t.true(a.test("foo")));',
 		header + 'test("main", t => t.true(foo()));',
-		header + 'test(t => t.regex(foo, new RegExp("\\d+")));',
-		header + 'test(t => t.regex(foo, RegExp("\\d+")));',
-		header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
-		header + 'test(t => t.regex(foo, RegExp(/\\d+/)));',
+		header + String.raw`test(t => t.regex(foo, new RegExp("\d+")));`,
+		header + String.raw`test(t => t.regex(foo, RegExp("\d+")));`,
+		header + String.raw`test(t => t.regex(foo, new RegExp(/\d+/)));`,
+		header + String.raw`test(t => t.regex(foo, RegExp(/\d+/)));`,
 		// Shouldn't be triggered since it's not a test file
-		'test(t => t.true(/\\d+/.test("foo")));',
+		String.raw`test(t => t.true(/\d+/.test("foo")));`,
 		'test(t => t.true());',
 		// These shouldn't cause errors as this rule affects them.
 		// This rule would crash on the following.
@@ -49,13 +50,13 @@ ruleTester.run('prefer-t-regex', rule, {
 	],
 	invalid: [
 		{
-			code: header + 'test(t => t.true(/\\d+/.test("foo")));',
-			output: header + 'test(t => t.regex("foo", /\\d+/));',
+			code: header + String.raw`test(t => t.true(/\d+/.test("foo")));`,
+			output: header + String.raw`test(t => t.regex("foo", /\d+/));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(foo.search(/\\d+/)));',
-			output: header + 'test(t => t.notRegex(foo, /\\d+/));',
+			code: header + String.raw`test(t => t.false(foo.search(/\d+/)));`,
+			output: header + String.raw`test(t => t.notRegex(foo, /\d+/));`,
 			errors: errors('notRegex'),
 		},
 		{
@@ -64,28 +65,28 @@ ruleTester.run('prefer-t-regex', rule, {
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.truthy(foo.match(/\\d+/)));',
-			output: header + 'test(t => t.regex(foo, /\\d+/));',
+			code: header + String.raw`test(t => t.truthy(foo.match(/\d+/)));`,
+			output: header + String.raw`test(t => t.regex(foo, /\d+/));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(/\\d+/.test("foo")));',
-			output: header + 'test(t => t.notRegex("foo", /\\d+/));',
+			code: header + String.raw`test(t => t.false(/\d+/.test("foo")));`,
+			output: header + String.raw`test(t => t.notRegex("foo", /\d+/));`,
 			errors: errors('notRegex'),
 		},
 		{
-			code: header + 'test(t => t.true(/\\d+/.test(foo())));',
-			output: header + 'test(t => t.regex(foo(), /\\d+/));',
+			code: header + String.raw`test(t => t.true(/\d+/.test(foo())));`,
+			output: header + String.raw`test(t => t.regex(foo(), /\d+/));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(/\\d+/.test(foo), true));',
-			output: header + 'test(t => t.regex(foo, /\\d+/));',
+			code: header + String.raw`test(t => t.is(/\d+/.test(foo), true));`,
+			output: header + String.raw`test(t => t.regex(foo, /\d+/));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(/\\d+/.test(foo), false));',
-			output: header + 'test(t => t.notRegex(foo, /\\d+/));',
+			code: header + String.raw`test(t => t.is(/\d+/.test(foo), false));`,
+			output: header + String.raw`test(t => t.notRegex(foo, /\d+/));`,
 			errors: errors('notRegex'),
 		},
 		{
@@ -95,13 +96,13 @@ ruleTester.run('prefer-t-regex', rule, {
 		},
 		// The same as the above tests but with `RegExp()` object instead of a regex literal
 		{
-			code: header + 'test(t => t.true(new RegExp("\\d+").test("foo")));',
-			output: header + 'test(t => t.regex("foo", new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.true(new RegExp("\d+").test("foo")));`,
+			output: header + String.raw`test(t => t.regex("foo", new RegExp("\d+")));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(foo.search(new RegExp("\\d+"))));',
-			output: header + 'test(t => t.notRegex(foo, new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.false(foo.search(new RegExp("\d+"))));`,
+			output: header + String.raw`test(t => t.notRegex(foo, new RegExp("\d+")));`,
 			errors: errors('notRegex'),
 		},
 		{
@@ -110,28 +111,28 @@ ruleTester.run('prefer-t-regex', rule, {
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.truthy(foo.match(new RegExp("\\d+"))));',
-			output: header + 'test(t => t.regex(foo, new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.truthy(foo.match(new RegExp("\d+"))));`,
+			output: header + String.raw`test(t => t.regex(foo, new RegExp("\d+")));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(RegExp("\\d+").test("foo")));',
-			output: header + 'test(t => t.notRegex("foo", RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.false(RegExp("\d+").test("foo")));`,
+			output: header + String.raw`test(t => t.notRegex("foo", RegExp("\d+")));`,
 			errors: errors('notRegex'),
 		},
 		{
-			code: header + 'test(t => t.true(new RegExp("\\d+").test(foo())));',
-			output: header + 'test(t => t.regex(foo(), new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.true(new RegExp("\d+").test(foo())));`,
+			output: header + String.raw`test(t => t.regex(foo(), new RegExp("\d+")));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(new RegExp("\\d+").test(foo), true));',
-			output: header + 'test(t => t.regex(foo, new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.is(new RegExp("\d+").test(foo), true));`,
+			output: header + String.raw`test(t => t.regex(foo, new RegExp("\d+")));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(new RegExp("\\d+").test(foo), false));',
-			output: header + 'test(t => t.notRegex(foo, new RegExp("\\d+")));',
+			code: header + String.raw`test(t => t.is(new RegExp("\d+").test(foo), false));`,
+			output: header + String.raw`test(t => t.notRegex(foo, new RegExp("\d+")));`,
 			errors: errors('notRegex'),
 		},
 		{
@@ -141,13 +142,13 @@ ruleTester.run('prefer-t-regex', rule, {
 		},
 		// The same as the above tests but with regex literal instead of string regex
 		{
-			code: header + 'test(t => t.true(new RegExp(/\\d+/).test("foo")));',
-			output: header + 'test(t => t.regex("foo", new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.true(new RegExp(/\d+/).test("foo")));`,
+			output: header + String.raw`test(t => t.regex("foo", new RegExp(/\d+/)));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(foo.search(new RegExp(/\\d+/))));',
-			output: header + 'test(t => t.notRegex(foo, new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.false(foo.search(new RegExp(/\d+/))));`,
+			output: header + String.raw`test(t => t.notRegex(foo, new RegExp(/\d+/)));`,
 			errors: errors('notRegex'),
 		},
 		{
@@ -156,28 +157,28 @@ ruleTester.run('prefer-t-regex', rule, {
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.truthy(foo.match(new RegExp(/\\d+/))));',
-			output: header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.truthy(foo.match(new RegExp(/\d+/))));`,
+			output: header + String.raw`test(t => t.regex(foo, new RegExp(/\d+/)));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.false(RegExp(/\\d+/).test("foo")));',
-			output: header + 'test(t => t.notRegex("foo", RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.false(RegExp(/\d+/).test("foo")));`,
+			output: header + String.raw`test(t => t.notRegex("foo", RegExp(/\d+/)));`,
 			errors: errors('notRegex'),
 		},
 		{
-			code: header + 'test(t => t.true(new RegExp(/\\d+/).test(foo())));',
-			output: header + 'test(t => t.regex(foo(), new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.true(new RegExp(/\d+/).test(foo())));`,
+			output: header + String.raw`test(t => t.regex(foo(), new RegExp(/\d+/)));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(new RegExp(/\\d+/).test(foo), true));',
-			output: header + 'test(t => t.regex(foo, new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.is(new RegExp(/\d+/).test(foo), true));`,
+			output: header + String.raw`test(t => t.regex(foo, new RegExp(/\d+/)));`,
 			errors: errors('regex'),
 		},
 		{
-			code: header + 'test(t => t.is(new RegExp(/\\d+/).test(foo), false));',
-			output: header + 'test(t => t.notRegex(foo, new RegExp(/\\d+/)));',
+			code: header + String.raw`test(t => t.is(new RegExp(/\d+/).test(foo), false));`,
+			output: header + String.raw`test(t => t.notRegex(foo, new RegExp(/\d+/)));`,
 			errors: errors('notRegex'),
 		},
 		{

@@ -1,25 +1,41 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import tsParser from '@typescript-eslint/parser';
+import rule from '../rules/use-test.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/use-test');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
-	},
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 		sourceType: 'module',
 	},
 });
 
-const typescriptRuleTester = avaRuleTester(test, {
-	parser: require.resolve('@typescript-eslint/parser'),
+const typescriptRuleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		parser: tsParser,
+	},
 });
 
-const errors = [{}];
+const errors = [{message: 'AVA should be imported as `test`.'}];
+
+const prefixTestCases = (testCases, prefix) => ({
+	assertionOptions: {
+		requireMessage: true,
+	},
+	valid: testCases.valid.map(testCase => ({
+		...typeof testCase === 'string' ? {code: testCase} : testCase,
+		name: `[${prefix}] ${typeof testCase === 'string' ? testCase : testCase.code}`,
+	})),
+	invalid: testCases.invalid.map(testCase => ({
+		...testCase,
+		name: `[${prefix}] ${testCase.code}`,
+	})),
+});
 
 const commonTestCases = {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		{code: 'var test = require(\'ava\');', filename: 'file.js'},
 		{code: 'let test = require(\'ava\');', filename: 'file.js'},
@@ -80,31 +96,6 @@ const commonTestCases = {
 		{
 			code: 'var ava = require(\'ava\');',
 			errors,
-			filename: 'file.ts',
-		},
-		{
-			code: 'let ava = require(\'ava\');',
-			errors,
-			filename: 'file.ts',
-		},
-		{
-			code: 'const ava = require(\'ava\');',
-			errors,
-			filename: 'file.ts',
-		},
-		{
-			code: 'const a = 1, ava = require(\'ava\'), b = 2;',
-			errors,
-			filename: 'file.ts',
-		},
-		{
-			code: 'import ava from \'ava\';',
-			errors,
-			filename: 'file.ts',
-		},
-		{
-			code: 'var ava = require(\'ava\');',
-			errors,
 			filename: 'file.tsx',
 		},
 		{
@@ -131,6 +122,9 @@ const commonTestCases = {
 };
 
 const typescriptTestCases = {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		{code: 'import type {Macro} from \'ava\';', filename: 'file.ts'},
 		{code: 'import type {Macro} from \'ava\';', filename: 'file.tsx'},
@@ -139,5 +133,5 @@ const typescriptTestCases = {
 };
 
 ruleTester.run('use-test', rule, commonTestCases);
-typescriptRuleTester.run('use-test', rule, commonTestCases);
-typescriptRuleTester.run('use-test', rule, typescriptTestCases);
+typescriptRuleTester.run('use-test', rule, prefixTestCases(commonTestCases, 'ts'));
+typescriptRuleTester.run('use-test', rule, prefixTestCases(typescriptTestCases, 'ts-type'));

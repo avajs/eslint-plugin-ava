@@ -1,4 +1,6 @@
-# Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative (`ava/prefer-power-assert`)
+# ava/prefer-power-assert
+
+📝 Enforce the use of the asserts that have no [power-assert](https://github.com/power-assert-js/power-assert) alternative.
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

@@ -1,9 +1,7 @@
-'use strict';
-
-const {visitIf} = require('enhance-visitors');
-const MicroSpellingCorrecter = require('micro-spelling-correcter');
-const util = require('../util');
-const createAvaRule = require('../create-ava-rule');
+import {visitIf} from 'enhance-visitors';
+import MicroSpellingCorrecter from 'micro-spelling-correcter';
+import util from '../util.js';
+import createAvaRule from '../create-ava-rule.js';
 
 const properties = new Set([
 	...util.executionMethods,
@@ -35,7 +33,7 @@ const create = context => {
 			ava.isInTestNode,
 		])(node => {
 			if (node.callee.type !== 'MemberExpression'
-					&& node.callee.name === 't') {
+				&& node.callee.name === 't') {
 				context.report({
 					node,
 					message: '`t` is not a function.',
@@ -47,7 +45,7 @@ const create = context => {
 			ava.isInTestNode,
 		])(node => {
 			if (node.parent.type === 'MemberExpression'
-					|| util.getNameOfRootNodeObject(node) !== 't') {
+				|| util.getNameOfRootNodeObject(node) !== 't') {
 				return;
 			}
 
@@ -145,13 +143,13 @@ const create = context => {
 	});
 };
 
-module.exports = {
+export default {
 	create,
 	meta: {
 		type: 'problem',
 		docs: {
 			description: 'Disallow the incorrect use of `t`.',
-			url: util.getDocsUrl(__filename),
+			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
 		schema: [],

@@ -14,30 +14,26 @@ This plugin is bundled in [XO](https://github.com/xojs/xo). No need to do anythi
 npm install --save-dev eslint eslint-plugin-ava
 ```
 
+**Requires ESLint `>=10`, [flat config](https://eslint.org/docs/latest/use/configure/configuration-files), and [ESM](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).**
+
 ## Usage
 
-Configure it in `package.json`.
+Use a [preset config](#recommended-config) or configure each rule in `eslint.config.js`.
 
-```json
-{
-	"name": "my-awesome-project",
-	"eslintConfig": {
-		"env": {
-			"es6": true
+```js
+import eslintPluginAva from 'eslint-plugin-ava';
+
+export default [
+	{
+		plugins: {
+			ava: eslintPluginAva,
 		},
-		"parserOptions": {
-			"ecmaVersion": "latest",
-			"sourceType": "module"
+		rules: {
+			'ava/assertion-arguments': 'error',
+			'ava/no-only-test': 'error',
 		},
-		"plugins": [
-			"ava"
-		],
-		"rules": {
-			"ava/assertion-arguments": "error",
-			"ava/...": "error"
-        }
-    }
-}
+	},
+];
 ```
 
 ## Rules
@@ -89,17 +85,10 @@ The rules will only activate in test files.
 
 This plugin exports a [`recommended` config](index.js) that enforces good practices.
 
-Enable it in your `package.json` with the `extends` option:
+```js
+import eslintPluginAva from 'eslint-plugin-ava';
 
-```json
-{
-	"name": "my-awesome-project",
-	"eslintConfig": {
-		"extends": "plugin:ava/recommended"
-	}
-}
+export default [
+	eslintPluginAva.configs.recommended,
+];
 ```
-
-See the [ESLint docs](https://eslint.org/docs/user-guide/configuring#extending-configuration-files) for more information about extending config files.
-
-**Note**: This config will also enable the correct [parser options](https://eslint.org/docs/user-guide/configuring#specifying-parser-options) and [environment](https://eslint.org/docs/user-guide/configuring#specifying-environments).

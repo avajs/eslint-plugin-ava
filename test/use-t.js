@@ -1,14 +1,10 @@
-'use strict';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import rule from '../rules/use-t.js';
 
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const rule = require('../rules/use-t');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
-	},
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 		sourceType: 'module',
 	},
 });
@@ -20,6 +16,9 @@ const parameterNotNamedTErrors = [{
 const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('use-t', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		header + 'test();',
 		header + 'test(() => {});',

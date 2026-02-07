@@ -1,21 +1,17 @@
-'use strict';
+import path from 'node:path';
+import test from 'ava';
+import AvaRuleTester from 'eslint-ava-rule-tester';
+import util from '../util.js';
+import rule from '../rules/no-import-test-files.js';
 
-const path = require('node:path');
-const test = require('ava');
-const avaRuleTester = require('eslint-ava-rule-tester');
-const util = require('../util');
-const rule = require('../rules/no-import-test-files');
-
-const ruleTester = avaRuleTester(test, {
-	env: {
-		es6: true,
-	},
-	parserOptions: {
+const ruleTester = new AvaRuleTester(test, {
+	languageOptions: {
+		ecmaVersion: 'latest',
 		sourceType: 'module',
 	},
 });
 
-const rootDirectory = path.dirname(__dirname);
+const rootDirectory = path.dirname(import.meta.dirname);
 const toPath = subPath => path.join(rootDirectory, subPath);
 
 util.loadAvaHelper = () => ({
@@ -47,6 +43,9 @@ const errors = [
 ];
 
 ruleTester.run('no-import-test-files', rule, {
+	assertionOptions: {
+		requireMessage: true,
+	},
 	valid: [
 		'import test from \'ava\';',
 		'import foo from \'@foo/bar\';',

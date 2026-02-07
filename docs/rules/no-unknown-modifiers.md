@@ -1,4 +1,6 @@
-# Disallow the use of unknown test modifiers (`ava/no-unknown-modifiers`)
+# ava/no-unknown-modifiers
+
+📝 Disallow the use of unknown test modifiers.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

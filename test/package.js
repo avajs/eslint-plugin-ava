@@ -1,10 +1,8 @@
-'use strict';
-
-const fs = require('node:fs');
-const path = require('node:path');
-const test = require('ava');
-const pify = require('pify');
-const index = require('..');
+import fs from 'node:fs';
+import path from 'node:path';
+import test from 'ava';
+import pify from 'pify';
+import index from '../index.js';
 
 let ruleFiles;
 
@@ -38,10 +36,8 @@ test('Every rule is defined in index file in alphabetical order', t => {
 		t.truthy(fs.existsSync(path.join('test', file)), `There are no tests for '${name}'`);
 	}
 
-	t.is(Object.keys(index.rules).length, ruleFiles.length,
-		'There are more exported rules than rule files.');
-	t.is(Object.keys(index.configs.recommended.rules).length, ruleFiles.length,
-		'There are more exported rules in the recommended config than rule files.');
+	t.is(Object.keys(index.rules).length, ruleFiles.length, 'There are more exported rules than rule files.');
+	t.is(Object.keys(index.configs.recommended.rules).length, ruleFiles.length, 'There are more exported rules in the recommended config than rule files.');
 
 	testSorted(t, Object.keys(index.configs.recommended.rules), 'configs.recommended.rules');
 });

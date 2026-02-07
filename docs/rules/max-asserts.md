@@ -1,4 +1,6 @@
-# Enforce a limit on the number of assertions in a test (`ava/max-asserts`)
+# ava/max-asserts
+
+📝 Enforce a limit on the number of assertions in a test.
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 

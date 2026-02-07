@@ -1,4 +1,6 @@
-# Ensure no test files are imported anywhere (`ava/no-import-test-files`)
+# ava/no-import-test-files
+
+📝 Ensure no test files are imported anywhere.
 
 💼 This rule is enabled in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
