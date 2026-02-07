@@ -53,7 +53,15 @@ ruleTester.run('prefer-async-await', rule, {
 			errors,
 		},
 		{
+			code: header + 'test(t => { return promise?.then(fn); });',
+			errors,
+		},
+		{
 			code: header + 'test(t => { return foo?.().then(fn); });',
+			errors,
+		},
+		{
+			code: header + 'test(t => { return foo?.().then(fn).catch(fn2); });',
 			errors,
 		},
 		{
