@@ -8,13 +8,10 @@ const ruleTester = new AvaRuleTester(test, {
 	},
 });
 
-const trueErrors = [{
-	messageId: 'use-true',
-}];
-
-const falseErrors = [{
-	messageId: 'use-false',
-}];
+const trueErrors = [{messageId: 'use-true'}];
+const falseErrors = [{messageId: 'use-false'}];
+const isTrueErrors = [{messageId: 'use-true-over-is'}];
+const isFalseErrors = [{messageId: 'use-false-over-is'}];
 
 const header = 'const test = require(\'ava\');\n';
 
@@ -58,6 +55,17 @@ ruleTester.run('use-true-false', rule, {
 		testCase('t.context.falsy(false)'),
 		testCase('foo.t.truthy(true)'),
 		testCase('foo.t.falsy(false)'),
+		// `t.is()` with non-boolean literals should not trigger
+		testCase('t.is(value, 1)'),
+		testCase('t.is(value, "string")'),
+		testCase('t.is(value, null)'),
+		testCase('t.is(value, undefined)'),
+		// `t.is()` with both boolean literals should not trigger
+		testCase('t.is(true, true)'),
+		testCase('t.is(true, false)'),
+		// `t.is()` with too few arguments should not trigger
+		testCase('t.is(true)'),
+		testCase('t.is()'),
 		// Shouldn't be triggered since it's not a test file
 		testCase('t.truthy(value === 1)', false),
 	],
@@ -136,6 +144,51 @@ ruleTester.run('use-true-false', rule, {
 			code: testCase('t.falsy(value === 1)'),
 			output: testCase('t.false(value === 1)'),
 			errors: falseErrors,
+		},
+		// `t.is(x, true)` → `t.true(x)`
+		{
+			code: testCase('t.is(x, true)'),
+			output: testCase('t.true(x)'),
+			errors: isTrueErrors,
+		},
+		// `t.is(x, false)` → `t.false(x)`
+		{
+			code: testCase('t.is(x, false)'),
+			output: testCase('t.false(x)'),
+			errors: isFalseErrors,
+		},
+		// Boolean literal in first argument position
+		{
+			code: testCase('t.is(true, x)'),
+			output: testCase('t.true(x)'),
+			errors: isTrueErrors,
+		},
+		{
+			code: testCase('t.is(false, x)'),
+			output: testCase('t.false(x)'),
+			errors: isFalseErrors,
+		},
+		// With assertion message
+		{
+			code: testCase('t.is(x, true, "message")'),
+			output: testCase('t.true(x, "message")'),
+			errors: isTrueErrors,
+		},
+		{
+			code: testCase('t.is(x, false, "message")'),
+			output: testCase('t.false(x, "message")'),
+			errors: isFalseErrors,
+		},
+		// Boolean literal in first position with assertion message
+		{
+			code: testCase('t.is(true, x, "message")'),
+			output: testCase('t.true(x, "message")'),
+			errors: isTrueErrors,
+		},
+		{
+			code: testCase('t.is(false, x, "message")'),
+			output: testCase('t.false(x, "message")'),
+			errors: isFalseErrors,
 		},
 	],
 });

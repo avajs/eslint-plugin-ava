@@ -14,6 +14,8 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 For example: if you have a function `foo()` which normally returns `true`, but suddenly returns `1` instead, `t.truthy(foo())` would not catch the change, but `t.true(foo())` would.
 This rule enforces the use of the former when the tested expression is known to result in a boolean value.
 
+This rule also enforces `t.true(x)` over `t.is(x, true)` and `t.false(x)` over `t.is(x, false)`.
+
 ### Fail
 
 ```js
@@ -26,6 +28,8 @@ test('foo', t => {
 	t.falsy(!value);
 	t.truthy(!!value);
 	t.truthy(Array.isArray(value));
+	t.is(value, true);
+	t.is(value, false);
 });
 ```
 
@@ -41,5 +45,7 @@ test('foo', t => {
 	t.false(!value);
 	t.true(!!value);
 	t.true(Array.isArray(value));
+	t.true(value);
+	t.false(value);
 });
 ```

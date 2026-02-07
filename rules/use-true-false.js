@@ -7,6 +7,8 @@ import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID_TRUE = 'use-true';
 const MESSAGE_ID_FALSE = 'use-false';
+const MESSAGE_ID_IS_TRUE = 'use-true-over-is';
+const MESSAGE_ID_IS_FALSE = 'use-false-over-is';
 
 const booleanBinaryOperators = new Set([
 	'==',
@@ -57,10 +59,15 @@ const create = context => {
 			ava.isInTestNode,
 		])(node => {
 			if (
-				node.callee.type === 'MemberExpression'
-				&& (node.callee.property.name === 'truthy' || node.callee.property.name === 'falsy')
-				&& node.callee.object.name === 't'
+				node.callee.type !== 'MemberExpression'
+				|| node.callee.object.name !== 't'
 			) {
+				return;
+			}
+
+			const {name} = node.callee.property;
+
+			if (name === 'truthy' || name === 'falsy') {
 				const argument = node.arguments[0];
 
 				if (argument
@@ -69,7 +76,7 @@ const create = context => {
 						|| (argument.type === 'Literal' && argument.value === Boolean(argument.value))
 						|| (matchesKnownBooleanExpression(argument)))
 				) {
-					const isFalsy = node.callee.property.name === 'falsy';
+					const isFalsy = name === 'falsy';
 					context.report({
 						node,
 						messageId: isFalsy ? MESSAGE_ID_FALSE : MESSAGE_ID_TRUE,
@@ -78,6 +85,48 @@ const create = context => {
 						},
 					});
 				}
+
+				return;
+			}
+
+			if (name === 'is') {
+				const [first, second, message] = node.arguments;
+
+				if (!first || !second) {
+					return;
+				}
+
+				const firstIsBoolean = first.type === 'Literal' && typeof first.value === 'boolean';
+				const secondIsBoolean = second.type === 'Literal' && typeof second.value === 'boolean';
+
+				// Skip if neither or both are boolean literals
+				if (firstIsBoolean === secondIsBoolean) {
+					return;
+				}
+
+				const booleanLiteral = firstIsBoolean ? first : second;
+				const otherArgument = firstIsBoolean ? second : first;
+				const assertion = booleanLiteral.value ? 'true' : 'false';
+				const messageId = booleanLiteral.value ? MESSAGE_ID_IS_TRUE : MESSAGE_ID_IS_FALSE;
+
+				context.report({
+					node,
+					messageId,
+					fix(fixer) {
+						const source = context.sourceCode;
+						const newArguments = message
+							? `${source.getText(otherArgument)}, ${source.getText(message)}`
+							: source.getText(otherArgument);
+
+						return [
+							fixer.replaceText(node.callee.property, assertion),
+							fixer.replaceTextRange(
+								[first.range[0], node.arguments.at(-1).range[1]],
+								newArguments,
+							),
+						];
+					},
+				});
 			}
 		}),
 	});
@@ -97,6 +146,8 @@ export default {
 		messages: {
 			[MESSAGE_ID_TRUE]: '`t.true()` should be used instead of `t.truthy()`.',
 			[MESSAGE_ID_FALSE]: '`t.false()` should be used instead of `t.falsy()`.',
+			[MESSAGE_ID_IS_TRUE]: 'Prefer `t.true()` over `t.is(…, true)`.',
+			[MESSAGE_ID_IS_FALSE]: 'Prefer `t.false()` over `t.is(…, false)`.',
 		},
 	},
 };
