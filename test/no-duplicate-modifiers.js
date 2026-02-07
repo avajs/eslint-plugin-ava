@@ -26,6 +26,7 @@ const modifiers = [
 const valid = modifiers.map(modifier => `${header}test.${modifier}(t => {});`);
 const invalid = modifiers.map(modifier => ({
 	code: `${header}test.${modifier}.${modifier}(t => {});`,
+	output: `${header}test.${modifier}(t => {});`,
 	errors: [
 		{
 			messageId: 'no-duplicate-modifiers',

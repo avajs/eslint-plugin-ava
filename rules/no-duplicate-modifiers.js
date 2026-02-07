@@ -20,12 +20,19 @@ const create = context => {
 				return;
 			}
 
+			const {sourceCode} = context;
+
 			for (let index = 1; index < testModifiers.length; index++) {
 				if (testModifiers[index - 1].name === testModifiers[index].name) {
+					const duplicate = testModifiers[index];
 					context.report({
-						node: testModifiers[index],
+						node: duplicate,
 						messageId: MESSAGE_ID,
-						data: {name: testModifiers[index].name},
+						data: {name: duplicate.name},
+						fix(fixer) {
+							const dotToken = sourceCode.getTokenBefore(duplicate);
+							return fixer.removeRange([dotToken.range[0], duplicate.range[1]]);
+						},
 					});
 				}
 			}
@@ -42,6 +49,7 @@ export default {
 			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
+		fixable: 'code',
 		schema: [],
 		messages: {
 			[MESSAGE_ID]: 'Duplicate test modifier `.{{name}}`.',

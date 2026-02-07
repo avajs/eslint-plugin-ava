@@ -3,6 +3,7 @@ import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'no-unknown-modifiers';
+const MESSAGE_ID_SUGGESTION = 'no-unknown-modifiers-suggestion';
 
 const modifiers = new Set([
 	'after',
@@ -30,13 +31,20 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			const unknown = unknownModifiers(node);
-
-			if (unknown.length > 0) {
+			for (const modifier of unknownModifiers(node)) {
 				context.report({
-					node: unknown[0],
+					node: modifier,
 					messageId: MESSAGE_ID,
-					data: {name: unknown[0].name},
+					data: {name: modifier.name},
+					suggest: [{
+						messageId: MESSAGE_ID_SUGGESTION,
+						data: {name: modifier.name},
+						fix: fixer => fixer.replaceTextRange(...util.removeTestModifier({
+							modifier: modifier.name,
+							node,
+							context,
+						})),
+					}],
 				});
 			}
 		}),
@@ -52,9 +60,11 @@ export default {
 			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
+		hasSuggestions: true,
 		schema: [],
 		messages: {
 			[MESSAGE_ID]: 'Unknown test modifier `.{{name}}`.',
+			[MESSAGE_ID_SUGGESTION]: 'Remove the `.{{name}}` modifier.',
 		},
 	},
 };

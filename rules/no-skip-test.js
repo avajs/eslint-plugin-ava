@@ -41,7 +41,6 @@ export default {
 			recommended: true,
 			url: util.getDocsUrl(import.meta.filename),
 		},
-		fixable: 'code',
 		hasSuggestions: true,
 		schema: [],
 		messages: {

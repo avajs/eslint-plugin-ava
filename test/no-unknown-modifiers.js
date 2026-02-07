@@ -38,56 +38,86 @@ ruleTester.run('no-unknown-modifiers', rule, {
 			code: `${header}test.foo(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test(t => {});`,
+				}],
 			}],
 		},
 		{
 			code: `${header}test.onlu(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test(t => {});`,
+				}],
 			}],
 		},
 		{
 			code: `${header}test.beforeeach(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test(t => {});`,
+				}],
 			}],
 		},
 		{
 			code: `${header}test.c.only(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test.only(t => {});`,
+				}],
 			}],
 		},
 		{
 			code: `${header}test.cb(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test(t => {});`,
+				}],
 			}],
 		},
 		{
 			code: `${header}test.foo.bar.baz(t => {});`,
-			errors: [{
-				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
-			}],
+			errors: [
+				{
+					messageId: 'no-unknown-modifiers',
+					suggestions: [{
+						messageId: 'no-unknown-modifiers-suggestion',
+						output: `${header}test.bar.baz(t => {});`,
+					}],
+				},
+				{
+					messageId: 'no-unknown-modifiers',
+					suggestions: [{
+						messageId: 'no-unknown-modifiers-suggestion',
+						output: `${header}test.foo.baz(t => {});`,
+					}],
+				},
+				{
+					messageId: 'no-unknown-modifiers',
+					suggestions: [{
+						messageId: 'no-unknown-modifiers-suggestion',
+						output: `${header}test.foo.bar(t => {});`,
+					}],
+				},
+			],
 		},
 		{
 			code: `${header}test.test(t => {});`,
 			errors: [{
 				messageId: 'no-unknown-modifiers',
-				line: 2,
-				column: 6,
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: `${header}test(t => {});`,
+				}],
 			}],
 		},
 	],
