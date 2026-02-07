@@ -33,11 +33,42 @@ const create = context => {
 
 		const statements = node.body.body;
 		const returnStatement = statements.find(statement => statement.type === 'ReturnStatement');
-		if (returnStatement && containsThen(returnStatement.argument)) {
+
+		if (!returnStatement) {
+			return;
+		}
+
+		if (containsThen(returnStatement.argument)) {
 			context.report({
 				node,
 				message: 'Prefer using async/await instead of returning a Promise.',
 			});
+			return;
+		}
+
+		// Check if the returned variable was assigned from a `.then()` call
+		if (returnStatement.argument?.type === 'Identifier') {
+			const returnedName = returnStatement.argument.name;
+
+			for (const statement of statements) {
+				if (statement.type !== 'VariableDeclaration') {
+					continue;
+				}
+
+				for (const declarator of statement.declarations) {
+					if (
+						declarator.id.type === 'Identifier'
+						&& declarator.id.name === returnedName
+						&& containsThen(declarator.init)
+					) {
+						context.report({
+							node,
+							message: 'Prefer using async/await instead of returning a Promise.',
+						});
+						return;
+					}
+				}
+			}
 		}
 	});
 

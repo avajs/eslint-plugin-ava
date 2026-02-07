@@ -87,10 +87,9 @@ const create = context => {
 
 	const {sourceCode} = context;
 
-	// TODO: Remove `.reduce()` usage.
-	// eslint-disable-next-line unicorn/no-array-reduce
-	const selectors = checks.reduce((result, check) => {
-		result[check.selector] = visitIf([
+	const selectors = {};
+	for (const check of checks) {
+		selectors[check.selector] = visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
@@ -138,8 +137,7 @@ const create = context => {
 				});
 			}
 		});
-		return result;
-	}, {});
+	}
 
 	return ava.merge(selectors);
 };

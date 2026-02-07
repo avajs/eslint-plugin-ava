@@ -30,11 +30,11 @@ ruleTester.run('max-asserts', rule, {
 		`${header} test(t => { t.is.skip(1, 1); ${nbAssertions(4)} });`,
 		{
 			code: `${header} test(t => { ${nbAssertions(3)} });`,
-			options: [3],
+			options: [{max: 3}],
 		},
 		{
 			code: `${header} test(t => { notT.is(1, 1); notT.is(1, 1); notT.is(1, 1); });`,
-			options: [2],
+			options: [{max: 2}],
 		},
 		`${header} test(t => { t.context.bar(); ${nbAssertions(5)} });`,
 		`${header} test(t => { ${'t.context.is(1, 1); '.repeat(6)}});`,
@@ -64,7 +64,7 @@ ruleTester.run('max-asserts', rule, {
 		},
 		{
 			code: `${header} test(t => { ${nbAssertions(4)} });`,
-			options: [3],
+			options: [{max: 3}],
 			errors: maxAssertsError(3, 4),
 		},
 		{

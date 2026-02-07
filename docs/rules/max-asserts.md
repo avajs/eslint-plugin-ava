@@ -15,7 +15,7 @@ Skipped assertions are counted.
 ## Fail
 
 ```js
-/*eslint ava/max-asserts: ["error", 5]*/
+/*eslint ava/max-asserts: ["error", {"max": 5}]*/
 const test = require('ava');
 
 test('getSomeObject should define the players\' names', t => {
@@ -57,10 +57,15 @@ test('getSomeObject should define the opponent\'s name', t => {
 
 ## Options
 
-The rule takes one option, a number, which is the maximum number of assertions for each test. The default is 5.
+### max
+
+Type: `integer`\
+Default: `5`
+
+The maximum number of assertions allowed in each test.
 
 You can set the option in configuration like this:
 
 ```js
-"ava/max-asserts": ["error", 5]
+"ava/max-asserts": ["error", {"max": 5}]
 ```

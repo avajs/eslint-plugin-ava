@@ -2,15 +2,11 @@ import {visitIf} from 'enhance-visitors';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
-const MAX_ASSERTIONS_DEFAULT = 5;
-
 const notAssertionMethods = new Set(['plan', 'end']);
 
 const create = context => {
 	const ava = createAvaRule();
-	// TODO: Convert options to object JSON Schema default works properly
-	// https://github.com/avajs/eslint-plugin-ava/issues/260
-	const maxAssertions = context.options[0] ?? MAX_ASSERTIONS_DEFAULT;
+	const {max: maxAssertions} = context.options[0];
 	let assertionCount = 0;
 	let nodeToReport;
 
@@ -58,13 +54,6 @@ const create = context => {
 	});
 };
 
-const schema = [
-	{
-		type: 'integer',
-		default: MAX_ASSERTIONS_DEFAULT,
-	},
-];
-
 export default {
 	create,
 	meta: {
@@ -73,6 +62,18 @@ export default {
 			description: 'Enforce a limit on the number of assertions in a test.',
 			url: util.getDocsUrl(import.meta.filename),
 		},
-		schema,
+		schema: [
+			{
+				type: 'object',
+				properties: {
+					max: {
+						type: 'integer',
+						minimum: 1,
+					},
+				},
+				additionalProperties: false,
+			},
+		],
+		defaultOptions: [{max: 5}],
 	},
 };

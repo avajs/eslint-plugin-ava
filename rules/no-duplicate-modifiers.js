@@ -28,18 +28,14 @@ const create = context => {
 				return;
 			}
 
-			// TODO: Remove `.reduce()` usage.
-			// eslint-disable-next-line unicorn/no-array-reduce
-			testModifiers.reduce((previous, current) => {
-				if (previous.name === current.name) {
+			for (let index = 1; index < testModifiers.length; index++) {
+				if (testModifiers[index - 1].name === testModifiers[index].name) {
 					context.report({
-						node: current,
-						message: `Duplicate test modifier \`.${current.name}\`.`,
+						node: testModifiers[index],
+						message: `Duplicate test modifier \`.${testModifiers[index].name}\`.`,
 					});
 				}
-
-				return current;
-			});
+			}
 		}),
 	});
 };
