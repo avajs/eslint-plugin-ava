@@ -52,6 +52,7 @@ The rules will only activate in test files.
 | Name                                                                 | Description                                                                                                    | 💼 | ⚠️ | 🚫 | 🔧 | 💡 |
 | :------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :- | :- | :- | :- | :- |
 | [assertion-arguments](docs/rules/assertion-arguments.md)             | Enforce passing correct arguments to assertions.                                                               | ✅  |    |    | 🔧 |    |
+| [failing-test-url](docs/rules/failing-test-url.md)                   | Require a URL in a comment above `test.failing()`.                                                             |    |    | ✅  |    |    |
 | [hooks-order](docs/rules/hooks-order.md)                             | Enforce test hook ordering.                                                                                    | ✅  |    |    | 🔧 |    |
 | [max-asserts](docs/rules/max-asserts.md)                             | Limit the number of assertions in a test.                                                                      |    |    | ✅  |    |    |
 | [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) | Require async tests to use `await`.                                                                            | ✅  |    |    |    | 💡 |

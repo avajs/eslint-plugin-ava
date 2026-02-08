@@ -1,6 +1,7 @@
 import {createRequire} from 'node:module';
 import json from '@eslint/json';
 import assertionArguments from './rules/assertion-arguments.js';
+import failingTestUrl from './rules/failing-test-url.js';
 import hooksOrder from './rules/hooks-order.js';
 import maxAsserts from './rules/max-asserts.js';
 import noAvaInDependencies from './rules/no-ava-in-dependencies.js';
@@ -35,6 +36,7 @@ const {name, version} = require('./package.json');
 
 const rules = {
 	'assertion-arguments': assertionArguments,
+	'failing-test-url': failingTestUrl,
 	'hooks-order': hooksOrder,
 	'max-asserts': maxAsserts,
 	'no-ava-in-dependencies': noAvaInDependencies,
@@ -67,6 +69,7 @@ const rules = {
 
 const recommendedRules = {
 	'ava/assertion-arguments': 'error',
+	'ava/failing-test-url': 'off',
 	'ava/hooks-order': 'error',
 	'ava/max-asserts': [
 		'off',
