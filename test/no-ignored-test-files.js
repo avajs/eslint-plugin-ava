@@ -1,20 +1,9 @@
-import path from 'node:path';
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester, {toPath} from './helpers/rule-tester.js';
 import util from '../util.js';
 import rule from '../rules/no-ignored-test-files.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
-
-const header = 'const test = require(\'ava\');\n';
-const rootDirectory = path.dirname(import.meta.dirname);
-
-const toPath = subPath => path.join(rootDirectory, subPath);
-const code = hasHeader => (hasHeader ? header : '') + 'test(t => { t.pass(); });';
+const ruleTester = new RuleTester();
+const code = 'test(t => { t.pass(); });';
 
 util.loadAvaHelper = filename => {
 	if (filename === toPath('no-helper.test.js')) {
@@ -45,48 +34,45 @@ util.loadAvaHelper = filename => {
 };
 
 ruleTester.run('no-ignored-test-files', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		{
-			code: code(true),
+			code,
 			filename: toPath('lib/foo.test.js'),
 		},
 		{
-			code: code(true),
+			code,
 			filename: '<input>',
 			name: 'synthetic-filename',
 		},
 		{
-			code: header + 'const x = 1;',
+			code: 'const x = 1;',
 			filename: toPath('lib/foo.test.js'),
 			name: 'no-test-call',
 		},
 		{
-			code: code(true),
+			code,
 			filename: toPath('no-helper.test.js'),
 			name: 'no-ava-helper',
 		},
 	],
 	invalid: [
 		{
-			code: code(true),
+			code,
 			filename: toPath('lib/foo/fixtures/bar.test.js'),
 			errors: [{messageId: 'ignored-file'}],
 		},
 		{
-			code: code(true),
+			code,
 			filename: toPath('lib/foo/helpers/bar.test.js'),
 			errors: [{messageId: 'helper-file'}],
 		},
 		{
-			code: code(true),
+			code,
 			filename: toPath('test.js'),
 			errors: [{messageId: 'ignored-file'}],
 		},
 		{
-			code: code(true),
+			code,
 			filename: toPath('bar/foo.test.js'),
 			errors: [{messageId: 'ignored-file'}],
 		},

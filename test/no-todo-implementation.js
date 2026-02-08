@@ -1,120 +1,110 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/no-todo-implementation.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
-
-const header = 'const test = require(\'ava\');\n';
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-todo-implementation', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
-		header + 'test(t => {});',
-		header + 'test("title", t => {});',
-		header + 'test.todo("title");',
-		header + 'notTest.todo(t => {});',
+		'test(t => {});',
+		'test("title", t => {});',
+		'test.todo("title");',
+		'notTest.todo(t => {});',
 		// Shouldn't be triggered since it's not a test file
-		'test.todo("title", t => {});',
+		{code: 'test.todo("title", t => {});', noHeader: true},
 	],
 	invalid: [
 		{
-			code: header + 'test.todo("title", t => {});',
+			code: 'test.todo("title", t => {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test("title", t => {});',
+						output: 'test("title", t => {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo("title");',
+						output: 'test.todo("title");',
 					},
 				],
 			}],
 		},
 		{
-			code: header + 'test.todo(t => {});',
+			code: 'test.todo(t => {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test(t => {});',
+						output: 'test(t => {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo();',
+						output: 'test.todo();',
 					},
 				],
 			}],
 		},
 		{
-			code: header + 'test.todo("title", function (t) {});',
+			code: 'test.todo("title", function (t) {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test("title", function (t) {});',
+						output: 'test("title", function (t) {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo("title");',
+						output: 'test.todo("title");',
 					},
 				],
 			}],
 		},
 		{
-			code: header + 'test.todo(function (t) {});',
+			code: 'test.todo(function (t) {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test(function (t) {});',
+						output: 'test(function (t) {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo();',
+						output: 'test.todo();',
 					},
 				],
 			}],
 		},
 		{
-			code: header + 'test.todo("title", function foo(t) {});',
+			code: 'test.todo("title", function foo(t) {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test("title", function foo(t) {});',
+						output: 'test("title", function foo(t) {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo("title");',
+						output: 'test.todo("title");',
 					},
 				],
 			}],
 		},
 		{
-			code: header + 'test.todo(function foo(t) {});',
+			code: 'test.todo(function foo(t) {});',
 			errors: [{
 				messageId: 'no-todo-implementation',
 				suggestions: [
 					{
 						messageId: 'no-todo-implementation-remove-todo',
-						output: header + 'test(function foo(t) {});',
+						output: 'test(function foo(t) {});',
 					},
 					{
 						messageId: 'no-todo-implementation-remove-implementation',
-						output: header + 'test.todo();',
+						output: 'test.todo();',
 					},
 				],
 			}],

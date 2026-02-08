@@ -1,16 +1,11 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import tsParser from '@typescript-eslint/parser';
 import rule from '../rules/use-test.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-		sourceType: 'module',
-	},
-});
+const ruleTester = new RuleTester({autoHeader: false});
 
-const typescriptRuleTester = new AvaRuleTester(test, {
+const typescriptRuleTester = new RuleTester({
+	autoHeader: false,
 	languageOptions: {
 		parser: tsParser,
 	},
@@ -21,9 +16,6 @@ const errors = [{messageId: 'use-test'}];
 const typescriptExtensions = ['.ts', '.tsx', '.mts', '.cts'];
 
 const prefixTestCases = (testCases, prefix) => ({
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: testCases.valid.map(testCase => ({
 		...typeof testCase === 'string' ? {code: testCase} : testCase,
 		name: `[${prefix}] ${typeof testCase === 'string' ? testCase : testCase.code}`,
@@ -35,9 +27,6 @@ const prefixTestCases = (testCases, prefix) => ({
 });
 
 const commonTestCases = {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		{code: 'var test = require(\'ava\');', filename: 'file.js'},
 		{code: 'let test = require(\'ava\');', filename: 'file.js'},
@@ -75,9 +64,6 @@ const commonTestCases = {
 };
 
 const typescriptTestCases = {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: typescriptExtensions.flatMap(extension => [
 		// Statement-level type import
 		{code: 'import type {Macro} from \'ava\';', filename: `file${extension}`},

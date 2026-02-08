@@ -1,38 +1,29 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/no-skip-test.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
+const ruleTester = new RuleTester();
 
 const messageId = 'no-skip-test';
-const header = 'const test = require(\'ava\');\n';
 
 ruleTester.run('no-skip-test', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
-		header + 'test("my test name", t => { t.pass(); });',
-		header + 'test(t => { t.pass(); }); test(t => { t.pass(); });',
-		header + 'test(t => { t.skip.is(1, 2); });',
-		header + 'notTest.skip();',
+		'test("my test name", t => { t.pass(); });',
+		'test(t => { t.pass(); }); test(t => { t.pass(); });',
+		'test(t => { t.skip.is(1, 2); });',
+		'notTest.skip();',
 		// Shouldn't be triggered since it's not a test file
-		'test.skip(t => {});',
+		{code: 'test.skip(t => {});', noHeader: true},
 	],
 	invalid: [
 		{
-			code: header + 'test.skip(t => { t.pass(); });',
+			code: 'test.skip(t => { t.pass(); });',
 			errors: [{
 				messageId,
 				line: 2,
 				column: 6,
 				suggestions: [{
 					messageId: 'no-skip-test-suggestion',
-					output: header + 'test(t => { t.pass(); });',
+					output: 'test(t => { t.pass(); });',
 				}],
 			}],
 		},

@@ -1,34 +1,14 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester, {testCase} from './helpers/rule-tester.js';
 import rule from '../rules/use-true-false.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
+const ruleTester = new RuleTester();
 
 const trueErrors = [{messageId: 'use-true'}];
 const falseErrors = [{messageId: 'use-false'}];
 const isTrueErrors = [{messageId: 'use-true-over-is'}];
 const isFalseErrors = [{messageId: 'use-false-over-is'}];
 
-const header = 'const test = require(\'ava\');\n';
-
-function testCase(contents, prependHeader) {
-	const content = `test(t => { ${contents} });`;
-
-	if (prependHeader !== false) {
-		return header + content;
-	}
-
-	return content;
-}
-
 ruleTester.run('use-true-false', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		testCase('t.true(true)'),
 		testCase('t.true(false)'),
@@ -67,7 +47,7 @@ ruleTester.run('use-true-false', rule, {
 		testCase('t.is(true)'),
 		testCase('t.is()'),
 		// Shouldn't be triggered since it's not a test file
-		testCase('t.truthy(value === 1)', false),
+		{code: testCase('t.truthy(value === 1)'), noHeader: true},
 	],
 	invalid: [
 		{

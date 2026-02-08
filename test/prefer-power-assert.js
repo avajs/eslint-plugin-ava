@@ -1,31 +1,22 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/prefer-power-assert.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-		sourceType: 'module',
-	},
-});
+const ruleTester = new RuleTester();
 
 const errors = [{messageId: 'prefer-power-assert'}];
 
 function testNotAllowedMethod(methodName) {
 	ruleTester.run(`prefer-power-assert - not allowed: ${methodName}`, rule, {
-		assertionOptions: {
-			requireMessage: true,
-		},
 		valid: [],
 		invalid: [
 			{
 				name: `[not allowed: ${methodName}] t.${methodName}`,
-				code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
+				code: `test(t => { t.${methodName}; });`,
 				errors,
 			},
 			{
 				name: `[not allowed: ${methodName}] t.skip.${methodName}`,
-				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
+				code: `test(t => { t.skip.${methodName}; });`,
 				errors,
 			},
 		],
@@ -50,17 +41,14 @@ for (const methodName of notAllowedMethods) {
 
 function testAllowedMethod(methodName) {
 	ruleTester.run(`prefer-power-assert - allowed: ${methodName}`, rule, {
-		assertionOptions: {
-			requireMessage: true,
-		},
 		valid: [
 			{
 				name: `[allowed: ${methodName}] t.${methodName}`,
-				code: `import test from 'ava';\n test(t => { t.${methodName}; });`,
+				code: `test(t => { t.${methodName}; });`,
 			},
 			{
 				name: `[allowed: ${methodName}] t.skip.${methodName}`,
-				code: `import test from 'ava';\n test(t => { t.skip.${methodName}; });`,
+				code: `test(t => { t.skip.${methodName}; });`,
 			},
 		],
 		invalid: [],
@@ -84,19 +72,16 @@ for (const methodName of allowedMethods) {
 
 function testWithModifier(modifier) {
 	ruleTester.run(`prefer-power-assert - modifier: ${modifier}`, rule, {
-		assertionOptions: {
-			requireMessage: true,
-		},
 		valid: [
 			{
 				name: `[modifier: ${modifier}] t.assert(foo)`,
-				code: `import test from 'ava';\n test.${modifier}(t => { t.assert(foo); });`,
+				code: `test.${modifier}(t => { t.assert(foo); });`,
 			},
 		],
 		invalid: [
 			{
 				name: `[modifier: ${modifier}] t.is(foo)`,
-				code: `import test from 'ava';\n test.${modifier}(t => { t.is(foo); });`,
+				code: `test.${modifier}(t => { t.is(foo); });`,
 				errors,
 			},
 		],
@@ -109,18 +94,17 @@ for (const modifiers of ['skip', 'only', 'serial']) {
 
 function testDeclaration(declaration) {
 	ruleTester.run(`prefer-power-assert - declaration: ${declaration}`, rule, {
-		assertionOptions: {
-			requireMessage: true,
-		},
 		valid: [
 			{
 				name: `[declaration] ${declaration} t.assert(foo)`,
+				noHeader: true,
 				code: `${declaration}\n test(t => { t.assert(foo); });`,
 			},
 		],
 		invalid: [
 			{
 				name: `[declaration] ${declaration} t.is(foo)`,
+				noHeader: true,
 				code: `${declaration}\n test(t => { t.is(foo); });`,
 				errors,
 			},
@@ -138,8 +122,6 @@ for (const declaration of [
 }
 
 const assertionInNestedCode = `
-import test from 'ava';
-
 test(t => {
 	const foo = () => {
 		t.is('foo', 'bar');
@@ -149,17 +131,15 @@ test(t => {
 `;
 
 ruleTester.run('prefer-power-assert - nested', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		{
 			name: '[nested] function expression',
-			code: 'import test from \'ava\';\n test(function (t) { t.assert(foo); });',
+			code: 'test(function (t) { t.assert(foo); });',
 		},
 		// Shouldn't be triggered since it's not a test file
 		{
 			name: '[nested] not a test file',
+			noHeader: true,
 			code: 'test(t => {});',
 		},
 	],
@@ -171,7 +151,7 @@ ruleTester.run('prefer-power-assert - nested', rule, {
 		// Alternative test object names for t.try() callbacks
 		{
 			name: '[nested] alternative test object name',
-			code: 'import test from \'ava\';\n test(t => { tt.is(foo); });',
+			code: 'test(t => { tt.is(foo); });',
 			errors,
 		},
 	],

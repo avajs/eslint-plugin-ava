@@ -1,33 +1,13 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester, {testCase} from './helpers/rule-tester.js';
 import rule from '../rules/use-t-well.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
-
-const header = 'const test = require(\'ava\');\n';
+const ruleTester = new RuleTester();
 
 function error(messageId) {
 	return {messageId};
 }
 
-function testCase(contents, prependHeader) {
-	const content = `test(t => { ${contents} });`;
-
-	if (prependHeader !== false) {
-		return header + content;
-	}
-
-	return content;
-}
-
 ruleTester.run('use-t-well', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		testCase('t;'),
 		testCase('fn(t);'),
@@ -82,8 +62,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t_.is(v);'),
 		testCase('t1.deepEqual(v, v);'),
 		// Shouldn't be triggered since it's not a test file
-		testCase('t.foo(a, a);', false),
-		testCase('t.foo;', false),
+		{code: testCase('t.foo(a, a);'), noHeader: true},
+		{code: testCase('t.foo;'), noHeader: true},
 	],
 	invalid: [
 		{

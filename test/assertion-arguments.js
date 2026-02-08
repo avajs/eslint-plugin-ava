@@ -1,12 +1,7 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/assertion-arguments.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
+const ruleTester = new RuleTester();
 
 const missingError = {messageId: 'missing-message'};
 const foundError = {messageId: 'found-message'};
@@ -20,16 +15,12 @@ const outOfOrderError = (line, column, endLine, endColumn) => ({
 const messageIsNotStringError = {messageId: 'not-string-message'};
 const regexFirstError = {messageId: 'regex-first-argument'};
 
-const header = 'const test = require(\'ava\');';
-
-function testCode(content, useHeader) {
-	const testFunction = `
+function testCode(content) {
+	return `
 		test(t => {
 			${content}
 		});
 	`;
-	const code = (useHeader === false ? '' : header) + testFunction;
-	return code;
 }
 
 function offsetError(error, line, column) {
@@ -55,24 +46,28 @@ function offsetError(error, line, column) {
 }
 
 function testCase(message, content, errors = [], {
-	useHeader, output = null,
+	noHeader, output = null,
 } = {}) {
 	if (!Array.isArray(errors)) {
 		errors = [errors];
 	}
 
-	const offset = useHeader === false ? [1, 3] : [2, 3];
+	const offset = noHeader ? [2, 3] : [3, 3];
 
 	errors = errors.map(error => offsetError(error, ...offset));
 
 	const result = {
 		options: message ? [{message}] : [],
-		code: testCode(content, useHeader),
+		code: testCode(content),
 	};
+
+	if (noHeader) {
+		result.noHeader = true;
+	}
 
 	if (errors.length > 0) {
 		result.errors = errors;
-		result.output = output === null ? null : testCode(output, useHeader);
+		result.output = output === null ? null : testCode(output);
 	}
 
 	return result;
@@ -157,9 +152,6 @@ const dynamics = [
 ];
 
 ruleTester.run('assertion-arguments', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		testCase(false, 't.plan(1);'),
 		testCase(false, 't.plan(0);'),
@@ -194,7 +186,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.timeout(100, \'message\');'),
 		testCase(false, 'foo.t.plan();'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true);', [], {useHeader: false}),
+		testCase(false, 't.true(true);', [], {noHeader: true}),
 
 		testCase(false, 't.assert(true);'),
 		testCase(false, 't.deepEqual({}, {});'),
@@ -221,7 +213,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.truthy(\'unicorn\');'),
 		testCase(false, 't.snapshot(value);'),
 		// Shouldn't be triggered since it's not a test file
-		testCase(false, 't.true(true, \'message\');', [], {useHeader: false}),
+		testCase(false, 't.true(true, \'message\');', [], {noHeader: true}),
 
 		testCase(false, 't.context.a(1, 2, 3, 4);'),
 		testCase(false, 't.context.is(1, 2, 3, 4);'),
@@ -257,7 +249,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.try(\'title\', tt => tt.pass(\'ok\'), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('always', 't.true(true);', [], {useHeader: false}),
+		testCase('always', 't.true(true);', [], {noHeader: true}),
 
 		testCase('always', 't.context.a(1, 2, 3, 4);'),
 		testCase('always', 't.context.is(1, 2, 3, 4);'),
@@ -295,7 +287,7 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.try(\'title\', tt => tt.pass(), 1, 2);'),
 
 		// Shouldn't be triggered since it's not a test file
-		testCase('never', 't.true(true, \'message\');', [], {useHeader: false}),
+		testCase('never', 't.true(true, \'message\');', [], {noHeader: true}),
 
 		testCase('never', 't.context.a(1, 2, 3, 4);'),
 		testCase('never', 't.context.is(1, 2, 3, 4);'),

@@ -1,25 +1,14 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import {outdent} from 'outdent';
 import rule from '../rules/hooks-order.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
+const ruleTester = new RuleTester();
 
 const errors = [{messageId: 'hooks-order'}];
-const header = 'const test = require(\'ava\');';
 
-ruleTester.run('no-todo-test', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
+ruleTester.run('hooks-order', rule, {
 	valid: [
 		outdent`
-			${header}
-
 			test.before(t => {
 				doFoo();
 			});
@@ -49,8 +38,6 @@ ruleTester.run('no-todo-test', rule, {
 			});
 		`,
 		outdent`
-			${header}
-
 			test.before(t => {
 				doFoo();
 			});
@@ -71,6 +58,38 @@ ruleTester.run('no-todo-test', rule, {
 				t.true(true);
 			});
 		`,
+		{
+			code: outdent`
+				test.before(t => {
+					doFoo();
+				});
+
+				test.after(t => {
+					doFoo();
+				});
+
+				test.after.always(t => {
+					doFoo();
+				});
+
+				test.beforeEach(t => {
+					doFoo();
+				});
+
+				test.afterEach(t => {
+					doFoo();
+				});
+
+				test.afterEach.always(t => {
+					doFoo();
+				});
+
+				test('foo', t => {
+					t.true(true);
+				});
+			`,
+			noHeader: true,
+		},
 		outdent`
 			test.before(t => {
 				doFoo();
@@ -79,50 +98,20 @@ ruleTester.run('no-todo-test', rule, {
 			test.after(t => {
 				doFoo();
 			});
-
-			test.after.always(t => {
-				doFoo();
-			});
-
-			test.beforeEach(t => {
-				doFoo();
-			});
-
-			test.afterEach(t => {
-				doFoo();
-			});
-
-			test.afterEach.always(t => {
-				doFoo();
-			});
-
-			test('foo', t => {
-				t.true(true);
-			});
 		`,
+		{
+			code: outdent`
+				test.after(t => {
+					doFoo();
+				});
+
+				test.before(t => {
+					doFoo();
+				});
+			`,
+			noHeader: true,
+		},
 		outdent`
-			${header}
-
-			test.before(t => {
-				doFoo();
-			});
-
-			test.after(t => {
-				doFoo();
-			});
-		`,
-		outdent`
-			test.after(t => {
-				doFoo();
-			});
-
-			test.before(t => {
-				doFoo();
-			});
-		`,
-		outdent`
-			${header}
-
 			test('foo', t => {
 				t.true(true);
 			});
@@ -131,8 +120,6 @@ ruleTester.run('no-todo-test', rule, {
 	invalid: [
 		{
 			code: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -142,8 +129,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -156,8 +141,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -171,8 +154,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -189,8 +170,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.after.always(t => {
 					doFoo();
 				});
@@ -204,8 +183,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -222,8 +199,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -233,8 +208,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after.always(t => {
 					doFoo();
 				});
@@ -247,8 +220,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.beforeEach(t => {
 					doFoo();
 				});
@@ -262,8 +233,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -280,8 +249,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.afterEach(t => {
 					doFoo();
 				});
@@ -295,8 +262,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -313,8 +278,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.afterEach.always(t => {
 					doFoo();
 				});
@@ -328,8 +291,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -346,8 +307,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -357,8 +316,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.before(t => {
 					doFoo();
 				});
@@ -372,8 +329,6 @@ ruleTester.run('no-todo-test', rule, {
 
 		{
 			code: outdent`
-				${header}
-
 				test.after.always(t => {
 					doFoo();
 				});
@@ -387,8 +342,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -405,8 +358,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.beforeEach(t => {
 					doFoo();
 				});
@@ -420,8 +371,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -438,8 +387,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.afterEach(t => {
 					doFoo();
 				});
@@ -453,8 +400,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -471,8 +416,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.afterEach.always(t => {
 					doFoo();
 				});
@@ -486,8 +429,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -504,8 +445,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -515,8 +454,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -530,8 +467,6 @@ ruleTester.run('no-todo-test', rule, {
 
 		{
 			code: outdent`
-				${header}
-
 				test.afterEach(t => {
 					doFoo();
 				});
@@ -545,8 +480,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.beforeEach(t => {
 					doFoo();
 				});
@@ -563,8 +496,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -574,8 +505,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.beforeEach(t => {
 					doFoo();
 				});
@@ -589,8 +518,6 @@ ruleTester.run('no-todo-test', rule, {
 
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -600,8 +527,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.afterEach(t => {
 					doFoo();
 				});
@@ -615,8 +540,6 @@ ruleTester.run('no-todo-test', rule, {
 
 		{
 			code: outdent`
-				${header}
-
 				test('foo', t => {
 					t.true(true);
 				});
@@ -626,8 +549,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				test.afterEach.always(t => {
 					doFoo();
 				});
@@ -641,8 +562,6 @@ ruleTester.run('no-todo-test', rule, {
 
 		{
 			code: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -658,8 +577,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -670,8 +587,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				// comments
 				test.before(t => {
 					doFoo();
@@ -685,8 +600,6 @@ ruleTester.run('no-todo-test', rule, {
 		},
 		{
 			code: outdent`
-				${header}
-
 				test.after(t => {
 					doFoo();
 				});
@@ -697,8 +610,6 @@ ruleTester.run('no-todo-test', rule, {
 				});
 			`,
 			output: outdent`
-				${header}
-
 				/* comments */
 				test.before(t => {
 					doFoo();

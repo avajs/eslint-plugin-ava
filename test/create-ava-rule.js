@@ -1,5 +1,4 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import tsParser from '@typescript-eslint/parser';
 import createAvaRule from '../create-ava-rule.js';
 
@@ -17,14 +16,10 @@ const rule = {
 	},
 };
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-		sourceType: 'module',
-	},
-});
+const ruleTester = new RuleTester({autoHeader: false});
 
-const typescriptRuleTester = new AvaRuleTester(test, {
+const typescriptRuleTester = new RuleTester({
+	autoHeader: false,
 	languageOptions: {
 		parser: tsParser,
 	},
@@ -37,9 +32,6 @@ const errors = [
 ];
 
 ruleTester.run('rule-fixture', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		// `require` patterns
 		'const test = require(\'ava\');',
@@ -76,9 +68,6 @@ ruleTester.run('rule-fixture', rule, {
 });
 
 typescriptRuleTester.run('rule-fixture-ts', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		// TypeScript re-assignment patterns
 		{name: 'as assertion', code: 'import anyTest from \'ava\';\nconst test = anyTest as any;'},

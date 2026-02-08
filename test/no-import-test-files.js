@@ -1,18 +1,8 @@
-import path from 'node:path';
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester, {toPath} from './helpers/rule-tester.js';
 import util from '../util.js';
 import rule from '../rules/no-import-test-files.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-		sourceType: 'module',
-	},
-});
-
-const rootDirectory = path.dirname(import.meta.dirname);
-const toPath = subPath => path.join(rootDirectory, subPath);
+const ruleTester = new RuleTester({autoHeader: false});
 
 util.loadAvaHelper = filename => {
 	if (filename === toPath('no-helper.js')) {
@@ -57,9 +47,6 @@ const errors = [
 ];
 
 ruleTester.run('no-import-test-files', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
 		'import test from \'ava\';',
 		'import foo from \'@foo/bar\';',

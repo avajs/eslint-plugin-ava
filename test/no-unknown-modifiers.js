@@ -1,181 +1,171 @@
-import test from 'ava';
-import AvaRuleTester from 'eslint-ava-rule-tester';
+import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/no-unknown-modifiers.js';
 
-const ruleTester = new AvaRuleTester(test, {
-	languageOptions: {
-		ecmaVersion: 'latest',
-	},
-});
-
-const header = 'const test = require(\'ava\');\n';
+const ruleTester = new RuleTester();
 
 ruleTester.run('no-unknown-modifiers', rule, {
-	assertionOptions: {
-		requireMessage: true,
-	},
 	valid: [
-		`${header}test(t => {});`,
-		`${header}test.after(t => {});`,
-		`${header}test.afterEach(t => {});`,
-		`${header}test.before(t => {});`,
-		`${header}test.beforeEach(t => {});`,
-		`${header}test.default(t => {});`,
-		`${header}test.default.serial(t => {});`,
-		`${header}test.only(t => {});`,
-		`${header}test.serial(t => {});`,
-		`${header}test.skip(t => {});`,
-		`${header}test.todo(t => {});`,
-		`${header}test.after.always(t => {});`,
-		`${header}test.afterEach.always(t => {});`,
-		`${header}test.after.always.skip(t => {});`,
-		`${header}test.failing(t => {});`,
-		`${header}test.macro(t => {});`,
+		'test(t => {});',
+		'test.after(t => {});',
+		'test.afterEach(t => {});',
+		'test.before(t => {});',
+		'test.beforeEach(t => {});',
+		'test.default(t => {});',
+		'test.default.serial(t => {});',
+		'test.only(t => {});',
+		'test.serial(t => {});',
+		'test.skip(t => {});',
+		'test.todo(t => {});',
+		'test.after.always(t => {});',
+		'test.afterEach.always(t => {});',
+		'test.after.always.skip(t => {});',
+		'test.failing(t => {});',
+		'test.macro(t => {});',
 		// Shouldn't be triggered since it's not a test file
-		'test.foo(t => {});',
+		{code: 'test.foo(t => {});', noHeader: true},
 	],
 	invalid: [
 		{
-			code: `${header}test.foo(t => {});`,
+			code: 'test.foo(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.onlu(t => {});`,
+			code: 'test.onlu(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.beforeeach(t => {});`,
+			code: 'test.beforeeach(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.c.only(t => {});`,
+			code: 'test.c.only(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test.only(t => {});`,
+					output: 'test.only(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.cb(t => {});`,
+			code: 'test.cb(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.foo.bar.baz(t => {});`,
+			code: 'test.foo.bar.baz(t => {});',
 			errors: [
 				{
 					messageId: 'no-unknown-modifiers',
 					suggestions: [{
 						messageId: 'no-unknown-modifiers-suggestion',
-						output: `${header}test.bar.baz(t => {});`,
+						output: 'test.bar.baz(t => {});',
 					}],
 				},
 				{
 					messageId: 'no-unknown-modifiers',
 					suggestions: [{
 						messageId: 'no-unknown-modifiers-suggestion',
-						output: `${header}test.foo.baz(t => {});`,
+						output: 'test.foo.baz(t => {});',
 					}],
 				},
 				{
 					messageId: 'no-unknown-modifiers',
 					suggestions: [{
 						messageId: 'no-unknown-modifiers-suggestion',
-						output: `${header}test.foo.bar(t => {});`,
+						output: 'test.foo.bar(t => {});',
 					}],
 				},
 			],
 		},
 		{
-			code: `${header}test.test(t => {});`,
+			code: 'test.test(t => {});',
 			errors: [{
 				messageId: 'no-unknown-modifiers',
 				suggestions: [{
 					messageId: 'no-unknown-modifiers-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.always(t => {});`,
+			code: 'test.always(t => {});',
 			errors: [{
 				messageId: 'always-without-after',
 				suggestions: [{
 					messageId: 'always-without-after-suggestion',
-					output: `${header}test(t => {});`,
+					output: 'test(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.before.always(t => {});`,
+			code: 'test.before.always(t => {});',
 			errors: [{
 				messageId: 'always-without-after',
 				suggestions: [{
 					messageId: 'always-without-after-suggestion',
-					output: `${header}test.before(t => {});`,
+					output: 'test.before(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.beforeEach.always(t => {});`,
+			code: 'test.beforeEach.always(t => {});',
 			errors: [{
 				messageId: 'always-without-after',
 				suggestions: [{
 					messageId: 'always-without-after-suggestion',
-					output: `${header}test.beforeEach(t => {});`,
+					output: 'test.beforeEach(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.serial.always(t => {});`,
+			code: 'test.serial.always(t => {});',
 			errors: [{
 				messageId: 'always-without-after',
 				suggestions: [{
 					messageId: 'always-without-after-suggestion',
-					output: `${header}test.serial(t => {});`,
+					output: 'test.serial(t => {});',
 				}],
 			}],
 		},
 		{
-			code: `${header}test.foo.always(t => {});`,
+			code: 'test.foo.always(t => {});',
 			errors: [
 				{
 					messageId: 'no-unknown-modifiers',
 					suggestions: [{
 						messageId: 'no-unknown-modifiers-suggestion',
-						output: `${header}test.always(t => {});`,
+						output: 'test.always(t => {});',
 					}],
 				},
 				{
 					messageId: 'always-without-after',
 					suggestions: [{
 						messageId: 'always-without-after-suggestion',
-						output: `${header}test.foo(t => {});`,
+						output: 'test.foo(t => {});',
 					}],
 				},
 			],
