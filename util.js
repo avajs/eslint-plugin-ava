@@ -1,16 +1,53 @@
+import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
-import {packageDirectorySync} from 'package-directory';
 import resolveFrom from 'resolve-from';
 
 const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
+const avaConfigFiles = ['ava.config.js', 'ava.config.cjs', 'ava.config.mjs'];
+
+// Walk up from the file to find the directory where AVA is configured.
+// In a monorepo, the nearest package.json may belong to a sub-package
+// while AVA is configured at the monorepo root.
+export const findProjectRoot = filename => {
+	let directory = path.resolve(path.dirname(filename));
+	const {root} = path.parse(directory);
+	let nearestPackageDirectory;
+
+	while (directory !== root) {
+		if (avaConfigFiles.some(configFile => fs.existsSync(path.join(directory, configFile)))) {
+			return directory;
+		}
+
+		const packageJsonPath = path.join(directory, 'package.json');
+		if (fs.existsSync(packageJsonPath)) {
+			nearestPackageDirectory ??= directory;
+
+			try {
+				const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+				if ('ava' in packageJson) {
+					return directory;
+				}
+			} catch {}
+		}
+
+		if (fs.existsSync(path.join(directory, '.git'))) {
+			break;
+		}
+
+		directory = path.dirname(directory);
+	}
+
+	return nearestPackageDirectory;
+};
+
 /* c8 ignore start -- requires a real project with AVA's eslint-plugin-helper installed */
 const avaHelperCache = new Map();
 
 export const loadAvaHelper = (filename, overrides) => {
-	const rootDirectory = packageDirectorySync({cwd: filename});
+	const rootDirectory = findProjectRoot(filename);
 	if (!rootDirectory) {
 		return undefined;
 	}
@@ -25,7 +62,8 @@ export const loadAvaHelper = (filename, overrides) => {
 		avaHelperCache.clear();
 	}
 
-	const avaHelperPath = resolveFrom.silent(rootDirectory, 'ava/eslint-plugin-helper');
+	const avaHelperPath = resolveFrom.silent(path.resolve(path.dirname(filename)), 'ava/eslint-plugin-helper')
+		?? resolveFrom.silent(rootDirectory, 'ava/eslint-plugin-helper');
 	if (!avaHelperPath) {
 		return undefined;
 	}
