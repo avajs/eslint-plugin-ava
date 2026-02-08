@@ -64,6 +64,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.log(\'Unicorns\');'),
 		testCase('a.foo();'),
 		testCase('t.context.foo(a, a);'),
+		testCase('t.context();'),
+		testCase('t.context(\'arg\');'),
 		testCase('foo.t.bar(a, a);'),
 		testCase('t.teardown(() => {});'),
 		testCase('t.timeout(100);'),
@@ -101,10 +103,6 @@ ruleTester.run('use-t-well', rule, {
 			code: testCase('t.deepEqual.skp(a, a);'),
 			output: testCase('t.deepEqual.skip(a, a);'),
 			errors: [error('misspelled')],
-		},
-		{
-			code: testCase('t.context();'),
-			errors: [error('unknown-assertion')],
 		},
 		{
 			code: testCase('t.title();'),

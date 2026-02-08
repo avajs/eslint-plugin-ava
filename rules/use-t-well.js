@@ -99,7 +99,7 @@ const create = context => {
 				}
 
 				if (name === 'context' || name === 'title') {
-					if (members.length === 1 && isCallExpression(node)) {
+					if (name === 'title' && members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
 							messageId: MESSAGE_ID_UNKNOWN_ASSERTION,
