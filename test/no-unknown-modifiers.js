@@ -28,6 +28,7 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		`${header}test.todo(t => {});`,
 		`${header}test.after.always(t => {});`,
 		`${header}test.afterEach.always(t => {});`,
+		`${header}test.after.always.skip(t => {});`,
 		`${header}test.failing(t => {});`,
 		`${header}test.macro(t => {});`,
 		// Shouldn't be triggered since it's not a test file
@@ -119,6 +120,65 @@ ruleTester.run('no-unknown-modifiers', rule, {
 					output: `${header}test(t => {});`,
 				}],
 			}],
+		},
+		{
+			code: `${header}test.always(t => {});`,
+			errors: [{
+				messageId: 'always-without-after',
+				suggestions: [{
+					messageId: 'always-without-after-suggestion',
+					output: `${header}test(t => {});`,
+				}],
+			}],
+		},
+		{
+			code: `${header}test.before.always(t => {});`,
+			errors: [{
+				messageId: 'always-without-after',
+				suggestions: [{
+					messageId: 'always-without-after-suggestion',
+					output: `${header}test.before(t => {});`,
+				}],
+			}],
+		},
+		{
+			code: `${header}test.beforeEach.always(t => {});`,
+			errors: [{
+				messageId: 'always-without-after',
+				suggestions: [{
+					messageId: 'always-without-after-suggestion',
+					output: `${header}test.beforeEach(t => {});`,
+				}],
+			}],
+		},
+		{
+			code: `${header}test.serial.always(t => {});`,
+			errors: [{
+				messageId: 'always-without-after',
+				suggestions: [{
+					messageId: 'always-without-after-suggestion',
+					output: `${header}test.serial(t => {});`,
+				}],
+			}],
+		},
+		{
+			code: `${header}test.foo.always(t => {});`,
+			errors: [
+				{
+					messageId: 'no-unknown-modifiers',
+					suggestions: [{
+						messageId: 'no-unknown-modifiers-suggestion',
+						output: `${header}test.always(t => {});`,
+					}],
+				},
+				{
+					messageId: 'always-without-after',
+					suggestions: [{
+						messageId: 'always-without-after-suggestion',
+						output: `${header}test.foo(t => {});`,
+					}],
+				},
+			],
 		},
 	],
 });

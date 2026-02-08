@@ -4,8 +4,10 @@ import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'no-unknown-modifiers';
 const MESSAGE_ID_SUGGESTION = 'no-unknown-modifiers-suggestion';
+const MESSAGE_ID_ALWAYS = 'always-without-after';
+const MESSAGE_ID_ALWAYS_SUGGESTION = 'always-without-after-suggestion';
 
-const modifiers = new Set([
+const knownModifiers = new Set([
 	'after',
 	'afterEach',
 	'always',
@@ -20,9 +22,6 @@ const modifiers = new Set([
 	'macro',
 ]);
 
-const unknownModifiers = node => util.getTestModifiers(node)
-	.filter(modifier => !modifiers.has(modifier.name));
-
 const create = context => {
 	const ava = createAvaRule();
 
@@ -31,16 +30,37 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			for (const modifier of unknownModifiers(node)) {
-				context.report({
-					node: modifier,
-					messageId: MESSAGE_ID,
-					data: {name: modifier.name},
-					suggest: [{
-						messageId: MESSAGE_ID_SUGGESTION,
+			const testModifiers = util.getTestModifiers(node);
+
+			for (const modifier of testModifiers) {
+				if (!knownModifiers.has(modifier.name)) {
+					context.report({
+						node: modifier,
+						messageId: MESSAGE_ID,
 						data: {name: modifier.name},
+						suggest: [{
+							messageId: MESSAGE_ID_SUGGESTION,
+							data: {name: modifier.name},
+							fix: fixer => fixer.replaceTextRange(...util.removeTestModifier({
+								modifier: modifier.name,
+								node,
+								context,
+							})),
+						}],
+					});
+				}
+			}
+
+			const alwaysModifier = testModifiers.find(modifier => modifier.name === 'always');
+
+			if (alwaysModifier && !testModifiers.some(modifier => modifier.name === 'after' || modifier.name === 'afterEach')) {
+				context.report({
+					node: alwaysModifier,
+					messageId: MESSAGE_ID_ALWAYS,
+					suggest: [{
+						messageId: MESSAGE_ID_ALWAYS_SUGGESTION,
 						fix: fixer => fixer.replaceTextRange(...util.removeTestModifier({
-							modifier: modifier.name,
+							modifier: 'always',
 							node,
 							context,
 						})),
@@ -65,6 +85,8 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Unknown test modifier `.{{name}}`.',
 			[MESSAGE_ID_SUGGESTION]: 'Remove the `.{{name}}` modifier.',
+			[MESSAGE_ID_ALWAYS]: 'The `.always` modifier can only be used with `after` and `afterEach` hooks.',
+			[MESSAGE_ID_ALWAYS_SUGGESTION]: 'Remove the `.always` modifier.',
 		},
 	},
 };

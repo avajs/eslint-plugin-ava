@@ -20,11 +20,17 @@ import test from 'ava';
 test.onlu(t => {}); // ❌
 test.only(t => {}); // ✅
 
-test.seril(t => {}); // ❌
+test.seril(t => {});  // ❌
 test.serial(t => {}); // ✅
 
 test.beforeeach(t => {}); // ❌
 test.beforeEach(t => {}); // ✅
 
 test.unknown(t => {}); // ❌
+
+test.always(t => {});       // ❌ `.always` requires `after` or `afterEach`
+test.after.always(t => {}); // ✅
+
+test.before.always(t => {});    // ❌ `.always` requires `after` or `afterEach`
+test.afterEach.always(t => {}); // ✅
 ```
