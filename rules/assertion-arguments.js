@@ -12,6 +12,7 @@ const MESSAGE_ID_FOUND_MESSAGE = 'found-message';
 const MESSAGE_ID_NOT_STRING = 'not-string-message';
 const MESSAGE_ID_OUT_OF_ORDER = 'out-of-order';
 const MESSAGE_ID_PLAN_NOT_INTEGER = 'plan-not-integer';
+const MESSAGE_ID_REGEX_FIRST = 'regex-first-argument';
 
 const expectedNbArguments = {
 	assert: {
@@ -211,6 +212,12 @@ function noComments(sourceCode, ...nodes) {
 	return nodes.every(node => sourceCode.getCommentsBefore(node).length === 0 && sourceCode.getCommentsAfter(node).length === 0);
 }
 
+function isRegex(node) {
+	const {type} = node;
+	return (type === 'Literal' && node.regex)
+		|| ((type === 'NewExpression' || type === 'CallExpression') && node.callee.type === 'Identifier' && node.callee.name === 'RegExp');
+}
+
 function isString(node) {
 	const {type} = node;
 	return type === 'TemplateLiteral'
@@ -292,6 +299,32 @@ const create = context => {
 					) {
 						context.report({node: argument, messageId: MESSAGE_ID_PLAN_NOT_INTEGER});
 					}
+				}
+
+				if (
+					(firstNonSkipMember === 'regex' || firstNonSkipMember === 'notRegex')
+					&& isRegex(node.arguments[0])
+				) {
+					const [firstArgument, secondArgument] = node.arguments;
+					const {sourceCode} = context;
+					const [leftRange, rightRange] = sourceRangesOfArguments(sourceCode, node);
+					const report = {
+						node: firstArgument,
+						messageId: MESSAGE_ID_REGEX_FIRST,
+					};
+
+					if (noComments(sourceCode, firstArgument, secondArgument) && !isRegex(secondArgument)) {
+						report.fix = fixer => {
+							const leftText = sourceCode.getText().slice(...leftRange);
+							const rightText = sourceCode.getText().slice(...rightRange);
+							return [
+								fixer.replaceTextRange(leftRange, rightText),
+								fixer.replaceTextRange(rightRange, leftText),
+							];
+						};
+					}
+
+					context.report(report);
 				}
 			}
 
@@ -443,6 +476,7 @@ export default {
 			[MESSAGE_ID_NOT_STRING]: 'Assertion message should be a string.',
 			[MESSAGE_ID_OUT_OF_ORDER]: 'Expected values should come after actual values.',
 			[MESSAGE_ID_PLAN_NOT_INTEGER]: 'Expected `t.plan()` argument to be a non-negative integer.',
+			[MESSAGE_ID_REGEX_FIRST]: 'Expected first argument to be a string, not a regex.',
 		},
 	},
 };

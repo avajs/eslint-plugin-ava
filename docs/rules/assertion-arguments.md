@@ -16,6 +16,8 @@ Assertion messages are optional arguments that can be given to any assertion cal
 
 This rule also attempts to enforce passing actual values before expected values. If exactly one of the first two arguments to a two-argument assertion is a static expression such as `{a: 1}`, then the static expression must come second. (`t.regex()` and `t.notRegex()` are excluded from this check, because either their `contents` argument or their `regex` argument could plausibly be the actual or expected value.) If the argument to a one-argument assertion is a binary relation such as `'static' === dynamic`, a similar check is performed on its left- and right-hand sides. Errors of these kinds are usually fixable.
 
+For `t.regex()` and `t.notRegex()`, this rule instead checks that the first argument is not a regex (it should be a string). If a regex literal or `new RegExp()` is passed as the first argument, the error is auto-fixable by swapping the first two arguments.
+
 ## Examples
 
 ```js
@@ -28,6 +30,7 @@ test('1', t => {
 	t.is(value, expected, false); // Assertion message is not a string
 	t.plan('1'); // Argument is not a non-negative integer
 	t.plan(2.5); // Argument is not a non-negative integer
+	t.regex(/foo/, string); // First argument should be a string, not a regex
 });
 
 // ✅
@@ -35,6 +38,7 @@ test('1', t => {
 	t.plan(1);
 	t.is(value, expected);
 	t.is(value, expected, message);
+	t.regex(string, /foo/);
 });
 ```
 

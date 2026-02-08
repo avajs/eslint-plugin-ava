@@ -18,6 +18,7 @@ const outOfOrderError = (line, column, endLine, endColumn) => ({
 	line, column, endLine, endColumn,
 });
 const messageIsNotStringError = {messageId: 'not-string-message'};
+const regexFirstError = {messageId: 'regex-first-argument'};
 
 const header = 'const test = require(\'ava\');';
 
@@ -515,6 +516,21 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, {}, 42);', messageIsNotStringError),
 		testCase(false, 't.fail({});', messageIsNotStringError),
 		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError),
+
+		// Regex as first argument
+		testCase(false, 't.regex(/foo/, variable);', regexFirstError, {output: 't.regex(variable, /foo/);'}),
+		testCase(false, 't.notRegex(/foo/, variable);', regexFirstError, {output: 't.notRegex(variable, /foo/);'}),
+		testCase(false, 't.regex(/foo/, \'bar\');', regexFirstError, {output: 't.regex(\'bar\', /foo/);'}),
+		testCase(false, 't.regex(/foo/gi, variable);', regexFirstError, {output: 't.regex(variable, /foo/gi);'}),
+		testCase(false, 't.regex(new RegExp(\'foo\'), variable);', regexFirstError, {output: 't.regex(variable, new RegExp(\'foo\'));'}),
+		testCase(false, 't.regex(RegExp(\'foo\'), variable);', regexFirstError, {output: 't.regex(variable, RegExp(\'foo\'));'}),
+		testCase(false, 't.regex(/foo/, variable, \'message\');', regexFirstError, {output: 't.regex(variable, /foo/, \'message\');'}),
+		testCase(false, 't.regex.skip(/foo/, variable);', regexFirstError, {output: 't.regex.skip(variable, /foo/);'}),
+		testCase(false, 't.skip.regex(/foo/, variable);', regexFirstError, {output: 't.skip.regex(variable, /foo/);'}),
+		testCase(false, 'tt.regex(/foo/, variable);', regexFirstError, {output: 'tt.regex(variable, /foo/);'}),
+		testCase(false, 't.regex(/foo/, /bar/);', regexFirstError),
+		testCase(false, 't.regex(/foo/, new RegExp(\'bar\'));', regexFirstError),
+		testCase('always', 't.regex(/foo/, variable);', [missingError, regexFirstError], {output: 't.regex(variable, /foo/);'}),
 
 		// Alternative test object names for t.try() callbacks
 		testCase(false, 'tt.is(\'same\');', tooFewError()),
