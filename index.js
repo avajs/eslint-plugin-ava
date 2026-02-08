@@ -21,6 +21,7 @@ import noSkipTest from './rules/no-skip-test.js';
 import noTodoImplementation from './rules/no-todo-implementation.js';
 import noTodoTest from './rules/no-todo-test.js';
 import noUnknownModifiers from './rules/no-unknown-modifiers.js';
+import noUselessTPass from './rules/no-useless-t-pass.js';
 import preferAsyncAwait from './rules/prefer-async-await.js';
 import preferPowerAssert from './rules/prefer-power-assert.js';
 import preferTRegex from './rules/prefer-t-regex.js';
@@ -57,6 +58,7 @@ const rules = {
 	'no-todo-implementation': noTodoImplementation,
 	'no-todo-test': noTodoTest,
 	'no-unknown-modifiers': noUnknownModifiers,
+	'no-useless-t-pass': noUselessTPass,
 	'prefer-async-await': preferAsyncAwait,
 	'prefer-power-assert': preferPowerAssert,
 	'prefer-t-regex': preferTRegex,
@@ -93,6 +95,7 @@ const recommendedRules = {
 	'ava/no-todo-implementation': 'error',
 	'ava/no-todo-test': 'warn',
 	'ava/no-unknown-modifiers': 'error',
+	'ava/no-useless-t-pass': 'error',
 	'ava/prefer-async-await': 'error',
 	'ava/prefer-power-assert': 'off',
 	'ava/prefer-t-regex': 'error',

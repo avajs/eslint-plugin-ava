@@ -72,6 +72,7 @@ The rules will only activate in test files.
 | [no-todo-implementation](docs/rules/no-todo-implementation.md)       | Disallow giving `test.todo()` an implementation function.                                                      | ✅  |    |    |    | 💡 |
 | [no-todo-test](docs/rules/no-todo-test.md)                           | Disallow `test.todo()`.                                                                                        |    | ✅  |    |    | 💡 |
 | [no-unknown-modifiers](docs/rules/no-unknown-modifiers.md)           | Disallow unknown test modifiers.                                                                               | ✅  |    |    |    | 💡 |
+| [no-useless-t-pass](docs/rules/no-useless-t-pass.md)                 | Disallow useless `t.pass()`.                                                                                   | ✅  |    |    |    |    |
 | [prefer-async-await](docs/rules/prefer-async-await.md)               | Prefer async/await over returning a Promise.                                                                   | ✅  |    |    |    |    |
 | [prefer-power-assert](docs/rules/prefer-power-assert.md)             | Enforce using only assertions compatible with [power-assert](https://github.com/power-assert-js/power-assert). |    |    | ✅  |    |    |
 | [prefer-t-regex](docs/rules/prefer-t-regex.md)                       | Prefer `t.regex()` over `RegExp#test()` and `String#match()`.                                                  | ✅  |    |    | 🔧 |    |
