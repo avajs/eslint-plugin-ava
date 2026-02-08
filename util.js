@@ -7,10 +7,22 @@ const require = createRequire(import.meta.url);
 const pkg = require('./package.json');
 
 /* c8 ignore start -- requires a real project with AVA's eslint-plugin-helper installed */
+const avaHelperCache = new Map();
+
 export const loadAvaHelper = (filename, overrides) => {
 	const rootDirectory = packageDirectorySync({cwd: filename});
 	if (!rootDirectory) {
 		return undefined;
+	}
+
+	const cacheKey = rootDirectory + JSON.stringify(overrides);
+	if (avaHelperCache.has(cacheKey)) {
+		return avaHelperCache.get(cacheKey);
+	}
+
+	// Prevent unbounded growth in long-running processes (e.g. IDE integrations).
+	if (avaHelperCache.size > 100) {
+		avaHelperCache.clear();
 	}
 
 	const avaHelperPath = resolveFrom.silent(rootDirectory, 'ava/eslint-plugin-helper');
@@ -19,7 +31,9 @@ export const loadAvaHelper = (filename, overrides) => {
 	}
 
 	const avaHelper = require(avaHelperPath);
-	return avaHelper.load(rootDirectory, overrides);
+	const result = avaHelper.load(rootDirectory, overrides);
+	avaHelperCache.set(cacheKey, result);
+	return result;
 };
 /* c8 ignore stop */
 
