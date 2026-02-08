@@ -1,7 +1,9 @@
 import {createRequire} from 'node:module';
+import json from '@eslint/json';
 import assertionArguments from './rules/assertion-arguments.js';
 import hooksOrder from './rules/hooks-order.js';
 import maxAsserts from './rules/max-asserts.js';
+import noAvaInDependencies from './rules/no-ava-in-dependencies.js';
 import noAsyncFnWithoutAwait from './rules/no-async-fn-without-await.js';
 import noDuplicateModifiers from './rules/no-duplicate-modifiers.js';
 import noIdenticalTitle from './rules/no-identical-title.js';
@@ -34,6 +36,7 @@ const rules = {
 	'assertion-arguments': assertionArguments,
 	'hooks-order': hooksOrder,
 	'max-asserts': maxAsserts,
+	'no-ava-in-dependencies': noAvaInDependencies,
 	'no-async-fn-without-await': noAsyncFnWithoutAwait,
 	'no-duplicate-modifiers': noDuplicateModifiers,
 	'no-identical-title': noIdenticalTitle,
@@ -86,9 +89,9 @@ const recommendedRules = {
 	'ava/prefer-t-regex': 'error',
 	'ava/test-title': 'error',
 	'ava/test-title-format': 'off',
-	'ava/use-t-well': 'error',
 	'ava/use-t': 'error',
 	'ava/use-t-throws-async-well': 'error',
+	'ava/use-t-well': 'error',
 	'ava/use-test': 'error',
 	'ava/use-true-false': 'error',
 };
@@ -103,14 +106,24 @@ const plugin = {
 };
 
 Object.assign(plugin.configs, {
-	recommended: {
-		plugins: {
-			ava: plugin,
+	recommended: [
+		{
+			plugins: {
+				ava: plugin,
+			},
+			rules: {
+				...recommendedRules,
+			},
 		},
-		rules: {
-			...recommendedRules,
+		{
+			files: ['**/package.json'],
+			language: 'json/json',
+			plugins: {json, ava: plugin},
+			rules: {
+				'ava/no-ava-in-dependencies': 'error',
+			},
 		},
-	},
+	],
 });
 
 export default plugin;

@@ -43,6 +43,7 @@
 	],
 	"dependencies": {
 		"@eslint-community/eslint-utils": "^4.9.1",
+		"@eslint/json": "^1.0.0",
 		"enhance-visitors": "^1.0.0",
 		"espree": "^11.1.0",
 		"espurify": "^3.2.0",

@@ -55,6 +55,7 @@ The rules will only activate in test files.
 | [hooks-order](docs/rules/hooks-order.md)                             | Enforce test hook ordering.                                                                                    | ✅  |    |    | 🔧 |    |
 | [max-asserts](docs/rules/max-asserts.md)                             | Limit the number of assertions in a test.                                                                      |    |    | ✅  |    |    |
 | [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) | Require async tests to use `await`.                                                                            | ✅  |    |    |    | 💡 |
+| [no-ava-in-dependencies](docs/rules/no-ava-in-dependencies.md)       | Disallow AVA in `dependencies`.                                                                                | ✅  |    |    | 🔧 |    |
 | [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md)       | Disallow duplicate test modifiers.                                                                             | ✅  |    |    | 🔧 |    |
 | [no-identical-title](docs/rules/no-identical-title.md)               | Disallow identical test titles.                                                                                | ✅  |    |    |    |    |
 | [no-ignored-test-files](docs/rules/no-ignored-test-files.md)         | Disallow tests in ignored files.                                                                               | ✅  |    |    |    |    |
@@ -89,6 +90,6 @@ This plugin exports a [`recommended` config](index.js) that enforces good practi
 import eslintPluginAva from 'eslint-plugin-ava';
 
 export default [
-	eslintPluginAva.configs.recommended,
+	...eslintPluginAva.configs.recommended,
 ];
 ```
