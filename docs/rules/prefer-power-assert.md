@@ -19,12 +19,13 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Useful for people wanting to fully embrace the power of [power-assert](https://github.com/power-assert-js/power-assert).
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
 test('foo', t => {
+	// ❌
 	t.truthy(foo);
 	t.falsy(foo);
 	t.true(foo === bar);
@@ -33,15 +34,8 @@ test('foo', t => {
 	t.not(foo, bar);
 	t.regex(foo, bar);
 	t.ifError(error);
-});
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
-test('foo', t => {
+	// ✅
 	t.assert(foo === bar);
 	t.deepEqual(foo, bar);
 	t.notDeepEqual(foo, bar);

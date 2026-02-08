@@ -14,20 +14,14 @@ The test implementation should not purely consist of an inline assertion as asse
 
 This rule is fixable. It will wrap the assertion in braces `{}`. It will not do any whitespace or style changes.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
-test('foo', t => t.true(fn()));
-```
+test('foo', t => t.true(fn())); // ❌
 
-## Pass
-
-```js
-import test from 'ava';
-
-test('foo', t => {
+test('foo', t => { // ✅
 	t.true(fn());
 });
 ```

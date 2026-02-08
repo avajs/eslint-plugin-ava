@@ -10,19 +10,17 @@
 
 AVA is a test runner and should be in `devDependencies`, not `dependencies`. Having it in `dependencies` means it will be installed by consumers of your package, which is unnecessary and increases install size.
 
-### Fail
+## Examples
 
-```json
+```jsonc
+// ❌
 {
 	"dependencies": {
 		"ava": "^6.0.0"
 	}
 }
-```
 
-### Pass
-
-```json
+// ✅
 {
 	"devDependencies": {
 		"ava": "^6.0.0"

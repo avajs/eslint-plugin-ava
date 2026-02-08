@@ -12,22 +12,19 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 The `deepEqual` and `notDeepEqual` assertions are unnecessary when comparing primitives. Use `is` or `not` instead.
 
-## Fail
+## Examples
 
 ```js
+// ❌
 t.deepEqual(expression, 'foo');
 t.deepEqual(expression, 1);
 t.deepEqual(expression, `foo${bar}`);
 t.deepEqual(expression, null);
 t.deepEqual(expression, undefined);
 t.notDeepEqual(expression, undefined);
-```
 
-## Pass
-
-```js
+// ✅
 t.is(expression, 'foo');
-
 t.deepEqual(expression, otherExpression);
 t.deepEqual(expression, {});
 t.deepEqual(expression, []);

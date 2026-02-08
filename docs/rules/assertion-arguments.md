@@ -16,11 +16,12 @@ Assertion messages are optional arguments that can be given to any assertion cal
 
 This rule also attempts to enforce passing actual values before expected values. If exactly one of the first two arguments to a two-argument assertion is a static expression such as `{a: 1}`, then the static expression must come second. (`t.regex()` and `t.notRegex()` are excluded from this check, because either their `contents` argument or their `regex` argument could plausibly be the actual or expected value.) If the argument to a one-argument assertion is a binary relation such as `'static' === dynamic`, a similar check is performed on its left- and right-hand sides. Errors of these kinds are usually fixable.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('1', t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
@@ -29,36 +30,29 @@ test('1', t => {
 	t.plan(2.5); // Argument is not a non-negative integer
 });
 
-/* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
-test('2', t => {
-	t.true(array.includes(value));
-});
-
-/* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
-test('3', t => {
-	t.true(array.includes(value), 'value is not in array');
-});
-```
-
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('1', t => {
 	t.plan(1);
 	t.is(value, expected);
 	t.is(value, expected, message);
 });
+```
 
+```js
 /* eslint ava/assertion-arguments: ["error", {"message": "always"}] */
-test('2', t => {
-	t.true(array.includes(value), 'value is not in array');
-});
 
+test('2', t => {
+	t.true(array.includes(value)); // ❌
+	t.true(array.includes(value), 'value is not in array'); // ✅
+});
+```
+
+```js
 /* eslint ava/assertion-arguments: ["error", {"message": "never"}] */
+
 test('3', t => {
-	t.true(array.includes(value));
+	t.true(array.includes(value), 'value is not in array'); // ❌
+	t.true(array.includes(value)); // ✅
 });
 ```
 

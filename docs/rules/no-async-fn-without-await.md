@@ -16,23 +16,19 @@ Declaring an async test without using the `await` keyword means that either a Pr
 
 This rule will report an error when it finds an async test which does not use the `await` keyword.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('foo', async t => {
 	return foo().then(res => {
 		t.is(res, 1);
 	});
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('foo', async t => {
 	t.is(await foo(), 1);
 });

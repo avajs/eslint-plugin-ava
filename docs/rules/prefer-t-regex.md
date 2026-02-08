@@ -16,30 +16,14 @@ This rule will enforce the use of `t.regex()` instead of manually using `RegExp#
 
 This rule is fixable. It will replace the use of `RegExp#test()`, `String#match()`, or `String#search()` with `t.regex()`.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
 test('main', t => {
-	t.true(/\w+/.test('foo'));
-});
-```
-
-```js
-import test from 'ava';
-
-test('main', t => {
-	t.truthy('foo'.match(/\w+/));
-});
-```
-
-## Pass
-
-```js
-import test from 'ava';
-
-test('main', async t => {
-	t.regex('foo', /\w+/);
+	t.true(/\w+/.test('foo')); // ❌
+	t.truthy('foo'.match(/\w+/)); // ❌
+	t.regex('foo', /\w+/); // ✅
 });
 ```

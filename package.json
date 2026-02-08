@@ -20,7 +20,7 @@
 		"lint:js": "xo",
 		"test": "npm-run-all lint test:unit",
 		"test:unit": "c8 ava",
-		"update:eslint-docs": "eslint-doc-generator --rule-doc-section-include Pass --rule-doc-section-include Fail --url-configs \"https://github.com/avajs/eslint-plugin-ava#recommended-config\""
+		"update:eslint-docs": "eslint-doc-generator --rule-doc-section-include Examples --url-configs \"https://github.com/avajs/eslint-plugin-ava#recommended-config\""
 	},
 	"files": [
 		"index.js",

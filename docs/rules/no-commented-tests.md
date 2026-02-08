@@ -8,30 +8,18 @@
 
 Commented-out tests are invisible to the test runner and easy to forget about. Use `test.skip()` instead, which is visible in the test results.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 // test('foo', t => {
 // 	t.pass();
 // });
 
-test('bar', t => {
-	t.pass();
-});
-```
-
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test.skip('foo', t => {
-	t.pass();
-});
-
-test('bar', t => {
 	t.pass();
 });
 ```

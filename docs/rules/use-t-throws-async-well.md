@@ -12,22 +12,18 @@ When you use the `t.throwsAsync()` and `t.notThrowsAsync()` assertions, you must
 
 This rule is fixable inside `async` functions. It will insert `await` before `t.throwsAsync()` and `t.notThrowsAsync()`.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('main', t => {
 	t.throwsAsync(somePromise);
 	t.notThrowsAsync(somePromise);
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('main', async t => {
 	await t.throwsAsync(somePromise);
 	await t.notThrowsAsync(somePromise);

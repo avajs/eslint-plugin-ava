@@ -12,32 +12,18 @@ This rule is useful when you want to make sure all test titles match a common pa
 
 For example, titles like `'Should throw when invalid.'`, `'Should fail when called.'` or `'Should pass when using any number.'` could be enforced with the following pattern `'^Should (pass|fail|throw) when [\\w ]+\\.$'` (Note the escaped `\`).
 
-## Fail
+## Examples
 
 ```js
 /* eslint ava/test-title-format: ["error", {format: "^Should"}] */
 import test from 'ava';
 
+// ❌
 test('Not starting with `Should`', t => {
 	t.pass();
 });
-```
 
-```js
-/* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
-import test from 'ava';
-
-test('Doesn\'t end with a dot', t => {
-	t.pass();
-});
-```
-
-## Pass
-
-```js
-/* eslint ava/test-title-format: ["error", {format: "^Should"}] */
-import test from 'ava';
-
+// ✅
 test('Should pass tests', t => {
 	t.pass();
 });
@@ -51,6 +37,12 @@ test('Should behave as expected', t => {
 /* eslint ava/test-title-format: ["error", {format: "\\.$"}] */
 import test from 'ava';
 
+// ❌
+test('Doesn\'t end with a dot', t => {
+	t.pass();
+});
+
+// ✅
 test('End with a dot.', t => {
 	t.pass();
 });

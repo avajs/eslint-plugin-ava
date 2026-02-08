@@ -16,36 +16,34 @@ This rule enforces the use of the former when the tested expression is known to 
 
 This rule also enforces `t.true(x)` over `t.is(x, true)` and `t.false(x)` over `t.is(x, false)`.
 
-### Fail
+## Examples
 
 ```js
 import test from 'ava';
 
 test('foo', t => {
-	t.truthy(value < 2);
-	t.truthy(value === 1);
-	t.truthy([1, 2, 3].includes(value));
-	t.falsy(!value);
-	t.truthy(!!value);
-	t.truthy(Array.isArray(value));
-	t.is(value, true);
-	t.is(value, false);
-});
-```
+	t.truthy(value < 2); // ❌
+	t.true(value < 2); // ✅
 
-### Pass
+	t.truthy(value === 1); // ❌
+	t.true(value === 1); // ✅
 
-```js
-import test from 'ava';
+	t.truthy([1, 2, 3].includes(value)); // ❌
+	t.true([1, 2, 3].includes(value)); // ✅
 
-test('foo', t => {
-	t.true(value < 2);
-	t.true(value === 1);
-	t.true([1, 2, 3].includes(value));
-	t.false(!value);
-	t.true(!!value);
-	t.true(Array.isArray(value));
-	t.true(value);
-	t.false(value);
+	t.falsy(!value); // ❌
+	t.false(!value); // ✅
+
+	t.truthy(!!value); // ❌
+	t.true(!!value); // ✅
+
+	t.truthy(Array.isArray(value)); // ❌
+	t.true(Array.isArray(value)); // ✅
+
+	t.is(value, true); // ❌
+	t.true(value); // ✅
+
+	t.is(value, false); // ❌
+	t.false(value); // ✅
 });
 ```

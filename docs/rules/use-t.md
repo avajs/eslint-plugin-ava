@@ -10,21 +10,17 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 The convention is to have the parameter in AVA's test function be named `t`. Most rules in `eslint-plugin-ava` are based on that assumption.
 
-### Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('foo', foo => { // Incorrect name
 	t.pass();
 });
-```
 
-### Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('foo', () => {
 	// ...
 });

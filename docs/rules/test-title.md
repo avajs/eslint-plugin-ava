@@ -10,22 +10,16 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Tests should have a title. AVA [v1.0.1](https://github.com/avajs/ava/releases/tag/v1.0.1) and later enforces this at runtime.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
-test(t => {
+test(t => { // ❌
 	t.pass();
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
-test('foo', t => {
+test('foo', t => { // ✅
 	t.pass();
 });
 ```

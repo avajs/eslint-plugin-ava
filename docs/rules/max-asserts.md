@@ -12,12 +12,13 @@ Limit the amount of assertions in a test to enforce splitting up large tests int
 
 Skipped assertions are counted.
 
-## Fail
+## Examples
 
 ```js
 /*eslint ava/max-asserts: ["error", {"max": 5}]*/
 import test from 'ava';
 
+// ❌
 test('getSomeObject should define the players\' names', t => {
 	const object = lib.getSomeObject();
 
@@ -29,13 +30,8 @@ test('getSomeObject should define the players\' names', t => {
 	t.is(object.opponent.firstName, 'Darth');
 	t.is(object.opponent.lastName, 'Vader');
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('getSomeObject should define the player\'s name', t => {
 	const object = lib.getSomeObject();
 

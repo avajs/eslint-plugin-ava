@@ -12,23 +12,19 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Prevent the use of unknown [test modifiers](https://github.com/avajs/ava/blob/main/docs/01-writing-tests.md).
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
-test.onlu(t => {});
-test.seril(t => {});
-test.beforeeach(t => {});
-test.unknown(t => {});
-```
+test.onlu(t => {}); // ❌
+test.only(t => {}); // ✅
 
-## Pass
+test.seril(t => {}); // ❌
+test.serial(t => {}); // ✅
 
-```js
-import test from 'ava';
+test.beforeeach(t => {}); // ❌
+test.beforeEach(t => {}); // ✅
 
-test.only(t => {});
-test.serial(t => {});
-test.beforeEach(t => {});
+test.unknown(t => {}); // ❌
 ```

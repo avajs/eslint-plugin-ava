@@ -14,12 +14,13 @@ Prevent the use of unknown assertion methods and the access to members other tha
 
 This rule is partly fixable. It can fix most misspelled assertion method names and incorrect usages of `.skip`.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
 test('main', t => {
+	// ❌
 	t(value); // `t` is not a function
 	t.depEqual(value, [2]); // Misspelled `.deepEqual` as `.depEqual`, fixable
 	t.contxt.foo = 100; // Misspelled `.context` as `.contxt`, fixable
@@ -28,15 +29,8 @@ test('main', t => {
 	t.foo = 1000; // Unknown member `.foo`. Use `.context.foo` instead
 	t.deepEqual.is(value, value); // Can't chain assertion methods
 	t.skip(); // Missing assertion method
-});
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
-test('main', t => {
+	// ✅
 	t.deepEqual(value, [2]);
 	t.context.a = 100;
 	require(`fixtures/${t.title}`);

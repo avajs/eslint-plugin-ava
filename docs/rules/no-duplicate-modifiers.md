@@ -12,22 +12,17 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Prevent the use of duplicate [test modifiers](https://github.com/avajs/ava/blob/main/docs/01-writing-tests.md).
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
-test.only.only(t => {});
-test.serial.serial(t => {});
-test.beforeEach.beforeEach(t => {});
-```
+test.only.only(t => {}); // ❌
+test.only(t => {}); // ✅
 
-## Pass
+test.serial.serial(t => {}); // ❌
+test.serial(t => {}); // ✅
 
-```js
-import test from 'ava';
-
-test.only(t => {});
-test.serial(t => {});
-test.beforeEach(t => {});
+test.beforeEach.beforeEach(t => {}); // ❌
+test.beforeEach(t => {}); // ✅
 ```

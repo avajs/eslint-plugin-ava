@@ -22,11 +22,12 @@ Hooks should be placed before any tests and in the proper semantic order:
 
 This rule is fixable as long as no other code is between the hooks that need to be reordered.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test.after(t => {
 	doFoo();
 });
@@ -38,25 +39,8 @@ test.before(t => {
 test('foo', t => {
 	t.true(true);
 });
-```
 
-```js
-import test from 'ava';
-
-test('foo', t => {
-	t.true(true);
-});
-
-test.before(t => {
-	doFoo();
-});
-```
-
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test.before(t => {
 	doFoo();
 });
@@ -78,6 +62,28 @@ test.afterEach(t => {
 });
 
 test.afterEach.always(t => {
+	doFoo();
+});
+
+test('foo', t => {
+	t.true(true);
+});
+```
+
+```js
+import test from 'ava';
+
+// ❌
+test('foo', t => {
+	t.true(true);
+});
+
+test.before(t => {
+	doFoo();
+});
+
+// ✅
+test.before(t => {
 	doFoo();
 });
 

@@ -10,11 +10,12 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Disallow tests with identical titles as it makes it hard to differentiate them.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('foo', t => {
 	t.pass();
 });
@@ -22,13 +23,8 @@ test('foo', t => {
 test('foo', t => {
 	t.pass();
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('foo', t => {
 	t.pass();
 });

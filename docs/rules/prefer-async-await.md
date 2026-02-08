@@ -12,23 +12,19 @@ AVA comes with built-in support for async functions (async/await). This allows y
 
 This rule will report an error when it finds a test that returns an expression that looks like a Promise (containing a `.then()` call), which could be simplified by using the async/await syntax.
 
-## Fail
+## Examples
 
 ```js
 import test from 'ava';
 
+// ❌
 test('foo', t => {
 	return foo().then(res => {
 		t.is(res, 1);
 	});
 });
-```
 
-## Pass
-
-```js
-import test from 'ava';
-
+// ✅
 test('foo', async t => {
 	t.is(await foo(), 1);
 });
