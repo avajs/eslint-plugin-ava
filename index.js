@@ -13,6 +13,7 @@ import noIgnoredTestFiles from './rules/no-ignored-test-files.js';
 import noImportTestFiles from './rules/no-import-test-files.js';
 import noIncorrectDeepEqual from './rules/no-incorrect-deep-equal.js';
 import noInlineAssertions from './rules/no-inline-assertions.js';
+import noNestedAssertions from './rules/no-nested-assertions.js';
 import noNestedTests from './rules/no-nested-tests.js';
 import noOnlyTest from './rules/no-only-test.js';
 import noSkipAssert from './rules/no-skip-assert.js';
@@ -48,6 +49,7 @@ const rules = {
 	'no-import-test-files': noImportTestFiles,
 	'no-incorrect-deep-equal': noIncorrectDeepEqual,
 	'no-inline-assertions': noInlineAssertions,
+	'no-nested-assertions': noNestedAssertions,
 	'no-nested-tests': noNestedTests,
 	'no-only-test': noOnlyTest,
 	'no-skip-assert': noSkipAssert,
@@ -83,6 +85,7 @@ const recommendedRules = {
 	'ava/no-import-test-files': 'error',
 	'ava/no-incorrect-deep-equal': 'error',
 	'ava/no-inline-assertions': 'error',
+	'ava/no-nested-assertions': 'error',
 	'ava/no-nested-tests': 'error',
 	'ava/no-only-test': 'error',
 	'ava/no-skip-assert': 'error',

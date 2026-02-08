@@ -64,6 +64,7 @@ The rules will only activate in test files.
 | [no-import-test-files](docs/rules/no-import-test-files.md)           | Disallow importing test files.                                                                                 | ✅  |    |    |    |    |
 | [no-incorrect-deep-equal](docs/rules/no-incorrect-deep-equal.md)     | Disallow using `deepEqual` with primitives.                                                                    | ✅  |    |    | 🔧 |    |
 | [no-inline-assertions](docs/rules/no-inline-assertions.md)           | Disallow inline assertions.                                                                                    | ✅  |    |    | 🔧 |    |
+| [no-nested-assertions](docs/rules/no-nested-assertions.md)           | Disallow nested assertions.                                                                                    | ✅  |    |    |    |    |
 | [no-nested-tests](docs/rules/no-nested-tests.md)                     | Disallow nested tests.                                                                                         | ✅  |    |    |    |    |
 | [no-only-test](docs/rules/no-only-test.md)                           | Disallow `test.only()`.                                                                                        | ✅  |    |    |    | 💡 |
 | [no-skip-assert](docs/rules/no-skip-assert.md)                       | Disallow skipping assertions.                                                                                  | ✅  |    |    |    | 💡 |
