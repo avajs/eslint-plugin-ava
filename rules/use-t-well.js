@@ -7,10 +7,52 @@ const MESSAGE_ID_NOT_FUNCTION = 'not-function';
 const MESSAGE_ID_UNKNOWN_ASSERTION = 'unknown-assertion';
 const MESSAGE_ID_UNKNOWN_MEMBER = 'unknown-member';
 const MESSAGE_ID_MISSPELLED = 'misspelled';
+const MESSAGE_ID_SYNONYM = 'synonym';
 const MESSAGE_ID_CHAINING = 'chaining';
 const MESSAGE_ID_MISSING_ASSERTION = 'missing-assertion';
 const MESSAGE_ID_TOO_MANY_SKIPS = 'too-many-skips';
 const MESSAGE_ID_SKIP_POSITION = 'skip-position';
+
+// Map of common assertion names from other test frameworks (tape, node:assert, Jest) to their AVA equivalents.
+const assertionSynonyms = new Map([
+	// Truthy/Falsy
+	['ok', 'truthy'],
+	['notOk', 'falsy'],
+
+	// Equality
+	['equal', 'is'],
+	['equals', 'is'],
+	['strictEqual', 'is'],
+	['strictEquals', 'is'],
+	['notEqual', 'not'],
+	['notEquals', 'not'],
+	['notStrictEqual', 'not'],
+	['notStrictEquals', 'not'],
+
+	// Deep equality
+	['same', 'deepEqual'],
+	['deepStrictEqual', 'deepEqual'],
+	['notSame', 'notDeepEqual'],
+	['notDeepStrictEqual', 'notDeepEqual'],
+
+	// Throws
+	['catch', 'throws'],
+	['exception', 'throws'],
+	['doesNotThrow', 'notThrows'],
+	['rejects', 'throwsAsync'],
+	['doesNotReject', 'notThrowsAsync'],
+
+	// Regex
+	['match', 'regex'],
+	['doesNotMatch', 'notRegex'],
+
+	// Error
+	['error', 'ifError'],
+	['ifErr', 'ifError'],
+
+	// Snapshot
+	['matchSnapshot', 'snapshot'],
+]);
 
 const properties = new Set([
 	...util.executionMethods,
@@ -64,6 +106,17 @@ const create = context => {
 			let hadCall = false;
 			for (const [i, member] of members.entries()) {
 				const {name} = member;
+
+				const synonym = assertionSynonyms.get(name);
+				if (synonym) {
+					context.report({
+						node,
+						messageId: MESSAGE_ID_SYNONYM,
+						data: {name, corrected: synonym},
+						fix: fixer => fixer.replaceText(member, synonym),
+					});
+					return;
+				}
 
 				let corrected = correcter.correct(name);
 
@@ -172,6 +225,7 @@ export default {
 			[MESSAGE_ID_UNKNOWN_ASSERTION]: 'Unknown assertion method `.{{name}}`.',
 			[MESSAGE_ID_UNKNOWN_MEMBER]: 'Unknown member `.{{name}}`. Use `.context.{{name}}` instead.',
 			[MESSAGE_ID_MISSPELLED]: 'Misspelled `.{{corrected}}` as `.{{name}}`.',
+			[MESSAGE_ID_SYNONYM]: 'Unknown assertion method `.{{name}}`. Did you mean `.{{corrected}}`?',
 			[MESSAGE_ID_CHAINING]: 'Can\'t chain assertion methods.',
 			[MESSAGE_ID_MISSING_ASSERTION]: 'Missing assertion method.',
 			[MESSAGE_ID_TOO_MANY_SKIPS]: 'Too many chained uses of `.skip`.',

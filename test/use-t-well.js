@@ -223,5 +223,138 @@ ruleTester.run('use-t-well', rule, {
 			output: testCase('t_.deepEqual(a, a);'),
 			errors: [error('misspelled')],
 		},
+		// Synonyms from other test frameworks
+		{
+			code: testCase('t.ok(v);'),
+			output: testCase('t.truthy(v);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notOk(v);'),
+			output: testCase('t.falsy(v);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.equal(a, a);'),
+			output: testCase('t.is(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.equals(a, a);'),
+			output: testCase('t.is(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.strictEqual(a, a);'),
+			output: testCase('t.is(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.strictEquals(a, a);'),
+			output: testCase('t.is(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notEqual(a, a);'),
+			output: testCase('t.not(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notEquals(a, a);'),
+			output: testCase('t.not(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notStrictEqual(a, a);'),
+			output: testCase('t.not(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notStrictEquals(a, a);'),
+			output: testCase('t.not(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.same(a, a);'),
+			output: testCase('t.deepEqual(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.deepStrictEqual(a, a);'),
+			output: testCase('t.deepEqual(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notSame(a, a);'),
+			output: testCase('t.notDeepEqual(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.notDeepStrictEqual(a, a);'),
+			output: testCase('t.notDeepEqual(a, a);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.catch(fn);'),
+			output: testCase('t.throws(fn);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.exception(fn);'),
+			output: testCase('t.throws(fn);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.doesNotThrow(fn);'),
+			output: testCase('t.notThrows(fn);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.rejects(fn);'),
+			output: testCase('t.throwsAsync(fn);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.doesNotReject(fn);'),
+			output: testCase('t.notThrowsAsync(fn);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.match(v, /v/);'),
+			output: testCase('t.regex(v, /v/);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.doesNotMatch(v, /v/);'),
+			output: testCase('t.notRegex(v, /v/);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.error(v);'),
+			output: testCase('t.ifError(v);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.ifErr(v);'),
+			output: testCase('t.ifError(v);'),
+			errors: [error('synonym')],
+		},
+		{
+			code: testCase('t.matchSnapshot(v);'),
+			output: testCase('t.snapshot(v);'),
+			errors: [error('synonym')],
+		},
+		// Synonym with .skip modifier
+		{
+			code: testCase('t.ok.skip(v);'),
+			output: testCase('t.truthy.skip(v);'),
+			errors: [error('synonym')],
+		},
+		// Synonym with alternative test object name
+		{
+			code: testCase('tt.equal(a, a);'),
+			output: testCase('tt.is(a, a);'),
+			errors: [error('synonym')],
+		},
 	],
 });
