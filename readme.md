@@ -56,6 +56,7 @@ The rules will only activate in test files.
 | [max-asserts](docs/rules/max-asserts.md)                             | Limit the number of assertions in a test.                                                                      |    |    | ✅  |    |    |
 | [no-async-fn-without-await](docs/rules/no-async-fn-without-await.md) | Require async tests to use `await`.                                                                            | ✅  |    |    |    | 💡 |
 | [no-ava-in-dependencies](docs/rules/no-ava-in-dependencies.md)       | Disallow AVA in `dependencies`.                                                                                | ✅  |    |    | 🔧 |    |
+| [no-commented-tests](docs/rules/no-commented-tests.md)               | Disallow commented-out tests.                                                                                  |    | ✅  |    |    |    |
 | [no-duplicate-modifiers](docs/rules/no-duplicate-modifiers.md)       | Disallow duplicate test modifiers.                                                                             | ✅  |    |    | 🔧 |    |
 | [no-identical-title](docs/rules/no-identical-title.md)               | Disallow identical test titles.                                                                                | ✅  |    |    |    |    |
 | [no-ignored-test-files](docs/rules/no-ignored-test-files.md)         | Disallow tests in ignored files.                                                                               | ✅  |    |    |    |    |
