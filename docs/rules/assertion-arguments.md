@@ -28,6 +28,7 @@ test('1', t => {
 	t.is(value); // Not enough arguments
 	t.is(value, expected, message, extra); // Too many arguments
 	t.is(value, expected, false); // Assertion message is not a string
+	t.notThrows(() => { /* … */ }, TypeError); // Second argument should be a string message
 	t.plan('1'); // Argument is not a non-negative integer
 	t.plan(2.5); // Argument is not a non-negative integer
 	t.regex(/foo/, string); // First argument should be a string, not a regex

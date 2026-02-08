@@ -509,6 +509,15 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.fail({});', messageIsNotStringError),
 		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError),
 
+		// Error constructors are not valid assertion messages
+		testCase(false, 't.notThrows(() => {}, TypeError);', messageIsNotStringError),
+		testCase(false, 't.notThrowsAsync(Promise.resolve(), TypeError);', messageIsNotStringError),
+		testCase(false, 't.notThrows(() => {}, Error);', messageIsNotStringError),
+		testCase(false, 't.notThrows(() => {}, RangeError);', messageIsNotStringError),
+		testCase(false, 't.fail(CustomError);', messageIsNotStringError),
+		testCase(false, 't.is(1, 2, TypeError);', messageIsNotStringError),
+		testCase(false, 't.throws(() => {}, null, TypeError);', messageIsNotStringError),
+
 		// Regex as first argument
 		testCase(false, 't.regex(/foo/, variable);', regexFirstError, {output: 't.regex(variable, /foo/);'}),
 		testCase(false, 't.notRegex(/foo/, variable);', regexFirstError, {output: 't.notRegex(variable, /foo/);'}),

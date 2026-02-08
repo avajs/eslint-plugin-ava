@@ -333,20 +333,19 @@ const create = context => {
 
 				if (lastArgument.type === 'Identifier') {
 					const variable = findVariable(context.sourceCode.getScope(node), lastArgument);
-					if (!variable) {
+
+					let resolved;
+					if (variable) {
+						for (const reference of variable.references) {
+							resolved = reference.writeExpr ?? resolved;
+						}
+					}
+
+					if (resolved) {
+						lastArgument = resolved;
+					} else if (!/^(?:[A-Z][a-z\d]*)*Error$/.test(lastArgument.name)) {
 						return;
 					}
-
-					let value;
-					for (const reference of variable.references) {
-						value = reference.writeExpr ?? value;
-					}
-
-					if (!value) {
-						return;
-					}
-
-					lastArgument = value;
 				}
 
 				if (!isString(lastArgument)) {
