@@ -38,7 +38,7 @@ const knownBooleanSignatures = [
 	'SharedArrayBuffer.isView()',
 	'Reflect.has()',
 	'Reflect.isExtensible()',
-].map(signature => espurify(espree.parse(signature).body[0].expression.callee));
+].map(signature => espurify(espree.parse(signature, {ecmaVersion: 'latest'}).body[0].expression.callee));
 
 function matchesKnownBooleanExpression(argument) {
 	if (argument.type !== 'CallExpression') {

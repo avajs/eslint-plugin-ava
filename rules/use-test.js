@@ -17,6 +17,7 @@ const avaVariableDeclaratorInitAst = {
 			value: 'ava',
 		},
 	],
+	optional: false,
 };
 
 function report(context, node) {
