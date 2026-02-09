@@ -46,10 +46,15 @@ export default {
 		type: 'problem',
 		docs: {
 			description: 'Disallow duplicate test modifiers.',
-			recommended: true,
+			recommended: false,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		fixable: 'code',
+		deprecated: {
+			message: 'Replaced by `ava/no-invalid-modifier-chain` which covers more cases.',
+			url: util.getDocsUrl(import.meta.filename),
+			replacedBy: ['ava/no-invalid-modifier-chain'],
+		},
 		schema: [],
 		messages: {
 			[MESSAGE_ID]: 'Duplicate test modifier `.{{name}}`.',

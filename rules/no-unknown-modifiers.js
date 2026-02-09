@@ -77,10 +77,15 @@ export default {
 		type: 'problem',
 		docs: {
 			description: 'Disallow unknown test modifiers.',
-			recommended: true,
+			recommended: false,
 			url: util.getDocsUrl(import.meta.filename),
 		},
 		hasSuggestions: true,
+		deprecated: {
+			message: 'Replaced by `ava/no-invalid-modifier-chain` which covers more cases.',
+			url: util.getDocsUrl(import.meta.filename),
+			replacedBy: ['ava/no-invalid-modifier-chain'],
+		},
 		schema: [],
 		messages: {
 			[MESSAGE_ID]: 'Unknown test modifier `.{{name}}`.',
