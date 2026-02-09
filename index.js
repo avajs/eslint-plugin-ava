@@ -7,6 +7,7 @@ import maxAsserts from './rules/max-asserts.js';
 import noAvaInDependencies from './rules/no-ava-in-dependencies.js';
 import noAsyncFnWithoutAwait from './rules/no-async-fn-without-await.js';
 import noCommentedTests from './rules/no-commented-tests.js';
+import noDuplicateHooks from './rules/no-duplicate-hooks.js';
 import noDuplicateModifiers from './rules/no-duplicate-modifiers.js';
 import noIdenticalTitle from './rules/no-identical-title.js';
 import noIgnoredTestFiles from './rules/no-ignored-test-files.js';
@@ -47,6 +48,7 @@ const rules = {
 	'no-ava-in-dependencies': noAvaInDependencies,
 	'no-async-fn-without-await': noAsyncFnWithoutAwait,
 	'no-commented-tests': noCommentedTests,
+	'no-duplicate-hooks': noDuplicateHooks,
 	'no-duplicate-modifiers': noDuplicateModifiers,
 	'no-identical-title': noIdenticalTitle,
 	'no-ignored-test-files': noIgnoredTestFiles,
@@ -87,6 +89,7 @@ const recommendedRules = {
 	],
 	'ava/no-async-fn-without-await': 'error',
 	'ava/no-commented-tests': 'warn',
+	'ava/no-duplicate-hooks': 'error',
 	'ava/no-duplicate-modifiers': 'off',
 	'ava/no-identical-title': 'error',
 	'ava/no-ignored-test-files': 'error',
