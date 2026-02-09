@@ -27,6 +27,7 @@ import preferAsyncAwait from './rules/prefer-async-await.js';
 import preferPowerAssert from './rules/prefer-power-assert.js';
 import preferTRegex from './rules/prefer-t-regex.js';
 import preferTThrows from './rules/prefer-t-throws.js';
+import requireAssertion from './rules/require-assertion.js';
 import testTitle from './rules/test-title.js';
 import testTitleFormat from './rules/test-title-format.js';
 import useT from './rules/use-t.js';
@@ -66,6 +67,7 @@ const rules = {
 	'prefer-power-assert': preferPowerAssert,
 	'prefer-t-regex': preferTRegex,
 	'prefer-t-throws': preferTThrows,
+	'require-assertion': requireAssertion,
 	'test-title': testTitle,
 	'test-title-format': testTitleFormat,
 	'use-t': useT,
@@ -105,6 +107,7 @@ const recommendedRules = {
 	'ava/prefer-power-assert': 'off',
 	'ava/prefer-t-regex': 'error',
 	'ava/prefer-t-throws': 'error',
+	'ava/require-assertion': 'error',
 	'ava/test-title': 'error',
 	'ava/test-title-format': 'off',
 	'ava/use-t': 'error',

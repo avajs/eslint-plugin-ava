@@ -79,6 +79,7 @@ The rules will only activate in test files.
 | [prefer-power-assert](docs/rules/prefer-power-assert.md)             | Enforce using only assertions compatible with [power-assert](https://github.com/power-assert-js/power-assert). |    |    | ✅  |    |    |    |
 | [prefer-t-regex](docs/rules/prefer-t-regex.md)                       | Prefer `t.regex()` over `RegExp#test()` and `String#match()`.                                                  | ✅  |    |    | 🔧 |    |    |
 | [prefer-t-throws](docs/rules/prefer-t-throws.md)                     | Prefer `t.throws()` or `t.throwsAsync()` over try/catch.                                                       | ✅  |    |    |    |    |    |
+| [require-assertion](docs/rules/require-assertion.md)                 | Require that tests contain at least one assertion.                                                             | ✅  |    |    |    |    |    |
 | [test-title](docs/rules/test-title.md)                               | Require tests to have a title.                                                                                 | ✅  |    |    |    |    |    |
 | [test-title-format](docs/rules/test-title-format.md)                 | Require test titles to match a pattern.                                                                        |    |    | ✅  |    |    |    |
 | [use-t](docs/rules/use-t.md)                                         | Require test functions to use `t` as their parameter.                                                          | ✅  |    |    |    |    |    |

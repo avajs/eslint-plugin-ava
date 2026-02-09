@@ -1,25 +1,11 @@
 import enhance from 'enhance-visitors';
-import {getTestModifiers} from './util.js';
+import {getTestModifiers, unwrapTypeExpression} from './util.js';
 
 function isRequireCall(node, moduleName) {
 	return node?.type === 'CallExpression'
 		&& node.callee?.type === 'Identifier'
 		&& node.callee.name === 'require'
 		&& node.arguments[0]?.value === moduleName;
-}
-
-// Unwrap TypeScript type assertion expressions (e.g., `anyTest as TestFn<Context>`)
-function unwrapTypeExpression(node) {
-	if (
-		node?.type === 'TSAsExpression'
-		|| node?.type === 'TSTypeAssertion'
-		|| node?.type === 'TSSatisfiesExpression'
-		|| node?.type === 'TSNonNullExpression'
-	) {
-		return unwrapTypeExpression(node.expression);
-	}
-
-	return node;
 }
 
 export default () => {

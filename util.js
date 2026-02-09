@@ -99,6 +99,19 @@ export const isPropertyUnderContext = node => getRootNode(node).property.name ==
 
 export const isFunctionExpression = node => node && functionExpressions.has(node.type);
 
+export const unwrapTypeExpression = node => {
+	if (
+		node?.type === 'TSAsExpression'
+		|| node?.type === 'TSTypeAssertion'
+		|| node?.type === 'TSSatisfiesExpression'
+		|| node?.type === 'TSNonNullExpression'
+	) {
+		return unwrapTypeExpression(node.expression);
+	}
+
+	return node;
+};
+
 function getTestModifiers(node) {
 	if (node.type === 'CallExpression') {
 		return getTestModifiers(node.callee);
@@ -189,6 +202,7 @@ export default {
 	isTestObject,
 	isPropertyUnderContext,
 	isFunctionExpression,
+	unwrapTypeExpression,
 	getTestModifiers,
 	getTestModifier,
 	removeTestModifier,
