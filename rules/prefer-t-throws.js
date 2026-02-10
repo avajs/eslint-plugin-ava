@@ -6,13 +6,44 @@ const MESSAGE_ID_SYNC = 'prefer-t-throws';
 const MESSAGE_ID_ASYNC = 'prefer-t-throws-async';
 
 function findTFailIndex(body) {
-	for (const [index, statement] of body.entries()) {
+	function getCallExpression(statement) {
 		if (
 			statement.type === 'ExpressionStatement'
 			&& statement.expression.type === 'CallExpression'
-			&& statement.expression.callee.type === 'MemberExpression'
 		) {
-			const {callee} = statement.expression;
+			return statement.expression;
+		}
+
+		if (
+			statement.type === 'ExpressionStatement'
+			&& statement.expression.type === 'AwaitExpression'
+			&& statement.expression.argument.type === 'CallExpression'
+		) {
+			return statement.expression.argument;
+		}
+
+		if (
+			statement.type === 'ReturnStatement'
+			&& statement.argument?.type === 'CallExpression'
+		) {
+			return statement.argument;
+		}
+
+		if (
+			statement.type === 'ReturnStatement'
+			&& statement.argument?.type === 'AwaitExpression'
+			&& statement.argument.argument.type === 'CallExpression'
+		) {
+			return statement.argument.argument;
+		}
+
+		return undefined;
+	}
+
+	for (const [index, statement] of body.entries()) {
+		const callExpression = getCallExpression(statement);
+		if (callExpression?.callee.type === 'MemberExpression') {
+			const {callee} = callExpression;
 			const rootName = util.getNameOfRootNodeObject(callee);
 
 			if (

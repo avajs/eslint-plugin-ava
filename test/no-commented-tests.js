@@ -37,6 +37,11 @@ ruleTester.run('no-commented-tests', rule, {
 			code: `// test without calling it\n${passingTest}`,
 			name: 'test at start but no parentheses',
 		},
+		// JSDoc examples should not be treated as commented-out tests
+		{
+			code: `/**\n * Example:\n * test('example', t => { t.pass(); });\n */\n${passingTest}`,
+			name: 'jsdoc example',
+		},
 	],
 	invalid: [
 		{
@@ -76,6 +81,12 @@ ruleTester.run('no-commented-tests', rule, {
 			code: `// test('a', t => {});\n${passingTest}\n// test('b', t => {});`,
 			errors: [{messageId, line: 2}, {messageId, line: 4}],
 			name: 'multiple commented-out tests',
+		},
+		{
+			code: `import {serial} from 'ava';\n// serial('foo', t => {\n${passingTest}`,
+			noHeader: true,
+			errors: [{messageId, line: 2}],
+			name: 'commented serial test',
 		},
 	],
 });

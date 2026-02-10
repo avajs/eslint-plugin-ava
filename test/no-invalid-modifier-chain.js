@@ -66,6 +66,9 @@ ruleTester.run('no-invalid-modifier-chain', rule, {
 		// CJS/ESM interop (default is stripped)
 		'test.default(t => {});',
 		'test.default.serial(t => {});',
+		// Named serial export
+		{code: 'import {serial} from \'ava\'; serial(t => {});', noHeader: true},
+		{code: 'import {serial} from \'ava\'; serial.before(t => {});', noHeader: true},
 
 		// Not a test file
 		{code: 'test.foo(t => {});', noHeader: true},
@@ -325,6 +328,14 @@ ruleTester.run('no-invalid-modifier-chain', rule, {
 				suggestion('macro', 'test.failing(t => {});'),
 			])],
 		},
+		{
+			code: 'import {serial} from \'ava\'; serial.macro(t => {});',
+			output: null,
+			noHeader: true,
+			errors: [error('serial.macro', [
+				suggestion('macro', 'import {serial} from \'ava\'; serial(t => {});'),
+			])],
+		},
 
 		// Unknown modifiers (no fix, no suggestions)
 		{
@@ -385,6 +396,26 @@ ruleTester.run('no-invalid-modifier-chain', rule, {
 			code: 'test.only.serial.serial(t => {});',
 			output: 'test.serial.only(t => {});',
 			errors: [error('only.serial.serial')],
+		},
+
+		// Named serial export (fixable)
+		{
+			code: 'import {serial} from \'ava\'; serial.serial(t => {});',
+			output: 'import {serial} from \'ava\'; serial(t => {});',
+			noHeader: true,
+			errors: [error('serial.serial')],
+		},
+		{
+			code: 'import {serial} from \'ava\'; serial.before.serial(t => {});',
+			output: 'import {serial} from \'ava\'; serial.before(t => {});',
+			noHeader: true,
+			errors: [error('serial.before.serial')],
+		},
+		{
+			code: 'import {serial as avaSerial} from \'ava\'; avaSerial.serial(t => {});',
+			output: 'import {serial as avaSerial} from \'ava\'; avaSerial(t => {});',
+			noHeader: true,
+			errors: [error('serial.serial')],
 		},
 
 		// Duplicates (fixable)

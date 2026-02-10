@@ -26,6 +26,8 @@ ruleTester.run('no-useless-t-pass', rule, {
 		' test(t => { t.plan(1); t.skip.pass(); });',
 		// Not a test object (foo.t.pass)
 		` test(t => { ${'foo.t.pass(); '.repeat(2)}});`,
+		// Shadowed callback parameter should not be treated as AVA test object
+		' test(t => { setTimeout(t => { t.pass(); }, 0); });',
 	],
 	invalid: [
 		{
@@ -97,6 +99,16 @@ ruleTester.run('no-useless-t-pass', rule, {
 		// Async test
 		{
 			code: ' test(async t => { t.pass(); });',
+			errors,
+		},
+		// `tt.plan()` should not suppress outer `t.pass()`
+		{
+			code: ' test(async t => { const attempt = await t.try(tt => { tt.plan(1); tt.pass(); }); t.pass(); await attempt.commit(); });',
+			errors,
+		},
+		// Outer `t.plan()` should not suppress inner `tt.pass()`
+		{
+			code: ' test(async t => { t.plan(1); const attempt = await t.try(tt => { tt.pass(); }); await attempt.commit(); });',
 			errors,
 		},
 	],

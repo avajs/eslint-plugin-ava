@@ -30,6 +30,8 @@ ruleTester.run('prefer-t-throws', rule, {
 		'test(t => { try { t.fail(); } catch (error) { t.pass(); } });',
 		// `t.fail()` is the first statement, code follows it
 		'test(t => { try { t.fail(); foo(); } catch (error) { t.pass(); } });',
+		// `return t.fail()` is the first statement
+		'test(t => { try { return t.fail(); } catch (error) { t.pass(); } });',
 		// Not a test object (`foo.fail()`)
 		'test(t => { try { bar(); foo.fail(); } catch (error) { t.pass(); } });',
 		// `t.fail()` inside for loop in try block, not a direct statement
@@ -168,6 +170,21 @@ ruleTester.run('prefer-t-throws', rule, {
 		{
 			code: 'test(t => { try { foo(); t.fail(); } catch (error) { t.pass(); } try { bar(); t.fail(); } catch (error) { t.pass(); } });',
 			errors: [syncError, syncError],
+		},
+		// `return t.fail()` after throwing code
+		{
+			code: 'test(t => { try { foo(); return t.fail(); } catch (error) { t.pass(); } });',
+			errors: [syncError],
+		},
+		// `await t.fail()` after async throwing code
+		{
+			code: 'test(async t => { try { await foo(); await t.fail(); } catch (error) { t.pass(); } });',
+			errors: [asyncError],
+		},
+		// `return await t.fail()` after async throwing code
+		{
+			code: 'test(async t => { try { await foo(); return await t.fail(); } catch (error) { t.pass(); } });',
+			errors: [asyncError],
 		},
 	],
 });

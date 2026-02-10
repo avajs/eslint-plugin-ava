@@ -1,4 +1,5 @@
 import {visitIf} from 'enhance-visitors';
+import {findVariable} from '@eslint-community/eslint-utils';
 import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
 
@@ -108,8 +109,46 @@ function getSuggestions(modifierNames) {
 	return suggestions;
 }
 
+function hasNamedSerialRoot(node, sourceCode) {
+	const rootObject = node.callee.type === 'MemberExpression'
+		? util.getRootNode(node.callee).object
+		: node.callee;
+
+	if (rootObject.type !== 'Identifier') {
+		return false;
+	}
+
+	const variable = findVariable(sourceCode.getScope(rootObject), rootObject);
+	if (!variable) {
+		return false;
+	}
+
+	return variable.defs.some(definition => definition.type === 'ImportBinding'
+		&& definition.parent?.source?.value === 'ava'
+		&& definition.node.type === 'ImportSpecifier'
+		&& definition.node.imported.name === 'serial');
+}
+
+function getCalleeText(chain, prefix, hasImplicitSerial) {
+	if (!hasImplicitSerial) {
+		return chain ? `${prefix}.${chain}` : prefix;
+	}
+
+	if (chain === 'serial') {
+		return prefix;
+	}
+
+	if (chain.startsWith('serial.')) {
+		const chainWithoutRootSerial = chain.slice('serial.'.length);
+		return chainWithoutRootSerial ? `${prefix}.${chainWithoutRootSerial}` : prefix;
+	}
+
+	return `${prefix}.${chain}`;
+}
+
 const create = context => {
 	const ava = createAvaRule();
+	const {sourceCode} = context;
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -121,18 +160,16 @@ const create = context => {
 
 			// Strip leading `default` modifier (CJS/ESM interop: test.default.serial() → test.serial())
 			const hasDefault = modifierNames[0] === 'default';
-			if (hasDefault) {
-				modifierNames.shift();
-			}
+			const modifiersWithoutDefault = hasDefault ? modifierNames.slice(1) : modifierNames;
+			const hasImplicitSerial = hasNamedSerialRoot(node, sourceCode);
+			const chainModifiers = hasImplicitSerial ? ['serial', ...modifiersWithoutDefault] : modifiersWithoutDefault;
 
-			const chain = modifierNames.join('.');
+			const chain = chainModifiers.join('.');
 
 			if (!validChains.has(chain)) {
-				const fixedChain = getFixedChain(modifierNames);
+				const fixedChain = getFixedChain(chainModifiers);
 				const rootName = util.getNameOfRootNodeObject(node.callee);
 				const prefix = hasDefault ? `${rootName}.default` : rootName;
-
-				const buildCallee = c => c ? `${prefix}.${c}` : prefix;
 
 				context.report({
 					node: node.callee,
@@ -140,13 +177,15 @@ const create = context => {
 					data: {chain},
 					fix: fixedChain === undefined
 						? undefined
-						: fixer => fixer.replaceText(node.callee, buildCallee(fixedChain)),
+						: fixer => fixer.replaceText(node.callee, getCalleeText(fixedChain, prefix, hasImplicitSerial)),
 					suggest: fixedChain === undefined
-						? getSuggestions(modifierNames).map(({chain, removed}) => ({
-							messageId: SUGGESTION_MESSAGE_ID,
-							data: {removed},
-							fix: fixer => fixer.replaceText(node.callee, buildCallee(chain)),
-						}))
+						? getSuggestions(chainModifiers)
+							.filter(({removed}) => !(hasImplicitSerial && removed === 'serial'))
+							.map(({chain, removed}) => ({
+								messageId: SUGGESTION_MESSAGE_ID,
+								data: {removed},
+								fix: fixer => fixer.replaceText(node.callee, getCalleeText(chain, prefix, hasImplicitSerial)),
+							}))
 						: [],
 				});
 			}

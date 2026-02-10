@@ -97,6 +97,14 @@ ruleTester.run('use-t-well', rule, {
 			errors: [error('unknown-member')],
 		},
 		{
+			code: testCase('t.equal = 1;'),
+			errors: [error('unknown-member')],
+		},
+		{
+			code: testCase('t.equal;'),
+			errors: [error('unknown-member')],
+		},
+		{
 			code: testCase('t.deepEqu;'),
 			output: testCase('t.deepEqual;'),
 			errors: [error('misspelled')],

@@ -108,7 +108,7 @@ const create = context => {
 				const {name} = member;
 
 				const synonym = assertionSynonyms.get(name);
-				if (synonym) {
+				if (synonym && isCallExpression(node)) {
 					context.report({
 						node,
 						messageId: MESSAGE_ID_SYNONYM,

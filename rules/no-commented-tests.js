@@ -3,7 +3,7 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'no-commented-tests';
 
-const commentedTestPattern = /^\s*\*?\s*test\s*(?:\.\s*\w+\s*)*\(/;
+const commentedTestPattern = /^\s*\*?\s*(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/;
 
 const create = context => {
 	const ava = createAvaRule();
@@ -15,6 +15,13 @@ const create = context => {
 			}
 
 			for (const comment of context.sourceCode.getAllComments()) {
+				if (
+					comment.type === 'Block'
+					&& context.sourceCode.getText(comment).startsWith('/**')
+				) {
+					continue;
+				}
+
 				const lines = comment.value.split('\n');
 				for (const [index, line] of lines.entries()) {
 					if (commentedTestPattern.test(line)) {
