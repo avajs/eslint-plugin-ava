@@ -16,6 +16,7 @@ import noImportTestFiles from './rules/no-import-test-files.js';
 import noIncorrectDeepEqual from './rules/no-incorrect-deep-equal.js';
 import noInlineAssertions from './rules/no-inline-assertions.js';
 import noInvalidModifierChain from './rules/no-invalid-modifier-chain.js';
+import noNegatedAssertion from './rules/no-negated-assertion.js';
 import noNestedAssertions from './rules/no-nested-assertions.js';
 import noNestedTests from './rules/no-nested-tests.js';
 import noOnlyTest from './rules/no-only-test.js';
@@ -58,6 +59,7 @@ const rules = {
 	'no-incorrect-deep-equal': noIncorrectDeepEqual,
 	'no-inline-assertions': noInlineAssertions,
 	'no-invalid-modifier-chain': noInvalidModifierChain,
+	'no-negated-assertion': noNegatedAssertion,
 	'no-nested-assertions': noNestedAssertions,
 	'no-nested-tests': noNestedTests,
 	'no-only-test': noOnlyTest,
@@ -100,6 +102,7 @@ const recommendedRules = {
 	'ava/no-incorrect-deep-equal': 'error',
 	'ava/no-inline-assertions': 'error',
 	'ava/no-invalid-modifier-chain': 'error',
+	'ava/no-negated-assertion': 'error',
 	'ava/no-nested-assertions': 'error',
 	'ava/no-nested-tests': 'error',
 	'ava/no-only-test': 'error',
