@@ -1,24 +1,7 @@
 import path from 'node:path';
-import {isDeepStrictEqual} from 'node:util';
-import espurify from 'espurify';
 import util from '../util.js';
 
 const MESSAGE_ID = 'use-test';
-
-const avaVariableDeclaratorInitAst = {
-	type: 'CallExpression',
-	callee: {
-		type: 'Identifier',
-		name: 'require',
-	},
-	arguments: [
-		{
-			type: 'Literal',
-			value: 'ava',
-		},
-	],
-	optional: false,
-};
 
 function report(context, node) {
 	context.report({
@@ -40,14 +23,6 @@ const create = context => {
 				}
 
 				const {name} = node.specifiers[0].local;
-				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
-					report(context, node);
-				}
-			}
-		},
-		VariableDeclarator(node) {
-			if (node.init && isDeepStrictEqual(espurify(node.init), avaVariableDeclaratorInitAst)) {
-				const {name} = node.id;
 				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
 					report(context, node);
 				}

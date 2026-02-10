@@ -1,5 +1,5 @@
-import {createRequire} from 'node:module';
 import json from '@eslint/json';
+import packageJson from './package.json' with {type: 'json'};
 import assertionArguments from './rules/assertion-arguments.js';
 import failingTestUrl from './rules/failing-test-url.js';
 import hooksOrder from './rules/hooks-order.js';
@@ -39,8 +39,7 @@ import useTWell from './rules/use-t-well.js';
 import useTest from './rules/use-test.js';
 import useTrueFalse from './rules/use-true-false.js';
 
-const require = createRequire(import.meta.url);
-const {name, version} = require('./package.json');
+const {name, version} = packageJson;
 
 const rules = {
 	'assertion-arguments': assertionArguments,

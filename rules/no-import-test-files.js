@@ -58,15 +58,6 @@ const create = context => {
 		ImportDeclaration(node) {
 			validateImportPath(node, node.source.value);
 		},
-		CallExpression(node) {
-			if (!(node.callee.type === 'Identifier' && node.callee.name === 'require')) {
-				return;
-			}
-
-			if (node.arguments[0]) {
-				validateImportPath(node, node.arguments[0].value);
-			}
-		},
 	};
 };
 

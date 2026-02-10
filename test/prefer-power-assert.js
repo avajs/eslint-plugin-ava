@@ -113,9 +113,6 @@ function testDeclaration(declaration) {
 }
 
 for (const declaration of [
-	'var test = require(\'ava\');',
-	'let test = require(\'ava\');',
-	'const test = require(\'ava\');',
 	'import test from \'ava\';',
 ]) {
 	testDeclaration(declaration);

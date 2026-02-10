@@ -2,11 +2,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import resolveFrom from 'resolve-from';
+import packageJson from './package.json' with {type: 'json'};
 
 const require = createRequire(import.meta.url);
-const pkg = require('./package.json');
 
-const avaConfigFiles = ['ava.config.js', 'ava.config.cjs', 'ava.config.mjs'];
+const avaConfigFiles = ['ava.config.js', 'ava.config.mjs'];
 
 // Walk up from the file to find the directory where AVA is configured.
 // In a monorepo, the nearest package.json may belong to a sub-package
@@ -157,7 +157,7 @@ export {getMembers};
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
-const getDocumentationUrl = (filename, commitHash = `v${pkg.version}`) => {
+const getDocumentationUrl = (filename, commitHash = `v${packageJson.version}`) => {
 	const ruleName = path.basename(filename, '.js');
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };

@@ -1,13 +1,10 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import {createRequire} from 'node:module';
 import test from 'ava';
 import resolveFrom from 'resolve-from';
+import packageJson from '../package.json' with {type: 'json'};
 import util, {findProjectRoot} from '../util.js';
-
-const require = createRequire(import.meta.url);
-const packageJson = require('../package.json');
 
 test('returns the URL of the a named rule\'s documentation', t => {
 	const url = `https://github.com/avajs/eslint-plugin-ava/blob/v${packageJson.version}/docs/rules/foo.md`;
@@ -36,7 +33,7 @@ test.serial('loadAvaHelper retries lookup when helper becomes available', async 
 
 	const overrides = {files: ['test.js']};
 	const helperPath = path.join(fixtureRootDirectory, 'eslint-plugin-helper.js');
-	await fs.writeFile(helperPath, 'module.exports = {load(rootDirectory, options) { return {rootDirectory, options}; }};');
+	await fs.writeFile(helperPath, 'exports.load = (rootDirectory, options) => ({rootDirectory, options});');
 
 	const originalResolveFromSilent = resolveFrom.silent;
 	let isHelperAvailable = false;
@@ -68,7 +65,7 @@ test.serial('loadAvaHelper resolves helper from sub-package when config is at wo
 	await fs.writeFile(testFilename, '');
 
 	const helperPath = path.join(workspaceRootDirectory, 'eslint-plugin-helper.js');
-	await fs.writeFile(helperPath, 'module.exports = {load(rootDirectory, options) { return {rootDirectory, options}; }};');
+	await fs.writeFile(helperPath, 'exports.load = (rootDirectory, options) => ({rootDirectory, options});');
 
 	const originalResolveFromSilent = resolveFrom.silent;
 	resolveFrom.silent = fromDirectory => {
@@ -106,7 +103,7 @@ test.serial('loadAvaHelper resolves hoisted helper outside sub-package root', as
 	// The helper lives at the workspace root (hoisted node_modules), outside the sub-package.
 	const helperPath = path.join(workspaceRootDirectory, 'node_modules', 'ava', 'eslint-plugin-helper.js');
 	await fs.mkdir(path.dirname(helperPath), {recursive: true});
-	await fs.writeFile(helperPath, 'module.exports = {load(rootDirectory, options) { return {rootDirectory, options}; }};');
+	await fs.writeFile(helperPath, 'exports.load = (rootDirectory, options) => ({rootDirectory, options});');
 
 	const originalResolveFromSilent = resolveFrom.silent;
 	resolveFrom.silent = () => helperPath;
@@ -143,17 +140,6 @@ test('findProjectRoot: finds directory with ava.config.js', async t => {
 	const root = await createFixtureDirectory(t);
 	await fs.writeFile(path.join(root, 'package.json'), '{"name":"fixture"}');
 	await fs.writeFile(path.join(root, 'ava.config.js'), '');
-	const testFile = path.join(root, 'test', 'foo.test.js');
-	await fs.mkdir(path.join(root, 'test'), {recursive: true});
-	await fs.writeFile(testFile, '');
-
-	t.is(findProjectRoot(testFile), root);
-});
-
-test('findProjectRoot: finds directory with ava.config.cjs', async t => {
-	const root = await createFixtureDirectory(t);
-	await fs.writeFile(path.join(root, 'package.json'), '{"name":"fixture"}');
-	await fs.writeFile(path.join(root, 'ava.config.cjs'), '');
 	const testFile = path.join(root, 'test', 'foo.test.js');
 	await fs.mkdir(path.join(root, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');

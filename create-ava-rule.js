@@ -1,13 +1,6 @@
 import enhance from 'enhance-visitors';
 import {getTestModifiers, unwrapTypeExpression} from './util.js';
 
-function isRequireCall(node, moduleName) {
-	return node?.type === 'CallExpression'
-		&& node.callee?.type === 'Identifier'
-		&& node.callee.name === 'require'
-		&& node.arguments[0]?.value === moduleName;
-}
-
 export default () => {
 	let isTestFile = false;
 	let currentTestNode;
@@ -52,22 +45,6 @@ export default () => {
 		},
 		VariableDeclarator(node) {
 			const init = unwrapTypeExpression(node.init);
-
-			if (isRequireCall(init, 'ava')) {
-				if (node.id.type === 'Identifier') {
-					isTestFile = true;
-					testIdentifiers.add(node.id.name);
-				} else if (node.id.type === 'ObjectPattern') {
-					for (const property of node.id.properties) {
-						if (property.key?.name === 'serial') {
-							isTestFile = true;
-							testIdentifiers.add(property.value.name);
-						}
-					}
-				}
-
-				return;
-			}
 
 			// Track re-assignment from a test identifier (e.g., `const test = anyTest as TestFn<Context>`)
 			if (init?.type === 'Identifier' && testIdentifiers.has(init.name) && node.id.type === 'Identifier') {

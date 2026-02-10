@@ -28,20 +28,10 @@ const prefixTestCases = (testCases, prefix) => ({
 
 const commonTestCases = {
 	valid: [
-		{code: 'var test = require(\'ava\');', filename: 'file.js'},
-		{code: 'let test = require(\'ava\');', filename: 'file.js'},
-		{code: 'const test = require(\'ava\');', filename: 'file.js'},
-		{code: 'const a = 1, test = require(\'ava\'), b = 2;', filename: 'file.js'},
-		{code: 'const test = require(\'foo\');', filename: 'file.js'},
 		{code: 'import test from \'ava\';', filename: 'file.js'},
 		{code: 'import test, {} from \'ava\';', filename: 'file.js'},
 		{code: 'import test from \'foo\';', filename: 'file.js'},
 		...typescriptExtensions.flatMap(extension => [
-			{code: 'var anyTest = require(\'ava\');', filename: `file${extension}`},
-			{code: 'let anyTest = require(\'ava\');', filename: `file${extension}`},
-			{code: 'const anyTest = require(\'ava\');', filename: `file${extension}`},
-			{code: 'const a = 1, anyTest = require(\'ava\'), b = 2;', filename: `file${extension}`},
-			{code: 'const anyTest = require(\'foo\');', filename: `file${extension}`},
 			{code: 'import anyTest from \'ava\';', filename: `file${extension}`},
 			{code: 'import anyTest, {} from \'ava\';', filename: `file${extension}`},
 			{code: 'import anyTest from \'foo\';', filename: `file${extension}`},
@@ -49,17 +39,9 @@ const commonTestCases = {
 	],
 	invalid: [
 		...typescriptExtensions.flatMap(extension => [
-			{code: 'var ava = require(\'ava\');', errors, filename: `file${extension}`},
-			{code: 'let ava = require(\'ava\');', errors, filename: `file${extension}`},
-			{code: 'const ava = require(\'ava\');', errors, filename: `file${extension}`},
-			{code: 'const a = 1, ava = require(\'ava\'), b = 2;', errors, filename: `file${extension}`},
 			{code: 'import ava from \'ava\';', errors, filename: `file${extension}`},
 		]),
-		{
-			code: 'var anyTest = require(\'ava\');',
-			errors,
-			filename: 'file.js',
-		},
+		{code: 'import anyTest from \'ava\';', errors, filename: 'file.js'},
 	],
 };
 

@@ -33,15 +33,6 @@ const errors = [
 
 ruleTester.run('rule-fixture', rule, {
 	valid: [
-		// `require` patterns
-		'const test = require(\'ava\');',
-		'let test = require(\'ava\');',
-		'var test = require(\'ava\');',
-		{name: 'require in multi-declaration', code: 'const a = 1, test = require(\'ava\'), b = 2;'},
-		'const {serial} = require(\'ava\');',
-		'const {serial: test} = require(\'ava\');',
-		{name: 'require anyTest', code: 'const anyTest = require(\'ava\');'},
-		{name: 'require destructure with rest element', code: 'const { serial, ...rest } = require(\'ava\');'},
 		// `import` patterns
 		'import test from \'ava\';',
 		'import {serial} from \'ava\';',
@@ -55,13 +46,10 @@ ruleTester.run('rule-fixture', rule, {
 
 	invalid: [
 		// Non-ava source
-		{name: 'require non-ava', code: 'const test = require(\'not-ava\');', errors},
 		{name: 'import non-ava', code: 'import test from \'not-ava\';', errors},
-		// No import/require at all
+		// No AVA import at all
 		{name: 'no ava import', code: 'test(t => {});', errors},
 		// Unknown named exports
-		{code: 'const {serial2} = require(\'ava\');', errors},
-		{code: 'const {serial2: test} = require(\'ava\');', errors},
 		{code: 'import {serial2} from \'ava\';', errors},
 		{code: 'import {serial2 as test} from \'ava\';', errors},
 	],
