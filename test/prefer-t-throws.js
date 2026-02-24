@@ -8,8 +8,8 @@ const asyncError = {messageId: 'prefer-t-throws-async'};
 
 ruleTester.run('prefer-t-throws', rule, {
 	valid: [
-		// Try/catch without `t.fail()`
-		'test(t => { try { foo(); } catch (error) { t.is(error.message, "expected"); } });',
+		// Try/catch without `t.fail()` and without asserting on the caught error
+		'test(t => { try { foo(); } catch { t.pass(); } });',
 		// Try/finally without catch
 		'test(t => { try { foo(); } finally { cleanup(); } });',
 		// `t.fail()` inside a nested arrow function, not a direct statement
@@ -51,9 +51,19 @@ ruleTester.run('prefer-t-throws', rule, {
 			code: 'test(t => { try { foo(); t.fail(); } catch (error) { t.is(error.message, "expected"); } });',
 			errors: [syncError],
 		},
+		// Issue #156 pattern (sync)
+		{
+			code: 'test(t => { try { request(requestOptions); } catch (error) { t.true(error.statusCode === 500); } });',
+			errors: [syncError],
+		},
 		// Basic async with `await` in try block
 		{
 			code: 'test(async t => { try { await foo(); t.fail(); } catch (error) { t.is(error.message, "expected"); } });',
+			errors: [asyncError],
+		},
+		// Issue #156 pattern (async)
+		{
+			code: 'test(async t => { try { await request(requestOptions); } catch (error) { t.true(error.statusCode === 500); } });',
 			errors: [asyncError],
 		},
 		// With message argument to `t.fail()`

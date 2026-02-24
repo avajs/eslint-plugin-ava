@@ -104,6 +104,92 @@ function hasDirectAwait(node) {
 	return false;
 }
 
+function referencesIdentifier(node, identifierName) {
+	if (!node || typeof node !== 'object') {
+		return false;
+	}
+
+	if (node.type === 'Identifier' && node.name === identifierName) {
+		return true;
+	}
+
+	// Don't descend into nested function scopes
+	if (
+		node.type === 'FunctionExpression'
+		|| node.type === 'ArrowFunctionExpression'
+		|| node.type === 'FunctionDeclaration'
+	) {
+		return false;
+	}
+
+	for (const key of Object.keys(node)) {
+		if (key === 'parent') {
+			continue;
+		}
+
+		const child = node[key];
+		if (Array.isArray(child)) {
+			if (child.some(element => referencesIdentifier(element, identifierName))) {
+				return true;
+			}
+		} else if (child && typeof child === 'object' && child.type && referencesIdentifier(child, identifierName)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function getSingleTryStatement(node) {
+	if (!node?.block?.body || node.block.body.length !== 1) {
+		return undefined;
+	}
+
+	const statement = node.block.body[0];
+	// Basic "might throw" patterns: `foo()` / `await foo()` / `return foo()` / `return await foo()`
+	if (statement.type === 'ExpressionStatement') {
+		return statement.expression;
+	}
+
+	if (statement.type === 'ReturnStatement') {
+		return statement.argument;
+	}
+
+	return undefined;
+}
+
+function isTryCatchAssertsOnErrorPattern(node) {
+	if (!node.handler?.param || node.handler.param.type !== 'Identifier') {
+		return false;
+	}
+
+	const tryExpression = getSingleTryStatement(node);
+	if (!tryExpression) {
+		return false;
+	}
+
+	// Require an actual call or awaited call.
+	const callExpression = tryExpression.type === 'AwaitExpression' ? tryExpression.argument : tryExpression;
+	if (!callExpression || callExpression.type !== 'CallExpression') {
+		return false;
+	}
+
+	const catchStatements = node.handler.body?.body;
+	if (!catchStatements || catchStatements.length === 0) {
+		return false;
+	}
+
+	// Don't flag if the catch block rethrows/returns (might be real error handling).
+	if (catchStatements.some(statement => statement.type === 'ThrowStatement' || statement.type === 'ReturnStatement')) {
+		return false;
+	}
+
+	const errorName = node.handler.param.name;
+
+	// Only flag if the catch block actually inspects the caught error.
+	return catchStatements.some(statement => referencesIdentifier(statement, errorName));
+}
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -118,18 +204,29 @@ const create = context => {
 
 			const tFailIndex = findTFailIndex(node.block.body);
 
-			// No t.fail() found, or it's the first statement (no throwing code before it)
-			if (tFailIndex < 1) {
+			// Primary pattern: try block contains throwing code followed by direct `t.fail()`.
+			if (tFailIndex >= 1) {
+				const statementsBeforeFail = node.block.body.slice(0, tFailIndex);
+				const isAsync = statementsBeforeFail.some(statement => hasDirectAwait(statement));
+
+				context.report({
+					node,
+					messageId: isAsync ? MESSAGE_ID_ASYNC : MESSAGE_ID_SYNC,
+				});
 				return;
 			}
 
-			const statementsBeforeFail = node.block.body.slice(0, tFailIndex);
-			const isAsync = statementsBeforeFail.some(statement => hasDirectAwait(statement));
+			// Secondary pattern (issue #156): try block runs a single (possibly awaited) call,
+			// catch block asserts on the caught error (without rethrow/return).
+			if (isTryCatchAssertsOnErrorPattern(node)) {
+				const tryExpression = getSingleTryStatement(node);
+				const isAsync = hasDirectAwait(tryExpression);
 
-			context.report({
-				node,
-				messageId: isAsync ? MESSAGE_ID_ASYNC : MESSAGE_ID_SYNC,
-			});
+				context.report({
+					node,
+					messageId: isAsync ? MESSAGE_ID_ASYNC : MESSAGE_ID_SYNC,
+				});
+			}
 		}),
 	});
 };
