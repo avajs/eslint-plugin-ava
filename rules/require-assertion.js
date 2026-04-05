@@ -180,7 +180,7 @@ const create = context => {
 				return;
 			}
 
-			const methodName = util.getMembers(node.callee).find(name => name !== 'skip');
+			const methodName = util.getAssertionMethod(node.callee);
 			if (util.assertionMethods.has(methodName) || methodName === 'plan') {
 				assertionCount++;
 			}

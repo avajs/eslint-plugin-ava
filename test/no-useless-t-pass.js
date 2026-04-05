@@ -46,10 +46,6 @@ ruleTester.run('no-useless-t-pass', rule, {
 			code: ' test(t => { t.pass(); t.is(1, 1); });',
 			errors,
 		},
-		{
-			code: ' test(t => { t.skip.pass(); });',
-			errors,
-		},
 		// Two tests: one valid (has t.plan), one invalid (no t.plan) - ensures state resets
 		{
 			code: ' test(t => { t.plan(1); t.pass(); }); test(t => { t.pass(); });',

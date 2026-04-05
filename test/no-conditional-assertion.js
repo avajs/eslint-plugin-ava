@@ -119,7 +119,7 @@ ruleTester.run('no-conditional-assertion', rule, {
 			code: 'test(t => { if (x) { tt.is(a, b); } });',
 			errors: [error],
 		},
-		// With .skip modifier
+		// With trailing .skip modifier
 		{
 			code: 'test(t => { if (x) { t.throws.skip(fn); } });',
 			errors: [error],

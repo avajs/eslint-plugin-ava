@@ -176,5 +176,31 @@ ruleTester.run('use-true-false', rule, {
 			output: testCase('tt.true(true)'),
 			errors: trueErrors,
 		},
+		// With supported trailing .skip modifier
+		{
+			code: testCase('t.truthy.skip(true)'),
+			output: testCase('t.true.skip(true)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.truthy.skip(value === 1)'),
+			output: testCase('t.true.skip(value === 1)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.falsy.skip(value === 1)'),
+			output: testCase('t.false.skip(value === 1)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.is.skip(x, true)'),
+			output: testCase('t.true.skip(x)'),
+			errors: isTrueErrors,
+		},
+		{
+			code: testCase('t.is.skip(x, false)'),
+			output: testCase('t.false.skip(x)'),
+			errors: isFalseErrors,
+		},
 	],
 });

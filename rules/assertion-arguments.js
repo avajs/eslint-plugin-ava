@@ -249,7 +249,7 @@ const create = context => {
 			}
 
 			const gottenArguments = node.arguments.length;
-			const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
+			const firstNonSkipMember = util.getAssertionMethod(callee);
 
 			if (firstNonSkipMember === 'end') {
 				if (gottenArguments > 1) {

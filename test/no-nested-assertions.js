@@ -66,7 +66,7 @@ ruleTester.run('no-nested-assertions', rule, {
 			code: 'test(t => { t.is(t.throws(() => { t.pass(); }).message, "x"); });',
 			errors: [error, error],
 		},
-		// With .skip modifier
+		// With trailing .skip modifier
 		{
 			code: 'test(t => { t.is(t.throws.skip(fn).message, "expected"); });',
 			errors: [error],

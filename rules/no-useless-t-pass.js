@@ -37,7 +37,7 @@ function isAllowedTryCall(node, sourceCode, allowedTestObjectVariables) {
 		return false;
 	}
 
-	const firstNonSkipMember = util.getMembers(node.callee).find(name => name !== 'skip');
+	const firstNonSkipMember = util.getAssertionMethod(node.callee);
 	if (firstNonSkipMember !== 'try') {
 		return false;
 	}
@@ -132,7 +132,7 @@ const create = context => {
 				return;
 			}
 
-			const firstNonSkipMember = util.getMembers(callee).find(name => name !== 'skip');
+			const firstNonSkipMember = util.getAssertionMethod(callee);
 			if (firstNonSkipMember === 'plan') {
 				hasPlanByTestObject.set(testObjectKey, true);
 			} else if (firstNonSkipMember === 'pass') {

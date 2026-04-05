@@ -81,11 +81,6 @@ ruleTester.run('prefer-t-throws', rule, {
 			code: 'test(t => { try { foo(); t1.fail(); } catch (error) { t1.pass(); } });',
 			errors: [syncError],
 		},
-		// `t.skip.fail()`
-		{
-			code: 'test(t => { try { foo(); t.skip.fail(); } catch (error) { t.pass(); } });',
-			errors: [syncError],
-		},
 		// With `t.plan()`
 		{
 			code: 'test(t => { t.plan(1); try { foo(); t.fail(); } catch (error) { t.is(error.code, 1); } });',

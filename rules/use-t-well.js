@@ -102,6 +102,15 @@ const create = context => {
 
 			const members = getMemberNodes(node);
 
+			if (members[0].name === 'skip' && members.length > 1) {
+				context.report({
+					node,
+					messageId: MESSAGE_ID_UNKNOWN_ASSERTION,
+					data: {name: 'skip'},
+				});
+				return;
+			}
+
 			const skipPositions = [];
 			let hadCall = false;
 			for (const [i, member] of members.entries()) {
@@ -121,6 +130,10 @@ const create = context => {
 				let corrected = correcter.correct(name);
 
 				if (i !== 0 && (corrected === 'context' || corrected === 'title')) { // `context` and `title` can only be first
+					corrected = undefined;
+				}
+
+				if (i === 0 && corrected === 'skip' && members.length > 1) {
 					corrected = undefined;
 				}
 

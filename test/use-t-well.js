@@ -190,13 +190,11 @@ ruleTester.run('use-t-well', rule, {
 
 		{
 			code: testCase('t.skip.deepEqual(a, a);'),
-			output: testCase('t.deepEqual.skip(a, a);'),
-			errors: [error('skip-position')],
+			errors: [error('unknown-assertion')],
 		},
 		{
 			code: testCase('t.skp.deepEqual(a, a);'),
-			output: testCase('t.skip.deepEqual(a, a);'),
-			errors: [error('misspelled')],
+			errors: [error('unknown-assertion')],
 		},
 		{
 			code: testCase('t.deepEqual.context(a, a);'),
@@ -218,8 +216,7 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('tt.skip.deepEqual(a, a);'),
-			output: testCase('tt.deepEqual.skip(a, a);'),
-			errors: [error('skip-position')],
+			errors: [error('unknown-assertion')],
 		},
 		{
 			code: testCase('tt.deepEqual.skip.skip(a, a);'),

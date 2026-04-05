@@ -36,8 +36,6 @@ ruleTester.run('require-assertion', rule, {
 		'test(t => { t.try(tt => { tt.is(1, 1); }); });',
 		// Skipped assertion still counts
 		'test(t => { t.is.skip(1, 1); });',
-		// Alternate skip prefix form
-		'test(t => { t.skip.is(1, 1); });',
 		// Passing `t` to a function counts (assertions may happen there)
 		'test(t => { helper(t); });',
 		'test(t => { lib.verify(t, value); });',
@@ -96,6 +94,8 @@ ruleTester.run('require-assertion', rule, {
 		invalid('test(t => { t.teardown(() => {}); });'),
 		// `t.timeout` is not an assertion
 		invalid('test(t => { t.timeout(5000); });'),
+		// Unsupported leading `skip` chain is not an assertion
+		invalid('test(t => { t.skip.is(1, 1); });'),
 		// Empty test body
 		invalid('test(t => {});'),
 		// `test.serial` still requires assertions

@@ -7,8 +7,12 @@ ruleTester.run('use-t-throws-async-well', rule, {
 	valid: [
 		asyncTestCase('await t.throwsAsync(f)'),
 		asyncTestCase('await t.notThrowsAsync(f)'),
+		asyncTestCase('t.throwsAsync.skip(f)'),
+		asyncTestCase('t.notThrowsAsync.skip(f)'),
 		asyncTestCase('t.throws(f)'),
 		asyncTestCase('t.notThrows(f)'),
+		asyncTestCase('t.context.helpers.throwsAsync(f)'),
+		asyncTestCase('t.context.notThrowsAsync(f)'),
 		asyncTestCase('f(t.throwsAsync(f))'),
 		asyncTestCase('let p = t.throwsAsync(f)'),
 		asyncTestCase('p = t.throwsAsync(f)'),

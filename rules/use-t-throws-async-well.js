@@ -4,6 +4,18 @@ import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'use-t-throws-async-well';
 
+const isThrowsAsyncAssertion = callee => {
+	// `.skip` swaps in AVA's synchronous skip helper, so only the real async assertions need `await`.
+	if (
+		callee.type !== 'MemberExpression'
+		|| (callee.property.name !== 'throwsAsync' && callee.property.name !== 'notThrowsAsync')
+	) {
+		return false;
+	}
+
+	return callee.object.type === 'Identifier' && util.isTestObject(callee.object.name);
+};
+
 const create = context => {
 	const ava = createAvaRule();
 
@@ -14,9 +26,7 @@ const create = context => {
 		])(node => {
 			if (
 				node.parent.type === 'ExpressionStatement'
-				&& node.callee.type === 'MemberExpression'
-				&& (node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync')
-				&& util.isTestObject(node.callee.object.name)
+				&& isThrowsAsyncAssertion(node.callee)
 			) {
 				if (ava.isInTestNode().arguments[0].async) {
 					context.report({

@@ -15,8 +15,8 @@ function testNotAllowedMethod(methodName) {
 				errors,
 			},
 			{
-				name: `[not allowed: ${methodName}] t.skip.${methodName}`,
-				code: `test(t => { t.skip.${methodName}; });`,
+				name: `[not allowed: ${methodName}] t.${methodName.split('(')[0]}.skip(...)`,
+				code: `test(t => { t.${methodName.split('(')[0]}.skip(foo); });`,
 				errors,
 			},
 		],
@@ -47,8 +47,8 @@ function testAllowedMethod(methodName) {
 				code: `test(t => { t.${methodName}; });`,
 			},
 			{
-				name: `[allowed: ${methodName}] t.skip.${methodName}`,
-				code: `test(t => { t.skip.${methodName}; });`,
+				name: `[allowed: ${methodName}] t.${methodName.split('(')[0]}.skip(...)`,
+				code: `test(t => { t.${methodName.split('(')[0]}.skip(foo); });`,
 			},
 		],
 		invalid: [],
@@ -132,6 +132,14 @@ ruleTester.run('prefer-power-assert - nested', rule, {
 		{
 			name: '[nested] function expression',
 			code: 'test(function (t) { t.assert(foo); });',
+		},
+		{
+			name: '[malformed] invalid chained member',
+			code: 'test(t => { t.is.context(foo); });',
+		},
+		{
+			name: '[malformed] invalid trailing member',
+			code: 'test(t => { t.truthy.foo(bar); });',
 		},
 		// Shouldn't be triggered since it's not a test file
 		{

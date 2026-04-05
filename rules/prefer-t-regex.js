@@ -171,8 +171,8 @@ const create = context => {
 			];
 		};
 
-		// Only fix a statically verifiable equality.
-		if (regex && matchee.type === 'Literal') {
+		// Only fix when regex is an actual test/match/search call, not a bare regex literal.
+		if (regex?.type === 'CallExpression' && matchee.type === 'Literal') {
 			let assertion;
 
 			if (matchee.raw === 'true') {

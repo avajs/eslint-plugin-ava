@@ -12,8 +12,12 @@ ruleTester.run('no-skip-assert', rule, {
 		'test(t => { t.context.is.skip(1, 1); });',
 		'test(t => { foo.t.is.skip(1, 1); });',
 		'test(t => { t.skip(); });',
+		'test(t => { t.skip.is(1, 1); });',
+		'test(t => { t.skip.true(1); });',
+		'test(t => { tt.skip.is(1, 1); });',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(t => { t.is.skip(1, 1); });', noHeader: true},
+		{code: 'test(t => { t.skip.is(1, 1); });', noHeader: true},
 	],
 	invalid: [
 		{

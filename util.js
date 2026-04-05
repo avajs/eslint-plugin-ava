@@ -155,6 +155,18 @@ const getMembers = node => {
 
 export {getMembers};
 
+export const getAssertionMethod = callee => {
+	const [firstMember] = getMembers(callee);
+
+	// AVA models `.skip` as a modifier on assertion methods, for example `t.is.skip()`.
+	// Leading chains like `t.skip.is()` are not supported and should not be treated as assertions.
+	if (firstMember === 'skip') {
+		return undefined;
+	}
+
+	return firstMember;
+};
+
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
 const getDocumentationUrl = (filename, commitHash = `v${packageJson.version}`) => {
@@ -207,6 +219,7 @@ export default {
 	getTestModifier,
 	removeTestModifier,
 	getMembers,
+	getAssertionMethod,
 	getDocsUrl,
 	assertionMethodsNumberArguments,
 	assertionMethods,

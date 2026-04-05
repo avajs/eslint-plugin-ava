@@ -22,7 +22,7 @@ const create = context => {
 				return;
 			}
 
-			const methodName = util.getMembers(node.callee)[0];
+			const methodName = util.getAssertionMethod(node.callee);
 			if (!util.assertionMethods.has(methodName)) {
 				return;
 			}

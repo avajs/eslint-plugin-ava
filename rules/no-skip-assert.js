@@ -13,22 +13,30 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isInTestNode,
 		])(node => {
-			if (node.property.name === 'skip') {
-				const root = util.getRootNode(node);
-				if (util.isTestObject(root.object.name) && util.assertionMethods.has(root.property.name)) {
-					context.report({
-						node,
-						messageId: MESSAGE_ID,
-						suggest: [{
-							messageId: MESSAGE_ID_SUGGESTION,
-							fix(fixer) {
-								const {sourceCode} = context;
-								const dotToken = sourceCode.getTokenBefore(node.property);
-								return fixer.removeRange([dotToken.range[0], node.property.range[1]]);
-							},
-						}],
-					});
-				}
+			if (node.property.name !== 'skip') {
+				return;
+			}
+
+			const root = util.getRootNode(node);
+			if (!util.isTestObject(root.object.name)) {
+				return;
+			}
+
+			// Only flag real AVA assertion modifiers like `t.is.skip()`.
+			// Unsupported chains like `t.skip.is()` are left alone.
+			if (util.assertionMethods.has(root.property.name)) {
+				context.report({
+					node,
+					messageId: MESSAGE_ID,
+					suggest: [{
+						messageId: MESSAGE_ID_SUGGESTION,
+						fix(fixer) {
+							const {sourceCode} = context;
+							const dotToken = sourceCode.getTokenBefore(node.property);
+							return fixer.removeRange([dotToken.range[0], node.property.range[1]]);
+						},
+					}],
+				});
 			}
 		}),
 	});

@@ -42,20 +42,19 @@ function findTFailIndex(body) {
 
 	for (const [index, statement] of body.entries()) {
 		const callExpression = getCallExpression(statement);
-		if (callExpression?.callee.type === 'MemberExpression') {
-			const {callee} = callExpression;
-			const rootName = util.getNameOfRootNodeObject(callee);
+		if (callExpression?.callee.type !== 'MemberExpression') {
+			continue;
+		}
 
-			if (
-				util.isTestObject(rootName)
-				&& !util.isPropertyUnderContext(callee)
-			) {
-				const members = util.getMembers(callee);
-				const firstNonSkipMember = members.find(name => name !== 'skip');
-				if (firstNonSkipMember === 'fail') {
-					return index;
-				}
-			}
+		const {callee} = callExpression;
+		const rootName = util.getNameOfRootNodeObject(callee);
+
+		if (
+			util.isTestObject(rootName)
+			&& !util.isPropertyUnderContext(callee)
+			&& util.getAssertionMethod(callee) === 'fail'
+		) {
+			return index;
 		}
 	}
 

@@ -36,6 +36,9 @@ ruleTester.run('prefer-t-regex', rule, {
 		'test(t => t.truthy())',
 		'test(t => t.deepEqual(true))',
 		String.raw`test(t => t.is(/\d+/))`,
+		// Bare regex compared to boolean is not a regex test pattern
+		String.raw`test(t => t.is(/\d+/, true))`,
+		String.raw`test(t => t.is(true, /\d+/))`,
 	],
 	invalid: [
 		{

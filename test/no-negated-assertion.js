@@ -19,7 +19,7 @@ ruleTester.run('no-negated-assertion', rule, {
 		testCase('foo.true(!x)'),
 		// `t.context` is not an assertion
 		testCase('t.context.true(!x)'),
-		// Invalid modifier order; handled by other rules
+		// Unsupported leading skip chain; handled by other rules
 		testCase('t.skip.true(!x)'),
 		// Invalid trailing member; handled by other rules
 		testCase('t.true.context(!x)'),

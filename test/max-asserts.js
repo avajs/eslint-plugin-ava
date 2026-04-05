@@ -17,6 +17,7 @@ ruleTester.run('max-asserts', rule, {
 		`,
 		`test(t => { t.plan(5); ${nbAssertions(5)} });`,
 		`test(t => { t.is.skip(1, 1); ${nbAssertions(4)} });`,
+		`test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`,
 		{
 			code: `test(t => { ${nbAssertions(3)} });`,
 			options: [{max: 3}],
@@ -44,10 +45,6 @@ ruleTester.run('max-asserts', rule, {
 		},
 		{
 			code: `test(t => { t.plan(5); ${nbAssertions(6)} });`,
-			errors: maxAssertsError,
-		},
-		{
-			code: `test(t => { t.skip.is(1, 1); ${nbAssertions(5)} });`,
 			errors: maxAssertsError,
 		},
 		{

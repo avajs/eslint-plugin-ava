@@ -60,12 +60,24 @@ const create = context => {
 		])(node => {
 			if (
 				node.callee.type !== 'MemberExpression'
-				|| !util.isTestObject(node.callee.object.name)
 			) {
 				return;
 			}
 
-			const {name} = node.callee.property;
+			const root = util.getRootNode(node.callee);
+			if (
+				root.object.type !== 'Identifier'
+				|| !util.isTestObject(root.object.name)
+			) {
+				return;
+			}
+
+			const members = util.getMembers(node.callee);
+			const name = util.getAssertionMethod(node.callee);
+
+			if (!name || !members.slice(1).every(member => member === 'skip')) {
+				return;
+			}
 
 			if (name === 'truthy' || name === 'falsy') {
 				const argument = node.arguments[0];
@@ -81,7 +93,7 @@ const create = context => {
 						node,
 						messageId: isFalsy ? MESSAGE_ID_FALSE : MESSAGE_ID_TRUE,
 						fix(fixer) {
-							return fixer.replaceText(node.callee.property, isFalsy ? 'false' : 'true');
+							return fixer.replaceText(root.property, isFalsy ? 'false' : 'true');
 						},
 					});
 				}
@@ -119,7 +131,7 @@ const create = context => {
 							: source.getText(otherArgument);
 
 						return [
-							fixer.replaceText(node.callee.property, assertion),
+							fixer.replaceText(root.property, assertion),
 							fixer.replaceTextRange(
 								[first.range[0], node.arguments.at(-1).range[1]],
 								newArguments,

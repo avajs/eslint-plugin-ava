@@ -17,7 +17,7 @@ function isAssertionCall(node) {
 		return false;
 	}
 
-	return util.assertionMethods.has(util.getMembers(node.callee)[0]);
+	return util.assertionMethods.has(util.getAssertionMethod(node.callee));
 }
 
 function analyzeStatements(statements) {

@@ -12,7 +12,7 @@ Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/rela
 
 Prevent the use of unknown assertion methods and the access to members other than the assertion methods and `.context`, as well as some known misuses of `t`.
 
-This rule is partly fixable. It can fix most misspelled assertion method names, suggest AVA equivalents for common assertion names from other test frameworks (tape, Jest, node:assert), and fix incorrect usages of `.skip`.
+This rule is partly fixable. It can fix most misspelled assertion method names, suggest AVA equivalents for common assertion names from other test frameworks (tape, Jest, node:assert), and fix duplicate `.skip` modifiers on supported assertion chains.
 
 ## Examples
 
@@ -27,7 +27,7 @@ test('main', t => {
 	t.equal(a, b); // Unknown assertion method `.equal`. Did you mean `.is`?, fixable
 	t.contxt.foo = 100; // Misspelled `.context` as `.contxt`, fixable
 	t.deepEqual.skip.skip(); // Too many chained uses of `.skip`, fixable
-	t.skip.deepEqual(1, 1); // `.skip` modifier should be the last in chain, fixable
+	t.skip.deepEqual(1, 1); // Unknown assertion method `.skip`
 	t.foo = 1000; // Unknown member `.foo`. Use `.context.foo` instead
 	t.deepEqual.is(value, value); // Can't chain assertion methods
 	t.skip(); // Missing assertion method
