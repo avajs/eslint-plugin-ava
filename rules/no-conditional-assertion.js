@@ -243,10 +243,10 @@ function isBalanced(node) {
 	}
 }
 
-function * conditionalAncestors(node) {
+function * conditionalAncestors(node, testNode) {
 	let child = node;
 	let current = node.parent;
-	while (current) {
+	while (current && current !== testNode) {
 		if (conditionalTypes.has(current.type) && shouldTrackConditionalAncestor(current, child)) {
 			yield current;
 		}
@@ -277,7 +277,7 @@ const create = context => {
 				return;
 			}
 
-			for (const conditional of conditionalAncestors(node)) {
+			for (const conditional of conditionalAncestors(node, ava.isInTestNode())) {
 				if (!isBalanced(conditional)) {
 					context.report({node, messageId: MESSAGE_ID});
 					break;

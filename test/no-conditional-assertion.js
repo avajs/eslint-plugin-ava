@@ -62,6 +62,16 @@ ruleTester.run('no-conditional-assertion', rule, {
 		'test(t => { t.pass() && setup(); });',
 		// Logical expression with guaranteed assertion in one if-branch is balanced
 		'test(t => { if (x) { t.pass() && setup(); } else { t.pass(); } });',
+		// Conditional wrapping the entire test call (test registration is conditional, not the assertion)
+		'if (x) { test(t => { t.is(a, b); }); }',
+		// Multiple tests in a conditional block
+		'if (x) { test(t => { t.is(a, b); }); test(t => { t.true(y); }); }',
+		// Conditional wrapping test.serial
+		'if (x) { test.serial(t => { t.is(a, b); }); }',
+		// Conditional wrapping a hook
+		'if (x) { test.before(t => { t.pass(); }); }',
+		// Switch wrapping test calls
+		'switch (env) { case "prod": test(t => { t.is(a, b); }); break; }',
 	],
 	invalid: [
 		// If statement without else
@@ -218,6 +228,11 @@ ruleTester.run('no-conditional-assertion', rule, {
 		{
 			code: 'test(t => { if (x) { ready && t.pass(); } else { t.pass(); } });',
 			errors: [error, error],
+		},
+		// Inner conditional inside a conditionally-registered test is still flagged
+		{
+			code: 'if (x) { test(t => { if (y) { t.is(a, b); } }); }',
+			errors: [error],
 		},
 	],
 });
