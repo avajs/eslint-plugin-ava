@@ -39,6 +39,24 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 				t.deepEqual(/regex/, expression);
 			});
 		`,
+		// String message argument (3rd arg) should not trigger the rule
+		`
+			test('x', t => {
+				t.deepEqual(expression, otherExpression, 'message');
+			});
+		`,
+		// Non-assertion method should not be flagged
+		`
+			test('x', t => {
+				t.plan(1);
+			});
+		`,
+		// Not a test object
+		`
+			test('x', t => {
+				foo.deepEqual(expression, 'bar');
+			});
+		`,
 	],
 	invalid: [
 		{
@@ -258,6 +276,113 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			output: `
 				test('x', t => {
 					t.not(undefined, expression);
+				});
+			`,
+			errors: [error],
+		},
+		// Boolean literals
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, true);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, true);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(false, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(false, expression);
+				});
+			`,
+			errors: [error],
+		},
+		// .skip variants
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual.skip(expression, 'foo');
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is.skip(expression, 'foo');
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual.skip(expression, 'foo');
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not.skip(expression, 'foo');
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual.skip(expression, undefined);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is.skip(expression, undefined);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual.skip(expression, \`template\`);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is.skip(expression, \`template\`);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual.skip(expression, null);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not.skip(expression, null);
+				});
+			`,
+			errors: [error],
+		},
+		// Primitive as first argument with .skip
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual.skip(42, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is.skip(42, expression);
 				});
 			`,
 			errors: [error],
