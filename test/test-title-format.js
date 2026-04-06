@@ -32,6 +32,15 @@ ruleTester.run('test-title-format', rule, {
 			code: 'test(macro, t => { t.pass(); });',
 			options: [{format: '^Should'}],
 		},
+		{
+			code: 'test(`Should pass tests.`, t => { t.pass(); });',
+			options: [{format: String.raw`^Should .+\.$`}],
+		},
+		{
+			// Template literal with expressions can't be statically checked
+			code: 'test(`${prefix} test`, t => { t.pass(); });',
+			options: [{format: '^Should'}],
+		},
 		// Shouldn't be triggered since it's not a test file
 		{
 			code: 'test("Test", t => { t.pass(); });',
@@ -47,6 +56,11 @@ ruleTester.run('test-title-format', rule, {
 		},
 		{
 			code: 'test.todo("Test something");',
+			options: [{format: '^Should'}],
+			errors,
+		},
+		{
+			code: 'test(`Test something`, t => { t.pass(); });',
 			options: [{format: '^Should'}],
 			errors,
 		},

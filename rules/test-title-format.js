@@ -25,7 +25,15 @@ const create = context => {
 
 			if (hasTitle) {
 				const title = node.arguments[0];
-				if (title.type === 'Literal' && !titleRegExp.test(title.value)) {
+
+				let titleValue;
+				if (title.type === 'Literal') {
+					titleValue = title.value;
+				} else if (title.type === 'TemplateLiteral' && title.expressions.length === 0) {
+					titleValue = title.quasis[0].value.cooked;
+				}
+
+				if (typeof titleValue === 'string' && !titleRegExp.test(titleValue)) {
 					context.report({
 						node,
 						messageId: MESSAGE_ID,
