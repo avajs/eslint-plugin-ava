@@ -116,6 +116,10 @@ const create = context => {
 			for (const [i, member] of members.entries()) {
 				const {name} = member;
 
+				if (!name) {
+					return; // Computed property — can't statically analyze
+				}
+
 				const synonym = assertionSynonyms.get(name);
 				if (synonym && isCallExpression(node)) {
 					context.report({
