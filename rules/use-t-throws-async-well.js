@@ -28,20 +28,18 @@ const create = context => {
 				node.parent.type === 'ExpressionStatement'
 				&& isThrowsAsyncAssertion(node.callee)
 			) {
-				if (ava.isInTestNode().arguments[0].async) {
-					context.report({
-						node,
-						messageId: MESSAGE_ID,
-						data: {method: node.callee.property.name},
-						fix: fixer => fixer.replaceText(node.callee, `await ${context.sourceCode.getText(node.callee)}`),
-					});
-				} else {
-					context.report({
-						node,
-						messageId: MESSAGE_ID,
-						data: {method: node.callee.property.name},
-					});
-				}
+				const testNode = ava.isInTestNode();
+				const implementationArg = testNode.arguments.find(arg => util.isFunctionExpression(util.unwrapTypeExpression(arg)));
+				const implementation = util.unwrapTypeExpression(implementationArg);
+				const fix = implementation?.async
+					? fixer => fixer.replaceText(node.callee, `await ${context.sourceCode.getText(node.callee)}`)
+					: undefined;
+				context.report({
+					node,
+					messageId: MESSAGE_ID,
+					data: {method: node.callee.property.name},
+					fix,
+				});
 			}
 		}),
 	});
