@@ -2,7 +2,7 @@
 
 📝 Disallow duplicate test modifiers.
 
-❌ This rule is deprecated.
+❌ This rule is [deprecated](https://github.com/avajs/eslint-plugin-ava/blob/v16.0.0/docs/rules/no-duplicate-modifiers.md). Replaced by `ava/no-invalid-modifier-chain` which covers more cases.
 
 🚫 This rule is _disabled_ in the ✅ `recommended` [config](https://github.com/avajs/eslint-plugin-ava#recommended-config).
 
