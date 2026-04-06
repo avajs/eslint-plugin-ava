@@ -32,6 +32,10 @@ const create = context => {
 		])(node => {
 			const testModifiers = util.getTestModifiers(node);
 
+			if (util.hasComputedTestModifier(node)) {
+				return;
+			}
+
 			for (const modifier of testModifiers) {
 				if (!knownModifiers.has(modifier.name)) {
 					context.report({

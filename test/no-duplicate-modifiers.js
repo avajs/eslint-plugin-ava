@@ -34,6 +34,9 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		'test(t => {});',
 		'test.after.always(t => {});',
 		'test.afterEach.always(t => {});',
+		// Computed modifiers — should not crash
+		"test['serial']['serial'](t => {});",
+		"test['only']['only'](t => {});",
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test.serial.serial(t => {});', noHeader: true}],
 	invalid,

@@ -155,6 +155,10 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
+			if (util.hasComputedTestModifier(node)) {
+				return;
+			}
+
 			const testModifiers = util.getTestModifiers(node);
 			const modifierNames = testModifiers.map(property => property.name);
 

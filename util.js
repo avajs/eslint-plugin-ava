@@ -125,6 +125,8 @@ function getTestModifiers(node) {
 
 export {getTestModifiers};
 
+export const hasComputedTestModifier = node => getTestModifiers(node).some(property => !property.name);
+
 export const getTestModifier = (node, module_) => getTestModifiers(node).find(property => property.name === module_);
 
 export const removeTestModifier = parameters => {
@@ -215,6 +217,7 @@ export default {
 	isFunctionExpression,
 	unwrapTypeExpression,
 	getTestModifiers,
+	hasComputedTestModifier,
 	getTestModifier,
 	removeTestModifier,
 	getMembers,
