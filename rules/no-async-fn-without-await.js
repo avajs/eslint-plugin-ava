@@ -53,10 +53,7 @@ const create = context => {
 				const asyncToken = sourceCode.getFirstToken(asyncTest, token => token.value === 'async');
 				context.report({
 					node: asyncTest,
-					loc: {
-						start: asyncTest.loc.start,
-						end: asyncTest.loc.start + 5,
-					},
+					loc: asyncToken.loc,
 					messageId: MESSAGE_ID,
 					suggest: [{
 						messageId: MESSAGE_ID_SUGGESTION,

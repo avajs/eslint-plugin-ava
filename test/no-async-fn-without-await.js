@@ -33,6 +33,8 @@ ruleTester.run('no-async-fn-without-await', rule, {
 				messageId,
 				line: 2,
 				column: 6,
+				endLine: 2,
+				endColumn: 11,
 				suggestions: [{
 					messageId: 'no-async-fn-without-await-suggestion',
 					output: 'test(t => {});',
