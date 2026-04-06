@@ -115,6 +115,10 @@ const create = context => {
 			// Represent: `lookup.test(variable)`
 			lookup = firstArgument.callee.object;
 			variable = firstArgument.arguments[0];
+			if (!variable) {
+				// Can't suggest `t.regex(?, lookup)` without knowing what string to test against.
+				return;
+			}
 		} else if (['search', 'match'].includes(name)) {
 			// Represent: `variable.match(lookup)`
 			lookup = firstArgument.arguments[0];
@@ -173,6 +177,11 @@ const create = context => {
 
 		// Only fix when regex is an actual test/match/search call, not a bare regex literal.
 		if (regex?.type === 'CallExpression' && matchee.type === 'Literal') {
+			if (!regex.arguments[0]) {
+				// Can't suggest `t.regex(?, regex)` without knowing what string to test against.
+				return;
+			}
+
 			let assertion;
 
 			if (matchee.raw === 'true') {

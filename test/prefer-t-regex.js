@@ -29,6 +29,17 @@ ruleTester.run('prefer-t-regex', rule, {
 		// These shouldn't cause errors as this rule affects them.
 		// This rule would crash on the following.
 		'test(t => t.true());',
+		// .test() called without an argument — variable would be undefined, can't transform safely
+		String.raw`test(t => t.true(/\d+/.test()));`,
+		String.raw`test(t => t.false(/\d+/.test()));`,
+		String.raw`test(t => t.truthy(/\d+/.test()));`,
+		String.raw`test(t => t.falsy(/\d+/.test()));`,
+		String.raw`test(t => t.is(/\d+/.test(), true));`,
+		String.raw`test(t => t.is(/\d+/.test(), false));`,
+		String.raw`test(t => t.is(true, /\d+/.test()));`,
+		String.raw`test(t => t.is(false, /\d+/.test()));`,
+		String.raw`test(t => t.deepEqual(/\d+/.test(), true));`,
+		String.raw`test(t => t.deepEqual(/\d+/.test(), false));`,
 		'test(t => t.is(true))',
 		'test(t => t.is())',
 		'test(t => t.false())',
