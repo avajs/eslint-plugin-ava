@@ -127,6 +127,23 @@ export {getTestModifiers};
 
 export const hasComputedTestModifier = node => getTestModifiers(node).some(property => !property.name);
 
+const hookNames = new Set(['before', 'after', 'beforeEach', 'afterEach']);
+
+/**
+Get the resolved hook name for a test node (e.g., `'before'`, `'after.always'`), or `undefined` if the node is not a hook call.
+*/
+export const getHookName = node => {
+	const modifiers = getTestModifiers(node).map(property => property.name);
+	const hook = modifiers.find(name => hookNames.has(name));
+	if (!hook) {
+		return undefined;
+	}
+
+	return (hook === 'after' || hook === 'afterEach') && modifiers.includes('always')
+		? `${hook}.always`
+		: hook;
+};
+
 export const getTestModifier = (node, module_) => getTestModifiers(node).find(property => property.name === module_);
 
 export const removeTestModifier = parameters => {
@@ -218,6 +235,7 @@ export default {
 	unwrapTypeExpression,
 	getTestModifiers,
 	hasComputedTestModifier,
+	getHookName,
 	getTestModifier,
 	removeTestModifier,
 	getMembers,

@@ -4,8 +4,6 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'no-duplicate-hooks';
 
-const hookNames = new Set(['before', 'after', 'beforeEach', 'afterEach']);
-
 const create = context => {
 	const ava = createAvaRule();
 	const seen = new Set();
@@ -15,16 +13,14 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			const modifiers = util.getTestModifiers(node).map(property => property.name);
-
-			const hook = modifiers.find(name => hookNames.has(name));
-			if (!hook) {
+			if (util.hasComputedTestModifier(node)) {
 				return;
 			}
 
-			const name = (hook === 'after' || hook === 'afterEach') && modifiers.includes('always')
-				? `${hook}.always`
-				: hook;
+			const name = util.getHookName(node);
+			if (!name) {
+				return;
+			}
 
 			if (seen.has(name)) {
 				context.report({

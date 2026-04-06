@@ -22,6 +22,9 @@ ruleTester.run('no-duplicate-hooks', rule, {
 		'test.before(t => {}); test.after(t => {}); test.after.always(t => {}); test.beforeEach(t => {}); test.afterEach(t => {}); test.afterEach.always(t => {});',
 		// Hooks with serial modifier (all different)
 		'test.serial.before(t => {}); test.serial.after(t => {});',
+		// Computed modifiers — can't statically analyze, should not crash or report
+		'test[\'serial\'].before(t => {}); test[\'serial\'].before(t => {});',
+		'test[\'before\'](t => {}); test[\'before\'](t => {});',
 		// Not a test file
 		{code: 'test.before(t => {}); test.before(t => {});', noHeader: true},
 	],
