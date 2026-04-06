@@ -16,6 +16,7 @@ ruleTester.run('use-t', rule, {
 		'test((t, foo) => {});',
 		'test(function (t) {});',
 		'test(testFunction);',
+		'test.macro();',
 		'test.macro(testFunction);',
 		'test.macro(t => {});',
 		'test.macro({exec: t => {}, title: () => "title"});',

@@ -13,7 +13,7 @@ const create = context => {
 			ava.isTestNode,
 		])(node => {
 			const index = node.arguments.length - 1;
-			if (index > 1) {
+			if (index < 0 || index > 1) {
 				return;
 			}
 
