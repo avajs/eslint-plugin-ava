@@ -19,6 +19,7 @@ ruleTester.run('use-t', rule, {
 		'test.macro(testFunction);',
 		'test.macro(t => {});',
 		'test.macro({exec: t => {}, title: () => "title"});',
+		'test.macro({...macroArgs, exec: t => {}});',
 		'test.todo("test name");',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(foo => {});', noHeader: true},
@@ -45,6 +46,10 @@ ruleTester.run('use-t', rule, {
 		},
 		{
 			code: 'test.macro({ exec(foo) {} });',
+			errors: parameterNotNamedTErrors,
+		},
+		{
+			code: 'test.macro({...macroArgs, exec(foo) {}});',
 			errors: parameterNotNamedTErrors,
 		},
 	],
