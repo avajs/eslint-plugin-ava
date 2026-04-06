@@ -130,7 +130,7 @@ ruleTester.run('no-async-fn-without-await', rule, {
 				}],
 			}],
 		},
-		// for-await-of inside nested function does not count
+		// `for-await-of` inside nested function does not count
 		{
 			code: 'test(async t => { async function helper() { for await (const x of gen()) {} } });',
 			errors: [{

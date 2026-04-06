@@ -6,15 +6,15 @@ const MESSAGE_ID = 'no-nested-tests';
 
 const create = context => {
 	const ava = createAvaRule();
-	let nestedCount = 0;
+	const testNodeStack = [];
 
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			nestedCount++;
-			if (nestedCount >= 2) {
+			testNodeStack.push(node);
+			if (testNodeStack.length >= 2) {
 				context.report({
 					node,
 					messageId: MESSAGE_ID,
@@ -22,12 +22,11 @@ const create = context => {
 			}
 		}),
 
-		'CallExpression:exit': visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(() => {
-			nestedCount--;
-		}),
+		'CallExpression:exit'(node) {
+			if (testNodeStack.length > 0 && testNodeStack.at(-1) === node) {
+				testNodeStack.pop();
+			}
+		},
 	});
 };
 

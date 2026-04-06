@@ -33,5 +33,20 @@ ruleTester.run('no-nested-tests', rule, {
 			code: 'test(t => { test(t => { test(t => {}); }); });',
 			errors: [error, error],
 		},
+		{
+			// The standalone test after the nested pair must not be a false positive
+			code: 'test(t => { test(t => {}); }); test(t => {});',
+			errors: [error],
+		},
+		{
+			// Multiple subsequent tests after a nested pair must not be false positives
+			code: 'test(t => { test(t => {}); }); test(t => {}); test(t => {});',
+			errors: [error],
+		},
+		{
+			// Two sequential nested pairs followed by a valid test must not accumulate state
+			code: 'test(t => { test(t => {}); }); test(t => { test(t => {}); }); test(t => {});',
+			errors: [error, error],
+		},
 	],
 });
