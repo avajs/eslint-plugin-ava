@@ -116,6 +116,83 @@ ruleTester.run('hooks-order', rule, {
 				t.true(true);
 			});
 		`,
+		// Serial hooks in correct order
+		outdent`
+			test.serial.before(t => {
+				doFoo();
+			});
+
+			test.serial.after(t => {
+				doFoo();
+			});
+
+			test.serial.after.always(t => {
+				doFoo();
+			});
+
+			test.serial.beforeEach(t => {
+				doFoo();
+			});
+
+			test.serial.afterEach(t => {
+				doFoo();
+			});
+
+			test.serial.afterEach.always(t => {
+				doFoo();
+			});
+
+			test('foo', t => {
+				t.true(true);
+			});
+		`,
+		// Mixed serial and non-serial in correct order
+		outdent`
+			test.before(t => {
+				doFoo();
+			});
+
+			test.serial.after(t => {
+				doFoo();
+			});
+
+			test.serial.beforeEach(t => {
+				doFoo();
+			});
+
+			test.afterEach(t => {
+				doFoo();
+			});
+
+			test('foo', t => {
+				t.true(true);
+			});
+		`,
+		// `test.only`, `test.skip`, `test.todo` after hooks
+		outdent`
+			test.before(t => {
+				doFoo();
+			});
+
+			test.after(t => {
+				doFoo();
+			});
+
+			test.only('foo', t => {
+				t.true(true);
+			});
+		`,
+		outdent`
+			test.before(t => {
+				doFoo();
+			});
+
+			test.skip('foo', t => {
+				t.true(true);
+			});
+		`,
+		// Computed modifiers — should not crash or report
+		'test[\'serial\'].before(t => {}); test[\'serial\'].after(t => {});',
 	],
 	invalid: [
 		{
@@ -617,6 +694,132 @@ ruleTester.run('hooks-order', rule, {
 
 				test.after(t => {
 					doFoo();
+				});
+			`,
+			errors,
+		},
+		// Serial hooks in wrong order
+		{
+			code: outdent`
+				test.serial.after(t => {
+					doFoo();
+				});
+
+				test.serial.before(t => {
+					doFoo();
+				});
+			`,
+			output: outdent`
+				test.serial.before(t => {
+					doFoo();
+				});
+
+				test.serial.after(t => {
+					doFoo();
+				});
+			`,
+			errors,
+		},
+		// Serial afterEach before serial before
+		{
+			code: outdent`
+				test.serial.afterEach(t => {
+					doFoo();
+				});
+
+				test.serial.before(t => {
+					doFoo();
+				});
+
+				test('foo', t => {
+					t.true(true);
+				});
+			`,
+			output: outdent`
+				test.serial.before(t => {
+					doFoo();
+				});
+
+				test.serial.afterEach(t => {
+					doFoo();
+				});
+
+				test('foo', t => {
+					t.true(true);
+				});
+			`,
+			errors,
+		},
+		// Mixed serial and non-serial in wrong order
+		{
+			code: outdent`
+				test.serial.after.always(t => {
+					doFoo();
+				});
+
+				test.before(t => {
+					doFoo();
+				});
+
+				test('foo', t => {
+					t.true(true);
+				});
+			`,
+			output: outdent`
+				test.before(t => {
+					doFoo();
+				});
+
+				test.serial.after.always(t => {
+					doFoo();
+				});
+
+				test('foo', t => {
+					t.true(true);
+				});
+			`,
+			errors,
+		},
+		// `test.only` before a hook
+		{
+			code: outdent`
+				test.only('foo', t => {
+					t.true(true);
+				});
+
+				test.before(t => {
+					doFoo();
+				});
+			`,
+			output: outdent`
+				test.before(t => {
+					doFoo();
+				});
+
+				test.only('foo', t => {
+					t.true(true);
+				});
+			`,
+			errors,
+		},
+		// `test.skip` before a hook
+		{
+			code: outdent`
+				test.skip('foo', t => {
+					t.true(true);
+				});
+
+				test.afterEach(t => {
+					doFoo();
+				});
+			`,
+			output: outdent`
+				test.afterEach(t => {
+					doFoo();
+				});
+
+				test.skip('foo', t => {
+					t.true(true);
 				});
 			`,
 			errors,

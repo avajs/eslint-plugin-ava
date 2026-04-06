@@ -62,8 +62,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t_.is(v);'),
 		testCase('t1.deepEqual(v, v);'),
 		// Computed member expressions — can't statically analyze, should not crash
-		testCase("t['is'](v);"),
-		testCase("t['truthy'](v);"),
+		testCase('t[\'is\'](v);'),
+		testCase('t[\'truthy\'](v);'),
 		// Shouldn't be triggered since it's not a test file
 		{code: testCase('t.foo(a, a);'), noHeader: true},
 		{code: testCase('t.foo;'), noHeader: true},

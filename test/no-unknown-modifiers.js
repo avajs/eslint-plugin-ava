@@ -6,8 +6,8 @@ const ruleTester = new RuleTester();
 ruleTester.run('no-unknown-modifiers', rule, {
 	valid: [
 		// Computed modifiers — can't statically analyze, should not report
-		"test['skip'](t => {});",
-		"test['serial']['only'](t => {});",
+		'test[\'skip\'](t => {});',
+		'test[\'serial\'][\'only\'](t => {});',
 		'test(t => {});',
 		'test.after(t => {});',
 		'test.afterEach(t => {});',

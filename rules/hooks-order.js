@@ -4,20 +4,7 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'hooks-order';
 
-const buildOrders = names => {
-	const orders = {};
-	for (const nameLater of names) {
-		for (const nameEarlier in orders) {
-			if (orders[nameEarlier]) {
-				orders[nameEarlier].push(nameLater);
-			}
-		}
-
-		orders[nameLater] = [];
-	}
-
-	return orders;
-};
+const buildOrders = names => Object.fromEntries(names.map((name, index) => [name, names.slice(index + 1)]));
 
 const buildMessage = (name, orders, visited) => {
 	const checks = orders[name];
@@ -54,48 +41,22 @@ const create = context => {
 
 	const visited = {};
 
-	const checks = [
-		{
-			selector: 'CallExpression[callee.object.name="test"][callee.property.name="before"]',
-			name: 'before',
-		},
-		{
-			selector: 'CallExpression[callee.object.name="test"][callee.property.name="after"]',
-			name: 'after',
-		},
-		{
-			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="after"][callee.property.name="always"]',
-			name: 'after.always',
-		},
-		{
-			selector: 'CallExpression[callee.object.name="test"][callee.property.name="beforeEach"]',
-			name: 'beforeEach',
-		},
-		{
-			selector: 'CallExpression[callee.object.name="test"][callee.property.name="afterEach"]',
-			name: 'afterEach',
-		},
-		{
-			selector: 'CallExpression[callee.object.object.name="test"][callee.object.property.name="afterEach"][callee.property.name="always"]',
-			name: 'afterEach.always',
-		},
-		{
-			selector: 'CallExpression[callee.name="test"]',
-			name: 'test',
-		},
-	];
-
 	const {sourceCode} = context;
 
-	const selectors = {};
-	for (const check of checks) {
-		selectors[check.selector] = visitIf([
+	return ava.merge({
+		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			visited[check.name] = node;
+			if (util.hasComputedTestModifier(node)) {
+				return;
+			}
 
-			const message = buildMessage(check.name, orders, visited);
+			const name = util.getHookName(node) ?? 'test';
+
+			visited[name] = node;
+
+			const message = buildMessage(name, orders, visited);
 			if (message) {
 				const nodeEarlier = message.node;
 
@@ -106,7 +67,7 @@ const create = context => {
 					fix(fixer) {
 						const tokensBetween = sourceCode.getTokensBetween(nodeEarlier.parent, node.parent);
 
-						if (tokensBetween?.length > 0) {
+						if (tokensBetween.length > 0) {
 							return;
 						}
 
@@ -117,7 +78,7 @@ const create = context => {
 						const start = nodeEarlier.parent.range[1];
 						const end = node.parent.range[1];
 
-						let text = sourceCode.getText().slice(start, end);
+						let text = source.slice(start, end);
 
 						// Preserve newline previously between hooks
 						if (source.length >= (start + 1) && source[start + 1] === '\n') {
@@ -136,10 +97,8 @@ const create = context => {
 					},
 				});
 			}
-		});
-	}
-
-	return ava.merge(selectors);
+		}),
+	});
 };
 
 export default {

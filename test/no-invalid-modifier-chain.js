@@ -71,10 +71,10 @@ ruleTester.run('no-invalid-modifier-chain', rule, {
 		{code: 'import {serial} from \'ava\'; serial.before(t => {});', noHeader: true},
 
 		// Computed modifiers — can't statically analyze, should not report
-		"test['only'](t => {});",
-		"test['serial']['only'](t => {});",
-		"test.serial['only'](t => {});",
-		"test['serial'].only(t => {});",
+		'test[\'only\'](t => {});',
+		'test[\'serial\'][\'only\'](t => {});',
+		'test.serial[\'only\'](t => {});',
+		'test[\'serial\'].only(t => {});',
 
 		// Not a test file
 		{code: 'test.foo(t => {});', noHeader: true},
