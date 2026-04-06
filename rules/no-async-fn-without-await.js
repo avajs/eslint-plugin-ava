@@ -9,10 +9,23 @@ const create = context => {
 	const ava = createAvaRule();
 	let testUsed = false;
 	let asyncTest;
+	let nestedFunctionDepth = 0;
 
 	const registerUseOfAwait = () => {
-		if (asyncTest) {
+		if (asyncTest && nestedFunctionDepth === 0) {
 			testUsed = true;
+		}
+	};
+
+	const enterFunction = node => {
+		if (asyncTest && node !== asyncTest) {
+			nestedFunctionDepth++;
+		}
+	};
+
+	const exitFunction = node => {
+		if (asyncTest && node !== asyncTest) {
+			nestedFunctionDepth--;
 		}
 	};
 
@@ -26,6 +39,8 @@ const create = context => {
 			asyncTest = (isAsync(node.arguments[0]) && node.arguments[0])
 				|| (isAsync(node.arguments[1]) && node.arguments[1]);
 		}),
+		':function': enterFunction,
+		':function:exit': exitFunction,
 		AwaitExpression: registerUseOfAwait,
 		YieldExpression: registerUseOfAwait,
 		'ForOfStatement[await=true]': registerUseOfAwait,
@@ -55,6 +70,7 @@ const create = context => {
 
 			asyncTest = undefined;
 			testUsed = false;
+			nestedFunctionDepth = 0;
 		}),
 	});
 };

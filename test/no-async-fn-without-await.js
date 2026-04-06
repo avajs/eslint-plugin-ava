@@ -22,6 +22,9 @@ ruleTester.run('no-async-fn-without-await', rule, {
 		'test(\'title\', async t => { await foo(); });',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(async t => {});', noHeader: true},
+		// Await inside nested function does not count as test-level await
+		'test(async t => { await foo(async () => { await bar(); }); });',
+		'test(async t => { await done(); const helper = async () => { await bar(); }; });',
 	],
 	invalid: [
 		{
@@ -101,6 +104,38 @@ ruleTester.run('no-async-fn-without-await', rule, {
 				suggestions: [{
 					messageId: 'no-async-fn-without-await-suggestion',
 					output: 'test(\'title\', t => {});',
+				}],
+			}],
+		},
+		// Await inside nested function does not count as test-level await
+		{
+			code: 'test(async t => { async function helper() { await foo(); } });',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(t => { async function helper() { await foo(); } });',
+				}],
+			}],
+		},
+		{
+			code: 'test(async t => { const helper = async () => { await foo(); }; });',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(t => { const helper = async () => { await foo(); }; });',
+				}],
+			}],
+		},
+		// for-await-of inside nested function does not count
+		{
+			code: 'test(async t => { async function helper() { for await (const x of gen()) {} } });',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(t => { async function helper() { for await (const x of gen()) {} } });',
 				}],
 			}],
 		},
