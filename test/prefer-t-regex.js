@@ -50,6 +50,9 @@ ruleTester.run('prefer-t-regex', rule, {
 		// Bare regex compared to boolean is not a regex test pattern
 		String.raw`test(t => t.is(/\d+/, true))`,
 		String.raw`test(t => t.is(true, /\d+/))`,
+		// Bare RegExp() constructor call compared to boolean — not a regex test pattern, should not crash
+		String.raw`test(t => t.is(RegExp("\d+"), true))`,
+		String.raw`test(t => t.is(true, RegExp("\d+")))`,
 	],
 	invalid: [
 		{

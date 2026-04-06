@@ -175,8 +175,8 @@ const create = context => {
 			];
 		};
 
-		// Only fix when regex is an actual test/match/search call, not a bare regex literal.
-		if (regex?.type === 'CallExpression' && matchee.type === 'Literal') {
+		// Only fix when regex is an actual test/match/search call, not a bare regex literal or constructor call.
+		if (regex?.type === 'CallExpression' && regex.callee.type === 'MemberExpression' && matchee.type === 'Literal') {
 			if (!regex.arguments[0]) {
 				// Can't suggest `t.regex(?, regex)` without knowing what string to test against.
 				return;
