@@ -38,6 +38,7 @@ ruleTester.run('test-title-format', rule, {
 		},
 		{
 			// Template literal with expressions can't be statically checked
+			// eslint-disable-next-line no-template-curly-in-string
 			code: 'test(`${prefix} test`, t => { t.pass(); });',
 			options: [{format: '^Should'}],
 		},

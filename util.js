@@ -2,7 +2,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import resolveFrom from 'resolve-from';
-import packageJson from './package.json' with {type: 'json'};
 
 const require = createRequire(import.meta.url);
 
@@ -169,7 +168,7 @@ export const getAssertionMethod = callee => {
 
 const repoUrl = 'https://github.com/avajs/eslint-plugin-ava';
 
-const getDocumentationUrl = (filename, commitHash = `v${packageJson.version}`) => {
+const getDocumentationUrl = (filename, commitHash = 'main') => {
 	const ruleName = path.basename(filename, '.js');
 	return `${repoUrl}/blob/${commitHash}/docs/rules/${ruleName}.md`;
 };
