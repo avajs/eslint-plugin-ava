@@ -36,6 +36,11 @@ const create = context => {
 		ava.isInTestFile,
 		ava.isInTestNode,
 	])(node => {
+		// Only check the direct test implementation function, not nested functions.
+		if (!ava.isTestNode(node.parent)) {
+			return;
+		}
+
 		if (node.body.type !== 'BlockStatement') {
 			return;
 		}

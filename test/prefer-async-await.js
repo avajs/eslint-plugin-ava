@@ -14,12 +14,20 @@ ruleTester.run('prefer-async-await', rule, {
 		'test(t => { return foo(); });',
 		'test(t => { foo().then(fn); });',
 		'test(t => { function foo() { return foo().then(fn); } });',
+		// Nested arrow function returning a Promise should not be flagged
+		'test(t => { const foo = () => { return bar().then(fn); }; t.pass(); });',
+		// Nested function expression returning a Promise should not be flagged
+		'test(t => { const foo = function() { return bar().then(fn); }; t.pass(); });',
+		// Nested async IIFE with .then() should not be flagged
+		'test(t => { (function() { return bar().then(fn); })(); t.pass(); });',
 		'test(t => foo().then(fn));',
 		{
 			code: 'test(t => { const bar = foo(); return bar; });',
 			name: 'returned-var-not-from-then',
 		},
 		'test(t => { return; });',
+		// Variable not assigned from .then()
+		'test(t => { let bar; bar = foo().then(fn); return; });',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(t => { return foo().then(fn); });', noHeader: true},
 	],
@@ -76,6 +84,21 @@ ruleTester.run('prefer-async-await', rule, {
 			code: 'test(t => { console.log("hi"); const bar = foo().then(fn); return bar; });',
 			errors,
 			name: 'non-var-statement-before-then-var',
+		},
+		// test.serial should still be flagged
+		{
+			code: 'test.serial(t => { return foo().then(fn); });',
+			errors,
+		},
+		// function expression (not arrow)
+		{
+			code: 'test(function(t) { return foo().then(fn).then(fn2); });',
+			errors,
+		},
+		// Returned var declared with let
+		{
+			code: 'test(t => { let bar = foo().then(fn); return bar; });',
+			errors,
 		},
 	],
 });
