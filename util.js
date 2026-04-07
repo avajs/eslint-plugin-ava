@@ -226,9 +226,12 @@ export const executionMethods = new Set([...assertionMethodNames, 'end', 'plan',
 
 export function isPrimitive(node) {
 	return (node.type === 'Literal' && !node.regex)
-		|| (node.type === 'Identifier' && node.name === 'undefined')
+		|| (node.type === 'Identifier' && (node.name === 'undefined' || node.name === 'NaN' || node.name === 'Infinity'))
 		|| node.type === 'TemplateLiteral'
-		|| (node.type === 'UnaryExpression' && node.operator === '-' && node.argument.type === 'Literal' && !node.argument.regex);
+		|| (node.type === 'UnaryExpression' && node.operator === '-' && (
+			(node.argument.type === 'Literal' && !node.argument.regex)
+			|| (node.argument.type === 'Identifier' && node.argument.name === 'Infinity')
+		));
 }
 
 // Default export as a mutable object to allow test mocking of loadAvaHelper.

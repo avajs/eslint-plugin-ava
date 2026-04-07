@@ -446,5 +446,112 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			`,
 			errors: [error],
 		},
+		// NaN
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, NaN);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, NaN);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(NaN, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(NaN, expression);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(expression, NaN);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(expression, NaN);
+				});
+			`,
+			errors: [error],
+		},
+		// Infinity
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, Infinity);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, Infinity);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(Infinity, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(Infinity, expression);
+				});
+			`,
+			errors: [error],
+		},
+		// -Infinity
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, -Infinity);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, -Infinity);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(-Infinity, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(-Infinity, expression);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(expression, -Infinity);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(expression, -Infinity);
+				});
+			`,
+			errors: [error],
+		},
 	],
 });
