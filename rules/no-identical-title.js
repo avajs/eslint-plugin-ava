@@ -8,20 +8,33 @@ const MESSAGE_ID = 'no-identical-title';
 
 const purify = node => node && espurify(node);
 
+const getStringValue = node => {
+	if (node.type === 'Literal' && typeof node.value === 'string') {
+		return node.value;
+	}
+
+	if (node.type === 'TemplateLiteral' && node.expressions.length === 0) {
+		return node.quasis[0].value.cooked;
+	}
+};
+
 const isStaticTemplateLiteral = node => node.expressions.every(expression => isStatic(expression));
 
 const isStatic = node => node.type === 'Literal'
 	|| (node.type === 'TemplateLiteral' && isStaticTemplateLiteral(node))
 	|| (node.type === 'BinaryExpression' && isStatic(node.left) && isStatic(node.right));
 
-function isTitleUsed(usedTitleNodes, titleNode) {
-	const purifiedNode = purify(titleNode);
-	return usedTitleNodes.some(usedTitle => isDeepStrictEqual(purifiedNode, usedTitle));
+function isTitleUsed(usedTitleKeys, key) {
+	if (typeof key === 'string') {
+		return usedTitleKeys.includes(key);
+	}
+
+	return usedTitleKeys.some(usedKey => typeof usedKey !== 'string' && isDeepStrictEqual(key, usedKey));
 }
 
 const create = context => {
 	const ava = createAvaRule();
-	let usedTitleNodes = [];
+	let usedTitleKeys = [];
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -42,7 +55,9 @@ const create = context => {
 				return;
 			}
 
-			if (isTitleUsed(usedTitleNodes, titleNode)) {
+			const key = getStringValue(titleNode) ?? purify(titleNode);
+
+			if (isTitleUsed(usedTitleKeys, key)) {
 				context.report({
 					node: titleNode,
 					messageId: MESSAGE_ID,
@@ -50,10 +65,10 @@ const create = context => {
 				return;
 			}
 
-			usedTitleNodes.push(purify(titleNode));
+			usedTitleKeys.push(key);
 		}),
 		'Program:exit'() {
-			usedTitleNodes = [];
+			usedTitleKeys = [];
 		},
 	});
 };

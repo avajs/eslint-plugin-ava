@@ -80,5 +80,23 @@ ruleTester.run('no-identical-title', rule, {
 				column: 27,
 			}],
 		},
+		// String literal then template literal
+		{
+			code: 'test("a", t => {}); test(`a`, t => {});',
+			errors: [{
+				messageId,
+				line: 2,
+				column: 26,
+			}],
+		},
+		// Template literal then string literal
+		{
+			code: 'test(`a`, t => {}); test("a", t => {});',
+			errors: [{
+				messageId,
+				line: 2,
+				column: 26,
+			}],
+		},
 	],
 });
