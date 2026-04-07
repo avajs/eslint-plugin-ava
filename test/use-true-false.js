@@ -20,6 +20,8 @@ ruleTester.run('use-true-false', rule, {
 		testCase('t.true(value <= 1)'),
 		testCase('t.true(value > 1)'),
 		testCase('t.true(value >= 1)'),
+		testCase('t.true(x instanceof Error)'),
+		testCase('t.true(key in obj)'),
 		testCase('t.true(!value)'),
 		testCase('t.true(!!value)'),
 		testCase('t.false(value === 1)'),
@@ -123,6 +125,28 @@ ruleTester.run('use-true-false', rule, {
 		{
 			code: testCase('t.falsy(value === 1)'),
 			output: testCase('t.false(value === 1)'),
+			errors: falseErrors,
+		},
+		// Instanceof
+		{
+			code: testCase('t.truthy(x instanceof Error)'),
+			output: testCase('t.true(x instanceof Error)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.falsy(x instanceof Error)'),
+			output: testCase('t.false(x instanceof Error)'),
+			errors: falseErrors,
+		},
+		// In operator
+		{
+			code: testCase('t.truthy(key in obj)'),
+			output: testCase('t.true(key in obj)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.falsy(key in obj)'),
+			output: testCase('t.false(key in obj)'),
 			errors: falseErrors,
 		},
 		// `t.is(x, true)` → `t.true(x)`

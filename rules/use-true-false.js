@@ -19,6 +19,8 @@ const booleanBinaryOperators = new Set([
 	'<=',
 	'>',
 	'>=',
+	'in',
+	'instanceof',
 ]);
 
 const knownBooleanSignatures = [
