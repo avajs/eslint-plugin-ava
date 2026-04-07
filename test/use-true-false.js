@@ -123,6 +123,11 @@ ruleTester.run('use-true-false', rule, {
 			errors: trueErrors,
 		},
 		{
+			code: testCase('t.truthy(Object.hasOwn(obj, \'key\'))'),
+			output: testCase('t.true(Object.hasOwn(obj, \'key\'))'),
+			errors: trueErrors,
+		},
+		{
 			code: testCase('t.falsy(value === 1)'),
 			output: testCase('t.false(value === 1)'),
 			errors: falseErrors,

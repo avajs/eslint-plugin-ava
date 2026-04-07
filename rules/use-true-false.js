@@ -30,6 +30,7 @@ const knownBooleanSignatures = [
 	'Object.isExtensible()',
 	'Object.isFrozen()',
 	'Object.isSealed()',
+	'Object.hasOwn()',
 	'Boolean()',
 	'Number.isNaN()',
 	'Number.isFinite()',
