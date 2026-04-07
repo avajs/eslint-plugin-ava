@@ -224,6 +224,13 @@ export {assertionMethodsNumberArguments};
 export const assertionMethods = new Set(assertionMethodNames);
 export const executionMethods = new Set([...assertionMethodNames, 'end', 'plan', 'log', 'teardown', 'timeout']);
 
+export function isPrimitive(node) {
+	return (node.type === 'Literal' && !node.regex)
+		|| (node.type === 'Identifier' && node.name === 'undefined')
+		|| node.type === 'TemplateLiteral'
+		|| (node.type === 'UnaryExpression' && node.operator === '-' && node.argument.type === 'Literal' && !node.argument.regex);
+}
+
 // Default export as a mutable object to allow test mocking of loadAvaHelper.
 export default {
 	loadAvaHelper,
@@ -244,4 +251,5 @@ export default {
 	assertionMethodsNumberArguments,
 	assertionMethods,
 	executionMethods,
+	isPrimitive,
 };

@@ -85,12 +85,12 @@ ruleTester.run('prefer-async-await', rule, {
 			errors,
 			name: 'non-var-statement-before-then-var',
 		},
-		// test.serial should still be flagged
+		// `test.serial` should still be flagged
 		{
 			code: 'test.serial(t => { return foo().then(fn); });',
 			errors,
 		},
-		// function expression (not arrow)
+		// Function expression (not arrow)
 		{
 			code: 'test(function(t) { return foo().then(fn).then(fn2); });',
 			errors,

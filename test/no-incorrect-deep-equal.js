@@ -57,6 +57,12 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 				foo.deepEqual(expression, 'bar');
 			});
 		`,
+		// Unary minus on non-literal should not be flagged
+		`
+			test('x', t => {
+				t.deepEqual(expression, -otherExpression);
+			});
+		`,
 	],
 	invalid: [
 		{
@@ -383,6 +389,59 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			output: `
 				test('x', t => {
 					t.is.skip(42, expression);
+				});
+			`,
+			errors: [error],
+		},
+		// Negative number literals
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, -1);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, -1);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(-1, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(-1, expression);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(expression, -1);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(expression, -1);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(-1, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(-1, expression);
 				});
 			`,
 			errors: [error],

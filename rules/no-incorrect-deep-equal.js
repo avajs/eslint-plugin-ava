@@ -4,12 +4,6 @@ import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'no-deep-equal-with-primitive';
 
-function isPrimitive(node) {
-	return (node.type === 'Literal' && !node.regex)
-		|| (node.type === 'Identifier' && node.name === 'undefined')
-		|| node.type === 'TemplateLiteral';
-}
-
 const create = context => {
 	const ava = createAvaRule();
 
@@ -44,7 +38,7 @@ const create = context => {
 				return;
 			}
 
-			if (!node.arguments.slice(0, 2).some(argument => isPrimitive(argument))) {
+			if (!node.arguments.slice(0, 2).some(argument => util.isPrimitive(argument))) {
 				return;
 			}
 
