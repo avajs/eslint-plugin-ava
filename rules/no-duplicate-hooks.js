@@ -5,7 +5,7 @@ import util from '../util.js';
 const MESSAGE_ID = 'no-duplicate-hooks';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const seen = new Set();
 
 	return ava.merge({

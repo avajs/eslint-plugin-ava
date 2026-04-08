@@ -84,6 +84,20 @@ ruleTester.run('use-t-throws-async-well', rule, {
 				messageId: 'use-t-throws-async-well',
 			}],
 		},
+		{
+			code: 'test(\'title\', {exec: async t => { t.throwsAsync(f); }});',
+			output: 'test(\'title\', {exec: async t => { await t.throwsAsync(f); }});',
+			errors: [{
+				messageId: 'use-t-throws-async-well',
+			}],
+		},
+		{
+			code: 'test(\'title\', {exec: async (t, value) => { t.notThrowsAsync(f); }}, 1);',
+			output: 'test(\'title\', {exec: async (t, value) => { await t.notThrowsAsync(f); }}, 1);',
+			errors: [{
+				messageId: 'use-t-throws-async-well',
+			}],
+		},
 	],
 });
 

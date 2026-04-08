@@ -5,14 +5,41 @@ import test from 'ava';
 import resolveFrom from 'resolve-from';
 import util, {findProjectRoot} from '../util.js';
 
+test('getStringValue: returns string literal value', t => {
+	t.is(util.getStringValue({type: 'Literal', value: 'hello'}), 'hello');
+});
+
+test('getStringValue: returns template literal string when no expressions', t => {
+	const node = {type: 'TemplateLiteral', expressions: [], quasis: [{value: {cooked: 'hello'}}]};
+	t.is(util.getStringValue(node), 'hello');
+});
+
+test('getStringValue: returns undefined for template literal with null cooked value', t => {
+	const node = {type: 'TemplateLiteral', expressions: [], quasis: [{value: {cooked: null}}]};
+	t.is(util.getStringValue(node), undefined);
+});
+
+test('getStringValue: returns undefined for template literal with expressions', t => {
+	const node = {type: 'TemplateLiteral', expressions: [{}], quasis: []};
+	t.is(util.getStringValue(node), undefined);
+});
+
+test('getStringValue: returns undefined for non-string literal', t => {
+	t.is(util.getStringValue({type: 'Literal', value: 42}), undefined);
+});
+
+test('unwrapParentTypeExpression: skips TypeScript wrapper parents', t => {
+	const callExpression = {type: 'CallExpression'};
+	const tsAsExpression = {type: 'TSAsExpression', parent: {type: 'ExpressionStatement'}};
+	const tsNonNullExpression = {type: 'TSNonNullExpression', parent: tsAsExpression};
+	callExpression.parent = tsNonNullExpression;
+
+	t.is(util.unwrapParentTypeExpression(callExpression), tsAsExpression.parent);
+});
+
 test('returns the URL of the a named rule\'s documentation', t => {
 	const url = 'https://github.com/avajs/eslint-plugin-ava/blob/main/docs/rules/foo.md';
 	t.is(util.getDocsUrl('foo.js'), url);
-});
-
-test('returns the URL of the a named rule\'s documentation at a commit hash', t => {
-	const url = 'https://github.com/avajs/eslint-plugin-ava/blob/bar/docs/rules/foo.md';
-	t.is(util.getDocsUrl('foo.js', 'bar'), url);
 });
 
 test('determines the rule name from the file', t => {

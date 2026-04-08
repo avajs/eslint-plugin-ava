@@ -191,6 +191,13 @@ ruleTester.run('hooks-order', rule, {
 				t.true(true);
 			});
 		`,
+		outdent`
+			const macro = test.macro(() => {});
+
+			test.before(t => {
+				doFoo();
+			});
+		`,
 		// Computed modifiers — should not crash or report
 		'test[\'serial\'].before(t => {}); test[\'serial\'].after(t => {});',
 	],

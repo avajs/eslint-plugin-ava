@@ -21,25 +21,21 @@ const isNotAllowedAssertion = callee => {
 		return false;
 	}
 
-	const assertionMethod = util.getAssertionMethod(callee);
+	// Only match real AVA assertion calls like `t.is()` and `t.is.skip()`.
+	// Malformed chains such as `t.is.context()` should be left to `use-t-well`.
+	const assertionMethod = util.getAssertionName(callee);
 	if (!assertionMethod) {
 		return false;
 	}
 
-	const members = util.getMembers(callee);
 	const root = util.getRootNode(callee);
-
-	// Only match real AVA assertion calls like `t.is()` and `t.is.skip()`.
-	// Malformed chains such as `t.is.context()` should be left to `use-t-well`.
 	return root.object.type === 'Identifier'
 		&& util.isTestObject(root.object.name)
-		&& members[0] === assertionMethod
-		&& members.slice(1).every(member => member === 'skip')
 		&& notAllowed.has(assertionMethod);
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([

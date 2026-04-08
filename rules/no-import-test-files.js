@@ -58,6 +58,12 @@ const create = context => {
 		ImportDeclaration(node) {
 			validateImportPath(node, node.source.value);
 		},
+		ExportAllDeclaration(node) {
+			validateImportPath(node, node.source?.value);
+		},
+		ExportNamedDeclaration(node) {
+			validateImportPath(node, node.source?.value);
+		},
 	};
 };
 

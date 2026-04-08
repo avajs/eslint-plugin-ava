@@ -27,7 +27,7 @@ const buildMessage = (name, orders, visited) => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	const orders = buildOrders([
 		'before',
@@ -49,6 +49,10 @@ const create = context => {
 			ava.isTestNode,
 		])(node => {
 			if (util.hasComputedTestModifier(node)) {
+				return;
+			}
+
+			if (ava.hasTestModifier('macro')) {
 				return;
 			}
 

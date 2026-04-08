@@ -7,7 +7,7 @@ const MESSAGE_ID = 'failing-test-url';
 const urlPattern = /https?:\/\/\S+/;
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([

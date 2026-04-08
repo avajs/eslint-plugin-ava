@@ -5,7 +5,7 @@ import util from '../util.js';
 const MESSAGE_ID = 'test-title-format';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	let titleRegExp;
 	if (context.options[0]?.format) {
@@ -26,14 +26,9 @@ const create = context => {
 			if (hasTitle) {
 				const title = node.arguments[0];
 
-				let titleValue;
-				if (title.type === 'Literal') {
-					titleValue = title.value;
-				} else if (title.type === 'TemplateLiteral' && title.expressions.length === 0) {
-					titleValue = title.quasis[0].value.cooked;
-				}
+				const titleValue = util.getStringValue(title);
 
-				if (typeof titleValue === 'string' && !titleRegExp.test(titleValue)) {
+				if (titleValue !== undefined && !titleRegExp.test(titleValue)) {
 					context.report({
 						node,
 						messageId: MESSAGE_ID,

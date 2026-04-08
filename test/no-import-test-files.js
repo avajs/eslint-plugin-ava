@@ -12,6 +12,10 @@ util.loadAvaHelper = filename => {
 	return {
 		classifyImport(importPath) {
 			switch (importPath) {
+				case toPath('foo.test.js'): {
+					return {isHelper: false, isTest: true};
+				}
+
 				case toPath('lib/foo.test.js'): {
 					return {isHelper: false, isTest: true};
 				}
@@ -51,6 +55,8 @@ ruleTester.run('no-import-test-files', rule, {
 		'import test from \'ava\';',
 		'import foo from \'@foo/bar\';',
 		'import foo from \'/foo/bar\';', // Classfied as not a test.
+		'export * from \'./bar.js\';',
+		'export {default as bar} from \'./bar.js\';',
 		'console.log()',
 		{ // Regression test for https://github.com/avajs/eslint-plugin-ava/issues/311
 			code: 'import helpers from \'./test\';',
@@ -71,6 +77,21 @@ ruleTester.run('no-import-test-files', rule, {
 		},
 		{
 			code: 'import test from \'../foo.test.js\';',
+			filename: toPath('foo.js'),
+			errors,
+		},
+		{
+			code: 'export * from \'./foo.test.js\';',
+			filename: toPath('foo.js'),
+			errors,
+		},
+		{
+			code: 'export {default as testFile} from \'./foo.test.js\';',
+			filename: toPath('foo.js'),
+			errors,
+		},
+		{
+			code: 'export {foo} from \'./foo.test.js\';',
 			filename: toPath('foo.js'),
 			errors,
 		},

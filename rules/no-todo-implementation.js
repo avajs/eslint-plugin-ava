@@ -8,43 +8,46 @@ const MESSAGE_ID_REMOVE_TODO = 'no-todo-implementation-remove-todo';
 const MESSAGE_ID_REMOVE_IMPLEMENTATION = 'no-todo-implementation-remove-implementation';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
+	const {sourceCode} = context;
 
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			if (ava.hasTestModifier('todo') && node.arguments.some(argument => util.isFunctionExpression(argument))) {
-				const {sourceCode} = context;
-				const functionArgument = node.arguments.find(argument => util.isFunctionExpression(argument));
+			if (!ava.hasTestModifier('todo')) {
+				return;
+			}
 
-				context.report({
-					node,
-					messageId: MESSAGE_ID,
-					suggest: [
-						{
-							messageId: MESSAGE_ID_REMOVE_TODO,
-							fix: fixer => fixer.replaceTextRange(...util.removeTestModifier({
-								modifier: 'todo',
-								node,
-								context,
-							})),
-						},
-						{
+			const implementationArgument = util.getTestImplementationArgument(node, sourceCode);
+			if (!util.isLocalImplementationReference(implementationArgument, sourceCode, node)) {
+				return;
+			}
+
+			context.report({
+				node,
+				messageId: MESSAGE_ID,
+				suggest: [
+					{
+						messageId: MESSAGE_ID_REMOVE_TODO,
+						fix: fixer => fixer.replaceTextRange(...util.removeTestModifier({
+							modifier: 'todo',
+							node,
+							context,
+						})),
+					},
+					...(implementationArgument === node.arguments[0]
+						? []
+						: [{
 							messageId: MESSAGE_ID_REMOVE_IMPLEMENTATION,
 							fix(fixer) {
-								const commaToken = sourceCode.getTokenBefore(functionArgument, {filter: token => isCommaToken(token)});
-								if (commaToken) {
-									return fixer.removeRange([commaToken.range[0], functionArgument.range[1]]);
-								}
-
-								return fixer.remove(functionArgument);
+								const commaTokenBefore = sourceCode.getTokenBefore(implementationArgument, {filter: token => isCommaToken(token)});
+								return fixer.removeRange([commaTokenBefore.range[0], implementationArgument.range[1]]);
 							},
-						},
-					],
-				});
-			}
+						}]),
+				],
+			});
 		}),
 	});
 };

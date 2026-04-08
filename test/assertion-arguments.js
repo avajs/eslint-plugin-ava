@@ -341,6 +341,16 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 'function foo(message) { t.assert(true, message); }'),
 		testCase(false, 't.fail(globalVariable);'),
 		testCase(false, '[["name", 1, 2]].forEach(([testName, a, b]) => { t.is(a, b, testName); });'),
+
+		// MemberExpression and ChainExpression as message — cannot statically determine type
+		testCase(false, 't.fail(error.message);'),
+		testCase(false, 't.fail(error?.message);'),
+		testCase(false, 't.is(1, 2, error.message);'),
+		testCase(false, 't.is(1, 2, error?.message);'),
+
+		// CallExpression as message — cannot statically determine return type
+		testCase(false, 't.fail(getMessage());'),
+		testCase(false, 't.is(1, 2, getMessage());'),
 	],
 	invalid: [
 		// Not enough arguments

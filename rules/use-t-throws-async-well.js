@@ -17,7 +17,8 @@ const isThrowsAsyncAssertion = callee => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
+	const {sourceCode} = context;
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -29,10 +30,9 @@ const create = context => {
 				&& isThrowsAsyncAssertion(node.callee)
 			) {
 				const testNode = ava.isInTestNode();
-				const implementationArg = testNode.arguments.find(arg => util.isFunctionExpression(util.unwrapTypeExpression(arg)));
-				const implementation = util.unwrapTypeExpression(implementationArg);
+				const implementation = util.getExecutableTestImplementation(testNode, sourceCode);
 				const fix = implementation?.async
-					? fixer => fixer.replaceText(node.callee, `await ${context.sourceCode.getText(node.callee)}`)
+					? fixer => fixer.replaceText(node.callee, `await ${sourceCode.getText(node.callee)}`)
 					: undefined;
 				context.report({
 					node,

@@ -16,16 +16,39 @@ const create = context => {
 
 	return {
 		'ImportDeclaration[importKind!="type"]'(node) {
-			if (node.source.value === 'ava') {
-				// Skip inline type imports: `import {type Foo} from 'ava'`
-				if (node.specifiers.every(specifier => specifier.importKind === 'type')) {
-					return;
-				}
+			if (node.source.value !== 'ava') {
+				return;
+			}
 
-				const {name} = node.specifiers[0].local;
-				if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
-					report(context, node);
-				}
+			// Side-effect import: `import 'ava'`
+			if (node.specifiers.length === 0) {
+				report(context, node);
+				return;
+			}
+
+			// Skip inline type imports: `import {type Foo} from 'ava'`
+			if (node.specifiers.every(specifier => specifier.importKind === 'type')) {
+				return;
+			}
+
+			// Only default imports are accepted
+			const defaultSpecifier = node.specifiers.find(specifier => specifier.type === 'ImportDefaultSpecifier');
+			if (!defaultSpecifier) {
+				report(context, node);
+				return;
+			}
+
+			const {name} = defaultSpecifier.local;
+			if (name !== 'test' && (!isTypeScript || name !== 'anyTest')) {
+				report(context, node);
+				return;
+			}
+
+			const hasRenamedNamedImport = node.specifiers.some(specifier => specifier.type === 'ImportSpecifier'
+				&& specifier.importKind !== 'type'
+				&& specifier.imported.name !== specifier.local.name);
+			if (hasRenamedNamedImport) {
+				report(context, node);
 			}
 		},
 	};

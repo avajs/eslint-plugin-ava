@@ -6,7 +6,7 @@ const MESSAGE_ID = 'no-skip-test';
 const MESSAGE_ID_SUGGESTION = 'no-skip-test-suggestion';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([

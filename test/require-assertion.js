@@ -66,14 +66,13 @@ ruleTester.run('require-assertion', rule, {
 		'const title = "name"; test(title, implementation);',
 		// Macro invocation with function-valued macro data
 		'const macro = (t, callback) => { t.true(callback()); }; test(macro, () => true);',
-		// Imported macro with function-valued macro data
+		// Imported macro invocations may receive function- or object-valued data
 		'import macro from "./macro.js"; test(macro, () => true);',
-		// Named imported macro with function-valued macro data
-		'import {macro as importedMacro} from "./macro.js"; test(importedMacro, () => true);',
-		// Namespace imported macro with function-valued macro data
-		'import * as macros from "./macro.js"; test(macros.macro, () => true);',
+		'import macro from "./macro.js"; test(macro, {exec(value) { value(); }});',
 		// Inline macro implementation with function-valued macro data
 		'test((t, callback) => { t.true(callback()); }, () => true);',
+		// Inline object macro with named test and assertion in exec
+		'test("name", {exec(t) { t.pass(); }});',
 		// Not a test file
 		{code: 'test(t => { doSomething(); });', noHeader: true},
 	],
@@ -114,6 +113,8 @@ ruleTester.run('require-assertion', rule, {
 		invalid('test(t => { const t1 = {is() {}}; t1.is(1, 1); });'),
 		// Calling assertion-like methods on shadowed `t` should not count
 		invalid('test(t => { { const t = {is() {}}; t.is(1, 1); } });'),
+		// Inline object macro with title should still require assertions in exec
+		invalid('test("name", {exec(t) { doSomething(); }});'),
 		// Multiple tests: one valid, one invalid (verifies counter reset)
 		invalid('test(t => { t.is(1, 1); }); test(t => { doSomething(); });'),
 	],

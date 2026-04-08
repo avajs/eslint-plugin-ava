@@ -5,6 +5,7 @@ import createAvaRule from '../create-ava-rule.js';
 const MESSAGE_ID = 'no-negated-assertion';
 
 const negatedPairs = {
+	assert: 'falsy',
 	true: 'falsy',
 	false: 'truthy',
 	truthy: 'falsy',
@@ -12,6 +13,7 @@ const negatedPairs = {
 };
 
 const doubleNegatedPairs = {
+	assert: 'truthy',
 	true: 'truthy',
 	false: 'falsy',
 	truthy: 'truthy',
@@ -21,7 +23,7 @@ const doubleNegatedPairs = {
 const getArgumentText = (source, argument) => argument.type === 'SequenceExpression' ? `(${source.getText(argument)})` : source.getText(argument);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -38,14 +40,8 @@ const create = context => {
 				return;
 			}
 
-			const members = util.getMembers(node.callee);
-			const methodName = members[0];
-
-			if (!negatedPairs[methodName]) {
-				return;
-			}
-
-			if (!members.slice(1).every(member => member === 'skip')) {
+			const methodName = util.getAssertionName(node.callee);
+			if (!methodName || !negatedPairs[methodName]) {
 				return;
 			}
 

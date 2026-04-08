@@ -20,6 +20,7 @@ ruleTester.run('no-inline-assertions', rule, {
 		// Shouldn't be triggered since the signature is incorrect
 		'test.todo("my test name", "bar");',
 		'test.todo("my test name", undefined, t => {})',
+		'import macro from "./macro.js"; test(macro, callback => callback());',
 	],
 	invalid: [
 		{
@@ -36,6 +37,21 @@ ruleTester.run('no-inline-assertions', rule, {
 			code: 'test("my test name", t => \n t.true(fn()));',
 			errors,
 			output: 'test("my test name", t => \n {t.true(fn())});',
+		},
+		{
+			code: 'test({exec: t => t.true(fn())});',
+			errors,
+			output: 'test({exec: t => {t.true(fn())}});',
+		},
+		{
+			code: 'test("my test name", {exec: t => t.true(fn())});',
+			errors,
+			output: 'test("my test name", {exec: t => {t.true(fn())}});',
+		},
+		{
+			code: 'const title = getTitle(); test(title, {exec: t => t.true(fn())});',
+			errors,
+			output: 'const title = getTitle(); test(title, {exec: t => {t.true(fn())}});',
 		},
 	],
 });

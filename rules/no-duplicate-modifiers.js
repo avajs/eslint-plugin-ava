@@ -7,7 +7,7 @@ const MESSAGE_ID = 'no-duplicate-modifiers';
 const sortByName = (a, b) => a.name.localeCompare(b.name);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([

@@ -34,6 +34,7 @@ ruleTester.run('no-identical-title', rule, {
 			test('same title', macro, false);
 		`,
 		'test(t => {}); test(t => {});',
+		'test("same", {exec(t, value) {}, title(provided, value) { return provided + value; }}, 1); test("same", {exec(t, value) {}, title(provided, value) { return provided + value; }}, 2);',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(t => {}); test(t => {});', noHeader: true},
 		{code: 'test("a", t => {}); test("a", t => {});', noHeader: true},
@@ -78,6 +79,15 @@ ruleTester.run('no-identical-title', rule, {
 				messageId,
 				line: 2,
 				column: 27,
+			}],
+		},
+		// Inline object macros with data arguments (same title, different data)
+		{
+			code: 'test("same", {exec(t) {}}, 1); test("same", {exec(t) {}}, 2);',
+			errors: [{
+				messageId,
+				line: 2,
+				column: 37,
 			}],
 		},
 		// String literal then template literal

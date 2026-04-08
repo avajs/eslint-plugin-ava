@@ -34,12 +34,15 @@ ruleTester.run('prefer-t-regex', rule, {
 		String.raw`test(t => t.false(/\d+/.test()));`,
 		String.raw`test(t => t.truthy(/\d+/.test()));`,
 		String.raw`test(t => t.falsy(/\d+/.test()));`,
+		String.raw`test(t => t.assert(/\d+/.test()));`,
 		String.raw`test(t => t.is(/\d+/.test(), true));`,
 		String.raw`test(t => t.is(/\d+/.test(), false));`,
 		String.raw`test(t => t.is(true, /\d+/.test()));`,
 		String.raw`test(t => t.is(false, /\d+/.test()));`,
 		String.raw`test(t => t.deepEqual(/\d+/.test(), true));`,
 		String.raw`test(t => t.deepEqual(/\d+/.test(), false));`,
+		String.raw`test(t => t.deepEqual(true, /\d+/.test()));`,
+		String.raw`test(t => t.deepEqual(false, /\d+/.test()));`,
 		'test(t => t.is(true))',
 		'test(t => t.is())',
 		'test(t => t.false())',
@@ -192,10 +195,74 @@ ruleTester.run('prefer-t-regex', rule, {
 			output: 'const reg = RegExp(/\\d+/);\ntest(t => t.regex(foo.bar(), reg));',
 			errors,
 		},
+		// `t.assert()` is equivalent to `t.truthy()`
+		{
+			code: String.raw`test(t => t.assert(/\d+/.test("foo")));`,
+			output: String.raw`test(t => t.regex("foo", /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.assert(foo.match(/\d+/)));`,
+			output: String.raw`test(t => t.regex(foo, /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.assert(foo.search(/\d+/)));`,
+			output: String.raw`test(t => t.regex(foo, /\d+/));`,
+			errors,
+		},
+		// `t.falsy()` should suggest `t.notRegex()`
+		{
+			code: String.raw`test(t => t.falsy(/\d+/.test("foo")));`,
+			output: String.raw`test(t => t.notRegex("foo", /\d+/));`,
+			errors,
+		},
+		// `t.deepEqual()` with boolean literal
+		{
+			code: String.raw`test(t => t.deepEqual(/\d+/.test(foo), true));`,
+			output: String.raw`test(t => t.regex(foo, /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.deepEqual(/\d+/.test(foo), false));`,
+			output: String.raw`test(t => t.notRegex(foo, /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.deepEqual(true, /\d+/.test(foo)));`,
+			output: String.raw`test(t => t.regex(foo, /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.deepEqual(false, /\d+/.test(foo)));`,
+			output: String.raw`test(t => t.notRegex(foo, /\d+/));`,
+			errors,
+		},
 		// Alternative test object names for t.try() callbacks
 		{
 			code: String.raw`test(t => tt.true(/\d+/.test("foo")));`,
 			output: String.raw`test(t => tt.regex("foo", /\d+/));`,
+			errors,
+		},
+		// .skip variants
+		{
+			code: String.raw`test(t => t.true.skip(/\d+/.test("foo")));`,
+			output: String.raw`test(t => t.regex.skip("foo", /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.false.skip(/\d+/.test("foo")));`,
+			output: String.raw`test(t => t.notRegex.skip("foo", /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.assert.skip(/\d+/.test("foo")));`,
+			output: String.raw`test(t => t.regex.skip("foo", /\d+/));`,
+			errors,
+		},
+		{
+			code: String.raw`test(t => t.is.skip(/\d+/.test(foo), true));`,
+			output: String.raw`test(t => t.regex.skip(foo, /\d+/));`,
 			errors,
 		},
 	],

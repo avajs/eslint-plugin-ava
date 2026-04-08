@@ -5,9 +5,10 @@ import util from '../util.js';
 const MESSAGE_ID = 'prefer-t-regex';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	const booleanTests = new Set([
+		'assert',
 		'true',
 		'false',
 		'truthy',
@@ -129,12 +130,12 @@ const create = context => {
 			return;
 		}
 
-		const assertion = ['true', 'truthy'].includes(node.callee.property.name) ? 'regex' : 'notRegex';
+		const assertion = ['assert', 'true', 'truthy'].includes(util.getAssertionName(node.callee)) ? 'regex' : 'notRegex';
 
 		const fix = fixer => {
 			const source = context.sourceCode;
 			return [
-				fixer.replaceText(node.callee.property, assertion),
+				fixer.replaceText(util.getRootNode(node.callee).property, assertion),
 				fixer.replaceText(firstArgument, `${source.getText(variable)}, ${source.getText(lookup)}`),
 			];
 		};
@@ -169,7 +170,7 @@ const create = context => {
 		const booleanFixer = assertion => fixer => {
 			const source = context.sourceCode;
 			return [
-				fixer.replaceText(node.callee.property, assertion),
+				fixer.replaceText(util.getRootNode(node.callee).property, assertion),
 				fixer.replaceText(firstArgument, `${source.getText(regex.arguments[0])}`),
 				fixer.replaceText(secondArgument, `${source.getText(regex.callee.object)}`),
 			];
@@ -213,11 +214,13 @@ const create = context => {
 			const isAssertion = node.callee.type === 'MemberExpression'
 				&& util.isTestObject(util.getNameOfRootNodeObject(node.callee));
 
-			const isBooleanAssertion = isAssertion
-				&& booleanTests.has(node.callee.property.name);
+			const assertionName = util.getAssertionName(node.callee);
+			if (!assertionName) {
+				return;
+			}
 
-			const isEqualityAssertion = isAssertion
-				&& equalityTests.has(node.callee.property.name);
+			const isBooleanAssertion = isAssertion && booleanTests.has(assertionName);
+			const isEqualityAssertion = isAssertion && equalityTests.has(assertionName);
 
 			if (isBooleanAssertion) {
 				booleanHandler(node);

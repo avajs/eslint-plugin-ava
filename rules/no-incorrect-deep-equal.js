@@ -5,7 +5,7 @@ import createAvaRule from '../create-ava-rule.js';
 const MESSAGE_ID = 'no-deep-equal-with-primitive';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -27,10 +27,8 @@ const create = context => {
 				return;
 			}
 
-			const members = util.getMembers(callee);
-			const name = util.getAssertionMethod(callee);
-
-			if (!name || !members.slice(1).every(member => member === 'skip')) {
+			const name = util.getAssertionName(callee);
+			if (!name) {
 				return;
 			}
 

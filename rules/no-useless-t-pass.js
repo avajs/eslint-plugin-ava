@@ -21,17 +21,6 @@ function getTestObjectVariable(node, sourceCode) {
 	return findVariable(sourceCode.getScope(firstParameter), firstParameter);
 }
 
-function getImplementationArgument(node) {
-	for (const argument of node.arguments.slice(0, 2)) {
-		const normalizedArgument = util.unwrapTypeExpression(argument);
-		if (util.isFunctionExpression(normalizedArgument)) {
-			return normalizedArgument;
-		}
-	}
-
-	return undefined;
-}
-
 function isAllowedTryCall(node, sourceCode, allowedTestObjectVariables) {
 	if (node.callee.type !== 'MemberExpression') {
 		return false;
@@ -56,7 +45,7 @@ function isAllowedTryCall(node, sourceCode, allowedTestObjectVariables) {
 
 function getAllowedTestObjectVariables(node, sourceCode, testNode) {
 	const allowedTestObjectVariables = new Set();
-	const testObjectVariable = getTestObjectVariable(getImplementationArgument(testNode), sourceCode);
+	const testObjectVariable = getTestObjectVariable(util.getExecutableTestImplementation(testNode, sourceCode), sourceCode);
 	if (testObjectVariable) {
 		allowedTestObjectVariables.add(testObjectVariable);
 	}
@@ -106,7 +95,7 @@ function getTestObjectKey(callee, sourceCode, allowedTestObjectVariables) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const {sourceCode} = context;
 	let hasPlanByTestObject = new Map();
 	let passNodesByTestObject = new Map();

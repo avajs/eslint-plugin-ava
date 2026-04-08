@@ -97,6 +97,14 @@ ruleTester.run('no-useless-t-pass', rule, {
 			code: ' test(async t => { t.pass(); });',
 			errors,
 		},
+		{
+			code: ' test({exec(t) { t.pass(); }});',
+			errors,
+		},
+		{
+			code: ' test("title", {exec(t) { t.pass(); }}, 1);',
+			errors,
+		},
 		// `tt.plan()` should not suppress outer `t.pass()`
 		{
 			code: ' test(async t => { const attempt = await t.try(tt => { tt.plan(1); tt.pass(); }); t.pass(); await attempt.commit(); });',

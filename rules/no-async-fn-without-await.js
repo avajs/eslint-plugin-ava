@@ -6,7 +6,8 @@ const MESSAGE_ID = 'no-async-fn-without-await';
 const MESSAGE_ID_SUGGESTION = 'no-async-fn-without-await-suggestion';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
+	const {sourceCode} = context;
 	let testUsed = false;
 	let asyncTest;
 	let nestedFunctionDepth = 0;
@@ -36,8 +37,8 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			asyncTest = (isAsync(node.arguments[0]) && node.arguments[0])
-				|| (isAsync(node.arguments[1]) && node.arguments[1]);
+			const implementationArgument = util.getExecutableTestImplementation(node, sourceCode);
+			asyncTest = isAsync(implementationArgument) && implementationArgument;
 		}),
 		':function': enterFunction,
 		':function:exit': exitFunction,

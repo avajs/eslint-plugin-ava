@@ -104,7 +104,7 @@ function hasDirectAwait(node) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		TryStatement: visitIf([

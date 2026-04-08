@@ -6,7 +6,7 @@ const MESSAGE_ID = 'no-commented-tests';
 const commentedTestPattern = /^\s*\*?\s*(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/;
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		'Program:exit'() {

@@ -227,7 +227,7 @@ function isString(node) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const options = context.options[0];
 	const enforcesMessage = Boolean(options.message);
 	const shouldHaveMessage = options.message !== 'never';
@@ -346,6 +346,8 @@ const create = context => {
 					} else if (!/^(?:[A-Z][a-z\d]*)*Error$/.test(lastArgument.name)) {
 						return;
 					}
+				} else if (lastArgument.type === 'MemberExpression' || lastArgument.type === 'ChainExpression' || lastArgument.type === 'CallExpression') {
+					return; // Cannot statically determine the type (e.g. `error.message`, `getMessage()`)
 				}
 
 				if (!isString(lastArgument)) {

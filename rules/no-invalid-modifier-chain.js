@@ -147,7 +147,7 @@ function getCalleeText(chain, prefix, hasImplicitSerial) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const {sourceCode} = context;
 
 	return ava.merge({

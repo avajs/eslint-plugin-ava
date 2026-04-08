@@ -5,7 +5,7 @@ import util from '../util.js';
 const MESSAGE_ID = 'no-nested-assertions';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const assertionCallStack = [];
 
 	return ava.merge({

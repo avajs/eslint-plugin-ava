@@ -20,6 +20,11 @@ ruleTester.run('no-async-fn-without-await', rule, {
 		'test(\'title\', fn);',
 		'test(\'title\', function(t) {});',
 		'test(\'title\', async t => { await foo(); });',
+		'test.macro({exec: async t => { await foo(); }});',
+		'test(\'title\', {exec: async t => { await foo(); }});',
+		'const macro = t => {}; test(macro, {exec: async t => { foo(); }});',
+		'import macro from "./macro.js"; test(macro, {exec: async value => { value(); }});',
+		'import macro from "./macro.js"; test(macro, async callback => { callback(); });',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(async t => {});', noHeader: true},
 		// Await inside nested function does not count as test-level await
@@ -106,6 +111,66 @@ ruleTester.run('no-async-fn-without-await', rule, {
 				suggestions: [{
 					messageId: 'no-async-fn-without-await-suggestion',
 					output: 'test(\'title\', t => {});',
+				}],
+			}],
+		},
+		{
+			code: 'const title = getTitle(); test(title, async t => {});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'const title = getTitle(); test(title, t => {});',
+				}],
+			}],
+		},
+		{
+			code: 'const title = getTitle(); test(title, {exec: async t => {}});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'const title = getTitle(); test(title, {exec: t => {}});',
+				}],
+			}],
+		},
+		{
+			code: 'test.macro({exec: async t => { foo(); }});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test.macro({exec: t => { foo(); }});',
+				}],
+			}],
+		},
+		{
+			code: 'test(\'title\', {exec: async t => { foo(); }});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(\'title\', {exec: t => { foo(); }});',
+				}],
+			}],
+		},
+		{
+			code: 'test({exec: async (t, value) => { foo(); }}, 123);',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test({exec: (t, value) => { foo(); }}, 123);',
+				}],
+			}],
+		},
+		{
+			code: 'test(\'title\', {exec: async (t, value) => { foo(); }}, 123);',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(\'title\', {exec: (t, value) => { foo(); }}, 123);',
 				}],
 			}],
 		},

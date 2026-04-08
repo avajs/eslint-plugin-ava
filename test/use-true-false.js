@@ -31,6 +31,10 @@ ruleTester.run('use-true-false', rule, {
 		testCase('t.falsy(value)'),
 		testCase('t.falsy(value())'),
 		testCase('t.falsy(value + value)'),
+		testCase('t.assert(value)'),
+		testCase('t.assert(value())'),
+		testCase('t.assert(value + value)'),
+		testCase('t.assert()'),
 		testCase('t.truthy()'),
 		testCase('t.falsy()'),
 		testCase('t.context.truthy(true)'),
@@ -128,8 +132,73 @@ ruleTester.run('use-true-false', rule, {
 			errors: trueErrors,
 		},
 		{
+			code: testCase('t.truthy(Reflect.deleteProperty(obj, \'key\'))'),
+			output: testCase('t.true(Reflect.deleteProperty(obj, \'key\'))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.truthy(Reflect.defineProperty(obj, \'key\', {}))'),
+			output: testCase('t.true(Reflect.defineProperty(obj, \'key\', {}))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.truthy(Reflect.preventExtensions(obj))'),
+			output: testCase('t.true(Reflect.preventExtensions(obj))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.truthy(Reflect.set(obj, \'key\', value))'),
+			output: testCase('t.true(Reflect.set(obj, \'key\', value))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.truthy(Reflect.setPrototypeOf(obj, proto))'),
+			output: testCase('t.true(Reflect.setPrototypeOf(obj, proto))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.falsy(Reflect.deleteProperty(obj, \'key\'))'),
+			output: testCase('t.false(Reflect.deleteProperty(obj, \'key\'))'),
+			errors: falseErrors,
+		},
+		{
 			code: testCase('t.falsy(value === 1)'),
 			output: testCase('t.false(value === 1)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(true)'),
+			output: testCase('t.false(true)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(false)'),
+			output: testCase('t.false(false)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(!value)'),
+			output: testCase('t.false(!value)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(!!value)'),
+			output: testCase('t.false(!!value)'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(Array.isArray(value))'),
+			output: testCase('t.false(Array.isArray(value))'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(isFinite(3))'),
+			output: testCase('t.false(isFinite(3))'),
+			errors: falseErrors,
+		},
+		{
+			code: testCase('t.falsy(Object.hasOwn(obj, \'key\'))'),
+			output: testCase('t.false(Object.hasOwn(obj, \'key\'))'),
 			errors: falseErrors,
 		},
 		// Instanceof
@@ -203,6 +272,42 @@ ruleTester.run('use-true-false', rule, {
 		{
 			code: testCase('tt.truthy(true)'),
 			output: testCase('tt.true(true)'),
+			errors: trueErrors,
+		},
+		// `t.assert()` is equivalent to `t.truthy()`
+		{
+			code: testCase('t.assert(value === 1)'),
+			output: testCase('t.true(value === 1)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert(!value)'),
+			output: testCase('t.true(!value)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert(!!value)'),
+			output: testCase('t.true(!!value)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert(true)'),
+			output: testCase('t.true(true)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert(false)'),
+			output: testCase('t.true(false)'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert(Array.isArray(value))'),
+			output: testCase('t.true(Array.isArray(value))'),
+			errors: trueErrors,
+		},
+		{
+			code: testCase('t.assert.skip(true)'),
+			output: testCase('t.true.skip(true)'),
 			errors: trueErrors,
 		},
 		// With supported trailing .skip modifier

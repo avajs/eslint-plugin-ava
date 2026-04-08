@@ -23,10 +23,18 @@ ruleTester.run('test-title', rule, {
 		'test.after(t => {});',
 		'test.beforeEach(t => {});',
 		'test.afterEach(t => {});',
+		'const before = test.before; before(t => {});',
+		'const before = test["before"]; before(t => {});',
+		'test({title() { return "name"; }, exec(t) { t.pass(); }});',
+		'const macro = {exec(t) { t.pass(); }, title() { return "name"; }}; test(macro);',
+		'const base = {exec(t) { t.pass(); }, title() { return "name"; }}; const macro = base; test(macro);',
 		'test.macro(t => {});',
 		'notTest(t => { t.pass(); t.end(); });',
 		'test([], arg1, arg2);',
 		'test({}, arg1, arg2);',
+		'import title from "./title.js"; test(title, t => { t.pass(); });',
+		'import title from "./title.js"; test(title, {exec(t) { t.pass(); }});',
+		'import macro from "./macro.js"; test(macro);',
 		// Variable/expression titles are OK (can't statically determine)
 		'test(title, t => { t.pass(); });',
 		// Shouldn't be triggered since it's not a test file
@@ -48,6 +56,18 @@ ruleTester.run('test-title', rule, {
 		},
 		{
 			code: 'test.todo();',
+			errors: missingErrors,
+		},
+		{
+			code: 'const macro = (t, value) => { t.pass(); }; test(macro, 1);',
+			errors: missingErrors,
+		},
+		{
+			code: 'test({exec(t) { t.pass(); }});',
+			errors: missingErrors,
+		},
+		{
+			code: 'test({exec(t) { t.pass(); }}, 1);',
 			errors: missingErrors,
 		},
 		// Non-string title

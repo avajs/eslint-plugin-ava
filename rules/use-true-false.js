@@ -41,6 +41,11 @@ const knownBooleanSignatures = [
 	'SharedArrayBuffer.isView()',
 	'Reflect.has()',
 	'Reflect.isExtensible()',
+	'Reflect.preventExtensions()',
+	'Reflect.defineProperty()',
+	'Reflect.deleteProperty()',
+	'Reflect.set()',
+	'Reflect.setPrototypeOf()',
 ].map(signature => espurify(espree.parse(signature, {ecmaVersion: 'latest'}).body[0].expression.callee));
 
 function matchesKnownBooleanExpression(argument) {
@@ -54,7 +59,7 @@ function matchesKnownBooleanExpression(argument) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 
 	return ava.merge({
 		CallExpression: visitIf([
@@ -75,14 +80,12 @@ const create = context => {
 				return;
 			}
 
-			const members = util.getMembers(node.callee);
-			const name = util.getAssertionMethod(node.callee);
-
-			if (!name || !members.slice(1).every(member => member === 'skip')) {
+			const name = util.getAssertionName(node.callee);
+			if (!name) {
 				return;
 			}
 
-			if (name === 'truthy' || name === 'falsy') {
+			if (name === 'assert' || name === 'truthy' || name === 'falsy') {
 				const argument = node.arguments[0];
 
 				if (argument
@@ -95,6 +98,7 @@ const create = context => {
 					context.report({
 						node,
 						messageId: isFalsy ? MESSAGE_ID_FALSE : MESSAGE_ID_TRUE,
+						data: {method: name},
 						fix(fixer) {
 							return fixer.replaceText(root.property, isFalsy ? 'false' : 'true');
 						},
@@ -159,8 +163,8 @@ export default {
 		fixable: 'code',
 		schema: [],
 		messages: {
-			[MESSAGE_ID_TRUE]: '`t.true()` should be used instead of `t.truthy()`.',
-			[MESSAGE_ID_FALSE]: '`t.false()` should be used instead of `t.falsy()`.',
+			[MESSAGE_ID_TRUE]: '`t.true()` should be used instead of `t.{{method}}()`.',
+			[MESSAGE_ID_FALSE]: '`t.false()` should be used instead of `t.{{method}}()`.',
 			[MESSAGE_ID_IS_TRUE]: 'Prefer `t.true()` over `t.is(…, true)`.',
 			[MESSAGE_ID_IS_FALSE]: 'Prefer `t.false()` over `t.is(…, false)`.',
 		},

@@ -15,7 +15,7 @@ const create = context => {
 
 	let hasTestCall = false;
 
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,

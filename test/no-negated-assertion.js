@@ -12,7 +12,7 @@ ruleTester.run('no-negated-assertion', rule, {
 		testCase('t.truthy(x)'),
 		testCase('t.falsy(x)'),
 		testCase('t.is(!x, y)'),
-		testCase('t.assert(!x)'),
+		testCase('t.assert(x)'),
 		testCase('t.true(x, "message")'),
 		testCase('t.true()'),
 		// Not a test object
@@ -141,6 +141,22 @@ ruleTester.run('no-negated-assertion', rule, {
 		{
 			code: testCase('tt.true(!x)'),
 			output: testCase('tt.falsy(x)'),
+			errors,
+		},
+		// `t.assert()` is equivalent to `t.truthy()`
+		{
+			code: testCase('t.assert(!x)'),
+			output: testCase('t.falsy(x)'),
+			errors,
+		},
+		{
+			code: testCase('t.assert(!!x)'),
+			output: testCase('t.truthy(x)'),
+			errors,
+		},
+		{
+			code: testCase('t.assert.skip(!x)'),
+			output: testCase('t.falsy.skip(x)'),
 			errors,
 		},
 	],

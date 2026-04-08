@@ -7,7 +7,7 @@ const MESSAGE_ID = 'max-asserts';
 const notAssertionMethods = new Set(['plan', 'end']);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	const {max: maxAssertions} = context.options[0];
 	let assertionCount = 0;
 	let nodeToReport;

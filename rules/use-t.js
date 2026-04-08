@@ -5,23 +5,15 @@ import util from '../util.js';
 const MESSAGE_ID = 'use-t';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
+	const {sourceCode} = context;
 
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			const index = node.arguments.length - 1;
-			if (index < 0 || index > 1) {
-				return;
-			}
-
-			let implementationArgument = node.arguments[index];
-			if (ava.hasTestModifier('macro') && implementationArgument.type === 'ObjectExpression') {
-				const execProperty = implementationArgument.properties.find(p => p.key?.name === 'exec');
-				implementationArgument = execProperty?.value;
-			}
+			const implementationArgument = util.getExecutableTestImplementation(node, sourceCode);
 
 			if (!implementationArgument || !implementationArgument.params || implementationArgument.params.length === 0) {
 				return;

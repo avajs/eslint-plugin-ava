@@ -486,6 +486,46 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			`,
 			errors: [error],
 		},
+		// -NaN
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, -NaN);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, -NaN);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(-NaN, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(-NaN, expression);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(expression, -NaN);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(expression, -NaN);
+				});
+			`,
+			errors: [error],
+		},
 		// Infinity
 		{
 			code: `
@@ -549,6 +589,59 @@ ruleTester.run('no-incorrect-deep-equal', rule, {
 			output: `
 				test('x', t => {
 					t.not(expression, -Infinity);
+				});
+			`,
+			errors: [error],
+		},
+		// Void 0 (equivalent to undefined)
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(expression, void 0);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(expression, void 0);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.deepEqual(void 0, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.is(void 0, expression);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(expression, void 0);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(expression, void 0);
+				});
+			`,
+			errors: [error],
+		},
+		{
+			code: `
+				test('x', t => {
+					t.notDeepEqual(void 0, expression);
+				});
+			`,
+			output: `
+				test('x', t => {
+					t.not(void 0, expression);
 				});
 			`,
 			errors: [error],

@@ -5,20 +5,15 @@ import util from '../util.js';
 const MESSAGE_ID = 'no-inline-assertions';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
+	const {sourceCode} = context;
 
 	return ava.merge({
 		CallExpression: visitIf([
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(node => {
-			const functionArgumentIndex = node.arguments.length - 1;
-			if (functionArgumentIndex > 1) {
-				return;
-			}
-
-			const functionArgument = node.arguments[functionArgumentIndex];
-
+			const functionArgument = util.getExecutableTestImplementation(node, sourceCode);
 			if (!util.isFunctionExpression(functionArgument)) {
 				return;
 			}

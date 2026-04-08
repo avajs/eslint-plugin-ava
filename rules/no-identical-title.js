@@ -8,16 +8,6 @@ const MESSAGE_ID = 'no-identical-title';
 
 const purify = node => node && espurify(node);
 
-const getStringValue = node => {
-	if (node.type === 'Literal' && typeof node.value === 'string') {
-		return node.value;
-	}
-
-	if (node.type === 'TemplateLiteral' && node.expressions.length === 0) {
-		return node.quasis[0].value.cooked;
-	}
-};
-
 const isStaticTemplateLiteral = node => node.expressions.every(expression => isStatic(expression));
 
 const isStatic = node => node.type === 'Literal'
@@ -32,8 +22,17 @@ function isTitleUsed(usedTitleKeys, key) {
 	return usedTitleKeys.some(usedKey => typeof usedKey !== 'string' && isDeepStrictEqual(key, usedKey));
 }
 
+function hasObjectMacroTitle(node) {
+	return node?.type === 'ObjectExpression' && node.properties.some(property => property.type === 'Property'
+		&& !property.computed
+		&& (
+			(property.key.type === 'Identifier' && property.key.name === 'title')
+			|| (property.key.type === 'Literal' && property.key.value === 'title')
+		));
+}
+
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context.sourceCode);
 	let usedTitleKeys = [];
 
 	return ava.merge({
@@ -50,12 +49,18 @@ const create = context => {
 				return;
 			}
 
-			// Don't flag what look to be macros
-			if (arguments_.length > 2 && !util.isFunctionExpression(arguments_[1])) {
+			// Data-driven object macros with their own `title()` can compute the final title from runtime arguments.
+			if (arguments_.length > 2 && util.getMacroExec(arguments_[1]) && hasObjectMacroTitle(arguments_[1])) {
 				return;
 			}
 
-			const key = getStringValue(titleNode) ?? purify(titleNode);
+			// Don't flag what look to be macros with data arguments,
+			// but still flag inline function implementations.
+			if (arguments_.length > 2 && !util.isFunctionExpression(arguments_[1]) && !util.getMacroExec(arguments_[1])) {
+				return;
+			}
+
+			const key = util.getStringValue(titleNode) ?? purify(titleNode);
 
 			if (isTitleUsed(usedTitleKeys, key)) {
 				context.report({

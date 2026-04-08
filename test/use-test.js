@@ -30,6 +30,7 @@ const commonTestCases = {
 	valid: [
 		{code: 'import test from \'ava\';', filename: 'file.js'},
 		{code: 'import test, {} from \'ava\';', filename: 'file.js'},
+		{code: 'import test, {serial} from \'ava\';', filename: 'file.js'},
 		{code: 'import test from \'foo\';', filename: 'file.js'},
 		...typescriptExtensions.flatMap(extension => [
 			{code: 'import anyTest from \'ava\';', filename: `file${extension}`},
@@ -42,6 +43,17 @@ const commonTestCases = {
 			{code: 'import ava from \'ava\';', errors, filename: `file${extension}`},
 		]),
 		{code: 'import anyTest from \'ava\';', errors, filename: 'file.js'},
+		// Side-effect import
+		{code: 'import \'ava\';', errors, filename: 'file.js'},
+		// Namespace import
+		{code: 'import * as test from \'ava\';', errors, filename: 'file.js'},
+		{code: 'import * as ava from \'ava\';', errors, filename: 'file.js'},
+		// Named import renamed to test
+		{code: 'import {serial as test} from \'ava\';', errors, filename: 'file.js'},
+		// Default import with renamed named import
+		{code: 'import test, {serial as foo} from \'ava\';', errors, filename: 'file.js'},
+		// Named import (not renamed)
+		{code: 'import {serial} from \'ava\';', errors, filename: 'file.js'},
 	],
 };
 
@@ -56,10 +68,22 @@ const typescriptTestCases = {
 		{code: 'import test, {type Macro} from \'ava\';', filename: `file${extension}`},
 		{code: 'import anyTest, {type Macro} from \'ava\';', filename: `file${extension}`},
 	]),
-	invalid: typescriptExtensions.map(extension => (
-		// Default with wrong name + inline type import should still report
-		{code: 'import ava, {type Macro} from \'ava\';', errors, filename: `file${extension}`}
-	)),
+	invalid: [
+		...typescriptExtensions.map(extension => (
+			// Default with wrong name + inline type import should still report
+			{code: 'import ava, {type Macro} from \'ava\';', errors, filename: `file${extension}`}
+		)),
+		// Namespace import in TypeScript
+		...typescriptExtensions.flatMap(extension => [
+			{code: 'import * as anyTest from \'ava\';', errors, filename: `file${extension}`},
+			{code: 'import * as test from \'ava\';', errors, filename: `file${extension}`},
+		]),
+		// Named import renamed to anyTest in TypeScript
+		...typescriptExtensions.flatMap(extension => [
+			{code: 'import {serial as anyTest} from \'ava\';', errors, filename: `file${extension}`},
+			{code: 'import anyTest, {serial as foo} from \'ava\';', errors, filename: `file${extension}`},
+		]),
+	],
 };
 
 ruleTester.run('use-test', rule, commonTestCases);
