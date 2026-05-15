@@ -81,7 +81,7 @@ const expectedNbArguments = {
 	},
 	snapshot: {
 		min: 1,
-		max: 2,
+		max: 3,
 	},
 	teardown: {
 		min: 1,
@@ -262,6 +262,29 @@ const create = context => {
 			if (firstNonSkipMember === 'try') {
 				if (gottenArguments < 1) {
 					context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: 1}});
+				}
+
+				return;
+			}
+
+			if (firstNonSkipMember === 'snapshot') {
+				if (gottenArguments < 1) {
+					context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: 1}});
+					return;
+				}
+
+				const hasOptionsArg = gottenArguments >= 2 && !isString(node.arguments[1]);
+				const effectiveMax = hasOptionsArg ? 3 : 2;
+
+				if (gottenArguments > effectiveMax) {
+					context.report({node, messageId: MESSAGE_ID_TOO_MANY, data: {max: effectiveMax}});
+				} else if (enforcesMessage) {
+					const hasMessage = hasOptionsArg ? gottenArguments === 3 : gottenArguments === 2;
+					if (!hasMessage && shouldHaveMessage) {
+						context.report({node, messageId: MESSAGE_ID_MISSING_MESSAGE});
+					} else if (hasMessage && !shouldHaveMessage) {
+						context.report({node, messageId: MESSAGE_ID_FOUND_MESSAGE});
+					}
 				}
 
 				return;
