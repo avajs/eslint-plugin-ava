@@ -1,7 +1,6 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import MicroSpellingCorrecter from 'micro-spelling-correcter';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID_NOT_FUNCTION = 'not-function';
 const MESSAGE_ID_UNKNOWN_ASSERTION = 'unknown-assertion';

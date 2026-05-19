@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import {findVariable} from '@eslint-community/eslint-utils';
-import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'require-assertion';

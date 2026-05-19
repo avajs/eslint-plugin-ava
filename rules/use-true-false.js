@@ -1,9 +1,8 @@
 import {isDeepStrictEqual} from 'node:util';
 import * as espree from 'espree';
 import espurify from 'espurify';
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID_TRUE = 'use-true';
 const MESSAGE_ID_FALSE = 'use-false';

@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'no-unknown-modifiers';
 const MESSAGE_ID_SUGGESTION = 'no-unknown-modifiers-suggestion';

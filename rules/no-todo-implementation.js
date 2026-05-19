@@ -1,7 +1,6 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import {isCommaToken} from '@eslint-community/eslint-utils';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID = 'no-todo-implementation';
 const MESSAGE_ID_REMOVE_TODO = 'no-todo-implementation-remove-todo';

@@ -1,9 +1,8 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import {
 	getStaticValue, isOpeningParenToken, isCommaToken, findVariable,
 } from '@eslint-community/eslint-utils';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID_TOO_FEW = 'too-few-arguments';
 const MESSAGE_ID_TOO_MANY = 'too-many-arguments';

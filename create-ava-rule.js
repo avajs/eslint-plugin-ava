@@ -1,5 +1,4 @@
 /* eslint-disable eslint-plugin/prefer-message-ids, eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type */
-import enhance from 'enhance-visitors';
 import {findVariable} from '@eslint-community/eslint-utils';
 import {hasComputedTestModifier, unwrapTypeExpression} from './util.js';
 
@@ -16,6 +15,32 @@ const trackedAliasModifiers = new Set([
 	'skip',
 	'todo',
 ]);
+
+const mergeVisitors = (...visitors) => {
+	const visitor = {};
+
+	for (const customVisitor of visitors) {
+		for (const [selector, customHandler] of Object.entries(customVisitor)) {
+			const predefinedHandler = visitor[selector];
+			if (!predefinedHandler) {
+				visitor[selector] = customHandler;
+				continue;
+			}
+
+			visitor[selector] = selector.endsWith(':exit')
+				? node => {
+					customHandler(node);
+					predefinedHandler(node);
+				}
+				: node => {
+					predefinedHandler(node);
+					customHandler(node);
+				};
+		}
+	}
+
+	return visitor;
+};
 
 const createAvaRule = sourceCode => {
 	let isTestFile = false;
@@ -194,8 +219,14 @@ const createAvaRule = sourceCode => {
 		isInTestFile: () => isTestFile,
 		isInTestNode: () => currentTestNode,
 		isTestNode: node => currentTestNode === node,
-		merge: customHandlers => enhance.mergeVisitors([predefinedRules, customHandlers]),
+		merge: customHandlers => mergeVisitors(predefinedRules, customHandlers),
 	};
+};
+
+export const visitIf = predicates => visitor => node => {
+	if (predicates.every(predicate => predicate(node))) {
+		return visitor(node);
+	}
 };
 
 export default createAvaRule;
