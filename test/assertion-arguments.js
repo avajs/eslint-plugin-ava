@@ -73,6 +73,23 @@ function testCase(message, content, errors = [], {
 	return result;
 }
 
+function rawTestCase(message, code, errors = []) {
+	if (!Array.isArray(errors)) {
+		errors = [errors];
+	}
+
+	const result = {
+		options: message ? [{message}] : [],
+		code,
+	};
+
+	if (errors.length > 0) {
+		result.errors = errors;
+	}
+
+	return result;
+}
+
 const statics = [
 	'null',
 	'true',
@@ -180,6 +197,21 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.true(true, \'message\');'),
 		testCase(false, 't.truthy(\'unicorn\', \'message\');'),
 		testCase(false, 't.snapshot(value, \'message\');'),
+		testCase(false, 't.snapshot(value, {formatAsCodeBlock: true});'),
+		testCase(false, 't.snapshot(value, {formatAsCodeBlock: true}, \'message\');'),
+		testCase(false, 't.snapshot(value, {\'formatAsCodeBlock\': true}, \'message\');'),
+		testCase(false, 't.snapshot(value, {[\'formatAsCodeBlock\']: true}, \'message\');'),
+		testCase(false, 't.snapshot(value, opts, \'message\');'),
+		testCase(false, 'const key = getKey(); t.snapshot(value, {[key]: true}, \'message\');'),
+		testCase(false, 't.snapshot(value, {...options}, \'message\');'),
+		testCase(false, 'const options = {...{formatAsCodeBlock: true}}; t.snapshot(value, options, \'message\');'),
+		testCase(false, 'const options = {formatAsCodeBlock: true}; t.snapshot(value, options, \'message\');'),
+		testCase(false, 'const options = true ? {formatAsCodeBlock: true} : {}; t.snapshot(value, options, \'message\');'),
+		testCase(false, 'let options = {formatAsCodeBlock: true}; t.snapshot(value, options, \'message\'); options = {};'),
+		testCase(false, 'let options = {formatAsCodeBlock: true}; function reset() { options = {}; } t.snapshot(value, options, \'message\');'),
+		testCase(false, 'const message = \'ok\'; t.snapshot(value, message);'),
+		testCase(false, 'const message = \'ok\'; t.snapshot(value, {formatAsCodeBlock: true}, message);'),
+		rawTestCase(false, 'const options = {formatAsCodeBlock: true}; test(t => { t.snapshot(value, options, \'message\'); });'),
 		testCase(false, 't.context.plan();'),
 		testCase(false, 't.teardown(() => {});'),
 		testCase(false, 't.timeout(100, \'message\');'),
@@ -239,6 +271,15 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.ifError(new Error(), \'message\');'),
 		testCase('always', 't.is.skip(\'same\', \'same\', \'message\');'),
 		testCase('always', 't.snapshot(value, \'message\');'),
+		testCase('always', 't.snapshot(value, {formatAsCodeBlock: true}, \'message\');'),
+		testCase('always', 't.snapshot(value, {\'formatAsCodeBlock\': true}, \'message\');'),
+		testCase('always', 't.snapshot(value, {[\'formatAsCodeBlock\']: true}, \'message\');'),
+		testCase('always', 't.snapshot(value, opts, \'message\');'),
+		testCase('always', 'const key = getKey(); t.snapshot(value, {[key]: true});'),
+		testCase('always', 't.snapshot(value, {...options});'),
+		testCase('always', 'const options = {formatAsCodeBlock: true}; t.snapshot(value, options, \'message\');'),
+		testCase('always', 'const message = \'ok\'; t.snapshot(value, message);'),
+		testCase('always', 'const message = \'ok\'; t.snapshot(value, {formatAsCodeBlock: true}, message);'),
 		testCase('always', 't.teardown(() => {});'),
 		testCase('always', 't.timeout(100, \'message\');'),
 		testCase('always', 't.try(tt => tt.pass(\'ok\'));'),
@@ -276,6 +317,12 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.ifError(new Error());'),
 		testCase('never', 't.is.skip(\'same\', \'same\');'),
 		testCase('never', 't.snapshot(value);'),
+		testCase('never', 't.snapshot(value, {formatAsCodeBlock: true});'),
+		testCase('never', 't.snapshot(value, {\'formatAsCodeBlock\': true});'),
+		testCase('never', 't.snapshot(value, opts);'),
+		testCase('never', 'const key = getKey(); t.snapshot(value, {[key]: true});'),
+		testCase('never', 't.snapshot(value, {...options});'),
+		testCase('never', 'const options = {formatAsCodeBlock: true}; t.snapshot(value, options);'),
 		testCase('never', 't.teardown(() => {});'),
 		testCase('never', 't.timeout(100);'),
 		testCase('never', 't.try(tt => tt.pass());'),
@@ -410,6 +457,10 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.ifError(new Error(), \'message\', \'extra argument\');', tooManyError()),
 		testCase(false, 't.is.skip(\'same\', \'same\', \'message\', \'extra argument\');', tooManyError()),
 		testCase(false, 't.snapshot(value, \'message\', \'extra argument\');', tooManyError()),
+		testCase(false, 't.snapshot(value, TypeError, \'message\');', tooManyError()),
+		testCase(false, 'const options = {}; t.snapshot(value, options, \'message\');', tooManyError()),
+		testCase(false, 'const options = true ? {} : {}; t.snapshot(value, options, \'message\');', tooManyError()),
+		testCase(false, 't.snapshot(value, {formatAsCodeBlock: true}, \'message\', \'extra argument\');', tooManyError()),
 		testCase(false, 't.teardown(() => {}, \'extra argument\');', tooManyError()),
 		testCase(false, 't.timeout(1, \'message\', \'extra argument\');', tooManyError()),
 
@@ -436,6 +487,13 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('always', 't.ifError(new Error());', missingError),
 		testCase('always', 't.is.skip(\'same\', \'same\');', missingError),
 		testCase('always', 't.snapshot(value);', missingError),
+		testCase('always', 't.snapshot(value, {formatAsCodeBlock: true});', missingError),
+		testCase('always', 'const key = \'formatAsCodeBlock\'; t.snapshot(value, {[key]: true});', missingError),
+		testCase('always', 'const options = {formatAsCodeBlock: true}; t.snapshot(value, {...options});', missingError),
+		testCase('always', 'const options = true ? {formatAsCodeBlock: true} : {}; t.snapshot(value, options);', missingError),
+		rawTestCase('always', 'const options = {formatAsCodeBlock: true}; test(t => { t.snapshot(value, options); });', missingError),
+		rawTestCase('always', 'const key = \'formatAsCodeBlock\'; const options = {[key]: true}; test(t => { const key = \'other\'; t.snapshot(value, options); });', missingError),
+		rawTestCase('always', 'const base = {formatAsCodeBlock: true}; const options = {...base}; test(t => { const base = {}; t.snapshot(value, options); });', missingError),
 
 		testCase('never', 't.assert(true, \'message\');', foundError),
 		testCase('never', 't.pass(\'message\');', foundError),
@@ -458,6 +516,8 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase('never', 't.ifError(new Error(), \'message\');', foundError),
 		testCase('never', 't.is.skip(\'same\', \'same\', \'message\');', foundError),
 		testCase('never', 't.snapshot(value, \'message\');', foundError),
+		testCase('never', 't.snapshot(value, {formatAsCodeBlock: true}, \'message\');', foundError),
+		testCase('never', 't.snapshot(value, opts, \'message\');', foundError),
 
 		testCase(false, 't.end(\'too many\', \'arguments\');', tooManyError()),
 		testCase(false, 't.end.skip(\'too many\', \'arguments\');', tooManyError()),
@@ -503,6 +563,12 @@ ruleTester.run('assertion-arguments', rule, {
 		testCase(false, 't.deepEqual({}, {}, 42);', messageIsNotStringError),
 		testCase(false, 't.fail({});', messageIsNotStringError),
 		testCase(false, 'let message = "ok"; message = false; t.assert(true, message);', messageIsNotStringError),
+		testCase(false, 'let message = "ok"; { message = false; } t.assert(true, message);', messageIsNotStringError),
+		rawTestCase(false, 'const message = true; test(t => { t.assert(true, message); });', messageIsNotStringError),
+		testCase(false, 't.snapshot(value, true);', messageIsNotStringError),
+		testCase(false, 't.snapshot(value, TypeError);', messageIsNotStringError),
+		testCase(false, 't.snapshot(value, {formatAsCodeBlock: true}, true);', messageIsNotStringError),
+		testCase(false, 'const message = true; t.snapshot(value, {formatAsCodeBlock: true}, message);', messageIsNotStringError),
 
 		// Error constructors are not valid assertion messages
 		testCase(false, 't.notThrows(() => {}, TypeError);', messageIsNotStringError),

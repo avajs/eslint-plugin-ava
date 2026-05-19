@@ -1,6 +1,10 @@
 import createAvaRule, {visitIf} from '../create-ava-rule.js';
 import {
-	getStaticValue, isOpeningParenToken, isCommaToken, findVariable,
+	getStaticValue,
+	isOpeningParenToken,
+	isCommaToken,
+	findVariable,
+	getPropertyName,
 } from '@eslint-community/eslint-utils';
 import util from '../util.js';
 
@@ -12,6 +16,8 @@ const MESSAGE_ID_NOT_STRING = 'not-string-message';
 const MESSAGE_ID_OUT_OF_ORDER = 'out-of-order';
 const MESSAGE_ID_PLAN_NOT_INTEGER = 'plan-not-integer';
 const MESSAGE_ID_REGEX_FIRST = 'regex-first-argument';
+
+const errorNamePattern = /^(?:[A-Z][a-z\d]*)*Error$/;
 
 const expectedNbArguments = {
 	assert: {
@@ -77,10 +83,6 @@ const expectedNbArguments = {
 	notRegex: {
 		min: 2,
 		max: 3,
-	},
-	snapshot: {
-		min: 1,
-		max: 2,
 	},
 	teardown: {
 		min: 1,
@@ -225,6 +227,156 @@ function isString(node) {
 		|| (type === 'BinaryExpression' && node.operator === '+' && (isString(node.left) || isString(node.right)));
 }
 
+function resolveIdentifier(node, context) {
+	return resolveIdentifierWithScope(node, context).node;
+}
+
+function resolveIdentifierWithScope(node, context) {
+	const scope = context.sourceCode.getScope(node);
+
+	if (node.type !== 'Identifier') {
+		return {node, scope};
+	}
+
+	const variable = findVariable(scope, node);
+	const lastWrite = variable?.references.findLast(reference =>
+		reference.writeExpr
+		&& isWriteReferenceReachable(scope, reference.from)
+		&& reference.identifier.range[1] < node.range[0]);
+
+	return {
+		node: lastWrite?.writeExpr ?? node,
+		scope: lastWrite?.from ?? scope,
+	};
+}
+
+function isWriteReferenceReachable(scope, referenceScope) {
+	const ancestors = new Set();
+	for (let current = scope; current; current = current.upper) {
+		ancestors.add(current);
+	}
+
+	for (let current = referenceScope; current; current = current.upper) {
+		if (ancestors.has(current)) {
+			return true;
+		}
+
+		if (current.type === 'function') {
+			return false;
+		}
+	}
+
+	return false;
+}
+
+function getSnapshotOptionsStatus(node, context) {
+	const resolved = resolveIdentifierWithScope(node, context);
+	node = resolved.node;
+	const {scope} = resolved;
+
+	if (node.type === 'ObjectExpression') {
+		let hasUnknownProperty = false;
+
+		for (const property of node.properties) {
+			if (property.type === 'SpreadElement') {
+				const staticValue = getStaticValue(property.argument, scope);
+				if (staticValue !== null && typeof staticValue.value === 'object' && staticValue.value !== null && Object.hasOwn(staticValue.value, 'formatAsCodeBlock')) {
+					return 'yes';
+				}
+
+				if (!staticValue) {
+					hasUnknownProperty = true;
+				}
+
+				continue;
+			}
+
+			const propertyName = getPropertyName(property, scope);
+			if (propertyName === 'formatAsCodeBlock') {
+				return 'yes';
+			}
+
+			if (property.computed && (propertyName === undefined || propertyName === null)) {
+				hasUnknownProperty = true;
+			}
+		}
+
+		return hasUnknownProperty ? 'unknown' : 'no';
+	}
+
+	if (node.type === 'Identifier' && errorNamePattern.test(node.name)) {
+		return 'no';
+	}
+
+	const staticValue = getStaticValue(node, scope);
+	if (staticValue !== null) {
+		return typeof staticValue.value === 'object' && staticValue.value !== null && Object.hasOwn(staticValue.value, 'formatAsCodeBlock') ? 'yes' : 'no';
+	}
+
+	return 'unknown';
+}
+
+function getMessageArgument(node, index, context) {
+	const argument = node.arguments[index];
+	const message = resolveIdentifier(argument, context);
+
+	if (message.type === 'Identifier') {
+		if (!errorNamePattern.test(message.name)) {
+			return;
+		}
+	} else if (message.type === 'MemberExpression' || message.type === 'ChainExpression' || message.type === 'CallExpression') {
+		return; // Cannot statically determine the type (e.g. `error.message`, `getMessage()`)
+	}
+
+	return message;
+}
+
+function checkMessageArgument({node, index, context}) {
+	const message = getMessageArgument(node, index, context);
+	if (message && !isString(message)) {
+		context.report({node, messageId: MESSAGE_ID_NOT_STRING});
+	}
+}
+
+function checkSnapshotArguments({
+	node,
+	context,
+	enforcesMessage,
+	shouldHaveMessage,
+}) {
+	const gottenArguments = node.arguments.length;
+
+	if (gottenArguments < 1) {
+		context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: 1}});
+		return;
+	}
+
+	const optionsStatus = node.arguments[1] ? getSnapshotOptionsStatus(node.arguments[1], context) : 'no';
+	const hasOptions = optionsStatus === 'yes' || (optionsStatus === 'unknown' && gottenArguments > 2);
+	const max = hasOptions ? 3 : 2;
+
+	if (gottenArguments > max) {
+		context.report({node, messageId: MESSAGE_ID_TOO_MANY, data: {max}});
+		return;
+	}
+
+	const messageIndex = hasOptions ? 2 : 1;
+	const hasMessage = gottenArguments > messageIndex;
+	const hasAmbiguousMessage = gottenArguments === 2 && optionsStatus === 'unknown';
+
+	if (enforcesMessage && !hasAmbiguousMessage) {
+		if (!hasMessage && shouldHaveMessage) {
+			context.report({node, messageId: MESSAGE_ID_MISSING_MESSAGE});
+		} else if (hasMessage && !shouldHaveMessage) {
+			context.report({node, messageId: MESSAGE_ID_FOUND_MESSAGE});
+		}
+	}
+
+	if (hasMessage && !hasAmbiguousMessage) {
+		checkMessageArgument({node, index: messageIndex, context});
+	}
+}
+
 const create = context => {
 	const ava = createAvaRule(context.sourceCode);
 	const options = context.options[0];
@@ -263,6 +415,16 @@ const create = context => {
 					context.report({node, messageId: MESSAGE_ID_TOO_FEW, data: {min: 1}});
 				}
 
+				return;
+			}
+
+			if (firstNonSkipMember === 'snapshot') {
+				checkSnapshotArguments({
+					node,
+					context,
+					enforcesMessage,
+					shouldHaveMessage,
+				});
 				return;
 			}
 
@@ -328,30 +490,7 @@ const create = context => {
 			}
 
 			if (gottenArguments === nArguments.max && nArguments.min !== nArguments.max) {
-				let lastArgument = node.arguments.at(-1);
-
-				if (lastArgument.type === 'Identifier') {
-					const variable = findVariable(context.sourceCode.getScope(node), lastArgument);
-
-					let resolved;
-					if (variable) {
-						for (const reference of variable.references) {
-							resolved = reference.writeExpr ?? resolved;
-						}
-					}
-
-					if (resolved) {
-						lastArgument = resolved;
-					} else if (!/^(?:[A-Z][a-z\d]*)*Error$/.test(lastArgument.name)) {
-						return;
-					}
-				} else if (lastArgument.type === 'MemberExpression' || lastArgument.type === 'ChainExpression' || lastArgument.type === 'CallExpression') {
-					return; // Cannot statically determine the type (e.g. `error.message`, `getMessage()`)
-				}
-
-				if (!isString(lastArgument)) {
-					context.report({node, messageId: MESSAGE_ID_NOT_STRING});
-				}
+				checkMessageArgument({node, index: node.arguments.length - 1, context});
 			}
 		}),
 	});
