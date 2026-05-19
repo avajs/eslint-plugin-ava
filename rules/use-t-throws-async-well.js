@@ -1,24 +1,29 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'use-t-throws-async-well';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile()) {
+				return;
+			}
+
+			const testNode = ava.isInTestNode(node);
+			if (!testNode) {
+				return;
+			}
+
 			if (
 				node.parent.type === 'ExpressionStatement'
 				&& node.callee.type === 'MemberExpression'
 				&& (node.callee.property.name === 'throwsAsync' || node.callee.property.name === 'notThrowsAsync')
 				&& util.isTestObject(node.callee.object.name)
 			) {
-				if (ava.isInTestNode().arguments[0].async) {
+				if (testNode.arguments[0].async) {
 					context.report({
 						node,
 						messageId: MESSAGE_ID,
@@ -33,7 +38,7 @@ const create = context => {
 					});
 				}
 			}
-		}),
+		},
 	});
 };
 

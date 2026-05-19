@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-unknown-modifiers';
 const MESSAGE_ID_SUGGESTION = 'no-unknown-modifiers-suggestion';
@@ -23,13 +22,14 @@ const knownModifiers = new Set([
 ]);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const testModifiers = util.getTestModifiers(node);
 
 			for (const modifier of testModifiers) {
@@ -67,7 +67,7 @@ const create = context => {
 					}],
 				});
 			}
-		}),
+		},
 	});
 };
 

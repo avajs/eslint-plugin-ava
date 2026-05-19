@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID_HELPER = 'helper-file';
 const MESSAGE_ID_IGNORED = 'ignored-file';
@@ -15,14 +14,15 @@ const create = context => {
 
 	let hasTestCall = false;
 
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(() => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			hasTestCall = true;
-		}),
+		},
 		'Program:exit'(node) {
 			if (!hasTestCall) {
 				return;

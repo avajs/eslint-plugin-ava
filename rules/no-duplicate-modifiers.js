@@ -1,19 +1,19 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-duplicate-modifiers';
 
 const sortByName = (a, b) => a.name.localeCompare(b.name);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const testModifiers = util.getTestModifiers(node).sort(sortByName);
 
 			if (testModifiers.length === 0) {
@@ -36,7 +36,7 @@ const create = context => {
 					});
 				}
 			}
-		}),
+		},
 	});
 };
 

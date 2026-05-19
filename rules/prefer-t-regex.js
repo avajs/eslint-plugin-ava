@@ -1,11 +1,10 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'prefer-t-regex';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	const booleanTests = new Set([
 		'true',
@@ -193,10 +192,11 @@ const create = context => {
 	};
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (!node?.callee?.property) {
 				return;
 			}
@@ -215,7 +215,7 @@ const create = context => {
 			} else if (isEqualityAssertion) {
 				equalityHandler(node);
 			}
-		}),
+		},
 	});
 };
 

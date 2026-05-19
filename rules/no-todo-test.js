@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -6,14 +5,15 @@ const MESSAGE_ID = 'no-todo-test';
 const MESSAGE_ID_SUGGESTION = 'no-todo-test-suggestion';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
-			if (ava.hasTestModifier('todo')) {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
+			if (ava.hasTestModifier(node, 'todo')) {
 				context.report({
 					node,
 					messageId: MESSAGE_ID,
@@ -27,7 +27,7 @@ const create = context => {
 					}],
 				});
 			}
-		}),
+		},
 	});
 };
 

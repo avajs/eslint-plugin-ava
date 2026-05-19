@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-deep-equal-with-primitive';
 
@@ -27,7 +26,7 @@ const buildNotDeepEqualMessage = (context, node) => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	const callExpression = 'CallExpression';
 	const deepEqual = '[callee.property.name="deepEqual"]';
@@ -38,42 +37,48 @@ const create = context => {
 	const argumentsTemplate = ':matches([arguments.0.type="TemplateLiteral"],[arguments.1.type="TemplateLiteral"])';
 
 	return ava.merge({
-		[`${callExpression}${deepEqual}${argumentsLiteral}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		[`${callExpression}${deepEqual}${argumentsLiteral}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildDeepEqualMessage(context, node);
-		}),
-		[`${callExpression}${deepEqual}${argumentsUndefined}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		[`${callExpression}${deepEqual}${argumentsUndefined}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildDeepEqualMessage(context, node);
-		}),
-		[`${callExpression}${deepEqual}${argumentsTemplate}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		[`${callExpression}${deepEqual}${argumentsTemplate}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildDeepEqualMessage(context, node);
-		}),
-		[`${callExpression}${notDeepEqual}${argumentsLiteral}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		[`${callExpression}${notDeepEqual}${argumentsLiteral}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildNotDeepEqualMessage(context, node);
-		}),
-		[`${callExpression}${notDeepEqual}${argumentsUndefined}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		[`${callExpression}${notDeepEqual}${argumentsUndefined}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildNotDeepEqualMessage(context, node);
-		}),
-		[`${callExpression}${notDeepEqual}${argumentsTemplate}`]: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		[`${callExpression}${notDeepEqual}${argumentsTemplate}`](node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			buildNotDeepEqualMessage(context, node);
-		}),
+		},
 	});
 };
 

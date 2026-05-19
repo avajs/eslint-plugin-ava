@@ -1,18 +1,18 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'no-nested-tests';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const testNodeStack = [];
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			testNodeStack.push(node);
 			if (testNodeStack.length >= 2) {
 				context.report({
@@ -20,7 +20,7 @@ const create = context => {
 					messageId: MESSAGE_ID,
 				});
 			}
-		}),
+		},
 
 		'CallExpression:exit'(node) {
 			if (testNodeStack.length > 0 && testNodeStack.at(-1) === node) {

@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import {findVariable, getStaticValue} from '@eslint-community/eslint-utils';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
@@ -145,13 +144,17 @@ function isTestObjectArgument(argument, sourceCode, testObjectVariable) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const {sourceCode} = context;
 	let assertionCount = 0;
 	let currentTestState;
 
 	return ava.merge({
-		CallExpression: visitIf([ava.isInTestFile, ava.isInTestNode])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			const isCurrentTestNode = ava.isTestNode(node);
 
 			if (isCurrentTestNode) {
@@ -184,9 +187,13 @@ const create = context => {
 			if (util.assertionMethods.has(methodName) || methodName === 'plan') {
 				assertionCount++;
 			}
-		}),
-		'CallExpression:exit': visitIf([ava.isTestNode])(node => {
-			if (ava.hasNoUtilityModifier() && !ava.hasTestModifier('todo') && assertionCount === 0) {
+		},
+		'CallExpression:exit'(node) {
+			if (!ava.isTestNode(node)) {
+				return;
+			}
+
+			if (ava.hasNoUtilityModifier(node) && !ava.hasTestModifier(node, 'todo') && assertionCount === 0) {
 				context.report({
 					node,
 					messageId: MESSAGE_ID,
@@ -195,7 +202,7 @@ const create = context => {
 
 			currentTestState = undefined;
 			assertionCount = 0;
-		}),
+		},
 	});
 };
 

@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -40,7 +39,7 @@ const buildMessage = (name, orders, visited) => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	const orders = buildOrders([
 		'before',
@@ -89,10 +88,11 @@ const create = context => {
 
 	const selectors = {};
 	for (const check of checks) {
-		selectors[check.selector] = visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		selectors[check.selector] = node => {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			visited[check.name] = node;
 
 			const message = buildMessage(check.name, orders, visited);
@@ -136,7 +136,7 @@ const create = context => {
 					},
 				});
 			}
-		});
+		};
 	}
 
 	return ava.merge(selectors);

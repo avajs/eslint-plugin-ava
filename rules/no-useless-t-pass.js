@@ -1,7 +1,6 @@
-import {visitIf} from 'enhance-visitors';
 import {findVariable} from '@eslint-community/eslint-utils';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-useless-t-pass';
 
@@ -106,16 +105,22 @@ function getTestObjectKey(callee, sourceCode, allowedTestObjectVariables) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const {sourceCode} = context;
 	let hasPlanByTestObject = new Map();
 	let passNodesByTestObject = new Map();
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile()) {
+				return;
+			}
+
+			const currentTestNode = ava.isInTestNode(node);
+			if (!currentTestNode) {
+				return;
+			}
+
 			const {callee} = node;
 			if (
 				callee.type !== 'MemberExpression'
@@ -125,7 +130,6 @@ const create = context => {
 				return;
 			}
 
-			const currentTestNode = ava.isInTestNode();
 			const allowedTestObjectVariables = getAllowedTestObjectVariables(node, sourceCode, currentTestNode);
 			const testObjectKey = getTestObjectKey(callee, sourceCode, allowedTestObjectVariables);
 			if (!testObjectKey) {
@@ -140,26 +144,28 @@ const create = context => {
 				nodes.push(node);
 				passNodesByTestObject.set(testObjectKey, nodes);
 			}
-		}),
-		'CallExpression:exit': visitIf([ava.isInTestNode])(node => {
-			if (ava.isTestNode(node)) {
-				for (const [testObjectKey, passNodes] of passNodesByTestObject) {
-					if (hasPlanByTestObject.get(testObjectKey)) {
-						continue;
-					}
+		},
+		'CallExpression:exit'(node) {
+			if (!ava.isTestNode(node)) {
+				return;
+			}
 
-					for (const node of passNodes) {
-						context.report({
-							node,
-							messageId: MESSAGE_ID,
-						});
-					}
+			for (const [testObjectKey, passNodes] of passNodesByTestObject) {
+				if (hasPlanByTestObject.get(testObjectKey)) {
+					continue;
 				}
 
-				hasPlanByTestObject = new Map();
-				passNodesByTestObject = new Map();
+				for (const node of passNodes) {
+					context.report({
+						node,
+						messageId: MESSAGE_ID,
+					});
+				}
 			}
-		}),
+
+			hasPlanByTestObject = new Map();
+			passNodesByTestObject = new Map();
+		},
 	});
 };
 

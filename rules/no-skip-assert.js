@@ -1,18 +1,18 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-skip-assert';
 const MESSAGE_ID_SUGGESTION = 'no-skip-assert-suggestion';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		MemberExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		MemberExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (node.property.name === 'skip') {
 				const root = util.getRootNode(node);
 				if (util.isTestObject(root.object.name) && util.assertionMethods.has(root.property.name)) {
@@ -30,7 +30,7 @@ const create = context => {
 					});
 				}
 			}
-		}),
+		},
 	});
 };
 

@@ -1,7 +1,6 @@
-import {visitIf} from 'enhance-visitors';
+import createAvaRule from '../create-ava-rule.js';
 import MicroSpellingCorrecter from 'micro-spelling-correcter';
 import util from '../util.js';
-import createAvaRule from '../create-ava-rule.js';
 
 const MESSAGE_ID_NOT_FUNCTION = 'not-function';
 const MESSAGE_ID_UNKNOWN_ASSERTION = 'unknown-assertion';
@@ -76,13 +75,14 @@ const getMemberNodes = node => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (node.callee.type !== 'MemberExpression'
 				&& util.isTestObject(node.callee.name)) {
 				context.report({
@@ -90,11 +90,12 @@ const create = context => {
 					messageId: MESSAGE_ID_NOT_FUNCTION,
 				});
 			}
-		}),
-		MemberExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		},
+		MemberExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (node.parent.type === 'MemberExpression'
 				|| !util.isTestObject(util.getNameOfRootNodeObject(node))) {
 				return;
@@ -205,7 +206,7 @@ const create = context => {
 					},
 				});
 			}
-		}),
+		},
 	});
 };
 

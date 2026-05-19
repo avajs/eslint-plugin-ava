@@ -1,18 +1,18 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'no-nested-assertions';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const assertionCallStack = [];
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (node.callee.type !== 'MemberExpression') {
 				return;
 			}
@@ -35,7 +35,7 @@ const create = context => {
 			if (methodName !== 'try') {
 				assertionCallStack.push(node);
 			}
-		}),
+		},
 		'CallExpression:exit'(node) {
 			if (assertionCallStack.length > 0 && assertionCallStack.at(-1) === node) {
 				assertionCallStack.pop();

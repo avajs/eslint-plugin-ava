@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -105,13 +104,14 @@ function hasDirectAwait(node) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		TryStatement: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		TryStatement(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (!node.handler) {
 				return;
 			}
@@ -130,7 +130,7 @@ const create = context => {
 				node,
 				messageId: isAsync ? MESSAGE_ID_ASYNC : MESSAGE_ID_SYNC,
 			});
-		}),
+		},
 	});
 };
 

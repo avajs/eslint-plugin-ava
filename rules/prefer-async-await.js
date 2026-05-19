@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -30,12 +29,13 @@ function containsThen(node) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
-	const check = visitIf([
-		ava.isInTestFile,
-		ava.isInTestNode,
-	])(node => {
+	const check = node => {
+		if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+			return;
+		}
+
 		if (node.body.type !== 'BlockStatement') {
 			return;
 		}
@@ -79,7 +79,7 @@ const create = context => {
 				}
 			}
 		}
-	});
+	};
 
 	return ava.merge({
 		ArrowFunctionExpression: check,

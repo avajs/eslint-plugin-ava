@@ -1,17 +1,17 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'no-inline-assertions';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const functionArgumentIndex = node.arguments.length - 1;
 			if (functionArgumentIndex > 1) {
 				return;
@@ -31,7 +31,7 @@ const create = context => {
 					fix: fixer => [fixer.insertTextBefore(body, '{'), fixer.insertTextAfter(body, '}')],
 				});
 			}
-		}),
+		},
 	});
 };
 

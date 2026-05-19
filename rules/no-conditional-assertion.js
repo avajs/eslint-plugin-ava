@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -269,21 +268,30 @@ function shouldTrackConditionalAncestor(node, child) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([ava.isInTestFile, ava.isInTestNode])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile()) {
+				return;
+			}
+
+			const testNode = ava.isInTestNode(node);
+			if (!testNode) {
+				return;
+			}
+
 			if (!isAssertionCall(node)) {
 				return;
 			}
 
-			for (const conditional of conditionalAncestors(node, ava.isInTestNode())) {
+			for (const conditional of conditionalAncestors(node, testNode)) {
 				if (!isBalanced(conditional)) {
 					context.report({node, messageId: MESSAGE_ID});
 					break;
 				}
 			}
-		}),
+		},
 	});
 };
 

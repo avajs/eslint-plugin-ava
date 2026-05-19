@@ -1,11 +1,10 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'test-title-format';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	let titleRegExp;
 	if (context.options[0]?.format) {
@@ -15,12 +14,12 @@ const create = context => {
 	}
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-			ava.hasNoUtilityModifier,
-		])(node => {
-			const requiredLength = ava.hasTestModifier('todo') ? 1 : 2;
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node) || !ava.hasNoUtilityModifier(node)) {
+				return;
+			}
+
+			const requiredLength = ava.hasTestModifier(node, 'todo') ? 1 : 2;
 			const hasTitle = node.arguments.length >= requiredLength;
 
 			if (hasTitle) {
@@ -33,7 +32,7 @@ const create = context => {
 					});
 				}
 			}
-		}),
+		},
 	});
 };
 

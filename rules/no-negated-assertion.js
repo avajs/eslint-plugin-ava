@@ -1,6 +1,5 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-negated-assertion';
 
@@ -21,13 +20,14 @@ const doubleNegatedPairs = {
 const getArgumentText = (source, argument) => argument.type === 'SequenceExpression' ? `(${source.getText(argument)})` : source.getText(argument);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (node.callee.type !== 'MemberExpression') {
 				return;
 			}
@@ -94,7 +94,7 @@ const create = context => {
 					];
 				},
 			});
-		}),
+		},
 	});
 };
 

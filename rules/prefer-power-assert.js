@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -38,20 +37,21 @@ const isNotAllowedAssertion = callee => {
 };
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (isNotAllowedAssertion(node.callee)) {
 				context.report({
 					node,
 					messageId: MESSAGE_ID,
 				});
 			}
-		}),
+		},
 	});
 };
 

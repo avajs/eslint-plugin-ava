@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -9,14 +8,14 @@ const MESSAGE_ID_WHITESPACE = 'title-whitespace';
 const toStringLiteral = value => JSON.stringify(value);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-			ava.hasNoUtilityModifier,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node) || !ava.hasNoUtilityModifier(node)) {
+				return;
+			}
+
 			const firstArgumentIsFunction = node.arguments.length === 0 || util.isFunctionExpression(node.arguments[0]);
 
 			if (firstArgumentIsFunction) {
@@ -83,7 +82,7 @@ const create = context => {
 					});
 				}
 			}
-		}),
+		},
 	});
 };
 

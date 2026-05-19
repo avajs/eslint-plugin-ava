@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -6,13 +5,14 @@ const MESSAGE_ID = 'no-only-test';
 const MESSAGE_ID_SUGGESTION = 'no-only-test-suggestion';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const propertyNode = util.getTestModifier(node, 'only');
 			if (propertyNode) {
 				context.report({
@@ -28,7 +28,7 @@ const create = context => {
 					}],
 				});
 			}
-		}),
+		},
 	});
 };
 

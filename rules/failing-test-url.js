@@ -1,4 +1,3 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
@@ -7,13 +6,14 @@ const MESSAGE_ID = 'failing-test-url';
 const urlPattern = /https?:\/\/\S+/;
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const propertyNode = util.getTestModifier(node, 'failing');
 			if (!propertyNode) {
 				return;
@@ -28,7 +28,7 @@ const create = context => {
 					messageId: MESSAGE_ID,
 				});
 			}
-		}),
+		},
 	});
 };
 

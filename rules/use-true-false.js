@@ -1,9 +1,8 @@
 import {isDeepStrictEqual} from 'node:util';
 import * as espree from 'espree';
 import espurify from 'espurify';
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID_TRUE = 'use-true';
 const MESSAGE_ID_FALSE = 'use-false';
@@ -51,13 +50,14 @@ function matchesKnownBooleanExpression(argument) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			if (
 				node.callee.type !== 'MemberExpression'
 				|| !util.isTestObject(node.callee.object.name)
@@ -128,7 +128,7 @@ const create = context => {
 					},
 				});
 			}
-		}),
+		},
 	});
 };
 

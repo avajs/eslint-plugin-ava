@@ -1,24 +1,24 @@
-import {visitIf} from 'enhance-visitors';
 import createAvaRule from '../create-ava-rule.js';
 import util from '../util.js';
 
 const MESSAGE_ID = 'use-t';
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node)) {
+				return;
+			}
+
 			const index = node.arguments.length - 1;
 			if (index > 1) {
 				return;
 			}
 
 			let implementationArgument = node.arguments[index];
-			if (ava.hasTestModifier('macro') && implementationArgument.type === 'ObjectExpression') {
+			if (ava.hasTestModifier(node, 'macro') && implementationArgument.type === 'ObjectExpression') {
 				const execProperty = implementationArgument.properties.find(p => p.key?.name === 'exec');
 				implementationArgument = execProperty?.value;
 			}
@@ -33,7 +33,7 @@ const create = context => {
 					messageId: MESSAGE_ID,
 				});
 			}
-		}),
+		},
 	});
 };
 

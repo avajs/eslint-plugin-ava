@@ -1,9 +1,8 @@
-import {visitIf} from 'enhance-visitors';
 import {
 	getStaticValue, isOpeningParenToken, isCommaToken, findVariable,
 } from '@eslint-community/eslint-utils';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID_TOO_FEW = 'too-few-arguments';
 const MESSAGE_ID_TOO_MANY = 'too-many-arguments';
@@ -227,16 +226,17 @@ function isString(node) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const options = context.options[0];
 	const enforcesMessage = Boolean(options.message);
 	const shouldHaveMessage = options.message !== 'never';
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			const {callee} = node;
 
 			if (
@@ -352,7 +352,7 @@ const create = context => {
 					context.report({node, messageId: MESSAGE_ID_NOT_STRING});
 				}
 			}
-		}),
+		},
 	});
 };
 

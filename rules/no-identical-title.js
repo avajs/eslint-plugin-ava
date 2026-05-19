@@ -1,8 +1,7 @@
 import {isDeepStrictEqual} from 'node:util';
 import espurify from 'espurify';
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'no-identical-title';
 
@@ -20,17 +19,17 @@ function isTitleUsed(usedTitleNodes, titleNode) {
 }
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	let usedTitleNodes = [];
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isTestNode,
-			ava.hasNoUtilityModifier,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isTestNode(node) || !ava.hasNoUtilityModifier(node)) {
+				return;
+			}
+
 			const arguments_ = node.arguments;
-			const titleNode = arguments_.length > 1 || ava.hasTestModifier('todo') ? arguments_[0] : undefined;
+			const titleNode = arguments_.length > 1 || ava.hasTestModifier(node, 'todo') ? arguments_[0] : undefined;
 
 			// Don't flag computed titles
 			if (!titleNode || !isStatic(titleNode)) {
@@ -51,7 +50,7 @@ const create = context => {
 			}
 
 			usedTitleNodes.push(purify(titleNode));
-		}),
+		},
 		'Program:exit'() {
 			usedTitleNodes = [];
 		},

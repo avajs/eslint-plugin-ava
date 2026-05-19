@@ -1,22 +1,22 @@
-import {visitIf} from 'enhance-visitors';
-import util from '../util.js';
 import createAvaRule from '../create-ava-rule.js';
+import util from '../util.js';
 
 const MESSAGE_ID = 'max-asserts';
 
 const notAssertionMethods = new Set(['plan', 'end']);
 
 const create = context => {
-	const ava = createAvaRule();
+	const ava = createAvaRule(context);
 	const {max: maxAssertions} = context.options[0];
 	let assertionCount = 0;
 	let nodeToReport;
 
 	return ava.merge({
-		CallExpression: visitIf([
-			ava.isInTestFile,
-			ava.isInTestNode,
-		])(node => {
+		CallExpression(node) {
+			if (!ava.isInTestFile() || !ava.isInTestNode(node)) {
+				return;
+			}
+
 			const {callee} = node;
 
 			if (callee.type !== 'MemberExpression') {
@@ -40,8 +40,12 @@ const create = context => {
 					nodeToReport = node;
 				}
 			}
-		}),
-		'CallExpression:exit': visitIf([ava.isTestNode])(() => {
+		},
+		'CallExpression:exit'(node) {
+			if (!ava.isTestNode(node)) {
+				return;
+			}
+
 			// Leaving test function
 			if (assertionCount > maxAssertions) {
 				context.report({
@@ -53,7 +57,7 @@ const create = context => {
 
 			assertionCount = 0;
 			nodeToReport = undefined;
-		}),
+		},
 	});
 };
 

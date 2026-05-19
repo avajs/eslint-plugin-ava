@@ -1,9 +1,7 @@
-import enhance from 'enhance-visitors';
 import {getTestModifiers, unwrapTypeExpression} from './util.js';
 
-export default () => {
+export default context => {
 	let isTestFile = false;
-	let currentTestNode;
 	const testIdentifiers = new Set();
 
 	function isTestFunctionCall(node) {
@@ -18,11 +16,8 @@ export default () => {
 		return false;
 	}
 
-	function getTestModifierNames(node) {
-		return getTestModifiers(node).map(property => property.name);
-	}
+	const getModifierNames = node => getTestModifiers(node).map(property => property.name);
 
-	/* eslint quote-props: [2, "as-needed"] */
 	const predefinedRules = {
 		ImportDeclaration(node) {
 			if (node.source.value !== 'ava' || node.importKind === 'type') {
@@ -51,18 +46,6 @@ export default () => {
 				testIdentifiers.add(node.id.name);
 			}
 		},
-		CallExpression(node) {
-			if (isTestFunctionCall(node.callee)) {
-				// Entering test function
-				currentTestNode = node;
-			}
-		},
-		'CallExpression:exit'(node) {
-			if (currentTestNode === node) {
-				// Leaving test function
-				currentTestNode = undefined;
-			}
-		},
 		'Program:exit'() {
 			isTestFile = false;
 			testIdentifiers.clear();
@@ -70,18 +53,50 @@ export default () => {
 	};
 
 	return {
-		hasTestModifier: module_ => getTestModifierNames(currentTestNode).includes(module_),
-		hasNoUtilityModifier() {
-			const modifiers = getTestModifierNames(currentTestNode);
+		isInTestFile: () => isTestFile,
+		isTestNode: node => node.type === 'CallExpression' && isTestFunctionCall(node.callee),
+		isInTestNode(node) {
+			if (node.type === 'CallExpression' && isTestFunctionCall(node.callee)) {
+				return node;
+			}
+
+			const ancestors = context.sourceCode.getAncestors(node);
+			for (let index = ancestors.length - 1; index >= 0; index--) {
+				const ancestor = ancestors[index];
+				if (ancestor.type === 'CallExpression' && isTestFunctionCall(ancestor.callee)) {
+					return ancestor;
+				}
+			}
+
+			return undefined;
+		},
+		hasTestModifier: (node, modifier) => getModifierNames(node).includes(modifier),
+		hasNoUtilityModifier(node) {
+			const modifiers = getModifierNames(node);
 			return !modifiers.includes('before')
 				&& !modifiers.includes('beforeEach')
 				&& !modifiers.includes('after')
 				&& !modifiers.includes('afterEach')
 				&& !modifiers.includes('macro');
 		},
-		isInTestFile: () => isTestFile,
-		isInTestNode: () => currentTestNode,
-		isTestNode: node => currentTestNode === node,
-		merge: customHandlers => enhance.mergeVisitors([predefinedRules, customHandlers]),
+		merge: customHandlers => ({
+			...predefinedRules,
+			...Object.fromEntries(Object.entries(customHandlers).map(([key, custom]) => {
+				const predefined = predefinedRules[key];
+				if (!predefined) {
+					return [key, custom];
+				}
+
+				return [key, key.endsWith(':exit')
+					? node => {
+						custom(node);
+						predefined(node);
+					}
+					: node => {
+						predefined(node);
+						custom(node);
+					}];
+			})),
+		}),
 	};
 };
