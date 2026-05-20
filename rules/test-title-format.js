@@ -8,7 +8,7 @@ const create = context => {
 
 	let titleRegExp;
 	if (context.options[0]?.format) {
-		titleRegExp = new RegExp(context.options[0].format);
+		titleRegExp = new RegExp(context.options[0].format, 'v');
 	} else {
 		return {};
 	}

@@ -17,7 +17,7 @@ const MESSAGE_ID_OUT_OF_ORDER = 'out-of-order';
 const MESSAGE_ID_PLAN_NOT_INTEGER = 'plan-not-integer';
 const MESSAGE_ID_REGEX_FIRST = 'regex-first-argument';
 
-const errorNamePattern = /^(?:[A-Z][a-z\d]*)*Error$/;
+const errorNamePattern = /^(?:[A-Z][a-z\d]*)*Error$/v;
 
 const expectedNbArguments = {
 	assert: {

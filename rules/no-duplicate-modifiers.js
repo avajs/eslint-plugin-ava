@@ -17,7 +17,7 @@ const create = context => {
 				return;
 			}
 
-			const testModifiers = util.getTestModifiers(node).sort(sortByName);
+			const testModifiers = util.getTestModifiers(node).toSorted(sortByName);
 
 			if (testModifiers.length === 0) {
 				return;

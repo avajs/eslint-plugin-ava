@@ -11,7 +11,7 @@
 	},
 	"sideEffects": false,
 	"engines": {
-		"node": ">=20.19"
+		"node": ">=22"
 	},
 	"scripts": {
 		"integration": "node ./test/integration/test.js",
@@ -43,27 +43,27 @@
 	],
 	"dependencies": {
 		"@eslint-community/eslint-utils": "^4.9.1",
-		"@eslint/json": "^1.0.0",
-		"espree": "^11.1.0",
+		"@eslint/json": "^1.2.0",
+		"espree": "^11.2.0",
 		"espurify": "^3.2.0",
 		"micro-spelling-correcter": "^1.1.1",
 		"resolve-from": "^5.0.0"
 	},
 	"devDependencies": {
-		"@typescript-eslint/parser": "^8.54.0",
-		"ava": "^7.0.0",
+		"@typescript-eslint/parser": "^8.59.4",
+		"ava": "^8.0.1",
 		"c8": "^11.0.0",
 		"chalk": "^5.6.2",
-		"eslint": "^10.0.0",
+		"eslint": "^10.4.0",
 		"eslint-ava-rule-tester": "^5.0.1",
-		"eslint-doc-generator": "^3.0.2",
-		"eslint-plugin-eslint-plugin": "^7.3.0",
+		"eslint-doc-generator": "^3.6.0",
+		"eslint-plugin-eslint-plugin": "^7.3.3",
 		"execa": "^9.6.1",
 		"npm-run-all": "^4.1.5",
 		"outdent": "^0.8.0",
 		"pify": "^6.1.0",
-		"typescript": "^5.9.3",
-		"xo": "^1.2.3"
+		"typescript": "^6.0.3",
+		"xo": "^2.0.2"
 	},
 	"peerDependencies": {
 		"eslint": ">=10"

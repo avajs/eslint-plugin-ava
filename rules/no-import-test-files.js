@@ -43,7 +43,7 @@ const create = context => {
 			if (fs.statSync(resolvedPath).isDirectory()) {
 				resolvedPath = path.join(resolvedPath, 'index');
 			}
-		} catch {}
+		} catch {} // eslint-disable-line @stylistic/curly-newline
 
 		const {isTest} = avaHelper.classifyImport(resolvedPath);
 		if (isTest) {

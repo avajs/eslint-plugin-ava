@@ -30,7 +30,7 @@ export const findProjectRoot = filename => {
 				if ('ava' in packageJson) {
 					return directory;
 				}
-			} catch {}
+			} catch {} // eslint-disable-line @stylistic/curly-newline
 		}
 
 		if (fs.existsSync(path.join(directory, '.git'))) {
@@ -94,7 +94,7 @@ export const getNameOfRootNodeObject = node => getRootNode(node).object.name;
 
 // Match valid test execution object names: `t`, `tt`, `t_`, `t1`-`t9`
 // These are used in `t.try()` callbacks when variable shadowing is disallowed.
-const testObjectPattern = /^t[t_1-9]?$/;
+const testObjectPattern = /^t[t_1-9]?$/v;
 export const isTestObject = name => testObjectPattern.test(name);
 
 /** Check whether a member-expression chain starts from `.context`. */
@@ -355,7 +355,7 @@ export const getTestModifier = (node, module_) => getTestModifiers(node).find(pr
 export const removeTestModifier = parameters => {
 	const modifier = parameters.modifier.trim();
 	const range = [...getTestModifier(parameters.node, modifier).range];
-	const replacementRegExp = new RegExp(`\\.|${modifier}`, 'g');
+	const replacementRegExp = new RegExp(String.raw`\.|${modifier}`, 'gv');
 	const source = parameters.context.sourceCode.getText();
 	let dotPosition = range[0] - 1;
 	while (source.charAt(dotPosition) !== '.') {

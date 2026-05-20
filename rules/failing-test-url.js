@@ -3,7 +3,7 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'failing-test-url';
 
-const urlPattern = /https?:\/\/\S+/;
+const urlPattern = /https?:\/\/\S+/v;
 
 const create = context => {
 	const ava = createAvaRule(context.sourceCode);

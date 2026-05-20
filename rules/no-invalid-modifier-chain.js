@@ -80,7 +80,7 @@ function getFixedChain(modifierNames) {
 
 	// Deduplicate and sort by canonical order
 	const fixedChain = [...new Set(modifierNames)]
-		.sort((a, b) => modifierOrder.get(a) - modifierOrder.get(b))
+		.toSorted((a, b) => modifierOrder.get(a) - modifierOrder.get(b))
 		.join('.');
 
 	return validChains.has(fixedChain) ? fixedChain : undefined;
@@ -97,7 +97,7 @@ function getSuggestions(modifierNames) {
 	for (const removed of unique) {
 		const remaining = unique.filter(name => name !== removed);
 		const chain = remaining
-			.sort((a, b) => modifierOrder.get(a) - modifierOrder.get(b))
+			.toSorted((a, b) => modifierOrder.get(a) - modifierOrder.get(b))
 			.join('.');
 
 		if (validChains.has(chain)) {

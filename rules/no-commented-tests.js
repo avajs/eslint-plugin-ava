@@ -3,7 +3,7 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'no-commented-tests';
 
-const commentedTestPattern = /^\s*\*?\s*(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/;
+const commentedTestPattern = /^\s*\*?\s*(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/v;
 
 const create = context => {
 	const ava = createAvaRule(context.sourceCode);
