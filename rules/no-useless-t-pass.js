@@ -96,7 +96,7 @@ function getTestObjectKey(callee, sourceCode, allowedTestObjectVariables) {
 const create = context => {
 	const ava = createAvaRule(context.sourceCode);
 	const {sourceCode} = context;
-	let hasPlanByTestObject = new Map();
+	let testObjectsWithPlan = new Map();
 	let passNodesByTestObject = new Map();
 
 	return ava.merge({
@@ -122,7 +122,7 @@ const create = context => {
 
 			const firstNonSkipMember = util.getAssertionMethod(callee);
 			if (firstNonSkipMember === 'plan') {
-				hasPlanByTestObject.set(testObjectKey, true);
+				testObjectsWithPlan.set(testObjectKey, true);
 			} else if (firstNonSkipMember === 'pass') {
 				const nodes = passNodesByTestObject.get(testObjectKey) ?? [];
 				nodes.push(node);
@@ -132,19 +132,19 @@ const create = context => {
 		'CallExpression:exit': visitIf([ava.isInTestNode])(node => {
 			if (ava.isTestNode(node)) {
 				for (const [testObjectKey, passNodes] of passNodesByTestObject) {
-					if (hasPlanByTestObject.get(testObjectKey)) {
+					if (testObjectsWithPlan.get(testObjectKey)) {
 						continue;
 					}
 
-					for (const node of passNodes) {
+					for (const passNode of passNodes) {
 						context.report({
-							node,
+							node: passNode,
 							messageId: MESSAGE_ID,
 						});
 					}
 				}
 
-				hasPlanByTestObject = new Map();
+				testObjectsWithPlan = new Map();
 				passNodesByTestObject = new Map();
 			}
 		}),

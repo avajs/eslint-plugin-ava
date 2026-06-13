@@ -83,12 +83,10 @@ function hasDirectAwait(node) {
 		return false;
 	}
 
-	for (const key of Object.keys(node)) {
+	for (const [key, child] of Object.entries(node)) {
 		if (key === 'parent') {
 			continue;
 		}
-
-		const child = node[key];
 
 		if (Array.isArray(child)) {
 			if (child.some(element => hasDirectAwait(element))) {

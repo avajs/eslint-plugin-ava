@@ -1,55 +1,56 @@
+import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import process from 'node:process';
-import test from 'ava';
+import {test} from 'node:test';
 import resolveFrom from 'resolve-from';
 import util, {findProjectRoot} from '../util.js';
 
-test('getStringValue: returns string literal value', t => {
-	t.is(util.getStringValue({type: 'Literal', value: 'hello'}), 'hello');
+test('getStringValue: returns string literal value', () => {
+	assert.equal(util.getStringValue({type: 'Literal', value: 'hello'}), 'hello');
 });
 
-test('getStringValue: returns template literal string when no expressions', t => {
+test('getStringValue: returns template literal string when no expressions', () => {
 	const node = {type: 'TemplateLiteral', expressions: [], quasis: [{value: {cooked: 'hello'}}]};
-	t.is(util.getStringValue(node), 'hello');
+	assert.equal(util.getStringValue(node), 'hello');
 });
 
-test('getStringValue: returns undefined for template literal with null cooked value', t => {
+test('getStringValue: returns undefined for template literal with null cooked value', () => {
 	const node = {type: 'TemplateLiteral', expressions: [], quasis: [{value: {cooked: null}}]};
-	t.is(util.getStringValue(node), undefined);
+	assert.equal(util.getStringValue(node), undefined);
 });
 
-test('getStringValue: returns undefined for template literal with expressions', t => {
+test('getStringValue: returns undefined for template literal with expressions', () => {
 	const node = {type: 'TemplateLiteral', expressions: [{}], quasis: []};
-	t.is(util.getStringValue(node), undefined);
+	assert.equal(util.getStringValue(node), undefined);
 });
 
-test('getStringValue: returns undefined for non-string literal', t => {
-	t.is(util.getStringValue({type: 'Literal', value: 42}), undefined);
+test('getStringValue: returns undefined for non-string literal', () => {
+	assert.equal(util.getStringValue({type: 'Literal', value: 42}), undefined);
 });
 
-test('unwrapParentTypeExpression: skips TypeScript wrapper parents', t => {
+test('unwrapParentTypeExpression: skips TypeScript wrapper parents', () => {
 	const callExpression = {type: 'CallExpression'};
 	const tsAsExpression = {type: 'TSAsExpression', parent: {type: 'ExpressionStatement'}};
 	const tsNonNullExpression = {type: 'TSNonNullExpression', parent: tsAsExpression};
 	callExpression.parent = tsNonNullExpression;
 
-	t.is(util.unwrapParentTypeExpression(callExpression), tsAsExpression.parent);
+	assert.equal(util.unwrapParentTypeExpression(callExpression), tsAsExpression.parent);
 });
 
-test('returns the URL of the a named rule\'s documentation', t => {
+test('returns the URL of the a named rule\'s documentation', () => {
 	const url = 'https://github.com/avajs/eslint-plugin-ava/blob/main/docs/rules/foo.md';
-	t.is(util.getDocsUrl('foo.js'), url);
+	assert.equal(util.getDocsUrl('foo.js'), url);
 });
 
-test('determines the rule name from the file', t => {
+test('determines the rule name from the file', () => {
 	const url = 'https://github.com/avajs/eslint-plugin-ava/blob/main/docs/rules/util.md';
-	t.is(util.getDocsUrl(import.meta.filename), url);
+	assert.equal(util.getDocsUrl(import.meta.filename), url);
 });
 
-test.serial('loadAvaHelper retries lookup when helper becomes available', async t => {
+test('loadAvaHelper retries lookup when helper becomes available', async t => {
 	const fixtureRootDirectory = await fs.mkdtemp(path.join(import.meta.dirname, 'tmp-load-ava-helper-'));
-	t.teardown(async () => {
+	t.after(async () => {
 		await fs.rm(fixtureRootDirectory, {recursive: true, force: true});
 	});
 
@@ -65,20 +66,20 @@ test.serial('loadAvaHelper retries lookup when helper becomes available', async 
 	let isHelperAvailable = false;
 	resolveFrom.silent = () => isHelperAvailable ? helperPath : undefined;
 
-	t.teardown(() => {
+	t.after(() => {
 		resolveFrom.silent = originalResolveFromSilent;
 	});
 
-	t.is(util.loadAvaHelper(testFilename, overrides), undefined);
+	assert.equal(util.loadAvaHelper(testFilename, overrides), undefined);
 	isHelperAvailable = true;
 
 	const helper = util.loadAvaHelper(testFilename, overrides);
-	t.deepEqual(helper, {rootDirectory: fixtureRootDirectory, options: overrides});
+	assert.deepEqual(helper, {rootDirectory: fixtureRootDirectory, options: overrides});
 });
 
-test.serial('loadAvaHelper resolves helper from sub-package when config is at workspace root', async t => {
+test('loadAvaHelper resolves helper from sub-package when config is at workspace root', async t => {
 	const workspaceRootDirectory = await fs.mkdtemp(path.join(import.meta.dirname, 'tmp-load-ava-helper-workspace-'));
-	t.teardown(async () => {
+	t.after(async () => {
 		await fs.rm(workspaceRootDirectory, {recursive: true, force: true});
 	});
 
@@ -102,18 +103,18 @@ test.serial('loadAvaHelper resolves helper from sub-package when config is at wo
 		return fromDirectory.startsWith(packageDirectory) ? helperPath : undefined;
 	};
 
-	t.teardown(() => {
+	t.after(() => {
 		resolveFrom.silent = originalResolveFromSilent;
 	});
 
 	const overrides = {files: ['test.js']};
 	const helper = util.loadAvaHelper(testFilename, overrides);
-	t.deepEqual(helper, {rootDirectory: workspaceRootDirectory, options: overrides});
+	assert.deepEqual(helper, {rootDirectory: workspaceRootDirectory, options: overrides});
 });
 
-test.serial('loadAvaHelper resolves hoisted helper outside sub-package root', async t => {
+test('loadAvaHelper resolves hoisted helper outside sub-package root', async t => {
 	const workspaceRootDirectory = await fs.mkdtemp(path.join(import.meta.dirname, 'tmp-load-ava-helper-hoisted-'));
-	t.teardown(async () => {
+	t.after(async () => {
 		await fs.rm(workspaceRootDirectory, {recursive: true, force: true});
 	});
 
@@ -134,18 +135,18 @@ test.serial('loadAvaHelper resolves hoisted helper outside sub-package root', as
 	const originalResolveFromSilent = resolveFrom.silent;
 	resolveFrom.silent = () => helperPath;
 
-	t.teardown(() => {
+	t.after(() => {
 		resolveFrom.silent = originalResolveFromSilent;
 	});
 
 	const overrides = {files: ['test.js']};
 	const helper = util.loadAvaHelper(testFilename, overrides);
-	t.deepEqual(helper, {rootDirectory: packageDirectory, options: overrides});
+	assert.deepEqual(helper, {rootDirectory: packageDirectory, options: overrides});
 });
 
 const createFixtureDirectory = async t => {
 	const directory = await fs.mkdtemp(path.join(import.meta.dirname, 'tmp-find-root-'));
-	t.teardown(async () => {
+	t.after(async () => {
 		await fs.rm(directory, {recursive: true, force: true});
 	});
 
@@ -159,7 +160,7 @@ test('findProjectRoot: finds directory with ava config in package.json', async t
 	await fs.mkdir(path.join(root, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), root);
+	assert.equal(findProjectRoot(testFile), root);
 });
 
 test('findProjectRoot: finds directory with ava.config.js', async t => {
@@ -170,7 +171,7 @@ test('findProjectRoot: finds directory with ava.config.js', async t => {
 	await fs.mkdir(path.join(root, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), root);
+	assert.equal(findProjectRoot(testFile), root);
 });
 
 test('findProjectRoot: finds directory with ava.config.mjs', async t => {
@@ -181,7 +182,7 @@ test('findProjectRoot: finds directory with ava.config.mjs', async t => {
 	await fs.mkdir(path.join(root, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), root);
+	assert.equal(findProjectRoot(testFile), root);
 });
 
 test('findProjectRoot: monorepo - finds root with ava config over sub-package', async t => {
@@ -194,7 +195,7 @@ test('findProjectRoot: monorepo - finds root with ava config over sub-package', 
 	await fs.mkdir(path.join(packageDir, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), root);
+	assert.equal(findProjectRoot(testFile), root);
 });
 
 test('findProjectRoot: config file closer to file wins over package.json ava key higher up', async t => {
@@ -208,7 +209,7 @@ test('findProjectRoot: config file closer to file wins over package.json ava key
 	await fs.mkdir(path.join(subDir, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), subDir);
+	assert.equal(findProjectRoot(testFile), subDir);
 });
 
 test('findProjectRoot: skips package.json without ava key', async t => {
@@ -222,7 +223,7 @@ test('findProjectRoot: skips package.json without ava key', async t => {
 	// The fixture package.json has no "ava" key, but traversal should stop
 	// at the repository boundary and return the nearest package root.
 	const result = findProjectRoot(testFile);
-	t.is(result, root);
+	assert.equal(result, root);
 });
 
 test('findProjectRoot: does not escape repository boundary', async t => {
@@ -238,7 +239,7 @@ test('findProjectRoot: does not escape repository boundary', async t => {
 	await fs.mkdir(path.join(root, 'test'), {recursive: true});
 	await fs.writeFile(testFile, '');
 
-	t.is(findProjectRoot(testFile), root);
+	assert.equal(findProjectRoot(testFile), root);
 });
 
 test('findProjectRoot: handles relative filename', async t => {
@@ -249,5 +250,5 @@ test('findProjectRoot: handles relative filename', async t => {
 	await fs.writeFile(testFile, '');
 
 	const relativeTestFile = path.relative(process.cwd(), testFile);
-	t.is(findProjectRoot(relativeTestFile), root);
+	assert.equal(findProjectRoot(relativeTestFile), root);
 });

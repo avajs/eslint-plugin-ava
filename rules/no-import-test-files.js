@@ -17,7 +17,7 @@ const create = context => {
 
 	const resolveFrom = path.dirname(filename);
 
-	let loadedAvaHelper = false;
+	let isAvaHelperLoaded = false;
 	let avaHelper;
 
 	const validateImportPath = (node, importPath) => {
@@ -29,9 +29,9 @@ const create = context => {
 			return;
 		}
 
-		if (!loadedAvaHelper) {
+		if (!isAvaHelperLoaded) {
 			avaHelper = util.loadAvaHelper(filename, overrides);
-			loadedAvaHelper = true;
+			isAvaHelperLoaded = true;
 		}
 
 		if (!avaHelper) {
@@ -43,7 +43,7 @@ const create = context => {
 			if (fs.statSync(resolvedPath).isDirectory()) {
 				resolvedPath = path.join(resolvedPath, 'index');
 			}
-		} catch {} // eslint-disable-line @stylistic/curly-newline
+		} catch {}
 
 		const {isTest} = avaHelper.classifyImport(resolvedPath);
 		if (isTest) {

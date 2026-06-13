@@ -4,7 +4,7 @@ import rule from '../rules/max-asserts.js';
 const ruleTester = new RuleTester();
 
 function nbAssertions(n) {
-	return Array.from({length: n}).map(() => 't.is(1, 1);').join('\n');
+	return Array.from({length: n}, () => 't.is(1, 1);').join('\n');
 }
 
 const maxAssertsError = [{messageId: 'max-asserts'}];

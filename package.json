@@ -19,15 +19,15 @@
 		"lint:eslint-docs": "npm-run-all \"update:eslint-docs -- --check\"",
 		"lint:js": "xo",
 		"test": "npm-run-all lint test:unit",
-		"test:unit": "c8 ava",
+		"test:unit": "c8 node --test 'test/*.js'",
 		"update:eslint-docs": "eslint-doc-generator --rule-doc-section-include Examples --url-configs \"https://github.com/avajs/eslint-plugin-ava#recommended-config\""
 	},
 	"files": [
 		"index.js",
 		"index.d.ts",
 		"create-ava-rule.js",
-		"util.js",
-		"rules"
+		"rules",
+		"util.js"
 	],
 	"keywords": [
 		"eslint",
@@ -42,37 +42,29 @@
 		"mocha"
 	],
 	"dependencies": {
-		"@eslint-community/eslint-utils": "^4.9.1",
-		"@eslint/json": "^2.0.0",
+		"@eslint-community/eslint-utils": "^4.10.1",
+		"@eslint/json": "^2.1.0",
 		"espree": "^11.2.0",
 		"espurify": "^3.2.0",
 		"micro-spelling-correcter": "^1.1.1",
 		"resolve-from": "^5.0.0"
 	},
 	"devDependencies": {
-		"@typescript-eslint/parser": "^8.61.0",
-		"ava": "^8.0.1",
-		"c8": "^11.0.0",
-		"chalk": "^5.6.2",
-		"eslint": "^10.5.0",
+		"@typescript-eslint/parser": "^8.71.1",
+		"c8": "^12.0.0",
+		"chalk": "^6.0.1",
+		"eslint": "^10.12.0",
 		"eslint-ava-rule-tester": "^5.0.1",
-		"eslint-doc-generator": "^3.6.0",
-		"eslint-plugin-eslint-plugin": "^7.4.0",
-		"execa": "^9.6.1",
+		"eslint-doc-generator": "^3.7.1",
+		"eslint-plugin-eslint-plugin": "^7.6.2",
+		"execa": "^10.0.1",
 		"npm-run-all": "^4.1.5",
 		"outdent": "^0.8.0",
-		"pify": "^6.1.0",
 		"typescript": "^6.0.3",
-		"xo": "^2.0.2"
+		"xo": "^5.0.1"
 	},
 	"peerDependencies": {
 		"eslint": ">=10"
-	},
-	"ava": {
-		"files": [
-			"!rules",
-			"test/*.js"
-		]
 	},
 	"c8": {
 		"reporter": [
@@ -80,10 +72,5 @@
 			"lcov",
 			"text"
 		]
-	},
-	"overrides": {
-		"c8": {
-			"yargs": "^18.0.0"
-		}
 	}
 }

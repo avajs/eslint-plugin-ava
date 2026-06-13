@@ -114,16 +114,16 @@ const create = context => {
 					return;
 				}
 
-				const firstIsBoolean = first.type === 'Literal' && typeof first.value === 'boolean';
-				const secondIsBoolean = second.type === 'Literal' && typeof second.value === 'boolean';
+				const isFirstBoolean = first.type === 'Literal' && typeof first.value === 'boolean';
+				const isSecondBoolean = second.type === 'Literal' && typeof second.value === 'boolean';
 
 				// Skip if neither or both are boolean literals
-				if (firstIsBoolean === secondIsBoolean) {
+				if (isFirstBoolean === isSecondBoolean) {
 					return;
 				}
 
-				const booleanLiteral = firstIsBoolean ? first : second;
-				const otherArgument = firstIsBoolean ? second : first;
+				const booleanLiteral = isFirstBoolean ? first : second;
+				const otherArgument = isFirstBoolean ? second : first;
 				const assertion = booleanLiteral.value ? 'true' : 'false';
 				const messageId = booleanLiteral.value ? MESSAGE_ID_IS_TRUE : MESSAGE_ID_IS_FALSE;
 

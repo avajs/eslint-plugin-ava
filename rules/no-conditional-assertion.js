@@ -20,52 +20,52 @@ function isAssertionCall(node) {
 }
 
 function analyzeStatements(statements) {
-	let pending = true;
-	let failed = false;
+	let isPending = true;
+	let hasFailed = false;
 
 	for (const statement of statements) {
-		if (!pending) {
+		if (!isPending) {
 			break;
 		}
 
 		const result = analyzeAssertionPaths(statement);
-		pending = result.pending;
-		failed ||= result.failed;
+		isPending = result.pending;
+		hasFailed ||= result.failed;
 	}
 
-	return {pending, failed};
+	return {pending: isPending, failed: hasFailed};
 }
 
 function analyzeSwitchCaseByIndex(switchStatement, caseIndex) {
-	let pending = true;
-	let failed = false;
+	let isPending = true;
+	let hasFailed = false;
 
 	for (let index = caseIndex; index < switchStatement.cases.length; index++) {
-		if (!pending) {
+		if (!isPending) {
 			break;
 		}
 
 		const currentCase = switchStatement.cases[index];
 		const result = analyzeStatements(currentCase.consequent);
-		pending = result.pending;
-		failed ||= result.failed;
+		isPending = result.pending;
+		hasFailed ||= result.failed;
 	}
 
-	return {pending, failed};
+	return {pending: isPending, failed: hasFailed};
 }
 
 function analyzeSwitchStatement(switchStatement) {
 	const hasDefault = switchStatement.cases.some(c => c.test === null);
-	let pending = !hasDefault;
-	let failed = false;
+	let isPending = !hasDefault;
+	let hasFailed = false;
 
 	for (let index = 0; index < switchStatement.cases.length; index++) {
 		const result = analyzeSwitchCaseByIndex(switchStatement, index);
-		pending ||= result.pending;
-		failed ||= result.failed;
+		isPending ||= result.pending;
+		hasFailed ||= result.failed;
 	}
 
-	return {pending, failed};
+	return {pending: isPending, failed: hasFailed};
 }
 
 function mergePathResults(left, right) {

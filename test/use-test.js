@@ -39,9 +39,9 @@ const commonTestCases = {
 		]),
 	],
 	invalid: [
-		...typescriptExtensions.flatMap(extension => [
-			{code: 'import ava from \'ava\';', errors, filename: `file${extension}`},
-		]),
+		...typescriptExtensions.map(extension => ({
+			code: 'import ava from \'ava\';', errors, filename: `file${extension}`,
+		})),
 		{code: 'import anyTest from \'ava\';', errors, filename: 'file.js'},
 		// Side-effect import
 		{code: 'import \'ava\';', errors, filename: 'file.js'},

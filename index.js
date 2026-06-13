@@ -137,6 +137,7 @@ const plugin = {
 Object.assign(plugin.configs, {
 	recommended: [
 		{
+			ignores: ['**/package.json'],
 			plugins: {
 				ava: plugin,
 			},

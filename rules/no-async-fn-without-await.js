@@ -7,13 +7,13 @@ const MESSAGE_ID_SUGGESTION = 'no-async-fn-without-await-suggestion';
 const create = context => {
 	const ava = createAvaRule(context.sourceCode);
 	const {sourceCode} = context;
-	let testUsed = false;
+	let isTestUsed = false;
 	let asyncTest;
 	let nestedFunctionDepth = 0;
 
 	const registerUseOfAwait = () => {
 		if (asyncTest && nestedFunctionDepth === 0) {
-			testUsed = true;
+			isTestUsed = true;
 		}
 	};
 
@@ -48,8 +48,7 @@ const create = context => {
 			ava.isInTestFile,
 			ava.isTestNode,
 		])(() => {
-			if (asyncTest && !testUsed) {
-				const {sourceCode} = context;
+			if (asyncTest && !isTestUsed) {
 				const asyncToken = sourceCode.getFirstToken(asyncTest, token => token.value === 'async');
 				context.report({
 					node: asyncTest,
@@ -66,7 +65,7 @@ const create = context => {
 			}
 
 			asyncTest = undefined;
-			testUsed = false;
+			isTestUsed = false;
 			nestedFunctionDepth = 0;
 		}),
 	});

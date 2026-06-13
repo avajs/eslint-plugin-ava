@@ -1,9 +1,9 @@
-import test from 'ava';
 import AvaRuleTester from 'eslint-ava-rule-tester';
 import json from '@eslint/json';
+import {nodeTest} from './helpers/rule-tester.js';
 import rule from '../rules/no-ava-in-dependencies.js';
 
-const ruleTester = new AvaRuleTester(test, {
+const ruleTester = new AvaRuleTester(nodeTest, {
 	language: 'json/json',
 	plugins: {json},
 });

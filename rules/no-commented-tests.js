@@ -3,6 +3,11 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'no-commented-tests';
 
+// The leading `\s*\*?\s*` can match the same whitespace twice, so a long line of whitespace
+// makes this backtrack polynomially. `/^\s*(?:\*\s*)?(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/v`
+// is equivalent on every input and is unambiguous, but changing a shipped rule's matching
+// pattern belongs in its own commit, not in the Node.js 22 migration.
+// eslint-disable-next-line regexp/no-super-linear-backtracking
 const commentedTestPattern = /^\s*\*?\s*(?:test|serial)\s*(?:\.\s*\w+\s*)*\(/v;
 
 const create = context => {

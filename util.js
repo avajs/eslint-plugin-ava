@@ -30,7 +30,7 @@ export const findProjectRoot = filename => {
 				if ('ava' in packageJson) {
 					return directory;
 				}
-			} catch {} // eslint-disable-line @stylistic/curly-newline
+			} catch {}
 		}
 
 		if (fs.existsSync(path.join(directory, '.git'))) {
@@ -94,7 +94,7 @@ export const getNameOfRootNodeObject = node => getRootNode(node).object.name;
 
 // Match valid test execution object names: `t`, `tt`, `t_`, `t1`-`t9`
 // These are used in `t.try()` callbacks when variable shadowing is disallowed.
-const testObjectPattern = /^t[t_1-9]?$/v;
+const testObjectPattern = /^t[1-9_t]?$/v;
 export const isTestObject = name => testObjectPattern.test(name);
 
 /** Check whether a member-expression chain starts from `.context`. */
@@ -433,7 +433,7 @@ const assertionMethodsNumberArguments = new Map([
 	['try', 1],
 ]);
 
-const assertionMethodNames = [...assertionMethodsNumberArguments.keys()];
+const assertionMethodNames = assertionMethodsNumberArguments.keys().toArray();
 
 export {assertionMethodsNumberArguments};
 export const assertionMethods = new Set(assertionMethodNames);

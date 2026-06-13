@@ -5,8 +5,8 @@ const ruleTester = new RuleTester();
 
 const trueErrors = [{messageId: 'use-true'}];
 const falseErrors = [{messageId: 'use-false'}];
-const isTrueErrors = [{messageId: 'use-true-over-is'}];
-const isFalseErrors = [{messageId: 'use-false-over-is'}];
+const trueOverIsErrors = [{messageId: 'use-true-over-is'}];
+const falseOverIsErrors = [{messageId: 'use-false-over-is'}];
 
 ruleTester.run('use-true-false', rule, {
 	valid: [
@@ -227,46 +227,46 @@ ruleTester.run('use-true-false', rule, {
 		{
 			code: testCase('t.is(x, true)'),
 			output: testCase('t.true(x)'),
-			errors: isTrueErrors,
+			errors: trueOverIsErrors,
 		},
 		// `t.is(x, false)` → `t.false(x)`
 		{
 			code: testCase('t.is(x, false)'),
 			output: testCase('t.false(x)'),
-			errors: isFalseErrors,
+			errors: falseOverIsErrors,
 		},
 		// Boolean literal in first argument position
 		{
 			code: testCase('t.is(true, x)'),
 			output: testCase('t.true(x)'),
-			errors: isTrueErrors,
+			errors: trueOverIsErrors,
 		},
 		{
 			code: testCase('t.is(false, x)'),
 			output: testCase('t.false(x)'),
-			errors: isFalseErrors,
+			errors: falseOverIsErrors,
 		},
 		// With assertion message
 		{
 			code: testCase('t.is(x, true, "message")'),
 			output: testCase('t.true(x, "message")'),
-			errors: isTrueErrors,
+			errors: trueOverIsErrors,
 		},
 		{
 			code: testCase('t.is(x, false, "message")'),
 			output: testCase('t.false(x, "message")'),
-			errors: isFalseErrors,
+			errors: falseOverIsErrors,
 		},
 		// Boolean literal in first position with assertion message
 		{
 			code: testCase('t.is(true, x, "message")'),
 			output: testCase('t.true(x, "message")'),
-			errors: isTrueErrors,
+			errors: trueOverIsErrors,
 		},
 		{
 			code: testCase('t.is(false, x, "message")'),
 			output: testCase('t.false(x, "message")'),
-			errors: isFalseErrors,
+			errors: falseOverIsErrors,
 		},
 		// Alternative test object names for t.try() callbacks
 		{
@@ -329,12 +329,12 @@ ruleTester.run('use-true-false', rule, {
 		{
 			code: testCase('t.is.skip(x, true)'),
 			output: testCase('t.true.skip(x)'),
-			errors: isTrueErrors,
+			errors: trueOverIsErrors,
 		},
 		{
 			code: testCase('t.is.skip(x, false)'),
 			output: testCase('t.false.skip(x)'),
-			errors: isFalseErrors,
+			errors: falseOverIsErrors,
 		},
 	],
 });

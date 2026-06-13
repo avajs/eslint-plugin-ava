@@ -184,10 +184,10 @@ const create = context => {
 					suggest: fixedChain === undefined
 						? getSuggestions(chainModifiers)
 							.filter(({removed}) => !(hasImplicitSerial && removed === 'serial'))
-							.map(({chain, removed}) => ({
+							.map(({chain: suggestedChain, removed}) => ({
 								messageId: SUGGESTION_MESSAGE_ID,
 								data: {removed},
-								fix: fixer => fixer.replaceText(node.callee, getCalleeText(chain, prefix, hasImplicitSerial)),
+								fix: fixer => fixer.replaceText(node.callee, getCalleeText(suggestedChain, prefix, hasImplicitSerial)),
 							}))
 						: [],
 				});

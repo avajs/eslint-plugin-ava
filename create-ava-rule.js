@@ -1,4 +1,4 @@
-/* eslint-disable eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type, eslint-plugin/require-meta-languages */
+/* eslint-disable eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type */
 import {findVariable} from '@eslint-community/eslint-utils';
 import {hasComputedTestModifier, unwrapTypeExpression} from './util.js';
 
@@ -42,14 +42,37 @@ const mergeVisitors = (...visitors) => {
 	return visitor;
 };
 
+// Scope resolution is a pure function of the source code, but ESLint instantiates a rule
+// (and thus `createAvaRule`) once per rule. Sharing the analysis caches per `sourceCode`
+// means the expensive `findVariable`/scope work runs once for a file instead of once per rule.
+const analysisCacheBySourceCode = new WeakMap();
+
+const getAnalysisCache = sourceCode => {
+	let cache = analysisCacheBySourceCode.get(sourceCode);
+	if (!cache) {
+		cache = {
+			testBindings: new WeakMap(),
+			trackedModifiersCache: new WeakMap(),
+			testFunctionCallCache: new WeakMap(),
+			testModifierNamesCache: new WeakMap(),
+		};
+		analysisCacheBySourceCode.set(sourceCode, cache);
+	}
+
+	return cache;
+};
+
 const createAvaRule = sourceCode => {
 	let isTestFile = false;
 	let currentTestNode;
-	const testBindings = new WeakMap();
-	// Cache per-reference resolution so repeated helper calls on the same node stay cheap.
-	const trackedModifiersCache = new WeakMap();
-	const testFunctionCallCache = new WeakMap();
-	const testModifierNamesCache = new WeakMap();
+	// These caches are shared across every rule linting the same file. Bindings are populated
+	// at declaration sites (visited before their uses), so the shared state is deterministic.
+	const {
+		testBindings,
+		trackedModifiersCache,
+		testFunctionCallCache,
+		testModifierNamesCache,
+	} = getAnalysisCache(sourceCode);
 
 	function getTrackedModifiersFromVariable(variable, node) {
 		const currentReference = variable.references.find(reference => reference.identifier === node);

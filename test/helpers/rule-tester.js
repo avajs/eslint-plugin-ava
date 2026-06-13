@@ -1,20 +1,21 @@
+import assert from 'node:assert/strict';
 import path from 'node:path';
-import test from 'ava';
+import {test} from 'node:test';
 import AvaRuleTester from 'eslint-ava-rule-tester';
 
 const header = 'import test from \'ava\';\n';
 
-function addHeaderToCase(testCase) {
-	if (typeof testCase === 'string') {
-		return header + testCase;
+function addHeaderToCase(scenario) {
+	if (typeof scenario === 'string') {
+		return header + scenario;
 	}
 
-	if (testCase.noHeader) {
-		const {noHeader, ...rest} = testCase;
+	if (scenario.noHeader) {
+		const {noHeader, ...rest} = scenario;
 		return rest;
 	}
 
-	const result = {...testCase, code: header + testCase.code};
+	const result = {...scenario, code: header + scenario.code};
 
 	if (typeof result.output === 'string') {
 		result.output = header + result.output;
@@ -43,11 +44,30 @@ const defaultConfig = {
 	},
 };
 
+/**
+`eslint-ava-rule-tester` predates `node:test` and still calls the test function the AVA way: `test(title, t => …)`, with `t.pass()` on success and `t.is(actual, expected, message)` on a `strictEqual` assertion failure, always followed by a rethrow of the original error.
+
+Only those two members are used, so the adapter stays that small.
+*/
+export function nodeTest(name, implementation) {
+	test(name, () => {
+		implementation({
+			pass() {},
+			is(actual, expected, message) {
+				assert.equal(actual, expected, message);
+			},
+		});
+	});
+}
+
+// `RuleTester` reads `test.only` when it is constructed, so it has to exist.
+nodeTest.only = nodeTest;
+
 export default class RuleTester extends AvaRuleTester {
 	#autoHeader;
 
 	constructor({autoHeader, ...config} = {}) {
-		super(test, {
+		super(nodeTest, {
 			...defaultConfig,
 			...config,
 			languageOptions: {
@@ -61,8 +81,8 @@ export default class RuleTester extends AvaRuleTester {
 	run(name, rule, tests) {
 		const processed = this.#autoHeader
 			? {
-				valid: tests.valid.map(testCase => addHeaderToCase(testCase)),
-				invalid: tests.invalid.map(testCase => addHeaderToCase(testCase)),
+				valid: tests.valid.map(scenario => addHeaderToCase(scenario)),
+				invalid: tests.invalid.map(scenario => addHeaderToCase(scenario)),
 			}
 			: {};
 

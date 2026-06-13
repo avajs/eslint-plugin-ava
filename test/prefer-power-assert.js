@@ -15,8 +15,8 @@ function testNotAllowedMethod(methodName) {
 				errors,
 			},
 			{
-				name: `[not allowed: ${methodName}] t.${methodName.split('(')[0]}.skip(...)`,
-				code: `test(t => { t.${methodName.split('(')[0]}.skip(foo); });`,
+				name: `[not allowed: ${methodName}] t.${methodName.split('(', 1)[0]}.skip(...)`,
+				code: `test(t => { t.${methodName.split('(', 1)[0]}.skip(foo); });`,
 				errors,
 			},
 		],
@@ -47,8 +47,8 @@ function testAllowedMethod(methodName) {
 				code: `test(t => { t.${methodName}; });`,
 			},
 			{
-				name: `[allowed: ${methodName}] t.${methodName.split('(')[0]}.skip(...)`,
-				code: `test(t => { t.${methodName.split('(')[0]}.skip(foo); });`,
+				name: `[allowed: ${methodName}] t.${methodName.split('(', 1)[0]}.skip(...)`,
+				code: `test(t => { t.${methodName.split('(', 1)[0]}.skip(foo); });`,
 			},
 		],
 		invalid: [],

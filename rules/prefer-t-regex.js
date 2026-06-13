@@ -92,7 +92,7 @@ const create = context => {
 		// Look up references in case it's a variable or RegExp declaration.
 		const reference = findRootReference(lookup);
 
-		return reference.regex ?? reference.name === 'RegExp';
+		return reference.regex ?? (reference.name === 'RegExp');
 	};
 
 	const booleanHandler = node => {
@@ -170,8 +170,8 @@ const create = context => {
 			const source = context.sourceCode;
 			return [
 				fixer.replaceText(util.getRootNode(node.callee).property, assertion),
-				fixer.replaceText(firstArgument, `${source.getText(regex.arguments[0])}`),
-				fixer.replaceText(secondArgument, `${source.getText(regex.callee.object)}`),
+				fixer.replaceText(firstArgument, source.getText(regex.arguments[0])),
+				fixer.replaceText(secondArgument, source.getText(regex.callee.object)),
 			];
 		};
 

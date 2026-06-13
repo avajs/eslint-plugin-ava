@@ -22,8 +22,9 @@ Use a [preset config](#recommended-config) or configure each rule in `eslint.con
 
 ```js
 import eslintPluginAva from 'eslint-plugin-ava';
+import {defineConfig} from 'eslint/config';
 
-export default [
+export default defineConfig([
 	{
 		plugins: {
 			ava: eslintPluginAva,
@@ -33,7 +34,7 @@ export default [
 			'ava/no-only-test': 'error',
 		},
 	},
-];
+]);
 ```
 
 ## Rules
@@ -99,8 +100,13 @@ This plugin exports a [`recommended` config](index.js) that enforces good practi
 
 ```js
 import eslintPluginAva from 'eslint-plugin-ava';
+import {defineConfig} from 'eslint/config';
 
-export default [
+export default defineConfig([
 	...eslintPluginAva.configs.recommended,
-];
+]);
 ```
+
+## Related
+
+- [eslint-node-test](https://github.com/sindresorhus/eslint-node-test) — ESLint rules for the Node.js built-in test runner.

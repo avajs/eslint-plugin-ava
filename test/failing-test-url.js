@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-https -- The `valid` cases below deliberately include both `http://` and `https://` comment URLs, because the rule only checks that a comment precedes the `test.failing()` call and ignores the scheme. Rewriting them to HTTPS would stop the fixtures covering the `http` case. */
 import RuleTester from './helpers/rule-tester.js';
 import rule from '../rules/failing-test-url.js';
 
