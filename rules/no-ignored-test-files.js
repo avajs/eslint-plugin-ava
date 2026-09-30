@@ -53,14 +53,23 @@ const schema = [{
 		extensions: {
 			description: 'File extensions recognized as test files.',
 			type: 'array',
+			items: {
+				type: 'string',
+			},
 		},
 		files: {
 			description: 'Glob patterns to match test files.',
 			type: 'array',
+			items: {
+				type: 'string',
+			},
 		},
 		helpers: {
 			description: 'Glob patterns to match helper files.',
 			type: 'array',
+			items: {
+				type: 'string',
+			},
 		},
 	},
 	additionalProperties: false,
