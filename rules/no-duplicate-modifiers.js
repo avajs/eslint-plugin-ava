@@ -62,5 +62,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Duplicate test modifier `.{{name}}`.',
 		},
+		languages: ['js/js'],
 	},
 };

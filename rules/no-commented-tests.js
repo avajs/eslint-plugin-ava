@@ -53,5 +53,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Use `test.skip()` instead of commenting out a test.',
 		},
+		languages: ['js/js'],
 	},
 };

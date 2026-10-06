@@ -73,10 +73,12 @@ const schema = [{
 		extensions: {
 			description: 'File extensions recognized as test files.',
 			type: 'array',
+			items: {type: 'string'},
 		},
 		files: {
 			description: 'Glob patterns to match test files.',
 			type: 'array',
+			items: {type: 'string'},
 		},
 	},
 	additionalProperties: false,
@@ -96,5 +98,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Test files should not be imported.',
 		},
+		languages: ['js/js'],
 	},
 };

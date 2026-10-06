@@ -46,5 +46,6 @@ export default {
 			[MESSAGE_ID]: 'No tests should be skipped.',
 			[MESSAGE_ID_SUGGESTION]: 'Remove the `.skip`.',
 		},
+		languages: ['js/js'],
 	},
 };

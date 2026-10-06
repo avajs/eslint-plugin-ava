@@ -247,5 +247,6 @@ export default {
 			[MESSAGE_ID_TOO_MANY_SKIPS]: 'Too many chained uses of `.skip`.',
 			[MESSAGE_ID_SKIP_POSITION]: '`.skip` modifier should be the last in chain.',
 		},
+		languages: ['js/js'],
 	},
 };

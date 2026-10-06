@@ -58,5 +58,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Use `await` with `t.{{method}}()`.',
 		},
+		languages: ['js/js'],
 	},
 };

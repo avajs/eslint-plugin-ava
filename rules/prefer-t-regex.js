@@ -244,5 +244,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Prefer using the `t.{{assertion}}()` assertion.',
 		},
+		languages: ['js/js'],
 	},
 };

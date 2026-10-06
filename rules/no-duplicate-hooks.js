@@ -47,5 +47,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Duplicate `test.{{hook}}()` hook. Combine the hooks into a single one.',
 		},
+		languages: ['js/js'],
 	},
 };

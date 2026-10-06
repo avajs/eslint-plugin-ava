@@ -212,5 +212,6 @@ export default {
 			[MESSAGE_ID]: 'Invalid test modifier chain `.{{chain}}`.',
 			[SUGGESTION_MESSAGE_ID]: 'Remove the `.{{removed}}` modifier.',
 		},
+		languages: ['js/js'],
 	},
 };

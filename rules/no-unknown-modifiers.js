@@ -96,5 +96,6 @@ export default {
 			[MESSAGE_ID_ALWAYS]: 'The `.always` modifier can only be used with `after` and `afterEach` hooks.',
 			[MESSAGE_ID_ALWAYS_SUGGESTION]: 'Remove the `.always` modifier.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -56,5 +56,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Assertions should not be nested.',
 		},
+		languages: ['js/js'],
 	},
 };

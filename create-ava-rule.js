@@ -1,4 +1,4 @@
-/* eslint-disable eslint-plugin/prefer-message-ids, eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type */
+/* eslint-disable eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type, eslint-plugin/require-meta-languages */
 import {findVariable} from '@eslint-community/eslint-utils';
 import {hasComputedTestModifier, unwrapTypeExpression} from './util.js';
 

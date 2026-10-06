@@ -42,5 +42,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Tests should not be nested.',
 		},
+		languages: ['js/js'],
 	},
 };

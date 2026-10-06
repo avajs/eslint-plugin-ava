@@ -107,5 +107,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Prefer `t.{{replacement}}()` over negating the argument of `t.{{assertion}}()`.',
 		},
+		languages: ['js/js'],
 	},
 };

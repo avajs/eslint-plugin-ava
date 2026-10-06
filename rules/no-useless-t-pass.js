@@ -164,5 +164,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: '`t.pass()` is useless without `t.plan()`.',
 		},
+		languages: ['js/js'],
 	},
 };

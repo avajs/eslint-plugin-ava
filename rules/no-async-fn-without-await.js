@@ -87,5 +87,6 @@ export default {
 			[MESSAGE_ID]: 'Function was declared as `async` but doesn\'t use `await`.',
 			[MESSAGE_ID_SUGGESTION]: 'Remove the `async` keyword.',
 		},
+		languages: ['js/js'],
 	},
 };

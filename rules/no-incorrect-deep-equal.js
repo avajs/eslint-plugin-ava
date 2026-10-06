@@ -65,5 +65,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Avoid using `{{callee}}` with literal primitives',
 		},
+		languages: ['js/js'],
 	},
 };

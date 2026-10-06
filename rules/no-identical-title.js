@@ -90,5 +90,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Test title is used multiple times in the same file.',
 		},
+		languages: ['js/js'],
 	},
 };

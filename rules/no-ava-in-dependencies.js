@@ -159,5 +159,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: '`ava` should be in `devDependencies` instead of `dependencies`.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -46,5 +46,6 @@ export default {
 			[MESSAGE_ID]: '`test.only()` should not be used.',
 			[MESSAGE_ID_SUGGESTION]: 'Remove the `.only`.',
 		},
+		languages: ['js/js'],
 	},
 };
