@@ -43,5 +43,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'The test implementation should not be an inline arrow function.',
 		},
+		languages: ['js/js'],
 	},
 };

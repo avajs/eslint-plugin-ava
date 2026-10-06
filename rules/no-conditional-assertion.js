@@ -299,5 +299,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Assertions should not be placed inside conditionals, as they may never execute.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -41,5 +41,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Test parameter should be named `t`.',
 		},
+		languages: ['js/js'],
 	},
 };

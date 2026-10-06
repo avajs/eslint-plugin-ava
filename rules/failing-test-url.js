@@ -44,5 +44,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: '`test.failing()` requires a URL in a comment above it.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -167,5 +167,6 @@ export default {
 			[MESSAGE_ID_IS_TRUE]: 'Prefer `t.true()` over `t.is(…, true)`.',
 			[MESSAGE_ID_IS_FALSE]: 'Prefer `t.false()` over `t.is(…, false)`.',
 		},
+		languages: ['js/js'],
 	},
 };

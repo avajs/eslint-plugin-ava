@@ -82,5 +82,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Expected at most {{max}} assertions, but found {{count}}.',
 		},
+		languages: ['js/js'],
 	},
 };

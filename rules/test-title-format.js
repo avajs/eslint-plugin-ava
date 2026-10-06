@@ -66,5 +66,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'The test title doesn\'t match the required format: `{{format}}`.',
 		},
+		languages: ['js/js'],
 	},
 };

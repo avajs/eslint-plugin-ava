@@ -146,5 +146,6 @@ export default {
 			[MESSAGE_ID_SYNC]: 'Use `t.throws()` instead of try/catch.',
 			[MESSAGE_ID_ASYNC]: 'Use `t.throwsAsync()` instead of try/catch.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -64,5 +64,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Only asserts with no power-assert alternative are allowed.',
 		},
+		languages: ['js/js'],
 	},
 };

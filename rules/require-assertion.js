@@ -115,5 +115,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Test is missing an assertion. Tests without assertions will always pass.',
 		},
+		languages: ['js/js'],
 	},
 };

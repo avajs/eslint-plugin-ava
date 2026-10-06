@@ -67,5 +67,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'AVA should be imported as `test`.',
 		},
+		languages: ['js/js'],
 	},
 };

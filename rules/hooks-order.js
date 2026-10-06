@@ -118,5 +118,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: '`{{current}}` hook must come before `{{invalid}}`',
 		},
+		languages: ['js/js'],
 	},
 };

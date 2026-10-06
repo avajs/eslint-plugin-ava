@@ -45,5 +45,6 @@ export default {
 			[MESSAGE_ID]: '`test.todo()` should not be used.',
 			[MESSAGE_ID_SUGGESTION]: 'Remove the `.todo`.',
 		},
+		languages: ['js/js'],
 	},
 };

@@ -146,5 +146,6 @@ export default {
 			[MESSAGE_ID_EMPTY]: 'Test title must not be empty.',
 			[MESSAGE_ID_WHITESPACE]: 'Test title must not have leading or trailing whitespace.',
 		},
+		languages: ['js/js'],
 	},
 };

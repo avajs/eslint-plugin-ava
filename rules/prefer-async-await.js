@@ -168,5 +168,6 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Prefer using async/await instead of returning a Promise.',
 		},
+		languages: ['js/js'],
 	},
 };

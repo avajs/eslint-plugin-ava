@@ -67,5 +67,6 @@ export default {
 			[MESSAGE_ID_REMOVE_TODO]: 'Remove the `.todo` modifier to make it a regular test.',
 			[MESSAGE_ID_REMOVE_IMPLEMENTATION]: 'Remove the implementation function to keep it as a todo.',
 		},
+		languages: ['js/js'],
 	},
 };

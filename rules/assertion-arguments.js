@@ -617,5 +617,6 @@ export default {
 			[MESSAGE_ID_PLAN_NOT_INTEGER]: 'Expected `t.plan()` argument to be a non-negative integer.',
 			[MESSAGE_ID_REGEX_FIRST]: 'Expected first argument to be a string, not a regex.',
 		},
+		languages: ['js/js'],
 	},
 };
