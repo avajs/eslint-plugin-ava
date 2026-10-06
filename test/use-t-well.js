@@ -38,6 +38,8 @@ ruleTester.run('use-t-well', rule, {
 		testCase('t.true(t.context.title(foo));'),
 		testCase('console.log(t.title);'),
 		testCase('t.true(t.title.includes(\'Unicorns\'));'),
+		testCase('if (t.passed) {}'),
+		testCase('console.log(!t.passed);'),
 		testCase('setImmediate(t.end);'),
 		testCase('t.deepEqual;'),
 		testCase('t.plan(1);'),
@@ -89,6 +91,10 @@ ruleTester.run('use-t-well', rule, {
 		},
 		{
 			code: testCase('t.title();'),
+			errors: [error('unknown-assertion')],
+		},
+		{
+			code: testCase('t.passed();'),
 			errors: [error('unknown-assertion')],
 		},
 		{

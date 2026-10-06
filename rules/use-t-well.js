@@ -53,10 +53,12 @@ const assertionSynonyms = new Map([
 	['matchSnapshot', 'snapshot'],
 ]);
 
+// Properties, not methods
+const valueProperties = new Set(['context', 'passed', 'title']);
+
 const properties = new Set([
 	...util.executionMethods,
-	'context',
-	'title',
+	...valueProperties,
 	'skip',
 ]);
 
@@ -132,7 +134,7 @@ const create = context => {
 
 				let corrected = correcter.correct(name);
 
-				if (i !== 0 && (corrected === 'context' || corrected === 'title')) { // `context` and `title` can only be first
+				if (i !== 0 && valueProperties.has(corrected)) { // `context`, `passed`, and `title` can only be first
 					corrected = undefined;
 				}
 
@@ -167,8 +169,8 @@ const create = context => {
 					return; // Don't check further
 				}
 
-				if (name === 'context' || name === 'title') {
-					if (name === 'title' && members.length === 1 && isCallExpression(node)) {
+				if (valueProperties.has(name)) {
+					if (name !== 'context' && members.length === 1 && isCallExpression(node)) {
 						context.report({
 							node,
 							messageId: MESSAGE_ID_UNKNOWN_ASSERTION,
