@@ -328,6 +328,9 @@ function getTestModifiers(node) {
 
 export {getTestModifiers};
 
+/** Modifiers that take a condition and return the test chain, for example `test.skipIf(condition)`. */
+export const conditionalModifiers = new Set(['runIf', 'skipIf']);
+
 /** Check whether a test call uses any computed modifier access. */
 export const hasComputedTestModifier = node => getTestModifiers(node).some(property => !property.name);
 
@@ -481,6 +484,7 @@ export default {
 	getTestImplementationArgument,
 	getExecutableTestImplementation,
 	getTestModifiers,
+	conditionalModifiers,
 	hasComputedTestModifier,
 	getHookName,
 	getTestModifier,

@@ -10,7 +10,7 @@
 
 Translations: [Français](https://github.com/avajs/ava-docs/blob/main/fr_FR/related/eslint-plugin-ava/docs/rules/no-invalid-modifier-chain.md)
 
-AVA only allows specific [test modifier](https://github.com/avajs/ava/blob/main/docs/01-writing-tests.md) chains. Using modifiers in the wrong order, combining incompatible modifiers, or using modifiers that don't apply to a given test type will cause runtime errors.
+AVA only allows specific [test modifier](https://github.com/avajs/ava/blob/main/docs/01-writing-tests.md) chains. Using modifiers in the wrong order, combining incompatible modifiers, or using modifiers that don't apply to a given test type will either cause runtime errors or make the modifiers silently do nothing.
 
 ## Examples
 
@@ -40,6 +40,14 @@ test.todo('title');         // ✅
 test.before.always(t => {});    // ❌ `.always` only works with `after`/`afterEach`
 test.after.always(t => {});     // ✅
 test.afterEach.always(t => {}); // ✅
+
+// Conditional modifiers
+test.skipIf(isWindows)(t => {});        // ✅
+test.serial.runIf(isLinux)(t => {});    // ✅
+test.skipIf(isWindows).serial(t => {}); // ✅
+test.only.skipIf(isWindows)(t => {});   // ❌ `.only` does not have `.skipIf`
+test.skipIf(isWindows).before(t => {}); // ❌ AVA ignores the condition for hooks
+test.skipIf()(t => {});                 // ❌ Missing condition
 
 // Unknown modifiers
 test.foo(t => {}); // ❌

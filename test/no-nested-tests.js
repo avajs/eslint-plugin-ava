@@ -17,10 +17,16 @@ ruleTester.run('no-nested-tests', rule, {
 		'test.skip(t => {}); test.skip(t => {});',
 		'test.only(t => {});',
 		'test.only(t => {}); test.only(t => {});',
+		// The inner `skipIf()` call is not a test
+		'test.skipIf(condition)(t => {});',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test(t => { test(t => {}); });', noHeader: true},
 	],
 	invalid: [
+		{
+			code: 'test.skipIf(condition)(t => { test.runIf(condition)(t => {}); });',
+			errors: [error],
+		},
 		{
 			code: 'test("2", t => { test(t => {}); });',
 			errors: [error],

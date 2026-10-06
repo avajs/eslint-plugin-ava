@@ -74,6 +74,20 @@ const aliasedModifierTestNodeRule = {
 	},
 };
 
+const testNodeSourceRule = {
+	create(context) {
+		const ava = createAvaRule(context.sourceCode);
+
+		return ava.merge({
+			CallExpression(node) {
+				if (ava.isTestNode(node)) {
+					context.report({node, message: `test node: ${context.sourceCode.getText(node.callee)}`});
+				}
+			},
+		});
+	},
+};
+
 const ruleTester = new RuleTester({autoHeader: false});
 
 const typescriptRuleTester = new RuleTester({
@@ -163,4 +177,37 @@ ruleTester.run('test-node-rule-fixture', testNodeRule, {
 		'import anyTest from \'ava\';\nlet test = anyTest;\ntest(\'name\', t => {});',
 	],
 	invalid: [],
+});
+
+ruleTester.run('conditional-test-node-rule-fixture', testNodeSourceRule, {
+	valid: [
+		// Only the result of `skipIf()` is a test function
+		'import test from \'ava\';\nconst skipIf = test.skipIf;\nskipIf(t => {});',
+	],
+	invalid: [
+		{
+			code: 'import test from \'ava\';\ntest.skipIf(a)(\'name\', t => {});',
+			errors: [{message: 'test node: test.skipIf(a)'}],
+		},
+		{
+			code: 'import test from \'ava\';\ntest.serial.runIf(a).failing(\'name\', t => {});',
+			errors: [{message: 'test node: test.serial.runIf(a).failing'}],
+		},
+		{
+			code: 'import test from \'ava\';\ntest.skipIf(a).runIf(b)(\'name\', t => {});',
+			errors: [{message: 'test node: test.skipIf(a).runIf(b)'}],
+		},
+		{
+			code: 'import test from \'ava\';\nconst linuxTest = test.runIf(isLinux);\nlinuxTest(\'name\', t => {});',
+			errors: [{message: 'test node: linuxTest'}],
+		},
+		{
+			code: 'import test from \'ava\';\nconst windowsTest = test.skipIf(isWindows);\nwindowsTest(\'name\', t => {});',
+			errors: [{message: 'test node: windowsTest'}],
+		},
+		{
+			code: 'import {serial} from \'ava\';\nserial.skipIf(a)(\'name\', t => {});',
+			errors: [{message: 'test node: serial.skipIf(a)'}],
+		},
+	],
 });

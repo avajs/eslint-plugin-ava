@@ -23,6 +23,16 @@ ruleTester.run('no-only-test', rule, {
 	],
 	invalid: [
 		{
+			code: 'test.skipIf(condition).only(t => { t.pass(); });',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-only-test-suggestion',
+					output: 'test.skipIf(condition)(t => { t.pass(); });',
+				}],
+			}],
+		},
+		{
 			code: 'test\n\t.only(t => { t.pass(); });',
 			errors: [{
 				messageId,

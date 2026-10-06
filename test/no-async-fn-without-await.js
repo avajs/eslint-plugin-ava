@@ -33,6 +33,48 @@ ruleTester.run('no-async-fn-without-await', rule, {
 	],
 	invalid: [
 		{
+			code: 'test.skipIf(condition)(\'title\', async t => {});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test.skipIf(condition)(\'title\', t => {});',
+				}],
+			}],
+		},
+		// Await inside nested function does not count as test-level await
+		{
+			code: 'test(async t => { const helper = async () => { await bar(); }; });',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(t => { const helper = async () => { await bar(); }; });',
+				}],
+			}],
+		},
+		// Await in the test call itself does not count as test-level await
+		{
+			code: 'test.skipIf(await isWindows())(\'title\', async t => {});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test.skipIf(await isWindows())(\'title\', t => {});',
+				}],
+			}],
+		},
+		{
+			code: 'test(await getTitle(), async t => {});',
+			errors: [{
+				messageId,
+				suggestions: [{
+					messageId: 'no-async-fn-without-await-suggestion',
+					output: 'test(await getTitle(), t => {});',
+				}],
+			}],
+		},
+		{
 			code: 'test(async t => {});',
 			errors: [{
 				messageId,

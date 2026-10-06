@@ -4,6 +4,7 @@ import util from '../util.js';
 
 const MESSAGE_ID = 'no-invalid-modifier-chain';
 const SUGGESTION_MESSAGE_ID = 'no-invalid-modifier-chain-suggestion';
+const MISSING_CONDITION_MESSAGE_ID = 'missing-condition';
 
 const validChains = new Set([
 	// Tests
@@ -69,6 +70,30 @@ const modifierOrder = new Map([
 	['macro', 5],
 ]);
 
+// AVA has `skipIf()` and `runIf()` only on these chains
+const conditionalModifierParentChains = new Set(['', 'serial', 'failing', 'serial.failing']);
+
+// AVA ignores the condition for these, so `test.skipIf(condition).before()` always runs. It also ignores it for `.todo`, but that is harmless, as todo tests never run.
+const conditionIgnoringModifiers = new Set(['after', 'afterEach', 'before', 'beforeEach', 'macro']);
+
+function isValidConditionalChain(modifierNames) {
+	const otherModifierNames = [];
+
+	for (const name of modifierNames) {
+		if (!util.conditionalModifiers.has(name)) {
+			otherModifierNames.push(name);
+			continue;
+		}
+
+		if (!conditionalModifierParentChains.has(otherModifierNames.join('.'))) {
+			return false;
+		}
+	}
+
+	return validChains.has(otherModifierNames.join('.'))
+		&& !otherModifierNames.some(name => conditionIgnoringModifiers.has(name));
+}
+
 function hasOnlyKnownModifiers(modifierNames) {
 	return modifierNames.every(name => modifierOrder.has(name));
 }
@@ -109,9 +134,11 @@ function getSuggestions(modifierNames) {
 }
 
 function hasNamedSerialRoot(node, sourceCode) {
-	const rootObject = node.callee.type === 'MemberExpression'
-		? util.getRootNode(node.callee).object
-		: node.callee;
+	// Walk through member access and conditional modifier calls: `serial.skipIf(condition).failing` → `serial`
+	let rootObject = node.callee;
+	while (rootObject.type === 'MemberExpression' || rootObject.type === 'CallExpression') {
+		rootObject = rootObject.type === 'MemberExpression' ? rootObject.object : rootObject.callee;
+	}
 
 	if (rootObject.type !== 'Identifier') {
 		return false;
@@ -169,6 +196,32 @@ const create = context => {
 
 			const chain = chainModifiers.join('.');
 
+			const conditionalTestModifiers = testModifiers.filter(modifier => util.conditionalModifiers.has(modifier.name));
+			if (conditionalTestModifiers.length > 0) {
+				for (const modifier of conditionalTestModifiers) {
+					// `skipIf` → `test.skipIf` → `test.skipIf()`
+					const call = modifier.parent.parent;
+					if (call.arguments.length === 0) {
+						context.report({
+							node: call,
+							messageId: MISSING_CONDITION_MESSAGE_ID,
+							data: {name: modifier.name},
+						});
+					}
+				}
+
+				// No fix, as replacing the callee text would remove the condition
+				if (!isValidConditionalChain(chainModifiers)) {
+					context.report({
+						node: node.callee,
+						messageId: MESSAGE_ID,
+						data: {chain},
+					});
+				}
+
+				return;
+			}
+
 			if (!validChains.has(chain)) {
 				const fixedChain = getFixedChain(chainModifiers);
 				const rootName = util.getNameOfRootNodeObject(node.callee);
@@ -211,6 +264,7 @@ export default {
 		messages: {
 			[MESSAGE_ID]: 'Invalid test modifier chain `.{{chain}}`.',
 			[SUGGESTION_MESSAGE_ID]: 'Remove the `.{{removed}}` modifier.',
+			[MISSING_CONDITION_MESSAGE_ID]: '`.{{name}}()` requires a condition.',
 		},
 		languages: ['js/js'],
 	},

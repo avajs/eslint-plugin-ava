@@ -17,7 +17,10 @@ const create = context => {
 				return;
 			}
 
-			const testModifiers = util.getTestModifiers(node).toSorted(sortByName);
+			// AVA combines repeated conditions, for example `test.skipIf(a).skipIf(b)`.
+			const testModifiers = util.getTestModifiers(node)
+				.filter(modifier => !util.conditionalModifiers.has(modifier.name))
+				.toSorted(sortByName);
 
 			if (testModifiers.length === 0) {
 				return;

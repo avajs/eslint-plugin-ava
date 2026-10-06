@@ -34,10 +34,20 @@ ruleTester.run('no-duplicate-modifiers', rule, {
 		'test(t => {});',
 		'test.after.always(t => {});',
 		'test.afterEach.always(t => {});',
+		// AVA combines repeated conditions
+		'test.skipIf(a).skipIf(b)(t => {});',
+		'test.runIf(a).serial.runIf(b)(t => {});',
 		// Computed modifiers — should not crash
 		'test[\'serial\'][\'serial\'](t => {});',
 		'test[\'only\'][\'only\'](t => {});',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test.serial.serial(t => {});', noHeader: true}],
-	invalid,
+	invalid: [
+		...invalid,
+		{
+			code: 'test.serial.skipIf(a).serial(t => {});',
+			output: 'test.serial.skipIf(a)(t => {});',
+			errors: [{messageId: 'no-duplicate-modifiers'}],
+		},
+	],
 });

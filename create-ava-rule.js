@@ -1,6 +1,6 @@
 /* eslint-disable eslint-plugin/prefer-object-rule, eslint-plugin/require-meta-docs-description, eslint-plugin/require-meta-docs-recommended, eslint-plugin/require-meta-schema, eslint-plugin/require-meta-type */
 import {findVariable} from '@eslint-community/eslint-utils';
-import {hasComputedTestModifier, unwrapTypeExpression} from './util.js';
+import {conditionalModifiers, hasComputedTestModifier, unwrapTypeExpression} from './util.js';
 
 const trackedAliasModifiers = new Set([
 	'after',
@@ -11,8 +11,10 @@ const trackedAliasModifiers = new Set([
 	'failing',
 	'macro',
 	'only',
+	'runIf',
 	'serial',
 	'skip',
+	'skipIf',
 	'todo',
 ]);
 
@@ -129,7 +131,16 @@ const createAvaRule = sourceCode => {
 			}
 
 			case 'MemberExpression': {
-				isTestFunction = isTestFunctionCall(unwrapTypeExpression(node.object));
+				// `test.skipIf` is not a test function. Only its result is: `test.skipIf(condition)`.
+				isTestFunction = !conditionalModifiers.has(node.property.name)
+					&& isTestFunctionCall(unwrapTypeExpression(node.object));
+				break;
+			}
+
+			case 'CallExpression': {
+				isTestFunction = node.callee.type === 'MemberExpression'
+					&& conditionalModifiers.has(node.callee.property.name)
+					&& isTestFunctionCall(unwrapTypeExpression(node.callee.object));
 				break;
 			}
 

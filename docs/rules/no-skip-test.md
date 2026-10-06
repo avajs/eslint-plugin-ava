@@ -28,4 +28,12 @@ test.skip('bar', t => { // ❌
 test('bar', t => { // ✅
 	t.pass();
 });
+
+test.skipIf(true)('baz', t => { // ❌ Always skipped
+	t.pass();
+});
+
+test.skipIf(process.platform === 'win32')('baz', t => { // ✅
+	t.pass();
+});
 ```

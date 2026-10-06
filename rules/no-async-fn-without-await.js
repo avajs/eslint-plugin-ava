@@ -9,23 +9,11 @@ const create = context => {
 	const {sourceCode} = context;
 	let isTestUsed = false;
 	let asyncTest;
-	let nestedFunctionDepth = 0;
 
-	const registerUseOfAwait = () => {
-		if (asyncTest && nestedFunctionDepth === 0) {
+	// Only count `await` directly in the test implementation, not in nested functions or in the test call itself, for example `test.skipIf(await isWindows())`
+	const registerUseOfAwait = node => {
+		if (asyncTest && sourceCode.getScope(node).variableScope.block === asyncTest) {
 			isTestUsed = true;
-		}
-	};
-
-	const enterFunction = node => {
-		if (asyncTest && node !== asyncTest) {
-			nestedFunctionDepth++;
-		}
-	};
-
-	const exitFunction = node => {
-		if (asyncTest && node !== asyncTest) {
-			nestedFunctionDepth--;
 		}
 	};
 
@@ -39,8 +27,6 @@ const create = context => {
 			const implementationArgument = util.getExecutableTestImplementation(node, sourceCode);
 			asyncTest = isAsync(implementationArgument) && implementationArgument;
 		}),
-		':function': enterFunction,
-		':function:exit': exitFunction,
 		AwaitExpression: registerUseOfAwait,
 		YieldExpression: registerUseOfAwait,
 		'ForOfStatement[await=true]': registerUseOfAwait,
@@ -66,7 +52,6 @@ const create = context => {
 
 			asyncTest = undefined;
 			isTestUsed = false;
-			nestedFunctionDepth = 0;
 		}),
 	});
 };

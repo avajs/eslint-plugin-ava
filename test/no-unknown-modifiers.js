@@ -24,10 +24,23 @@ ruleTester.run('no-unknown-modifiers', rule, {
 		'test.after.always.skip(t => {});',
 		'test.failing(t => {});',
 		'test.macro(t => {});',
+		'test.skipIf(condition)(t => {});',
+		'test.runIf(condition)(t => {});',
+		'test.serial.skipIf(condition).failing(t => {});',
 		// Shouldn't be triggered since it's not a test file
 		{code: 'test.foo(t => {});', noHeader: true},
 	],
 	invalid: [
+		{
+			code: 'test.skipIf(condition).foo(t => {});',
+			errors: [{
+				messageId: 'no-unknown-modifiers',
+				suggestions: [{
+					messageId: 'no-unknown-modifiers-suggestion',
+					output: 'test.skipIf(condition)(t => {});',
+				}],
+			}],
+		},
 		{
 			code: 'test.foo(t => {});',
 			errors: [{
